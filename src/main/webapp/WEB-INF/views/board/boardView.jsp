@@ -1,7 +1,7 @@
 <%@page import="java.util.regex.Matcher"%>
 <%@page import="java.util.regex.Pattern"%>
 <%@page import="com.moonBam.controller.board.util.MoviePoster"%>
-<%@page import="com.moonBam.controller.board.util.ContentDataFormatting"%>
+<%@page import="com.moonBam.controller.board.util.ContentDataFormating"%>
 <%@page import="com.moonBam.controller.board.util.ViewService"%>
 <%@page import="com.moonBam.dto.MemberDTO"%>
 <%@page import="com.moonBam.dto.board.PostPageDTO"%>
@@ -33,7 +33,7 @@ String selectSearchPositionText = request.getParameter("selectSearchPositionText
 String inputSearchFreeText = request.getParameter("inputSearchFreeText");
 
 List<PostPageDTO> hotList = (List<PostPageDTO>) request.getAttribute("hotList");
-ContentDataFormatting cdf = new ContentDataFormatting();
+	ContentDataFormating cdf = new ContentDataFormating();
 
 
 ViewService service = new ViewService();
