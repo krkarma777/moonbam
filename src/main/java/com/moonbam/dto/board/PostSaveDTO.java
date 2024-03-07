@@ -1,4 +1,4 @@
-package com.moonBam.dto.board;
+package com.moonbam.dto.board;
 
 import org.apache.ibatis.type.Alias;
 

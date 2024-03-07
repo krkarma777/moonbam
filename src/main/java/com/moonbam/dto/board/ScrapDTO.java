@@ -1,8 +1,8 @@
-package com.moonBam.dto.board;
-
-import java.util.Date;
+package com.moonbam.dto.board;
 
 import org.apache.ibatis.type.Alias;
+
+import java.util.Date;
 
 @Alias("ScrapDTO")
 public class ScrapDTO {

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MoonbamApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MoonbamApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MoonbamApplication.class, args);
+    }
 
 }

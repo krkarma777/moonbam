@@ -1,9 +1,9 @@
-package com.moonBam.dto.board;
+package com.moonbam.dto.board;
 
-
-import java.sql.Timestamp;
 
 import org.apache.ibatis.type.Alias;
+
+import java.sql.Timestamp;
 
 @Alias("PostCategoryDTO")
 public class PostCategoryDTO {

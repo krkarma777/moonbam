@@ -1,4 +1,4 @@
-package com.moonBam.config;
+package com.moonbam.config;
 
 import java.io.IOException;
 import java.io.InputStream;
