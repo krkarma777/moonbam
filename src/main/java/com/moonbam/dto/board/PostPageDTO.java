@@ -1,8 +1,8 @@
 package com.moonbam.dto.board;
 
-import org.apache.ibatis.type.Alias;
-
 import java.util.Date;
+
+import org.apache.ibatis.type.Alias;
 
 @Alias("PostPageDTO")
 public class PostPageDTO implements IPost {

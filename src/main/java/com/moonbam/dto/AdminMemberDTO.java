@@ -18,9 +18,9 @@ public class AdminMemberDTO {
 	private String usermaildomain;
 	private String usersigndate;
 	private String usertype;
+	
 	public AdminMemberDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public AdminMemberDTO(String userid, String userpw, String username, String userssn, String userssn2, String usergender,
 			String nickname, String userphonenum1, String userphonenum2, String userphonenum3, String usermailid,

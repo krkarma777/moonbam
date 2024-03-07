@@ -16,7 +16,6 @@ public class AdminBoardDTO {
 	
 	public AdminBoardDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AdminBoardDTO(String postid, String postboard, String userid, String contid, String posttitle, String postdate,

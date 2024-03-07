@@ -1,9 +1,9 @@
 package com.moonbam.dto.board;
 
 
-import org.apache.ibatis.type.Alias;
-
 import java.util.List;
+
+import org.apache.ibatis.type.Alias;
 
 @Alias("PageDTO")
 public class PageDTO<T> {
