@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminBoardMapper">
+ 
+ 
+     <select id="SearchPost" resultType="AdminBoardDTO" parameterType="HashMap">
+select POSTID, postboard, userid, contid, posttitle, postdate, posteditdate, posttext
+from postdb
+<choose>
+	<when test = "SearchCondition == 'POSTTITLE'" >
+		where posttitle like '%'||#{SearchValue}||'%'
+	</when>
+	
+	<when test = "SearchCondition == 'USERID'" >
+		where userid like '%'||#{SearchValue}||'%'
+	</when>
+	
+	<when test = "SearchCondition == 'POSTDATE'" >
+		where postdate like '%'||#{SearchValue}||'%'
+	</when>
+</choose>
+
+order by postdate desc
+    </select>
+	
+	
+	
+	
+</mapper>

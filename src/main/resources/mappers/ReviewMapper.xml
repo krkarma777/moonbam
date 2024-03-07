@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReviewMapper">
+
+	<select id="check" parameterType="ReviewDTO" resultType="int">
+		select count(*) from postdb where postBoard='review' and userId=#{userId} and contId=#{contId}
+	</select>
+
+	<insert id="writeReview" parameterType="ReviewDTO">
+		INSERT INTO postdb VALUES 
+		(POSTIDSEQ.NEXTVAL, 'review', #{userId}, #{contId}, 'r~!@#', sysdate, null, #{postText}, #{nickname}, null)
+		
+		<selectKey keyProperty="postId" resultType="Long" order="AFTER"> 
+			select POSTIDSEQ.CURRVAL from dual 
+		</selectKey>
+	</insert>
+	
+	<update id="updateReview" parameterType="ReviewDTO">
+		<selectKey keyProperty="postId" resultType="Long" order="BEFORE"> 
+			select postId from postdb where (postBoard,userId) in (('review', #{userId}))
+		</selectKey>
+		update postdb set postText=#{postText} where postid=#{postId}
+		
+	</update>
+	
+	<!-- <insert id="createRateData" parameterType="ReviewDTO">
+		insert into ratedb values (#{userId}, #{contId}, 0)
+	</insert> -->
+	<insert id="createRateData" parameterType="ReviewDTO">
+	    MERGE INTO ratedb r
+        
+        USING (SELECT #{userId} AS user_id, #{contId} AS cont_id FROM dual)
+        ON (r.userid = user_id AND r.contid = cont_id)
+        
+        WHEN NOT MATCHED THEN
+            INSERT (userid, contid, score)
+            VALUES (#{userId}, #{contId}, 0)
+    </insert>
+	
+	<select id="selectReview" parameterType="long" resultType="ReviewDTO">
+		select * from postdb where postid=#{postId}
+	</select>	
+	
+	<select id="selectReviewByUser" parameterType="map" resultType="ReviewDTO">
+		select * 
+		 from postdb left join ratedb using(userId, contId)
+		 where (postBoard,userId) in (('review', #{userId}))
+	</select>	
+	<select id="selectScore" parameterType="map" resultType="int">
+		select score from ratedb where (userId, contId) in ((#{userId}, #{contId}))
+	</select>
+	
+	 <!-- 별점 등록 또는 업데이트 -->
+    <update id="insertOrUpdateRating" parameterType="RateDTO">
+        MERGE INTO ratedb r
+        
+        USING (SELECT #{userId} AS user_id, #{contId} AS cont_id FROM dual)
+        ON (r.userid = user_id AND r.contid = cont_id)
+        
+        WHEN MATCHED THEN
+            UPDATE SET r.score = #{score}
+            
+        WHEN NOT MATCHED THEN
+            INSERT (userid, contid, score)
+            VALUES (#{userId}, #{contId}, #{score})
+    </update>
+    
+    <select id="selectReviews" parameterType="hashmap" resultType="ReviewDTO">
+    	SELECT *
+		FROM (
+		    select *
+		    from 
+		    postdb left join ratedb using(userId, contId)
+		    
+		    <!--각 리뷰 좋아요수 조인  -->
+		    left join  
+		    (
+		        select postId, count(*) As likeNum from likedb group by postId
+		    ) using (postId)
+		    
+		    <!--각 리뷰 본인이 좋아요 누른지 여부 조인  -->
+		    <if test="likeUserId!=null">
+			    left join 
+			    (
+			        select postId, isLike from likedb where userId = #{likeUserId}
+			    ) using (postId)
+		    </if>
+		    
+		    where (postBoard, contId) in (('review', #{contId}))
+		    ORDER BY postDate desc
+		)
+		WHERE ROWNUM &lt; 9
+    </select>
+    
+    <select id="selectContent" parameterType="string" resultType="ContentDTO">
+    	select * from contentDB where contId = #{contId}
+    </select>
+    
+    <update id="UpdateLike" parameterType="hashmap">
+    	<choose>
+    		<when test="isLike==1">
+		    	MERGE INTO likedb l
+		
+				USING (SELECT #{userId} AS user_id, #{postId} AS post_id FROM dual)
+				ON (l.userid = user_id AND l.postid = post_id )
+				
+				WHEN MATCHED THEN
+	
+					UPDATE SET l.isLike = #{isLike}
+				    
+				WHEN NOT MATCHED THEN
+				    INSERT (userid, postId, isLike)
+				    VALUES (#{userId}, #{postId}, #{isLike})
+			</when>
+			<otherwise>
+				DELETE FROM likedb where userId = #{userId} and postId = #{postId}
+		</otherwise>
+		</choose>
+    </update>
+    
+    <select id="selectReviewByPostId" parameterType="String" resultType="ReviewDTO">
+    	select * from postdb where postId = #{postId}
+    </select>
+    <select id="selectComments" parameterType="String" resultType="CommentDTO">
+    	select * from commentdb where postId = #{postId}
+    </select>
+    
+    <select id="selectRates" parameterType="String" resultType="RateDTO">
+    	select * from ratedb where contId = #{contId} and score IS NOT NULL and score &gt; 0
+    </select>
+    
+    <select id="selectReviewMore" parameterType="map" resultType="ReviewDTO">
+	    select * 
+	    from 
+	    postdb left join ratedb using(userId, contId)
+	    
+	    <!--각 리뷰 좋아요수 조인  -->
+	    left join  
+	    (
+	        select postId, count(*) As likeNum from likedb group by postId
+	    ) using (postId)
+	    
+	    <!--각 리뷰 본인이 좋아요 누른지 여부 조인  -->
+	    <if test="likeUserId!=null">
+		    left join 
+		    (
+		        select postId, isLike from likedb where userId = #{likeUserId}
+		    ) using (postId)
+	    </if>
+	    
+	    where postId = #{postId}
+    </select>
+    
+    <update id="reportReview">
+
+    MERGE INTO reportDB USING dual
+    ON (postId = #{postId} AND userId = #{userId})
+    WHEN MATCHED THEN
+        UPDATE SET reason = #{reason}, reportDate = sysdate
+    WHEN NOT MATCHED THEN
+        INSERT (postId, reason, userId, reportDate)
+        VALUES (#{postId}, #{reason}, #{userId}, sysdate)
+
+    </update>
+</mapper>

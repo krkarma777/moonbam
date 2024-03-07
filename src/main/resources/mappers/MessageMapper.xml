@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageMapper">
+
+	<insert id="insertMessage" parameterType="map">
+	    INSERT INTO Messages (MESSAGEID ,SenderID, ReceiverID, MessageContent, SendDate, ReadStatus)
+	    VALUES (MessageId_seq.nextval,#{senderId}, #{receiverId}, #{messageContent}, CURRENT_TIMESTAMP, 'N')
+	</insert>
+
+	<select id="selectSendedMessage" parameterType="string" resultType="MessageDTO">
+	select * from messages where senderId = #{senderId}
+	</select>
+	
+	<select id="selectReceivedMessage" parameterType="string" resultType="MessageDTO">
+	select * from messages where receiverId = #{receiverId}
+	</select>
+</mapper>

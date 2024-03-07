@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MyPageMapper">
+<!-- updateMember -->
+<update id="updateMember" parameterType="MemberDTO">
+     update member
+     set 
+     nickname = #{nickname},
+     userPhoneNum1 = #{userPhoneNum1},
+     userPhoneNum2 = #{userPhoneNum2},
+     userPhoneNum3 = #{userPhoneNum3},
+     userEmailId = #{userEmailId },
+     userEmailDomain = #{userEmailDomain}
+     
+    where userId = #{userId}
+   </update>
+
+ <!--	 updatePwdMember -->
+
+	<!-- <delete id="deleteMember" parameterType="string">
+	 delete  userId, userPw, userName, userSSN1, userSSN2,  nickname,
+    			userGender,  userPhoneNum1,  userPhoneNum2,  userPhoneNum3, userEmailId,
+    			 userEmailDomain,  userSignDate,  userType
+	 from memberDB
+	 where userid = #{userid}
+	</delete>-->
+	
+	<select id="selectMyReview" parameterType="string" resultType="ReviewDTO">
+       select POSTID,POSTBOARD,USERID,POSTTITLE,POSTDATE,POSTTEXT
+       from POSTDB
+       where userId = #{userId}
+	</select>
+	
+	<select id="selectMyComm" parameterType="string" resultType="CommentDTO">
+       select comid, postid, userId, comdate, comtext, abovecom
+       from commentDB
+       where userId = #{userId}
+	</select>
+	
+	 <select id="idCheck" parameterType="string"
+	            resultType="int">
+     select count(*)
+     from memberDB
+     where userId = #{userId}
+	</select>
+	
+	<select id="mypage" parameterType="string" resultType="MemberDTO">
+	  select userId, userPw, userName, userSSN1, userSSN2,  nickname,
+    			userGender,  userPhoneNum1,  userPhoneNum2,  userPhoneNum3, userEmailId,
+    			 userEmailDomain,  userSignDate,  userType
+      from memberDB
+      where userId = #{userId}
+	</select>
+	  <!-- 내댓글 삭제 -->
+	<delete id="commDel" parameterType="int">
+    delete
+    from commentDB
+    where comId = #{comId}
+   </delete>
+   <!-- 내리뷰 삭제 -->
+   <delete id="reviewDel" parameterType="Long">
+    delete
+    from postDB
+    where postId = #{postId}
+   </delete>
+</mapper>

@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+/* ID 찾기 페이지 스타일 */
+body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f6f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .col {
+            width: 45%;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            height: 300px;
+            box-sizing: border-box;
+        }
+
+        .must {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            transition: transform 80ms ease-in;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"]:active {
+            transform: scale(0.95);
+        }
+
+        #sitesShortCut {
+            text-align: center;
+        }
+
+        #sitesShortCut a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 10px;
+        }

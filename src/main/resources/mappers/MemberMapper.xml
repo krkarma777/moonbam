@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.MemberMapper">
+
+	<!-- 디버그용 - 회원 정보 찾기 -->	
+	<select id="selectAll" resultType="MemberDTO">
+		SELECT
+			*
+		FROM
+			memberDB
+	</select>
+	
+	<!-- 디버그용 - 회원 삭제 -->
+	<delete id="IDDelete" parameterType="String">
+		DELETE 
+		FROM memberDB
+		Where userId = #{userId}
+	</delete>
+	
+
+	<!-- **************************************************************** -->
+	<!-- *********************로그인 Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- 아이디 찾기 -->
+	<select id="findUserId" resultType="MemberDTO" parameterType="hashmap">
+		SELECT
+			*
+		FROM 
+			memberDB
+		WHERE 
+			userName = #{userName}
+			AND userSSN1 = #{ssn1}
+			AND userSSN2 = #{ssn2}
+	</select>
+
+	<!-- 비밀번호 찾기 -->
+	<select id="findUserPW" resultType="MemberDTO" parameterType="hashmap">
+		SELECT
+			*
+		FROM 
+			memberDB
+		WHERE 
+			userName = #{userName}
+			AND userId = #{userId}
+			AND userSSN1 = #{ssn1}
+			AND userSSN2 = #{ssn2}
+	</select>
+	
+		<!-- 로그인 -->
+	<select id="login" resultType="MemberDTO" parameterType="hashmap">
+		SELECT
+			*
+		FROM
+			memberDB
+		WHERE 
+			userId = #{userId}
+			AND userPw = #{userPw}
+	</select>
+
+	<!-- 로그인 에이젝스 -->
+	<select id="loginPossible" resultType="int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userId = #{userId}
+			AND userPw = #{userPw}
+	</select>
+		
+	<!-- 전체 비밀번호 - 닉네임으로 찾기 -->
+	<select id="findPWbyNickname" resultType="int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userid = #{userid}
+			AND nickname = #{nickname}
+	</select>
+	
+	<!-- 전체 비밀번호 - 이메일로 찾기 -->
+	<select id="findPWbyEmail" resultType="int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userid = #{userid}
+			AND userEmailId = #{userEmailId}
+			AND userEmailDomain = #{userEmailDomain}
+	</select>
+	
+	<!-- 전체 비밀번호 - 핸드폰 번호로 찾기 -->
+	<select id="findPWbyPhoneNum" resultType="int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userid = #{userid}
+			AND userPhoneNum1 = #{userPhoneNum1}
+			AND userPhoneNum2 = #{userPhoneNum2}
+			AND userPhoneNum3 = #{userPhoneNum3}
+	</select>
+	
+	<!-- 전체 비밀번호 출력용 -->
+	<select id="selectMemberData" resultType="MemberDTO" parameterType="String">
+		SELECT
+			*
+		FROM 
+			memberDB
+		WHERE 
+			userId = #{userId}
+	</select>
+
+	<!-- **************************************************************** -->
+	<!-- *********************회원가입 Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- 회원가입 -->
+	<insert id="insertNewMember" parameterType="MemberDTO">
+		INSERT INTO memberDB (
+		userId, userPw, userName, userSSN1, userSSN2, 
+		userGender, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3,
+		userEmailId, userEmailDomain
+		)
+		VALUES (
+		#{userId}, #{userPw}, #{userName}, #{userSSN1}, #{userSSN2},
+		#{userGender}, #{nickname}, #{userPhoneNum1}, #{userPhoneNum2},
+		#{userPhoneNum3}, #{userEmailId}, #{userEmailDomain}
+		)
+	</insert>
+
+	<!-- 아이디 중복 검사 에이젝스 -->
+	<select id="isUserIdDuplicate" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE userId = #{userId}
+	</select>
+
+	<!-- 닉네임 중복 검사 에이젝스 -->
+	<select id="isUserNicknameDuplicate" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE nickname = #{nickname}
+	</select>
+
+	<!-- 핸드폰 번호 중복 검사 에이젝스 -->
+	<select id="isUserPNDuplicate" resultType="int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userPhoneNum1 = #{userPhoneNum1}
+			AND userPhoneNum2 = #{userPhoneNum2}
+			AND userPhoneNum3 = #{userPhoneNum3}
+	</select>
+	
+	<!-- 이메일 중복 검사 에이젝스 -->
+	<select id="isUserEmailDuplicate" resultType="int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userEmailId = #{userEmailId}
+			AND userEmailDomain = #{userEmailDomain}
+	</select>
+	
+</mapper>

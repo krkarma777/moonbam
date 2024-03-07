@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ScrapMapper">
+
+	<insert id="insert" parameterType="map">
+		insert into scrap (scrapId, userId, postId, scrapDate)
+		values(scrap_seq.NEXTVAL, #{userId},#{postId},SYSDATE)
+	</insert>
+
+	<select id="checkScrap" resultType="ScrapDTO" parameterType="map">
+		select * from scrap where userId =#{userId} and postId=#{postId}
+	</select>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PostMapper">
+
+
+    <!-- 삽입 -->
+	<insert id="insertContent" parameterType="PostDTO">
+	    <selectKey keyProperty="postId" resultType="long" order="BEFORE">
+	        SELECT POSTIDSEQ.NEXTVAL AS postId FROM DUAL
+	    </selectKey>
+	    INSERT INTO postDB (postid, postBoard, userid, contid, postTitle, postDate, postEditDate, postText, nickname, categoryId)
+	    VALUES (#{postId}, #{postBoard}, #{userId}, #{contId, jdbcType=NUMERIC}, #{postTitle}, SYSTIMESTAMP, null, #{postText}, #{nickname}, #{categoryId})
+	</insert>
+	
+    <!-- 조회 -->
+    <select id="selectPost" resultType="PostDTO" parameterType="Long">
+        SELECT * FROM postdb WHERE postid = #{postId}
+    </select>
+
+	<!-- 개별 게시물 조회 (좋아요 수, 조회수, 댓글 수, 카테고리 이름 포함) -->
+	<select id="selectPagePost" resultType="PostPageDTO" parameterType="Long">
+	    SELECT p.*, c.categoryName,
+	           c.CATEGORYNAME as categoryName,
+	           (SELECT COUNT(*) FROM likeDB WHERE postId = p.postId AND isLike = '1') AS likeNum,
+	           (SELECT viewNum FROM postInfoDB WHERE postId = p.postId) AS viewNum,
+	           (SELECT COUNT(*) FROM commentDB WHERE postId = p.postId) AS commentCount
+	    FROM postDB p
+	    LEFT JOIN PostCategories c ON p.categoryId = c.categoryId
+	    WHERE p.postId = #{postId}
+	</select>
+
+
+
+	<delete id="deletePostInfo" parameterType="long">
+	    DELETE FROM postinfodb WHERE postid = #{postId}
+	</delete>
+	
+	<delete id="deletePost" parameterType="long">
+	    DELETE FROM postdb WHERE postid = #{postId}
+	</delete>
+
+
+	<!-- 전체 조회 (좋아요 수, 조회수, 댓글 수 포함, 조회수 높은 순으로 정렬, 상위 5개만 선택) -->
+	<select id="selectAllPosts" resultType="PostPageDTO" parameterType="map">
+		SELECT * FROM (
+		    SELECT p.*, c.categoryName,
+		           (SELECT COUNT(*) FROM likeDB WHERE postId = p.postId AND isLike = '1') AS likeNum,
+		           (SELECT viewNum FROM postInfoDB WHERE postId = p.postId) AS viewNum,
+		           (SELECT COUNT(*) FROM commentDB WHERE postId = p.postId) AS commentCount
+		    FROM postDB p
+		    LEFT JOIN PostCategories c ON p.categoryId = c.categoryId
+        	WHERE postBoard = #{board} AND postDate >= SYSDATE - 2
+		    ORDER BY viewNum DESC
+		)
+		WHERE ROWNUM &lt;= #{postCount}
+	</select>
+	
+	<select id="popularPostTwoDays" resultType="PostPageDTO" parameterType="map">
+	    SELECT * FROM (
+	        SELECT p.*,c.categoryName,
+	               (SELECT COUNT(*) FROM likeDB WHERE postId = p.postId AND isLike = '1') AS likeNum,
+	               (SELECT viewNum FROM postInfoDB WHERE postId = p.postId) AS viewNum,
+	               (SELECT COUNT(*) FROM commentDB WHERE postId = p.postId) AS commentCount
+	        FROM postDB p
+	        LEFT JOIN PostCategories c ON p.categoryId = c.categoryId
+	        WHERE postDate >= SYSDATE - 2
+	        <choose>
+	            <when test="board != null or board2 != null or board3 != null">
+	                AND (
+	                <if test="board != null">
+	                    postBoard = #{board}
+	                </if>
+	                <if test="board2 != null">
+	                    OR postBoard = #{board2}
+	                </if>
+	                <if test="board3 != null">
+	                    OR postBoard = #{board3}
+	                </if>
+	                )
+	            </when>
+	            <otherwise>
+	                AND 1=1
+	            </otherwise>
+	        </choose>
+	        ORDER BY viewNum DESC
+	    ) WHERE ROWNUM &lt;= #{postCount}
+	</select>
+
+
+
+
+    <!-- 업데이트 -->
+    <update id="updateContent" parameterType="map">
+        UPDATE postdb
+        SET postTitle = #{updatedTitle},
+            postText = #{updatedContent},
+            CATEGORYID = #{postCategory},
+            postEditDate = SYSTIMESTAMP
+        WHERE postId = #{postId}
+    </update>
+    
+
+	<!-- 페이지네이션을 위한 게시물 조회 (좋아요 수, 조회수, 댓글 수, 카테고리 이름 포함) -->
+	<select id="selectAllByPage" resultType="PostPageDTO">
+	    SELECT * FROM (
+	        SELECT inner_query.*, ROWNUM rnum FROM (
+	            SELECT p.*, c.categoryName,
+	                   (SELECT COUNT(*) FROM likeDB WHERE postId = p.postId AND isLike = '1') AS likeNum,
+	                   (SELECT viewNum FROM postInfoDB WHERE postId = p.postId) AS viewNum,
+	                   (SELECT COUNT(*) FROM commentDB WHERE postId = p.postId) AS commentCount
+	            FROM postDB p
+	            LEFT JOIN PostCategories c ON p.categoryId = c.categoryId
+	            <where>
+	                p.postBoard = #{postBoard}
+	                <if test="postTitle != null">
+	                    AND p.postTitle LIKE '%' || #{postTitle} || '%'
+	                </if>
+	                <if test="postText != null">
+	                    AND p.postText LIKE '%' || #{postText} || '%'
+	                </if>
+	                <if test="userId != null">
+	                    AND p.userId LIKE '%' || #{userId} || '%'
+	                </if>
+	                <if test="postCategoryId != null">
+	                	AND c.categoryId = #{postCategoryId}
+	                </if>
+	
+	            </where>
+	            <choose>
+	                <when test="sortIndex == 'likeNum'"> ORDER BY likeNum DESC, p.postDate DESC</when>
+	                <when test="sortIndex == 'viewNum'"> ORDER BY viewNum DESC, p.postDate DESC</when>
+	                <otherwise>ORDER BY p.postDate DESC, p.postId DESC</otherwise>
+	            </choose>
+	        ) inner_query
+	    ) WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{perPage}
+	</select>
+
+
+<!-- 게시물 총 개수 조회 -->
+    <select id="countPosts" resultType="int">
+        SELECT COUNT(*) FROM postDB
+        <where>
+            postBoard = #{postBoard}
+            <if test="postTitle != null">
+                AND postTitle LIKE '%'|| #{postTitle}||'%'
+            </if>
+            <if test="postText != null">
+                AND postText LIKE '%'||#{postText}||'%'
+            </if>
+            <if test="userId != null">
+                AND userId LIKE '%'||#{userId}||'%'
+            </if>
+        </where>
+    </select>
+    
+        <!-- 게시물 조회수 업데이트 -->
+	<update id="updateViewNum" parameterType="long">
+		UPDATE postInfoDB 
+		SET viewNum =
+			((SELECT viewNum FROM postInfoDB WHERE postId = #{postId} )+1) 
+		WHERE postId = #{postId}
+	</update>
+	
+	    <!-- 조회수를 가져오는 쿼리 -->
+    <select id="viewNum" resultType="long">
+        SELECT viewNum
+        FROM postInfoDB
+        WHERE postId = #{postId}
+    </select>
+    
+		<!-- 좋아요 수 조회 -->
+	<select id="likeNum" parameterType="Long" resultType="Long">
+		SELECT COUNT(*) AS likeCount
+		FROM likeDB
+		WHERE postId = #{postId} AND isLike = '1'
+	</select>
+	
+	<!-- 게시글 좋아요수 insert -->
+<update id="postLike" parameterType="hashmap">
+    MERGE INTO likeDB
+    USING (SELECT 1 FROM dual) ON (postId = #{postId} AND userId = #{userId})
+    WHEN MATCHED THEN
+        UPDATE SET isLike = 1
+    WHEN NOT MATCHED THEN
+        INSERT (postId, userId, isLike) VALUES (#{postId}, #{userId}, 1)
+</update>
+
+
+	
+	<select id="selectPostLike" parameterType="hashmap" resultType="likeDTO">
+	select * from likeDB where isLike = 1 and postId=#{postId} and userId=#{userId}
+	</select>
+	
+	<update id="updatePostLike" parameterType="hashmap">
+	update likeDB set isLike=0 
+	where postId = #{postId} and userId=#{userId}
+	</update>
+	
+	<select id="selectMember" parameterType="string" resultType="MemberDTO">
+	select * from MemberDB where userId = #{userId}
+	</select>
+	
+	<!-- 게시글 임시저장 insert -->
+	<insert id="insertPostSave">
+		INSERT INTO postSaveDB (postSaveId, userId, postSaveTitle, postSaveText, postSaveDate ) 
+		VALUES (postSaveIdseq.NEXTVAL, #{userId}, #{postSaveTitle}, #{postSaveText}, SYSDATE )
+	</insert>
+	
+	<!-- 임시글 select -->
+ 	<select id="postSaveSelect" parameterType="String" resultType="postSaveDTO">
+ 		select postSaveId, userId, postSaveTitle, postSaveText, TO_CHAR(postSaveDate, 'YYYY-MM-DD HH24:MI:SS') as postSaveDate
+		from postSaveDB 
+		where userId = #{userId}
+		ORDER BY postSaveDate DESC
+	</select>
+	
+	<!-- 임시글 갯수 count -->
+	<select id="postSaveCount" resultType="int">
+		SELECT COUNT(*) AS record_count FROM postSaveDB
+		WHERE USERID = #{userID}
+	</select>
+	
+	<!-- 임시글 삭제 -->
+	<delete id="deletePostSave" parameterType="long">
+		DELETE FROM postSaveDB WHERE postSaveId = ${postSaveId}
+	</delete>
+	
+	<!-- 임시글 불러오기 -->
+	<select id="selectPostSave" parameterType="String" resultType="postSaveDTO">
+		select postSaveId, userId, postSaveTitle, postSaveText, TO_CHAR(postSaveDate, 'YYYY-MM-DD HH24:MI:SS') as postSaveDate
+		from postSaveDB 
+		where postSaveId = #{postSaveId}
+	</select>
+	
+</mapper>
