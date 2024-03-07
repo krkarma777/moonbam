@@ -10,7 +10,10 @@
 
 4월초 spring boot 3.x 버전으로 마이그레이션 예정입니다.
 
+MyBatis Mapper의 경로는 src/main/resources/mappers 입니다.
+
 ## 전제 조건
 
 JDK 11<br>
 Oracle DB 11g<br>
+
