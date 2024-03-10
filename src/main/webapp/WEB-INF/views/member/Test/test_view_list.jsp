@@ -158,10 +158,10 @@ td {
 				if (ecPW == userPw) {
 					
 					$.ajax({
-						type : "POST",
-						url : "<c:url value='/DecodePW'/>",
+						type : "GET",
+						url : "<c:url value='/decrypt'/>",
 						data : {
-							encodingStr : userPw
+							mesg : userPw
 						},
 						dataType : "text",
 						success : function(response) {
@@ -175,10 +175,10 @@ td {
 				} else {
 					
 					$.ajax({
-						type : "POST",
-						url : "<c:url value='/EncodePW'/>",
+						type : "GET",
+						url : "<c:url value='/encrypt'/>",
 						data : {
-							userPw : userPw
+							mesg : userPw
 						},
 						dataType : "text",
 						success : function(response) {

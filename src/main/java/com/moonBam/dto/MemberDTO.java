@@ -1,11 +1,9 @@
 package com.moonBam.dto;
 
-import java.io.Serializable;
-
 import org.apache.ibatis.type.Alias;
 
 @Alias("MemberDTO")
-public class MemberDTO implements Serializable{
+public class MemberDTO{
 	private String userId;
 	private String userPw;
 	private String userName;

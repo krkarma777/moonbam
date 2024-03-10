@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>아이디 확인</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='//css/member/child.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/child.css'/>">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 
