@@ -5,8 +5,7 @@ import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moonBam.service.member.LoginService;
@@ -31,7 +30,7 @@ public class AjaxController {
 	//***************************************************************************************************************
 	
 	//메인에서 로그인 여부 확인 에이젝스
-	@RequestMapping(value = "AjaxCheckIDPW", method = RequestMethod.POST)
+	@PostMapping("AjaxCheckIDPW")
 	public String AjaxCheckIDPW(String userId, String userPw) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realUserPw = sc.encrypt(userPw);
 		boolean canLogin = lServ.loginPossible(userId, realUserPw);
@@ -43,7 +42,7 @@ public class AjaxController {
 	}
 	
 	//전체 비밀번호 찾기에서 질문에 따른 대답 확인 에이젝스
-	@RequestMapping(value = "AjaxMatchQnA", method = RequestMethod.POST)
+	@PostMapping("AjaxMatchQnA")
 	public String AjaxMatchQnA(String userInfo, String answer, String userId) {
 		
 		boolean can_All_PW = false;
@@ -85,7 +84,7 @@ public class AjaxController {
 	//***************************************************************************************************************
 	
 	//회원가입 자식창에서 아이디 중복 에이젝스
-	@RequestMapping(value = "/AjaxIDDuplicate", method = RequestMethod.POST)
+	@PostMapping("/AjaxIDDuplicate")
 	public String AjaxIDDuplicate(String userId) {
 		boolean isDuplicate = rServ.isUserIdDuplicate(userId);
 		String mesg = "notDuplicate";
@@ -96,7 +95,7 @@ public class AjaxController {
 	}
 	
 	//회원가입 자식창에서 닉네임 중복 에이젝스
-	@RequestMapping(value = "/AjaxNicknameDuplicate", method = RequestMethod.POST)
+	@PostMapping("/AjaxNicknameDuplicate")
 	public String AjaxNicknameDuplicate(String nickname) {
 		boolean isDuplicate = rServ.isUserNicknameDuplicate(nickname);
 		String mesg = "notDuplicate";
@@ -107,7 +106,7 @@ public class AjaxController {
 	}
 		
 	//회원가입 자식창에서 이메일 중복 에이젝스
-	@RequestMapping(value = "/AjaxEmailDuplicate", method = RequestMethod.POST)
+	@PostMapping("/AjaxEmailDuplicate")
 	public String AjaxEmailDuplicate(String userEmailId, String userEmailDomain) {
 		boolean isDuplicate = rServ.isUserEmailDuplicate(userEmailId, userEmailDomain);
 		String mesg = "notDuplicate";
@@ -118,7 +117,7 @@ public class AjaxController {
 	}		
 	
 	//회원가입 자식창에서 핸드폰 번호 중복 에이젝스
-	@RequestMapping(value = "/AjaxPhoneNumDuplicate", method = RequestMethod.POST)
+	@PostMapping("/AjaxPhoneNumDuplicate")
 	public String AjaxPhoneNumDuplicate(String userPhoneNum1, String userPhoneNum2, String userPhoneNum3) {
 		boolean isDuplicate = rServ.isUserPNDuplicate(userPhoneNum1, userPhoneNum2, userPhoneNum3);
 		String mesg = "notDuplicate";

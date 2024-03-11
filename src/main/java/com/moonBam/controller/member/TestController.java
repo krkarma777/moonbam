@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,7 +19,7 @@ public class TestController {
 	LoginService serv;
 
 	// 멤버 리스트 찾기
-	@RequestMapping(value = "/memberList", method = RequestMethod.GET)
+	@GetMapping("/memberList")
 	public ModelAndView memberList() {
 		ModelAndView mav = new ModelAndView();
 		List<MemberDTO> list = serv.selectAll();
@@ -31,7 +30,7 @@ public class TestController {
 	}
 
 	// 멤버 삭제
-	@RequestMapping(value = "/IDDelete", method = RequestMethod.GET)
+	@GetMapping("/IDDelete")
 	@ResponseBody
 	public void IDDelete(String userId) {
 		serv.IDDelete(userId);
