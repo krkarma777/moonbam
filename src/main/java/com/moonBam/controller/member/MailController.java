@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -41,7 +40,7 @@ public class MailController {
     }
     
     //단순 메일 전송
-    @RequestMapping(value =  "/joinEmail", method = RequestMethod.POST)
+    @PostMapping("/joinEmail")
     public String joinEmail(String userEmail) throws Exception {
     		
     		String authNumber = makeRandomNumber();
@@ -60,7 +59,7 @@ public class MailController {
     
     //로컬 데이터만 전송됨********************************************************************************************************************
     //파일 첨부 메일 전송
-    @RequestMapping(value =  "/sendFileEmail", method = RequestMethod.GET)
+    @GetMapping("/sendFileEmail")
     public String sendFileEmail(String userEmail) throws Exception {
         	String TO_EMAIL = 
         			"cjstkrhdfk@naver.com"; 
@@ -107,7 +106,7 @@ public class MailController {
  	}
     
  	//쿠키 삭제
-	@RequestMapping(value="/deleteCookiee", method=RequestMethod.GET)
+	@GetMapping("/deleteCookiee")
 	public String deleteCookiee(HttpServletResponse response){
 		
 		Cookie c = new Cookie("confirmNum", null); // 인증번호 값을 무작위 숫자로 지정
@@ -121,7 +120,7 @@ public class MailController {
 	}
  		
 	//인증번호 확인 AJAX
-	@RequestMapping(value =  "/CertificationAnswer", method = RequestMethod.POST)
+	@PostMapping("/CertificationAnswer")
 	public String CertificationAnswer(String certification, HttpServletRequest request) {
 		Cookie[] cookies= request.getCookies();
 		String confirmNumValue = "";

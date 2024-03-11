@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
@@ -31,7 +29,7 @@ public class RegisterController {
 	SecurityController sc;
 
 	//회원가입
-	@RequestMapping(value = "/InsertData", method = RequestMethod.POST)
+	@PostMapping("/InsertData")
 	public String InsertData(HttpServletRequest request, MemberDTO dto) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		System.out.println(dto);
 		

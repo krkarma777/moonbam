@@ -11,8 +11,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
@@ -46,7 +47,7 @@ public class LoginController {
 	}
 	
 	//로그인
-	@RequestMapping(value = "/Logined", method = RequestMethod.POST)
+	@PostMapping("/Logined")
 	public String LoginToMypage(String userId, String userPw, HttpSession session) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realUserPw = sc.encrypt(userPw);
 		System.out.println(realUserPw);
@@ -61,7 +62,7 @@ public class LoginController {
 	}
 
 	//로그아웃
-	@RequestMapping(value = "/Logout", method = RequestMethod.GET)
+	@GetMapping("/Logout")
 	public String Logout(HttpSession session) {
 		MemberDTO dto = (MemberDTO) session.getAttribute("loginUser");
 		if (dto != null) {
@@ -74,7 +75,7 @@ public class LoginController {
 	}
 	
 	//아이디 찾기
-	@RequestMapping(value = "/SearchID", method = RequestMethod.POST)
+	@PostMapping("/SearchID")
 	public String SearchID(Model model, String userName, String ssn1, String ssn2) {
 		MemberDTO dto = serv.findUserId(userName, ssn1, ssn2);
 		if (dto != null) {
@@ -87,7 +88,7 @@ public class LoginController {
 	}
 	
 	//비밀번호 찾기
-	@RequestMapping(value = "/SearchPartPW", method = RequestMethod.POST)
+	@PostMapping("/SearchPartPW")
 	public String SearchPartPW(Model model, HttpServletResponse response, String userId, String userName, String ssn1, String ssn2) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		MemberDTO dto = serv.findUserPW(userId, userName, ssn1, ssn2);
 				
@@ -107,7 +108,7 @@ public class LoginController {
 	}
 	
 	//전체 비밀번호 출력용
-	@RequestMapping(value = "/SearchAllPW", method = RequestMethod.GET)
+	@GetMapping("/SearchAllPW")
 	public String SearchAllPW(Model model, String userId, HttpSession session) throws Exception {
 		MemberDTO dto = serv.selectMemberData(userId);
 		String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();

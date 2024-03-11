@@ -5,8 +5,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
@@ -28,7 +28,7 @@ public class NewCommerController {
 	}
 	
 	//로그인 메인에서 기존 유저 확인		//약관 동의 연결
-	@RequestMapping(value = "/RegisterTerms", method = RequestMethod.POST)
+	@PostMapping("/RegisterTerms")
 	public String RegisterTerms(HttpServletRequest request, String userName, String ssn1, String ssn2, HttpSession session) {
 		MemberDTO dto = loginServ.findUserId(userName, ssn1, ssn2);
 		
@@ -47,7 +47,7 @@ public class NewCommerController {
 	}
 	
 	//약관 동의		//회원가입 연결
-	@RequestMapping(value = "/CheckExistUser", method = RequestMethod.POST)
+	@PostMapping("/CheckExistUser")
 	public String CheckExistUser(HttpServletRequest request, String userName, String ssn1, String ssn2, 
 			String checked_Agreement, String checked_Info, String checked_Withdraw, HttpSession session) {
 		
