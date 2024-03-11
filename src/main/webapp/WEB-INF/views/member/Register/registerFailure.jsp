@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 실패</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/register_result.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 </head>
 
 <body>

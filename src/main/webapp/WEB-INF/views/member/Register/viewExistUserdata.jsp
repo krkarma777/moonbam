@@ -13,7 +13,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Found ID</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/ID.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
 
 <body>

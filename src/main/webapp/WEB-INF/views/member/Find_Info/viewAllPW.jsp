@@ -10,14 +10,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>비밀번호 찾기</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/ID.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
 <body>
 
 <h1>이메일 발송 성공!</h1>
 
     <p>${dto.getUserName()}님의 비밀번호는  
-    ${dto.getUserEmailId()}@${dto.getUserEmailDomain()}로 전송되었습니다.</p> 
+    <a href="http://www.${dto.getUserEmailDomain()}" target="_blank">${dto.getUserEmailId()}@${dto.getUserEmailDomain()}로 전송되었습니다.</a>
     <p>확인 후 로그인 부탁드립니다.</p>
 
 <div id="sitesShortCut">

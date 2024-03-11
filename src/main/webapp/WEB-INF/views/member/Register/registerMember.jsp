@@ -10,7 +10,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>회원 가입</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/register_input.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_input.css'/>">
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
@@ -112,7 +112,7 @@
 
 	<script type="text/javascript">
 	
-		//페이지 로딩되면 기존 인증번호 쿠기 삭제
+		//페이지 로딩되면 기존 인증번호 쿠키 삭제
 	   $(function(){
 		   deleteCookeeFunction()
 	    });
@@ -129,7 +129,7 @@
 		                }
 		            },
 		            error: function(error) {
-		                console.error("쿠기 삭제 에러:", error);
+		                console.error("쿠키 삭제 에러:", error);
 		            }
 		        });
 

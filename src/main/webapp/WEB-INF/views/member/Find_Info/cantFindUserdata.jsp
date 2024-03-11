@@ -10,7 +10,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>회원 가입 이력 없음</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/unfound.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/unfound.css'/>">
 </head>
 
 <body>

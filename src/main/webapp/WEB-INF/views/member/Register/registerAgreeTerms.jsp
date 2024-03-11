@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>약관 동의 페이지</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/register_term.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_term.css'/>">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>

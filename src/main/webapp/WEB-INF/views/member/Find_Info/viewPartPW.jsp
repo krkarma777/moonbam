@@ -12,7 +12,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Found PW</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/ID.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script type="text/javascript">
     

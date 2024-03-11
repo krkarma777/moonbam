@@ -10,7 +10,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>전체 비밀번호 찾기</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/css/member/child.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/child.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	<script type="text/javascript">
 	
