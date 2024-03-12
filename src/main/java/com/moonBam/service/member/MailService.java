@@ -1,11 +1,14 @@
 package com.moonBam.service.member;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -45,7 +48,7 @@ public class MailService {
 //	}
     
     //이메일과 파일 전송 함수(수정 X)(일반식)
-    public void sendEmailWithFiles(String from, String to, String subject, String body) throws Exception {
+    public void sendEmailWithFiles(String from, String to, String subject, String body, String filePath, String fileName) throws Exception {
     	javaMailSender.send(new MimeMessagePreparator() {
 
 	    	@Override
@@ -55,15 +58,36 @@ public class MailService {
 	            messageHelper.setTo(to);
 	            messageHelper.setSubject(subject);
 	            messageHelper.setText(body, true);
-	
-	            //로컬 데이터만 전송됨............
-	        	FileSystemResource file = new FileSystemResource(new File("resources/images/sample.jpg")); 
-	        	messageHelper.addAttachment("resources/images/sample.jpg", file);
+	        	messageHelper.addAttachment(fileName, new ClassPathResource(filePath));
+	        	messageHelper.addInline("Register_Main", new ClassPathResource("/static/images/email/Register_Main.png"));
 	        }
 		});
 	}  
     
+public String EmailBody(String emailPath, Map<String, String> changeData) throws IOException {
+    	
+    	//Resources 폴더부터 경로 설정
+		ClassPathResource resource = new ClassPathResource(emailPath);
+		//BufferedReader를 통해 한줄씩 읽어옴 || InputStreamReader를 통해 byte를 String Stream으로 변경
+		BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+		//StringBuilder: 문자열 연산을 수행할 때마다, 기존 문자열에 변경사항을 반영하여 작업
+		StringBuilder emailBody = new StringBuilder();
+
+		String line;
+		//HTML의 각 줄을 읽어오고, 특정 글자는 치환
+		while ((line = br.readLine()) != null) {
+			for (Map.Entry<String, String> entry : changeData.entrySet()) {
+			    line = line.replace(entry.getKey(), entry.getValue());
+			}
+		    //각 줄을 StringBuilder에 더하고, 개행
+		    emailBody.append(line).append("\n");
+		}
+    	String mesg = emailBody.toString();
+		return mesg;
+    }
     
+
+
 
 	
 	
