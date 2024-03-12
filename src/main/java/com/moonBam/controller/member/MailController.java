@@ -31,7 +31,35 @@ public class MailController {
 	
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
 
-	//단순 메일 전송
+//	//단순 메일 전송
+//    public void sendEmail(String userEmail, MemberDTO dto) throws Exception {
+//    	
+//    		//Resources 폴더부터 경로 설정
+//    		ClassPathResource resource = new ClassPathResource("static/emailFiles/PWEmail.html");
+//    		//BufferedReader를 통해 한줄씩 읽어옴 || InputStreamReader를 통해 byte를 String Stream으로 변경
+//    		BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+//    		//StringBuilder: 문자열 연산을 수행할 때마다, 기존 문자열에 변경사항을 반영하여 작업
+//    		StringBuilder emailBody = new StringBuilder();
+//
+//    		String line;
+//    		//HTML의 각 줄을 읽어오고, 특정 글자는 치환
+//    		while ((line = br.readLine()) != null) {
+//    		    line = line.replace("##유저_아이디##", dto.getUserId())
+//    		               .replace("##유저_이름##", dto.getUserName())
+//    		               .replace("##유저_비밀번호##", dto.getUserPw());
+//    		    //각 줄을 StringBuilder에 더하고, 개행
+//    		    emailBody.append(line).append("\n");
+//    		}
+//
+//    		String TO_EMAIL = userEmail;
+//        	String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";
+//        	
+//        	//StringBuilder를 String으로 전환하고 이메일 본문으로 저장
+//        	String EMAIL_BODY = emailBody.toString();
+//
+//            serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
+//    }
+  //단순 메일 전송
     public void sendEmail(String userEmail, MemberDTO dto) throws Exception {
     	
     		//Resources 폴더부터 경로 설정
@@ -63,6 +91,7 @@ public class MailController {
     //단순 메일 전송
     @PostMapping("/joinEmail")
     public String joinEmail(String userEmail) throws Exception {
+    		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!1");
     	
     		String authNumber = makeRandomNumber();
     	
@@ -75,11 +104,12 @@ public class MailController {
 			    line = line.replace("##인증번호##", authNumber)
 			               .replace("##인증번호_유효기간##", expireDate);
 			    emailBody.append(line).append("\n");
-		}
+			}
     	
         	String TO_EMAIL = userEmail;
-        	String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";
+        	String EMAIL_SUBJECT = "[회원가입알림] 문화인의 밤을 이용해주셔서 감사합니다.";
         	String EMAIL_BODY = emailBody.toString();
+        	System.out.println(emailBody.toString());
         			
             serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
             return "send";
