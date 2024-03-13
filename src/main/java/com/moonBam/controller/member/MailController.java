@@ -1,10 +1,9 @@
 package com.moonBam.controller.member;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.Cookie;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,73 +30,108 @@ public class MailController {
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
 
 	//단순 메일 전송
+    public void RegisterCompleteEmail(String userEmail, String username) throws Exception {
+    		Map<String, String> changeData = new HashMap<>();
+    		
+    		//******************복사 후 수정하는 부분******************
+    		String emailPath = "static/emailFiles/RegisterCompleteEmail.html";	//HTML 경로
+
+    		String EMAIL_SUBJECT = "[회원가입안내] 문화인의 밤에 오신 것을 환영합니다!";		//이메일 제목
+    		
+    		changeData.put("##유저_이름##", username);								//HTML에서 치환할 데이터
+    		
+    		String innerImageName = "Register_Main";							//내부 이미지 파일 명
+    		String innerImagePath = "/static/images/email/Register_Main.png";	//내부 이미지 파일 경로
+    		//******************복사 후 수정하는 부분******************	   		
+	
+        	String TO_EMAIL = userEmail;
+        	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
+        			
+        	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
+    }	
+	
+  //단순 메일 전송
     public void sendEmail(String userEmail, MemberDTO dto) throws Exception {
+
+    		Map<String, String> changeData = new HashMap<>();
+    		
+    		//******************복사 후 수정하는 부분******************
+    		String emailPath = "static/emailFiles/PWEmail.html";				
+	    	
+    		String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";		
+    		
+			changeData.put("##유저_아이디##", dto.getUserId());					
+    		changeData.put("##유저_이름##", dto.getUserName());
+    		changeData.put("##유저_비밀번호##", dto.getUserPw());
+
+	    	String innerImageName = "FindPW";
+    		String innerImagePath = "/static/images/email/FindPW.png";
+	    	//******************복사 후 수정하는 부분******************
     	
-    		//Resources 폴더부터 경로 설정
-    		ClassPathResource resource = new ClassPathResource("static/emailFiles/PWEmail.html");
-    		//BufferedReader를 통해 한줄씩 읽어옴 || InputStreamReader를 통해 byte를 String Stream으로 변경
-    		BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-    		//StringBuilder: 문자열 연산을 수행할 때마다, 기존 문자열에 변경사항을 반영하여 작업
-    		StringBuilder emailBody = new StringBuilder();
-
-    		String line;
-    		//HTML의 각 줄을 읽어오고, 특정 글자는 치환
-    		while ((line = br.readLine()) != null) {
-    		    line = line.replace("##유저_아이디##", dto.getUserId())
-    		               .replace("##유저_이름##", dto.getUserName())
-    		               .replace("##유저_비밀번호##", dto.getUserPw());
-    		    //각 줄을 StringBuilder에 더하고, 개행
-    		    emailBody.append(line).append("\n");
-    		}
-
     		String TO_EMAIL = userEmail;
-        	String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";
-        	
         	//StringBuilder를 String으로 전환하고 이메일 본문으로 저장
-        	String EMAIL_BODY = emailBody.toString();
-
-            serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
+        	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
+        	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
     }
     
     //단순 메일 전송
     @PostMapping("/joinEmail")
-    public String joinEmail(String userEmail) throws Exception {
-    	
+    public String joinEmail(String userEmail, String userName) throws Exception {
     		String authNumber = makeRandomNumber();
-    	
-			ClassPathResource resource = new ClassPathResource("static/emailFiles/JoinEmail.html");
-			BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-			StringBuilder emailBody = new StringBuilder();
+    		Map<String, String> changeData = new HashMap<>();
+    		
+    		System.out.println(userEmail);
+    		System.out.println(userName);
+    		
+    		//******************복사 후 수정하는 부분******************
+    		String emailPath = "static/emailFiles/JoinEmail.html";
+			
+    		String EMAIL_SUBJECT = "[회원가입알림] 문화인의 밤을 이용해주셔서 감사합니다.";
+    		
+    		changeData.put("##유저_이름##", userName);
+    		changeData.put("##인증번호##", authNumber);
+    		changeData.put("##인증번호_유효기간##", expireDate);
+
+    		String innerImageName = "JoinNumber";
+    		String innerImagePath = "/static/images/email/JoinNumber.png";
+	    	//******************복사 후 수정하는 부분******************	    		
 	
-			String line;
-			while ((line = br.readLine()) != null) {
-			    line = line.replace("##인증번호##", authNumber)
-			               .replace("##인증번호_유효기간##", expireDate);
-			    emailBody.append(line).append("\n");
-		}
-    	
         	String TO_EMAIL = userEmail;
-        	String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";
-        	String EMAIL_BODY = emailBody.toString();
+        	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
         			
-            serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
+        	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
             return "send";
     }
     
     
-    //로컬 데이터만 전송됨********************************************************************************************************************
     //파일 첨부 메일 전송
-    @GetMapping("/sendFileEmail")
+    @GetMapping("/sendFileEmail")												//*****이후 POST로 변경하여 사용*****
     public String sendFileEmail(String userEmail) throws Exception {
-        	String TO_EMAIL = 
-        			"cjstkrhdfk@naver.com"; 
-        			//userEmail;
-        	String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";
-        	String EMAIL_BODY = "Email body";
-        	serv.sendEmailWithFiles(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
+        	
+        	Map<String, String> changeData = new HashMap<>();
+    		
+    		//******************복사 후 수정하는 부분******************
+    		String emailPath = "static/emailFiles/FileEmail.html";				//HTML 경로
+    		
+    		String EMAIL_SUBJECT = "[파일전송알림] 문화인의 밤을 이용해주셔서 감사합니다.";		//이메일 제목
+    		
+    		changeData.put("##HTML내용##", "변경할 값");							//HTML에서 치환할 데이터
+    		
+    		String filePath = "/static/images/sample.jpg";						//전송할 파일 경로
+    		String fileName = "샘플.jpg";											//파일 제목
+
+    		String innerImageName = null;										//내부 이미지 파일 명
+    		String innerImagePath = "/static/images/email/null";				//내부 이미지 파일 경로
+	    	//******************복사 후 수정하는 부분******************	    		
+	
+        	String TO_EMAIL = "userEmail";										
+        	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
+        	
+        	serv.sendEmailWithFiles(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, filePath, fileName, innerImageName, innerImagePath);
         	return "send";
+        	
+        	
     }
-    //로컬 데이터만 전송됨*********************************************************************************************************************
     
     
     
@@ -169,8 +202,4 @@ public class MailController {
 		}
 		return mesg;
 	}	
-    
-    
-    
-    
 }
