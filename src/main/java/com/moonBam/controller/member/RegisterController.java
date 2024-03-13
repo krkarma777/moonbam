@@ -1,8 +1,5 @@
 package com.moonBam.controller.member;
 
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,10 +24,13 @@ public class RegisterController {
 	
 	@Autowired
 	SecurityController sc;
+	
+	@Autowired
+	MailController mc;
 
 	//회원가입
 	@PostMapping("/InsertData")
-	public String InsertData(HttpServletRequest request, MemberDTO dto) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+	public String InsertData(HttpServletRequest request, MemberDTO dto) throws Exception {
 		System.out.println(dto);
 		
 		String result = "member/Register/registerFailure";
@@ -137,7 +137,8 @@ public class RegisterController {
 
 		// 이메일 검증
 		boolean isDuplicateEM = serv.isUserEmailDuplicate(dto.getUserEmailId(), dto.getUserEmailDomain());
-
+		String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();
+		
 		if (isDuplicateEM) { // 이메일 중복 확인(이메일 아이디 + 이메일 도메인이 모두 일치)
 			failMesg = false;
 			request.setAttribute("mesg", "이미 가입된 이메일입니다. 확인해주세요");
@@ -166,6 +167,7 @@ public class RegisterController {
 			if (num == 1 && failMesg == true) {
 				System.out.println("회원가입 성공");
 				result = "member/Register/registerSuccess";
+				mc.RegisterCompleteEmail(userEmail, dto.getUserName());
 			// 모든 데이터가 규격을 통과했음에도 insert되지 않았을 경우, 회원가입 실패 페이지로 이동
 			} else {
 				System.out.println("회원가입 실패");

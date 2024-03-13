@@ -29,42 +29,77 @@ public class MailController {
 	
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
 
+	//단순 메일 전송
+    public void RegisterCompleteEmail(String userEmail, String username) throws Exception {
+    		Map<String, String> changeData = new HashMap<>();
+    		
+    		//******************복사 후 수정하는 부분******************
+    		String emailPath = "static/emailFiles/RegisterCompleteEmail.html";	//HTML 경로
+
+    		String EMAIL_SUBJECT = "[회원가입안내] 문화인의 밤에 오신 것을 환영합니다!";		//이메일 제목
+    		
+    		changeData.put("##유저_이름##", username);								//HTML에서 치환할 데이터
+    		
+    		String innerImageName = "Register_Main";							//내부 이미지 파일 명
+    		String innerImagePath = "/static/images/email/Register_Main.png";	//내부 이미지 파일 경로
+    		//******************복사 후 수정하는 부분******************	   		
+	
+        	String TO_EMAIL = userEmail;
+        	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
+        			
+        	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
+    }	
+	
   //단순 메일 전송
     public void sendEmail(String userEmail, MemberDTO dto) throws Exception {
 
     		Map<String, String> changeData = new HashMap<>();
     		
     		//******************복사 후 수정하는 부분******************
-    		String emailPath = "static/emailFiles/PWEmail.html";				//HTML파일 경로
-	    		changeData.put("##유저_아이디##", dto.getUserId());					//HTML에서 치환할 데이터
-	    		changeData.put("##유저_이름##", dto.getUserName());
-	    		changeData.put("##유저_비밀번호##", dto.getUserPw());
-	    	String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";		//이메일 제목
+    		String emailPath = "static/emailFiles/PWEmail.html";				
+	    	
+    		String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";		
+    		
+			changeData.put("##유저_아이디##", dto.getUserId());					
+    		changeData.put("##유저_이름##", dto.getUserName());
+    		changeData.put("##유저_비밀번호##", dto.getUserPw());
+
+	    	String innerImageName = "FindPW";
+    		String innerImagePath = "/static/images/email/FindPW.png";
 	    	//******************복사 후 수정하는 부분******************
     	
     		String TO_EMAIL = userEmail;
         	//StringBuilder를 String으로 전환하고 이메일 본문으로 저장
         	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
-            serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
+        	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
     }
     
     //단순 메일 전송
     @PostMapping("/joinEmail")
-    public String joinEmail(String userEmail) throws Exception {
+    public String joinEmail(String userEmail, String userName) throws Exception {
     		String authNumber = makeRandomNumber();
     		Map<String, String> changeData = new HashMap<>();
     		
+    		System.out.println(userEmail);
+    		System.out.println(userName);
+    		
     		//******************복사 후 수정하는 부분******************
     		String emailPath = "static/emailFiles/JoinEmail.html";
-	    		changeData.put("##인증번호##", authNumber);
-	    		changeData.put("##인증번호_유효기간##", expireDate);
-	    	String EMAIL_SUBJECT = "[회원가입알림] 문화인의 밤을 이용해주셔서 감사합니다.";
+			
+    		String EMAIL_SUBJECT = "[회원가입알림] 문화인의 밤을 이용해주셔서 감사합니다.";
+    		
+    		changeData.put("##유저_이름##", userName);
+    		changeData.put("##인증번호##", authNumber);
+    		changeData.put("##인증번호_유효기간##", expireDate);
+
+    		String innerImageName = "JoinNumber";
+    		String innerImagePath = "/static/images/email/JoinNumber.png";
 	    	//******************복사 후 수정하는 부분******************	    		
 	
         	String TO_EMAIL = userEmail;
         	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
         			
-            serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY);
+        	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
             return "send";
     }
     
@@ -77,16 +112,22 @@ public class MailController {
     		
     		//******************복사 후 수정하는 부분******************
     		String emailPath = "static/emailFiles/FileEmail.html";				//HTML 경로
-    			changeData.put("##HTML내용##", "변경할 값");						//HTML에서 치환할 데이터
+    		
+    		String EMAIL_SUBJECT = "[파일전송알림] 문화인의 밤을 이용해주셔서 감사합니다.";		//이메일 제목
+    		
+    		changeData.put("##HTML내용##", "변경할 값");							//HTML에서 치환할 데이터
+    		
     		String filePath = "/static/images/sample.jpg";						//전송할 파일 경로
     		String fileName = "샘플.jpg";											//파일 제목
-    		String EMAIL_SUBJECT = "[파일전송알림] 문화인의 밤을 이용해주셔서 감사합니다.";		//이메일 제목
+
+    		String innerImageName = null;										//내부 이미지 파일 명
+    		String innerImagePath = "/static/images/email/null";				//내부 이미지 파일 경로
 	    	//******************복사 후 수정하는 부분******************	    		
 	
-        	String TO_EMAIL = "cjstkrhdfk@naver.com";							//*****userEmail로 변경하여 사용*****
+        	String TO_EMAIL = "userEmail";										
         	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
         	
-        	serv.sendEmailWithFiles(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, filePath, fileName);
+        	serv.sendEmailWithFiles(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, filePath, fileName, innerImageName, innerImagePath);
         	return "send";
         	
         	
@@ -161,45 +202,4 @@ public class MailController {
 		}
 		return mesg;
 	}	
-    
-    
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	//단순 메일 전송
-    @GetMapping("/test")
-    public String test() throws Exception {
-    		String authNumber = makeRandomNumber();
-    		Map<String, String> changeData = new HashMap<>();
-    		
-    		//******************복사 후 수정하는 부분******************
-    		String emailPath = "static/emailFiles/test.html";				//HTML 경로
-    			changeData.put("##유저_이름##", "진짜 힘들어욧");						//HTML에서 치환할 데이터
-    		String filePath = "/static/images/sample.jpg";						//전송할 파일 경로
-    		String fileName = "샘플.jpg";											//파일 제목
-    		String EMAIL_SUBJECT = "[testtsetsets]";		//이메일 제목
-	    	//******************복사 후 수정하는 부분******************	   		
-	
-        	String TO_EMAIL = "cjstkrhdfk@naver.com";
-        	String EMAIL_BODY = serv.EmailBody(emailPath, changeData);
-        			
-        	serv.sendEmailWithFiles(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, filePath, fileName);
-            return "send";
-    }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    
 }

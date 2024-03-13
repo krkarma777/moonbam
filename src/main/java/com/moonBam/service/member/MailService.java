@@ -21,7 +21,7 @@ public class MailService {
 	private JavaMailSender javaMailSender;
 
     //이메일 전송 함수(수정 X)(람다식)
-    public void sendEmail(String from, String to, String subject, String body) throws Exception {
+    public void sendEmail(String from, String to, String subject, String body, String innerImageName, String innerImagePath) throws Exception {
         javaMailSender.send(
         	(MimeMessagePreparator) mimeMessage -> {
 	        	MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);				// true: 멀티파트 메세지를 사용
@@ -29,6 +29,7 @@ public class MailService {
 	            messageHelper.setTo(to);
 	            messageHelper.setSubject(subject);
 	            messageHelper.setText(body, true);														// true: html을 사용
+	            messageHelper.addInline(innerImageName, new ClassPathResource(innerImagePath));
         });
     }
 
@@ -48,7 +49,7 @@ public class MailService {
 //	}
     
     //이메일과 파일 전송 함수(수정 X)(일반식)
-    public void sendEmailWithFiles(String from, String to, String subject, String body, String filePath, String fileName) throws Exception {
+    public void sendEmailWithFiles(String from, String to, String subject, String body, String filePath, String fileName, String innerImageName, String innerImagePath) throws Exception {
     	javaMailSender.send(new MimeMessagePreparator() {
 
 	    	@Override
@@ -59,7 +60,7 @@ public class MailService {
 	            messageHelper.setSubject(subject);
 	            messageHelper.setText(body, true);
 	        	messageHelper.addAttachment(fileName, new ClassPathResource(filePath));
-	        	messageHelper.addInline("Register_Main", new ClassPathResource("/static/images/email/Register_Main.png"));
+	        	messageHelper.addInline(innerImageName, new ClassPathResource(innerImagePath));
 	        }
 		});
 	}  
