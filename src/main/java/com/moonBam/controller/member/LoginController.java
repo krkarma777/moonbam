@@ -48,13 +48,56 @@ public class LoginController {
 	
 	//로그인
 	@PostMapping("/Logined")
-	public String LoginToMypage(String userId, String userPw, HttpSession session) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realUserPw = sc.encrypt(userPw);
 		System.out.println(realUserPw);
+		System.out.println("아이디 저장: " + userIdSave);					//체크되면 true
+		System.out.println("자동 로그인: " + autoLogin);						//체크 안 되면 false
 		MemberDTO dto = serv.login(userId, realUserPw);
 
 		if (dto != null) {
 			session.setAttribute("loginUser", dto);
+
+			if(autoLogin) {
+				
+				Cookie autoId= new Cookie("userId", userId);
+				Cookie autoPW= new Cookie("userPw", userPw);
+				autoId.setMaxAge(60*60*24);
+				autoPW.setMaxAge(60*60*24);
+				response.addCookie(autoId);
+				response.addCookie(autoPW);
+				
+//				System.out.println("등록 오토 아이디"+ autoId);
+//				System.out.println("등록 오토 패스"+ autoPW);
+
+			} else {
+				
+				Cookie autoId= new Cookie("userId", null);
+				Cookie autoPW= new Cookie("userPw", null);
+				autoId.setMaxAge(0);
+				autoPW.setMaxAge(0);
+				response.addCookie(autoId);
+				response.addCookie(autoPW);
+
+//				System.out.println("삭제 오토 아이디"+ autoId);
+//				System.out.println("삭제 오토 패스"+ autoPW);
+				
+				if(userIdSave) {
+					Cookie id= new Cookie("userId", userId);
+					id.setMaxAge(60*60*24);
+					response.addCookie(id);
+					
+//					System.out.println("등록 저장 아이디"+ id);
+				} else {
+					Cookie id= new Cookie("userId", null);
+					id.setMaxAge(0);
+					response.addCookie(id);
+					
+//					System.out.println("삭제 저장 아이디"+ id);
+				}
+				
+			}
+			
 			return "main";
 		} else {
 			return "member/Find_Info/cantFindUserdata";
@@ -127,10 +170,6 @@ public class LoginController {
 		}
 
 	}
-	
-	
-	
-	
 	
 	
 	
