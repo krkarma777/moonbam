@@ -14,7 +14,7 @@ public class MainDAO {
 	SqlSessionTemplate session;
 	
 	public List<ContentDTO> selectTop() {
-		List<ContentDTO> movieTopList = session.selectList("ReviewMapper.selectTop");
+		List<ContentDTO> movieTopList = session.selectList("ContentMapper.selectTop");
 		return movieTopList;
 	}
 }

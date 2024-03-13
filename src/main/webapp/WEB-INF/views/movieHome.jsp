@@ -1,10 +1,13 @@
-<%@page import="com.moonBam.controller.board.util.ContentDataFormatting"%>
+<%@page import="com.moonBam.dto.ContentDTO"%>
+<%@page import="com.moonBam.controller.board.util.ContentDataFormating"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.moonBam.dto.board.PostPageDTO"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <%
 	//데이터 뽑아 오는 곳: 기준은 아직이지만 최근 상영 중에 인기순이 가장 좋지 않을까?
@@ -12,7 +15,8 @@
 		List<PostPageDTO> movieList = (List<PostPageDTO>)request.getAttribute("movieList");
 		List<PostPageDTO> movieMeetList = (List<PostPageDTO>)request.getAttribute("movieMeetList");
 		List<PostPageDTO> movieInfoList = (List<PostPageDTO>)request.getAttribute("movieInfoList");
-    	ContentDataFormatting cdf = new ContentDataFormatting();
+    	ContentDataFormating cdf = new ContentDataFormating();
+    	List<ContentDTO> movieTopList = (List<ContentDTO>)request.getAttribute("movieTopList");
 %>    
 <html>
 <head>
@@ -50,16 +54,8 @@
 }
 
 .innerImage {
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-.leftImage {
-	margin-right: 5px;
-}
-
-.rightImage {
-	margin-left: 5px;
+	
+	margin-right: 10px;
 }
 
 #prevBtn {
@@ -97,36 +93,28 @@
 	<div class="carousel-container">
 		<div class="carousel-slide">
 			<div class="inner" id="lastClone">
-				<img class="leftImage" src="images/웡카.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/스즈메의문단속.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/라라랜드.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/도그맨.jpg" width="230px" height="330px">
-				<img class="rightImage" src="images/너의이름은.jpg" width="230px" height="330px">
+				<%for(int i=6; i<=movieTopList.size(); i++){ %>
+					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+				<%} %>
 			</div>
 			<div class="inner">
-				<a href="ContentDetail?mName=yourname"><img class="leftImage" src="images/너의이름은.jpg" width="230px" height="330px"></a>
-				<img class="innerImage" src="images/웡카.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/스즈메의문단속.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/라라랜드.jpg" width="230px" height="330px">
-				<img class="rightImage" src="images/도그맨.jpg" width="230px" height="330px">
+				<%for(int i=1; i<=movieTopList.size()-5; i++){ %>
+					<a href="showContent?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+				<%} %>
 			</div>
 			<div class="inner">
-				<img class="leftImage" src="images/웡카.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/스즈메의문단속.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/라라랜드.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/도그맨.jpg" width="230px" height="330px">
-				<img class="rightImage" src="images/너의이름은.jpg" width="230px" height="330px">
+				<%for(int i=6; i<=movieTopList.size(); i++){ %>
+					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+				<%} %>
 			</div>
 			<div class="inner" id="firstClone">
-				<a href="ContentDetail"><img class="leftImage" src="images/너의이름은.jpg" width="230px" height="330px"></a>
-				<img class="innerImage" src="images/웡카.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/스즈메의문단속.jpg" width="230px" height="330px">
-				<img class="innerImage" src="images/라라랜드.jpg" width="230px" height="330px">
-				<img class="rightImage" src="images/도그맨.jpg" width="230px" height="330px">
+				<%for(int i=1; i<=movieTopList.size()-5; i++){ %>
+					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+				<%} %>
 			</div>
 		</div>
-		<button id="prevBtn"><img src="images/chevron-left.svg" width="20px" height="30px"></button>
-		<button id="nextBtn"><img src="images/chevron-right.svg" width="20px" height="30px"></button>
+		<button id="prevBtn"><img src="image/chevron-left.svg" width="20px" height="30px"></button>
+		<button id="nextBtn"><img src="image/chevron-right.svg" width="20px" height="30px"></button>
 	</div>
 	
 	<div style="height:20px;"></div>

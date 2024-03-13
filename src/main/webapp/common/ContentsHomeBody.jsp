@@ -1,4 +1,4 @@
-<%@page import="com.moonBam.controller.board.util.ContentDataFormatting"%>
+<%@page import="com.moonBam.controller.board.util.ContentDataFormating"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.moonBam.dto.board.PostPageDTO"%>
@@ -11,7 +11,7 @@
 		List<PostPageDTO> movieList = (List<PostPageDTO>)request.getAttribute("movieList");
 		List<PostPageDTO> movieMeetList = (List<PostPageDTO>)request.getAttribute("movieMeetList");
 		List<PostPageDTO> movieInfoList = (List<PostPageDTO>)request.getAttribute("movieInfoList");
-    	ContentDataFormatting cdf = new ContentDataFormatting();
+    	ContentDataFormating cdf = new ContentDataFormating();
 %>    
 
 <div class="  " style="" align="center">
