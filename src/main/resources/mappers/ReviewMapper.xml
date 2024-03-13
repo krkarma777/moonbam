@@ -166,4 +166,6 @@
         VALUES (#{postId}, #{reason}, #{userId}, sysdate)
 
     </update>
+    
+    
 </mapper>
