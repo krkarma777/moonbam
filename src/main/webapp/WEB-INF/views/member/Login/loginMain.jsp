@@ -111,29 +111,44 @@
 	    
 	    //로그인 관련 함수*************************************************
 	    var currentAjaxRequest = null;
+
+		//쿠키 불러오기
+	    var cookieID = getCookie("userId");
+	    var cookiePW = getCookie("userPw");
+	   
+													  //  쿠키 디버그 코드
+													  console.log("아이디 쿠키: "+ cookieID);
+													  console.log("비밀번호 쿠키: "+ cookiePW);
+													  
+	    //아이디 쿠키가 있으면 아이디 창에 입력 + 아이디 저장 체크
+	    if(cookieID){
+	    	$("#userId").val(cookieID)
+	    	$("#userIdSave").prop("checked",true);
+	    } else {
+	    	$("#userId").val("")
+	    	$("#userIdSave").prop("checked",false);
+	    }
+	    
+	    //비밀번호 쿠키가 있으면 비밀번호 창에 입력 + 자동로그인 체크
+	    if(cookiePW){
+	    	$("#userPw").val(cookiePW)
+	    	$("#autoLogin").prop("checked",true);
+	    } else {
+	    	$("#userPw").val("")
+	    	$("#autoLogin").prop("checked",false);
+	    }
+	    
+		//쿠키 불러오기 함수	    
+	    function getCookie(name) {
+    		var value = "; " + document.cookie;
+    		var parts = value.split("; " + name + "=");
+   		 if (parts.length === 2) return parts.pop().split(";").shift();
+		}
+	    
 	    
 	    //로그인 전송을 시도할 경우, 발동
 	    $("#loginForm").on("submit", function(event) {
 	    	event.preventDefault(); // 폼이 서버로 전송되지 않도록 기본 동작을 막음
-	        
-	        document.cookie = "savedUserId=; expires=0; path=/";
-	        document.cookie = "savedUserPw=; expires=0; path=/";
-	        
-	        // 아이디 저장 체크박스 상태에 따라 쿠키 생성
-	        if ($("#userIdSave").prop("checked")) {
-	            var userId = $("#userId").val();
-	            //쿠키 유효기간 1일, 경로 지정은 보류(WEB-INF/member/Login/loginMain.jsp)
-	            document.cookie = "savedUserId=" + userId + "; expires=" + getCookieExpiration(1) + "; path=/";
-	        }
-	        
-	        // 자동로그인 체크박스 상태에 따라 쿠키 생성
-	        if ($("#autoLogin").prop("checked")) {
-	            var userId = $("#userId").val();
-	            var userPw = $("#userPw").val();
-	            //쿠키 유효기간 1일, 경로 지정은 보류(WEB-INF/member/Login/loginMain.jsp)
-	            document.cookie = "savedUserId=" + userId + "; expires=" + getCookieExpiration(1) + "; path=/";
-	            document.cookie = "savedUserPw=" + userPw + "; expires=" + getCookieExpiration(1) + "; path=/";
-	        }
 	        
 	        // 이전 Ajax 요청이 진행 중이라면 취소(4면 요청이 완료되었음을 의미)
 	        if (currentAjaxRequest && currentAjaxRequest.readyState !== 4) {
@@ -229,37 +244,7 @@
 	        showPW.attr("type", showPW.attr("type") == "password" ? "text" : "password");
 	    });
 
-	    //쿠키 만료일 지정
-	    function getCookieExpiration(days) {
-	        var date = new Date();
-	        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-	        return date.toUTCString();
-	    }
-	    
-	    // 쿠키 불러오기
-	    var savedUserId = getCookie("savedUserId");
-	    var savedUserPw = getCookie("savedUserPw");
 
-	    // 쿠키를 이름으로 가져오는 함수
-	    function getCookie(name) {
-	        var cookies = "; " + document.cookie;
-	        var parts = cookies.split("; " + name + "=");
-	        if (parts.length == 2){                            //쿠키에 유저 아이디가 있는 경우
-	            return parts.pop().split(";").shift();        //찾는 쿠키를 세미콜론을 기준으로 기준으로 자르기
-	        }
-	    }
-	    
-	    // 쿠키가 존재하면 아이디 입력란에 표시
-	    if (savedUserId) {
-	        $("#userId").val(savedUserId);
-	        $("#userIdSave").prop("checked", true);
-	    }
-	    
-	    // 자동로그인으로 비밀번호 쿠기가 존재하면 비밀번호 입력칸에 표시
-	    if (savedUserPw) {
-	        $("#userPw").val(savedUserPw);
-	        $("#autoLogin").prop("checked", true);
-	    }
 	    //*************************************************************
 	    
 	    
