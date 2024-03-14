@@ -1,17 +1,19 @@
 package com.moonBam.controller.review;
 
-import com.moonBam.dto.ContentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.ReviewDTO;
-import com.moonBam.service.ReviewService;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
+import com.moonBam.dto.ContentDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.ReviewDTO;
+import com.moonBam.service.ReviewService;
 
 @Controller
 public class ShowReviewController {
@@ -19,7 +21,7 @@ public class ShowReviewController {
 	@Autowired
 	ReviewService service;
 	
-	@RequestMapping(value="/review", method= RequestMethod.GET)
+	@RequestMapping(value="/review", method=RequestMethod.GET)
 	public String ShowReview(String postId, HttpSession session, HttpServletRequest request) {
 		
 		// 세션에서 로그인 정보 파싱

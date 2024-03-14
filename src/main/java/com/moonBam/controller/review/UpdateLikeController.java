@@ -1,24 +1,25 @@
 	package com.moonBam.controller.review;
 
+import java.util.HashMap;
 
-	import com.moonBam.dto.MemberDTO;
-	import com.moonBam.service.ReviewService;
-	import org.springframework.beans.factory.annotation.Autowired;
-	import org.springframework.stereotype.Controller;
-	import org.springframework.web.bind.annotation.RequestMapping;
-	import org.springframework.web.bind.annotation.RequestMethod;
-	import org.springframework.web.bind.annotation.RequestParam;
-	import org.springframework.web.bind.annotation.ResponseBody;
+import javax.servlet.http.HttpSession;
 
-	import javax.servlet.http.HttpSession;
-	import java.util.HashMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-	@Controller
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.service.ReviewService;
+
+@Controller
 public class UpdateLikeController {
 	@Autowired
 	ReviewService service;
 	
-	@RequestMapping(value="/like", method= RequestMethod.POST)
+	@RequestMapping(value="/like", method=RequestMethod.POST)
 	@ResponseBody
 	public void UpdateLike(@RequestParam HashMap<String, String> map, HttpSession session) {
 		
