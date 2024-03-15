@@ -19,6 +19,7 @@
 
 	<div class="container">
 		<h1>회원가입</h1>
+		
 		<form id="registerForm" action="<c:url value='/InsertData'/>" method="post">
 			
 			<!-- 아이디 입력칸(영어+숫자로 4글자 이상)(반드시 입력되어야 함)(직접 입력은 불가하며, 자식창을 통해서만 입력 가능) -->
@@ -112,9 +113,26 @@
 
 	<script type="text/javascript">
 	
+		//새로고침, 뒤로가기, 나가기 시 경고창 함수
+		function f5Control(event){
+			event.preventDefault();
+		    event.returnValue = '';
+		}
+	
 		//페이지 로딩되면 기존 인증번호 쿠키 삭제
 	   $(function(){
-		   deleteCookeeFunction()
+		   
+		   deleteCookeeFunction();
+		   
+		   //새로고침, 뒤로가기, 나가기 시 경고창 함수 출력
+		   window.addEventListener('beforeunload', f5Control);
+		   
+		   //뒤로가기 단축키을 누르면 로그인 메인으로 이동(Alt + <- 기능)(브라우저 뒤로가기 버튼은 막히지 않음)
+		   window.history.pushState(null, null, window.location.href);
+		   window.onpopstate = function(event) {
+		   	window.history.pushState(null, null, window.location.href);
+		    window.location.href= "<c:url value='/Login'/>"; 
+		    };
 	    });
 
 		function deleteCookeeFunction(){

@@ -12,6 +12,35 @@
 	<title>비밀번호 찾기</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script type="text/javascript">
+
+	//새로고침, 뒤로가기, 나가기 시 경고창 함수
+	function f5Control(event){
+		event.preventDefault();
+	    event.returnValue = '';
+	}
+	
+	//페이지 로딩되면 기존 인증번호 쿠키 삭제
+	$(function(){
+	   
+	   //새로고침, 뒤로가기, 나가기 시 경고창 함수 출력
+	   window.addEventListener('beforeunload', f5Control);
+	   
+	   //뒤로가기 단축키을 누르면 로그인 메인으로 이동(Alt + <- 기능)(브라우저 뒤로가기 버튼은 막히지 않음)
+	   window.history.pushState(null, null, window.location.href);
+	   window.onpopstate = function(event) {
+	   	window.history.pushState(null, null, window.location.href);
+	    window.location.href= "<c:url value='/Login'/>"; 
+	    };
+	    
+	    $("#goLogin").on("click", function(){
+			window.removeEventListener('beforeunload', f5Control);
+		})
+	});
+
+</script>
+
 <body>
 
 <h1>이메일 발송 성공!</h1>
@@ -21,7 +50,7 @@
     <p>확인 후 로그인 부탁드립니다.</p>
 
 <div id="sitesShortCut">
-    <a href="<c:url value='/Login'/>">로그인</a> 
+    <a href="<c:url value='/Login'/>" id="goLogin">로그인</a> 
 </div>
 
 </body>
