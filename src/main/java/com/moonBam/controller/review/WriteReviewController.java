@@ -1,16 +1,16 @@
 package com.moonBam.controller.review;
 
+import javax.servlet.http.HttpSession;
 
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.ReviewDTO;
-import com.moonBam.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.ReviewDTO;
+import com.moonBam.service.ReviewService;
 
 @Controller
 public class WriteReviewController {
@@ -19,7 +19,7 @@ public class WriteReviewController {
 	ReviewService service;
 	
 	// 비동기 리뷰 작성 서블릿
-	@RequestMapping(value="my-review", method= RequestMethod.POST)
+	@RequestMapping(value="my-review", method=RequestMethod.POST)
 	@ResponseBody
 	public String writeReview(ReviewDTO review, HttpSession session) {
 		
