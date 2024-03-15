@@ -5,6 +5,7 @@ import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -152,21 +153,34 @@ public class LoginController {
 	
 	//전체 비밀번호 출력용
 	@GetMapping("/SearchAllPW")
-	public String SearchAllPW(Model model, String userId, HttpSession session) throws Exception {
+	public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
+		
+		String userId = "";
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("findPW_userid")) {
+				userId = cookie.getValue();
+			}
+		}
+		
 		MemberDTO dto = serv.selectMemberData(userId);
-		String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();
-		String userPw = sc.decrypt(dto.getUserPw());
-		dto.setUserPw(userPw);
-		System.out.println(userPw);
-		System.out.println(userEmail);
-		System.out.println(dto);
 		
 		if (dto != null) {
+			
+			String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();
+			String userPw = sc.decrypt(dto.getUserPw());
+			dto.setUserPw(userPw);
+			
 			model.addAttribute("dto", dto);
 			mc.sendEmail(userEmail, dto);
+
+			Cookie userIdCookie = new Cookie("findPW_userid",null);
+			userIdCookie.setMaxAge(0);
+			response.addCookie(userIdCookie);
+			
 			return "member/Find_Info/viewAllPW";
 		} else {
-			return "member/Find_Info/cantFindUserdata";
+			return "member/Find_Info/emailErrorPage";
 		}
 
 	}
