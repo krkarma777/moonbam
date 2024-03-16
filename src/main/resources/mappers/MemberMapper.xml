@@ -19,6 +19,69 @@
 		Where userId = #{userId}
 	</delete>
 	
+	<!-- 게시판 목록 출력 -->
+	<select id="viewDBoardList" resultType="DebugBoardDTO">
+		SELECT
+			boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
+		FROM
+			debugBoardDB
+	</select>
+	
+	<!-- 게시판 글 출력 -->
+	<select id="viewDBoardContent" resultType="DebugBoardDTO" parameterType="int">
+		SELECT
+			nickname, title, category, content, edittedDate, viewCount, recommendNum
+		FROM
+			debugBoardDB
+		WHERE
+			boardNum = #{boardNum}
+	</select>
+			
+	<!-- 게시판글 입력-->
+	<insert id="insertPost" parameterType="DebugBoardDTO">
+		INSERT INTO debugBoardDB (
+			nickname, password, title, category, content, 
+			postDate, edittedDate)
+    	VALUES (
+    		#{nickname}, #{password}, #{title}, #{category}, #{content}, 
+    		#{postDate}, #{postDate})
+	</insert>
+	
+	<!-- 게시판글 수정 --><!-- ***************** -->
+	<update id="updateDBoard" parameterType="DebugBoardDTO">
+	    UPDATE debugBoardDB
+	    SET 
+	    	password = #{password},
+	        title = #{title},
+	        category = #{category},
+	        content = #{content},
+	        edittedDate = #{edittedDate},
+	    WHERE boardNum = #{boardNum}
+	</update>
+	
+	<!-- 게시판글 삭제 -->
+	<delete id="deleteDBoard" parameterType="int">
+	    DELETE FROM debugBoardDB
+	    WHERE BOARDNUM = #{boardNum}
+	</delete>
+	
+	<!-- 게시판글 조회수 수정 --><!-- ***************** -->
+	<update id="updateDBoardViewCount" parameterType="Integer">
+	    UPDATE debugBoardDB
+	    SET viewCount = viewCount + 1
+	    WHERE boardNum = #{boardNum}
+	</update>
+	
+	<!-- 게시판글 추천수 수정 --><!-- ***************** -->
+	<update id="updateDBoardRecommendNum" parameterType="DebugBoardDTO">
+	    UPDATE debugBoardDB
+	    SET 
+	        recommendNum = #{recommendNum}
+	    WHERE boardNum = #{boardNum}
+	</update>
+	
+	
+	
 
 	<!-- **************************************************************** -->
 	<!-- *********************로그인 Mapper********************************* -->

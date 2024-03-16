@@ -19,7 +19,6 @@ public class LoginDAO {
 	//디버그용 - 회원 정보 찾기
 	public List<MemberDTO> selectAll() {
 		List<MemberDTO> list = session.selectList("selectAll");
-		System.out.println("dao "+ list);
 		return list;
 	}
 	
