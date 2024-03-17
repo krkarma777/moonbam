@@ -15,7 +15,7 @@
 <body>
 
 <div id="header">
-    <jsp:include page="/common/navibarForMember.jsp" flush="true"></jsp:include><br>
+    <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
 </div>
 
 <div id="contentBody">
@@ -302,3 +302,28 @@
         crossorigin="anonymous"></script>  
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+　　　▅　　　　　　　　　　　　　 ▀█▅　　　▅
+　▅▀　　　█　　　　　██　　　　　　　　▀　　　▀▅
+▅▀　　　▀　　　　　█　　█　　　　　　　　　　　　▀▅
+█　　　　　　　　　█　　  █　　　　　　　　　　　　 █
+█　　　　　　　　 █　　　　█　　　　　　　　　　　　█
+　█　　　　　　　 █▀▀▀▀▀▀▀█　　　　　　　　　　   █
+　　▀▅　　　　▅▀　　　　　▀▅　　　　　　　   ▅▀
+
+ -->
+
+

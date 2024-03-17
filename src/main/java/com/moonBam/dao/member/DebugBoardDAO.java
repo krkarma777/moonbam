@@ -25,15 +25,25 @@ public class DebugBoardDAO {
 		return dto;
 	}
 
-	public int updateDBoardViewCount(int boardNum) {
-		System.out.println(boardNum);
-		int result = session.update("com.config.MemberMapper.viewDBoardContent", boardNum);
-		return result;
+	public void updateDBoardViewCount(HashMap<String, Integer> map) {
+		session.update("com.config.MemberMapper.viewDBoardContent", map);
 	}
 
-	public int insertPost(DebugBoardDTO dto) {
-		int num = session.insert("com.config.MemberMapper.insertPost", dto);
-		return num;
+	public void insertPost(DebugBoardDTO dto) {
+		session.insert("com.config.MemberMapper.insertPost", dto);
+	}
+
+	public void updateDBoard(DebugBoardDTO dto) {
+		int num = session.insert("com.config.MemberMapper.updateDBoard", dto);
+	}
+
+	public void deleteDBoard(int boardNum) {
+		session.delete("com.config.MemberMapper.deleteDBoard", boardNum);		
+	}
+
+	public void updateDBoardRecommendNum(HashMap<String, Integer> map) {
+		session.update("com.config.MemberMapper.updateDBoardRecommendNum", map);
+		
 	}
 	
 	

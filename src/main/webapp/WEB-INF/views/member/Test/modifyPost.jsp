@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>게시판 글쓰기</title>
+    <title>게시판 글 수정하기</title>
     
 <script type="text/javascript" src="<c:url value='/resources/libs/smarteditor/js/service/HuskyEZCreator.js'/>" charset="utf-8"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -23,6 +23,10 @@ function save(){
 }
 
 $(function(){
+	
+	//카테고리 select DB 반영
+	$("#categorySelect").val($("#category").val());
+	
 	//카테고리 변경 시 db에 저장할 카테고리 name의 value에 반영
 	$("#categorySelect").on("change", function(){
 		$("#category").val($("#categorySelect").val());
@@ -39,21 +43,22 @@ $(function(){
 </head>
 <body>
 
-<form id="board" action="insertPost" method="post">
+<form id="board" action="updateDBoard" method="post">
 
-	<input type="hidden" id="category" name="category" value="정보">
-	<input type="hidden" id="content" name="content">
+	<input type="hidden" id="boardNum" name="boardNum" value="${dto.boardNum}">
+	<input type="hidden" id="category" name="category" value="${dto.category}">
+	<input type="hidden" id="content" name="content" value="">
 
 <!-- 로그인상태일 때는 안 뜸 *****************************************************-->
-	닉네임: <input type="text" name="nickname" required="required">
-	비밀번호: <input type="text" name="password" required="required"><br>
+	닉네임: <input type="text" name="nickname" value="${dto.nickname}" required="required">
+	비밀번호: <input type="text" name="password" value="${dto.password}" required="required"><br>
 <!-- 로그인상태일 때는 안 뜸 *****************************************************-->
 
-	제목: <input type="text" name="title" required="required">
+	제목: <input type="text" name="title" value="${dto.title}" required="required">
 	카테고리: <jsp:include page="/WEB-INF/views/common/categoryForDBoard.jsp" flush="true"></jsp:include>
-
+	
 	<textarea id="txtContent" rows="10" cols="100" style="width: 100%;">
-		내용을 입력해주세요
+		${dto.content}
 	</textarea>
 
 	<input type="submit" value="제출">

@@ -30,7 +30,7 @@
 	<!-- 게시판 글 출력 -->
 	<select id="viewDBoardContent" resultType="DebugBoardDTO" parameterType="int">
 		SELECT
-			nickname, title, category, content, edittedDate, viewCount, recommendNum
+			boardNum, nickname, title, category, content, edittedDate, viewCount, recommendNum
 		FROM
 			debugBoardDB
 		WHERE
@@ -51,11 +51,12 @@
 	<update id="updateDBoard" parameterType="DebugBoardDTO">
 	    UPDATE debugBoardDB
 	    SET 
+	    	nickname = #{nickname},
 	    	password = #{password},
 	        title = #{title},
 	        category = #{category},
 	        content = #{content},
-	        edittedDate = #{edittedDate},
+	        edittedDate = #{edittedDate}
 	    WHERE boardNum = #{boardNum}
 	</update>
 	
@@ -66,14 +67,14 @@
 	</delete>
 	
 	<!-- 게시판글 조회수 수정 --><!-- ***************** -->
-	<update id="updateDBoardViewCount" parameterType="Integer">
+	<update id="updateDBoardViewCount" parameterType="hashmap">
 	    UPDATE debugBoardDB
-	    SET viewCount = viewCount + 1
+	    SET viewCount = #{viewCount}
 	    WHERE boardNum = #{boardNum}
 	</update>
 	
 	<!-- 게시판글 추천수 수정 --><!-- ***************** -->
-	<update id="updateDBoardRecommendNum" parameterType="DebugBoardDTO">
+	<update id="updateDBoardRecommendNum" parameterType="hashmap">
 	    UPDATE debugBoardDB
 	    SET 
 	        recommendNum = #{recommendNum}

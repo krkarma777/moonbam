@@ -3,11 +3,15 @@ package com.moonBam.controller.member;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.moonBam.dto.DebugBoardDTO;
+import com.moonBam.service.member.DebugBoardService;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
 
@@ -24,6 +28,8 @@ public class AjaxController {
 	@Autowired
 	SecurityController sc;
 
+	@Autowired
+	DebugBoardService dServ;
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
@@ -126,4 +132,40 @@ public class AjaxController {
         } 
 		return mesg;
 	}	
+	
+	
+	//***************************************************************************************************************
+	//***************************************************게 시 판*******************************************************
+	//***************************************************************************************************************
+		
+	
+	//게시판 추천수 증감
+	@PostMapping("/updateDBoardRecommendNum")
+	public int updateDBoardRecommendNum(int boardNum, String recommendVal) {
+		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		int recommendNum = dto.getRecommendNum();
+		int num = 0;
+		
+		System.out.println(recommendVal);
+		if(recommendVal.equals("like")) {
+			num = 1;
+		} else if(recommendVal.equals("dislike")) {
+			num = -2;
+		} else {
+			num = 1;
+		}
+		recommendNum += num;
+		
+		HashMap<String, Integer> map = new HashMap<>();
+			map.put("boardNum", boardNum);
+			map.put("recommendNum", recommendNum);
+		
+		dServ.updateDBoardRecommendNum(map);
+		return recommendNum;
+	}
+	
+	
+	
+	
+	
 }

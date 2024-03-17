@@ -25,14 +25,27 @@ public class DebugBoardService {
 		return dto;
 	}
 
-	public int updateDBoardViewCount(int boardNum) {
-		int result = dao.updateDBoardViewCount(boardNum);
-		return result;
+	public void updateDBoardViewCount(HashMap<String, Integer> map) {
+		dao.updateDBoardViewCount(map);
 	}
 
-	public int insertPost(DebugBoardDTO dto) {
-		int num = dao.insertPost(dto);
-		return num;
+	public void insertPost(DebugBoardDTO dto) {
+		dao.insertPost(dto);
+	}
+
+	public void updateDBoard(DebugBoardDTO dto) {
+		dao.updateDBoard(dto);
+		
+	}
+
+	public void deleteDBoard(int boardNum) {
+		dao.deleteDBoard(boardNum);
+		
+	}
+
+	public void updateDBoardRecommendNum(HashMap<String, Integer> map) {
+		dao.updateDBoardRecommendNum(map);
+		
 	}
 	
 	
