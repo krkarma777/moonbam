@@ -127,16 +127,28 @@
 		
 		//질문에 따른 해당 유저의 답변이 올바를 경우, 자식창을 닫고, 부모창을 전체 비밀번호를 보여주는 페이지로 이동
 		function moveToParentPage() {		
-			window.opener.location.href = "<c:url value='/SearchAllPW?userId='/>"+ userId;
+			window.opener.location.href = "<c:url value='/SearchAllPW'/>";
 	        window.close(); 
 	    }
 		
+		//오류창에서 부모창을 로그인 화면으로 보내는 기능
+		function redirectToLogin() {
+	        window.opener.location.href = "<c:url value='/Login'/>";
+	        window.close(); 
+	    }
+		
+		//오류창에서 부모창을 회원정보 찾기 화면으로 보내는 기능
+		function redirectToFindInfo() {
+	        window.opener.location.href = "<c:url value='/FindInfo'/>";
+	        window.close(); 
+	    }
 		
 	</script>
 
 </head>
 
 <body>
+
 <%
     String userIdFromPartPW = (String) request.getAttribute("userId");
     Cookie[] cookies = request.getCookies();
@@ -151,21 +163,46 @@
     }
 
     System.out.println("전체 비밀번호 페이지에서 불러온 아이디: " + userIdFromPartPW);
+
+	if(userIdFromPartPW != null){
 %>
-
 	<input type="hidden" id="userId" name="userId" value="<%=userIdFromPartPW%>">
+	
+		<form id="confirmForm">
+	        <label for="confirmUserId">전체 비밀번호 확인을 위한 질문</label>
+	        <select id="confirmUserInfo" name="confirmUserInfo">
+	            <option value="nickname">본인의 닉네임은?</option>
+	            <option value="userPhoneNum">본인의 핸드폰 번호는?(숫자만 쓰시오)</option>
+	            <option value="userEmail">본인의 이메일 주소는?</option>
+	        </select>
+	        <input type="text" id="userAnswer" name="userAnswer" autofocus>
+	        <button id="check_answer" type="button" onclick="checkUserAnswer(event)">확인</button><br>
+	        <span id="confirmAnswerError"></span>
+	    </form>
 
-	<form id="confirmForm">
-        <label for="confirmUserId">전체 비밀번호 확인을 위한 질문</label>
-        <select id="confirmUserInfo" name="confirmUserInfo">
-            <option value="nickname">본인의 닉네임은?</option>
-            <option value="userPhoneNum">본인의 핸드폰 번호는?(숫자만 쓰시오)</option>
-            <option value="userEmail">본인의 이메일 주소는?</option>
-        </select>
-        <input type="text" id="userAnswer" name="userAnswer" autofocus>
-        <button id="check_answer" type="button" onclick="checkUserAnswer(event)">확인</button><br>
-        <span id="confirmAnswerError"></span>
-    </form>
+    <% } else { %>
+    
+	    <div class="notFound">
+	        <h1>잘못된 접근입니다.</h1>
+	        <p class="mesg">비정상적인 접근입니다. 회원정보를 다시 입력해주시기 바랍니다.</p>
+			<div style="text-align: center;">
+				<span onclick="redirectToLogin()" style="margin-right: 10px; cursor: pointer;">로그인</span>
+				 | 
+				 <span onclick="redirectToFindInfo()" style="margin-left: 10px; cursor: pointer;">회원정보화면</span>
+			</div>
+	    </div>
+    
+
+<% } %>
+
+
+
+
+
+
+
+
+
 
 </body>
 

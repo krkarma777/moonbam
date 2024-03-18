@@ -72,29 +72,21 @@ public class ShowContentController {
 	
 	@RequestMapping("/showContent")
 	public String showContent(String contId, Model m, HttpSession session) {
-		//conId를 통해서 DB에서 컨텐츠정보 가져오기
 		ContentDTO content = service.selectContent(contId);
 		m.addAttribute("content", content);
 		
 		MemberDTO login = (MemberDTO)session.getAttribute("loginUser");
 		
-		// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
 		String likeUserId = null;
 		if(login!=null) {
 			likeUserId = login.getUserId();
 		}
 		
-		// DB에서 컨텐츠에 해당하는 리뷰리스트 가져와서 전달
-		// 최신순으로 8개 select
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("contId", contId);
-		map.put("likeUserId", likeUserId);//페이지 사용중인 유저id (각 리뷰에 좋아요 눌렀는지 불러오기 위하여 전달)
+		map.put("likeUserId", likeUserId);
 		List<ReviewDTO> reviewList = service.selectReviews(map);
-		System.out.println(reviewList);
 		m.addAttribute("reviewList", reviewList);
-		
-		
-		
 		return "content/showContent";
 	}
 }

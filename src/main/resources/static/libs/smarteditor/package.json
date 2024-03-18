@@ -1,0 +1,31 @@
+{
+  "name": "smarteditor2",
+  "version": "2.9.2",
+  "description": "WYSIWYG HTML text editor",
+  "keywords": [
+    "javascript",
+    "WYSIWYG",
+    "editor",
+    "SmartEditor"
+  ],
+  "homepage": "https://github.com/naver/smarteditor2",
+  "bugs": {
+    "url": "https://github.com/naver/smarteditor2/issues"
+  },
+  "license": "LGPL-2.1",
+  "author": {
+    "name": "NAVER corp.",
+    "email": "dl_smarteditor2open@navercorp.com"
+  },
+  "ignore": [
+    "**/.*",
+    "**/_*",
+    "node_modules",
+    "bower_components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naver/smarteditor2.git"
+  },
+  "devDependencies": {}
+}
