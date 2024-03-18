@@ -113,8 +113,8 @@
 				<%} %>
 			</div>
 		</div>
-		<button id="prevBtn"><img src="image/chevron-left.svg" width="20px" height="30px"></button>
-		<button id="nextBtn"><img src="image/chevron-right.svg" width="20px" height="30px"></button>
+		<button id="prevBtn"><img src="resources/images/chevron-left.svg" width="20px" height="30px"></button>
+		<button id="nextBtn"><img src="resources/images/chevron-right.svg" width="20px" height="30px"></button>
 	</div>
 	
 	<div style="height:20px;"></div>
