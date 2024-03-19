@@ -1,9 +1,5 @@
 package com.moonBam.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,12 +7,17 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Slf4j
 public class ImageStorageService {
 
     // 이미지를 저장할 디렉토리 경로
-    private final Path rootLocation = Paths.get("uploaded-images");
+    private final Path rootLocation = Paths.get("src/main/resources/static/board");
 
     public ImageStorageService() {
         try {
@@ -48,12 +49,13 @@ public class ImageStorageService {
                     .normalize().toAbsolutePath();
             // 파일 저장
             file.transferTo(destinationFile);
-
-            return filename;
+            System.out.println(filename);
+            return "/acorn/resources/board/" + filename; // 변경된 경로 반환
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);
         }
     }
+
 
     public List<String> listAllFiles() {
         try {

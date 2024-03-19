@@ -1,19 +1,21 @@
 package com.moonBam.controller.board.file;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.moonBam.service.ImageStorageService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.moonBam.service.ImageStorageService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class UploadController {
 
     @PostMapping("/upload-image")
     public ResponseEntity<Map<String, String>> handleFileUpload(@RequestParam("image") MultipartFile file) {
+    	System.out.println("asdasdasd");
         log.info("Received file: {}", file.getOriginalFilename());
         // 이미지를 저장하고 URL을 반환받습니다.
         String imageUrl = imageStorageService.store(file);

@@ -232,35 +232,7 @@
 
 			var uploadedImages = []; // 업로드한 이미지를 저장할 배열
 
-			// 이미지 선택 시 처리 로직
-			$("#image").change(function () {
-				var files = $('#image')[0].files;
-				for (var i = 0; i < files.length; i++) {
-					var formData = new FormData();
-					formData.append('image', files[i]);
-
-					$.ajax({
-						url: '/upload-image',
-						type: 'POST',
-						data: formData,
-						processData: false,
-						contentType: false,
-						success: function (data) {
-							var imageUrl = data.imageUrl;
-							if (imageUrl != null && !uploadedImages.includes(imageUrl)) {
-								uploadedImages.push(imageUrl);
-								addHiddenInput(imageUrl);
-								updateImageList();
-							}
-						},
-						error: function (xhr, status, error) {
-							alert("이미지 업로드 실패: " + error);
-						}
-					});
-				}
-			});
 			//응답형 이미지 처리
-
 			class MyUploadAdapter {
 				constructor(loader) {
 					this.loader = loader;
@@ -268,23 +240,22 @@
 
 				upload() {
 					return this.loader.file.then(file => {
-						const formData = new FormData();
-						formData.append('image', file); // 'image' 필드에 파일 추가
+					const formData = new FormData();
+					formData.append('image', file);
 
-						return fetch('/upload-image', {
-							method: 'POST',
-							body: formData,
-						})
-								.then(response => response.json())
-								.then(response => {
-									// 서버 응답에서 이미지 URL을 추출하여 CKEditor 형식에 맞게 반환
-									return {
-										default: '/uploaded-images/' + response.imageUrl // 이미지 URL을 에디터가 요구하는 형식으로 매핑
-									};
-								});
+					return fetch('/acorn/upload-image', {
+						method: 'POST',
+						body: formData,
+					})
+						.then(response => response.json())
+						.then(response => {
+						return {
+							default: response.imageUrl
+						};
+						});
 					});
 				}
-			}
+				}
 
 		});//end doc
 
