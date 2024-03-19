@@ -15,8 +15,8 @@ public class DebugBoardService {
 	@Autowired
 	DebugBoardDAO dao;
 
-	public List<DebugBoardDTO> viewDBoardList() {
-		List<DebugBoardDTO> list = dao.viewDBoardList();
+	public List<DebugBoardDTO> viewDBoardList(String orderBy) {
+		List<DebugBoardDTO> list = dao.viewDBoardList(orderBy);
 		return list;
 	}
 
@@ -25,14 +25,27 @@ public class DebugBoardService {
 		return dto;
 	}
 
-	public int updateDBoardViewCount(int boardNum) {
-		int result = dao.updateDBoardViewCount(boardNum);
-		return result;
+	public void updateDBoardViewCount(int boardNum) {
+		dao.updateDBoardViewCount(boardNum);
 	}
 
-	public int insertPost(DebugBoardDTO dto) {
-		int num = dao.insertPost(dto);
-		return num;
+	public void insertPost(DebugBoardDTO dto) {
+		dao.insertPost(dto);
+	}
+
+	public void updateDBoard(DebugBoardDTO dto) {
+		dao.updateDBoard(dto);
+		
+	}
+
+	public void deleteDBoard(int boardNum) {
+		dao.deleteDBoard(boardNum);
+		
+	}
+
+	public void updateDBoardRecommendNum(HashMap<String, Integer> map) {
+		dao.updateDBoardRecommendNum(map);
+		
 	}
 	
 	

@@ -25,12 +25,28 @@
 			boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
 		FROM
 			debugBoardDB
+		<choose>
+        <when test="orderBy == 'boardNum'">				<!-- 기본정렬 -->
+            ORDER BY boardNum desc
+        </when>
+        <when test="orderBy == 'viewCount'">			<!-- 인기글 -->
+        	WHERE viewcount > 10
+            ORDER BY viewCount desc
+        </when>
+        <when test="orderBy == 'recommendNum'">			<!-- 추천글 -->
+        	WHERE recommendNum > 5
+            ORDER BY recommendNum desc
+        </when>
+        <otherwise>
+            ORDER BY boardNum desc 						<!-- 기본정렬 -->
+        </otherwise>
+    </choose>
 	</select>
 	
 	<!-- 게시판 글 출력 -->
 	<select id="viewDBoardContent" resultType="DebugBoardDTO" parameterType="int">
 		SELECT
-			nickname, title, category, content, edittedDate, viewCount, recommendNum
+			boardNum, nickname, password, title, category, content, edittedDate, viewCount, recommendNum
 		FROM
 			debugBoardDB
 		WHERE
@@ -40,10 +56,10 @@
 	<!-- 게시판글 입력-->
 	<insert id="insertPost" parameterType="DebugBoardDTO">
 		INSERT INTO debugBoardDB (
-			nickname, password, title, category, content, 
+			boardNum, nickname, password, title, category, content, 
 			postDate, edittedDate)
     	VALUES (
-    		#{nickname}, #{password}, #{title}, #{category}, #{content}, 
+    		DEBUGBOARD_SEQ.nextval, #{nickname}, #{password}, #{title}, #{category}, #{content}, 
     		#{postDate}, #{postDate})
 	</insert>
 	
@@ -51,11 +67,12 @@
 	<update id="updateDBoard" parameterType="DebugBoardDTO">
 	    UPDATE debugBoardDB
 	    SET 
+		    nickname = #{nickname},
 	    	password = #{password},
 	        title = #{title},
 	        category = #{category},
 	        content = #{content},
-	        edittedDate = #{edittedDate},
+	        edittedDate = #{edittedDate}
 	    WHERE boardNum = #{boardNum}
 	</update>
 	
@@ -66,7 +83,7 @@
 	</delete>
 	
 	<!-- 게시판글 조회수 수정 --><!-- ***************** -->
-	<update id="updateDBoardViewCount" parameterType="Integer">
+	<update id="updateDBoardViewCount" parameterType="int">
 	    UPDATE debugBoardDB
 	    SET viewCount = viewCount + 1
 	    WHERE boardNum = #{boardNum}

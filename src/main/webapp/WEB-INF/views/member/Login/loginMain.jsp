@@ -15,7 +15,7 @@
 <body>
 
 <div id="header">
-    <jsp:include page="/common/navibarForMember.jsp" flush="true"></jsp:include><br>
+    <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
 </div>
 
 <div id="contentBody">
@@ -79,9 +79,9 @@
 	        <button class="ghost" id="signUp">회원가입 화면으로</button>
 	      </div>
 	    </div>
-	  </div><!-- overlay-container -->
-	</div><!-- container -->
-</div><!-- contentBody -->
+	  </div>
+	</div>
+</div>
 
 
 	<script type="text/javascript">
@@ -302,3 +302,28 @@
         crossorigin="anonymous"></script>  
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+　　　▅　　　　　　　　　　　　　 ▀█▅　　　▅
+　▅▀　　　█　　　　　██　　　　　　　　▀　　　▀▅
+▅▀　　　▀　　　　　█　　█　　　　　　　　　　　　▀▅
+█　　　　　　　　　█　　  █　　　　　　　　　　　　 █
+█　　　　　　　　 █　　　　█　　　　　　　　　　　　█
+　█　　　　　　　 █▀▀▀▀▀▀▀█　　　　　　　　　　   █
+　　▀▅　　　　▅▀　　　　　▀▅　　　　　　　   ▅▀
+
+ -->
+
+

@@ -16,14 +16,26 @@
 
 <body>
 
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
+</div>
+
+
+<button name=orderBy value="boardNum" onClick="changeList('boardNum')">기본</button>
+<button name="orderBy" value="viewCount" onClick="changeList('viewCount')">인기</button>
+<button name="orderBy" value="recommendNum" onClick="changeList('recommendNum')">추천</button>
+
 <c:forEach var="db" items="${list}" varStatus="vs">
-	    글번호: 	<c:out value="${db.boardNum}"/>
-	    카테고리: <c:out value="${db.category}"/>
-	    제목: 	<a href="<c:url value='/viewDBoardContent'/>/${db.boardNum}"><c:out value="${db.title}"/></a>
-	    닉네임: 	<c:out value="${db.nickname}"/>
-	    작성 날짜:	<c:out value="${db.edittedDate}"/>
-	    조회수: 	<c:out value="${db.viewCount}"/>
-	    추천수: 	<c:out value="${db.recommendNum}"/><br>
+		<p>
+		    글번호: 	<c:out value="${db.boardNum}"/><br>
+		    카테고리: <c:out value="${db.category}"/><br>
+		    제목: 	<span onclick="submitForm(${db.boardNum})">${db.title}</span>
+		    닉네임: 	<c:out value="${db.nickname}"/><br>
+		    작성 날짜:	<c:out value="${db.edittedDate}"/><br>
+		    조회수: 	<c:out value="${db.viewCount}"/><br>
+		    추천수: 	<c:out value="${db.recommendNum}"/>
+	    </p>
+	    <br>
 </c:forEach>
 
 <br>
@@ -37,6 +49,14 @@
 			window.location.href="<c:url value='/newPost'/>"
 		})
 	})
+	
+	function submitForm(boardNum) {
+        window.location.href ="<c:url value='/viewDBoardContent'/>/"+boardNum;
+    }
+	
+	function changeList(changeRow) {
+        window.location.href ="<c:url value='/viewDBoardList'/>/"+changeRow;
+    }
 
 </script>
 </body>

@@ -15,8 +15,8 @@ public class DebugBoardDAO {
 	@Autowired
 	SqlSessionTemplate session;
 
-	public List<DebugBoardDTO> viewDBoardList() {
-		List<DebugBoardDTO> list = session.selectList("com.config.MemberMapper.viewDBoardList");
+	public List<DebugBoardDTO> viewDBoardList(String orderBy) {
+		List<DebugBoardDTO> list = session.selectList("com.config.MemberMapper.viewDBoardList", orderBy);	//Mapper에 기입 필요 없음
 		return list;
 	}
 
@@ -25,15 +25,26 @@ public class DebugBoardDAO {
 		return dto;
 	}
 
-	public int updateDBoardViewCount(int boardNum) {
-		System.out.println(boardNum);
-		int result = session.update("com.config.MemberMapper.viewDBoardContent", boardNum);
-		return result;
+	public void updateDBoardViewCount(int boardNum) {
+		System.out.println(boardNum+"번 글 조회수 +1");
+		session.update("com.config.MemberMapper.viewDBoardContent", boardNum);
 	}
 
-	public int insertPost(DebugBoardDTO dto) {
-		int num = session.insert("com.config.MemberMapper.insertPost", dto);
-		return num;
+	public void insertPost(DebugBoardDTO dto) {
+		session.insert("com.config.MemberMapper.insertPost", dto);
+	}
+
+	public void updateDBoard(DebugBoardDTO dto) {
+		int num = session.insert("com.config.MemberMapper.updateDBoard", dto);
+	}
+
+	public void deleteDBoard(int boardNum) {
+		session.delete("com.config.MemberMapper.deleteDBoard", boardNum);		
+	}
+
+	public void updateDBoardRecommendNum(HashMap<String, Integer> map) {
+		session.update("com.config.MemberMapper.updateDBoardRecommendNum", map);
+		
 	}
 	
 	
