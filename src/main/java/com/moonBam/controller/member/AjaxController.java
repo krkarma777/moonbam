@@ -5,6 +5,9 @@ import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,7 +144,8 @@ public class AjaxController {
 	
 	//게시판 추천수 증감
 	@PostMapping("/updateDBoardRecommendNum")
-	public int updateDBoardRecommendNum(int boardNum, String recommendVal) {
+	public int updateDBoardRecommendNum(int boardNum, String recommendVal, HttpServletRequest request) {
+		
 		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		int recommendNum = dto.getRecommendNum();
 		int num = 0;
@@ -151,10 +155,25 @@ public class AjaxController {
 			num = 1;
 		} else if(recommendVal.equals("dislike")) {
 			num = -2;
-		} else {
+		} else if(recommendVal.equals("normal")){
 			num = 1;
 		}
 		recommendNum += num;
+
+		
+		// 추천|비추|일반 상태 ***************************************
+		ServletContext application = request.getServletContext();
+		String id = (String) application.getAttribute("save");
+		HashMap<Integer, String> numNrecommend = new HashMap<>();
+			numNrecommend.put(boardNum, recommendVal);
+		HashMap<String, Object> idNnumNrecommend = new HashMap<>();
+			idNnumNrecommend.put(id, numNrecommend);
+			
+		application.setAttribute("idNnumNrecommend", idNnumNrecommend);
+		// 추천|비추|일반 상태 ***************************************
+
+		
+		
 		
 		HashMap<String, Integer> map = new HashMap<>();
 			map.put("boardNum", boardNum);

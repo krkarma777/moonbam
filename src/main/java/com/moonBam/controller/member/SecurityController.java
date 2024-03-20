@@ -15,7 +15,7 @@ public class SecurityController {
  
     //암호화 시작(String 타입으로 출력)
     @GetMapping("/encrypt")
-    public String encrypt(String mesg) {
+    public static String encrypt(String mesg) {
     	byte[] byteMesg = doEncrypt(mesg);
     	String resultString = Base64.getEncoder().encodeToString(byteMesg);
     	return resultString;
@@ -30,7 +30,7 @@ public class SecurityController {
     
     //복호화 시작(String 타입으로 암호를 받음)
     @GetMapping("/decrypt")
-    public String decrypt(String mesg) {
+    public static String decrypt(String mesg) {
     	byte[] resultByteArray = Base64.getDecoder().decode(mesg);
     	String decryptedMessage = doDecrypt(resultByteArray);
     	return decryptedMessage;

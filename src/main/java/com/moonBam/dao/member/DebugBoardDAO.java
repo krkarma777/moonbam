@@ -46,6 +46,21 @@ public class DebugBoardDAO {
 		session.update("com.config.MemberMapper.updateDBoardRecommendNum", map);
 		
 	}
+
+	public DebugBoardDTO prevPost(int boardNum) {
+		DebugBoardDTO dto = session.selectOne("com.config.MemberMapper.prevPost", boardNum);
+		return dto;
+	}
+
+	public DebugBoardDTO nextPost(int boardNum) {
+		DebugBoardDTO dto = session.selectOne("com.config.MemberMapper.nextPost", boardNum);
+		return dto;
+	}
+
+	public List<DebugBoardDTO> searchList(HashMap<String, String> map) {
+		List<DebugBoardDTO> list = session.selectList("com.config.MemberMapper.searchList", map);	
+		return list;
+	}
 	
 	
 }

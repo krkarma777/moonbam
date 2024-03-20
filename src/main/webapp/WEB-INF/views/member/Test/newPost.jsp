@@ -37,11 +37,8 @@ $(function(){
 	<input type="hidden" id="category" name="category" value="정보">
 	<input type="hidden" id="content" name="content">
 
-<!-- 로그인상태일 때는 안 뜸 *****************************************************-->
 	닉네임: <input type="text" name="nickname" required="required">
 	비밀번호: <input type="text" name="password"><br>
-<!-- 로그인상태일 때는 안 뜸 *****************************************************-->
-
 	제목: <input type="text" name="title" required="required">
 	카테고리: <jsp:include page="/WEB-INF/views/common/categoryForDBoard.jsp" flush="true"></jsp:include>
 

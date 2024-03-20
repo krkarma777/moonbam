@@ -51,9 +51,8 @@ public class LoginController {
 	@PostMapping("/Logined")
 	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realUserPw = sc.encrypt(userPw);
-		System.out.println(realUserPw);
 		System.out.println("아이디 저장: " + userIdSave);					//체크되면 true
-		System.out.println("자동 로그인: " + autoLogin);						//체크 안 되면 false
+		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
 		MemberDTO dto = serv.login(userId, realUserPw);
 
 		if (dto != null) {

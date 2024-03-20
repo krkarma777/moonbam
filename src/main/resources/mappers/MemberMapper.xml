@@ -26,21 +26,62 @@
 		FROM
 			debugBoardDB
 		<choose>
-        <when test="orderBy == 'boardNum'">				<!-- 기본정렬 -->
-            ORDER BY boardNum desc
-        </when>
-        <when test="orderBy == 'viewCount'">			<!-- 인기글 -->
-        	WHERE viewcount > 10
-            ORDER BY viewCount desc
-        </when>
-        <when test="orderBy == 'recommendNum'">			<!-- 추천글 -->
-        	WHERE recommendNum > 5
-            ORDER BY recommendNum desc
-        </when>
-        <otherwise>
-            ORDER BY boardNum desc 						<!-- 기본정렬 -->
-        </otherwise>
-    </choose>
+	        <when test="orderBy == 'boardNum'">				<!-- 기본정렬 -->
+	            ORDER BY boardNum desc
+	        </when>
+	        <when test="orderBy == 'viewCount'">			<!-- 인기글 -->
+	        	WHERE viewcount > 10
+	            ORDER BY viewCount desc
+	        </when>
+	        <when test="orderBy == 'recommendNum'">			<!-- 추천글 -->
+	        	WHERE recommendNum > 5
+	            ORDER BY recommendNum desc
+	        </when>
+	        <when test="orderBy == '정보'">			<!-- 정보 카테고리 -->
+	        	WHERE category = '정보'
+	            ORDER BY boardNum desc
+	        </when>
+	        <when test="orderBy == '문제 보고'">		<!-- 문제 보고 카테고리 -->
+	        	WHERE category = '문제 보고'
+	            ORDER BY boardNum desc
+	        </when>
+	        <when test="orderBy == '질문'">			<!-- 질문 카테고리 -->
+	        	WHERE category = '질문'
+	            ORDER BY boardNum desc
+	        </when>
+	        <when test="orderBy == '정리'">			<!-- 정리 카테고리 -->
+	        	WHERE category = '정리'
+	            ORDER BY boardNum desc
+	        </when>
+	        <when test="orderBy == '잡담'">			<!-- 잡담 카테고리 -->
+	        	WHERE category = '잡담'
+	            ORDER BY boardNum desc
+	        </when>
+	        <otherwise>
+	            ORDER BY boardNum desc 						<!-- 기본정렬 -->
+	        </otherwise>
+    	</choose>
+	</select>
+	
+	<!-- 게시판 글 검색 -->
+	<select id="searchList" resultType="DebugBoardDTO" parameterType="hashmap">
+	    SELECT *
+	    FROM debugBoardDB
+	    <where>
+	        <if test="searchTag == 'title_contents'">		<!-- 제목 + 내용 -->
+	            AND (title LIKE '%'||#{searchData}||'%' OR content LIKE '%'||#{searchData}||'%')
+	        </if>
+	        <if test="searchTag == 'title'">				<!-- 제목 -->
+	            AND title LIKE '%'||#{searchData}||'%'
+	        </if>
+	        <if test="searchTag == 'contents'">				<!-- 내용 -->
+	            AND content LIKE '%'||#{searchData}||'%'
+	        </if>
+	        <if test="searchTag == 'nickname'">				<!-- 닉네임 -->
+	            AND nickname = #{searchData}
+	        </if>
+	    </where>
+	    ORDER BY boardNum desc
 	</select>
 	
 	<!-- 게시판 글 출력 -->
@@ -63,7 +104,7 @@
     		#{postDate}, #{postDate})
 	</insert>
 	
-	<!-- 게시판글 수정 --><!-- ***************** -->
+	<!-- 게시판글 수정 -->
 	<update id="updateDBoard" parameterType="DebugBoardDTO">
 	    UPDATE debugBoardDB
 	    SET 
@@ -89,13 +130,35 @@
 	    WHERE boardNum = #{boardNum}
 	</update>
 	
-	<!-- 게시판글 추천수 수정 --><!-- ***************** -->
+	<!-- 게시판글 추천수 수정 -->
 	<update id="updateDBoardRecommendNum" parameterType="DebugBoardDTO">
 	    UPDATE debugBoardDB
 	    SET 
 	        recommendNum = #{recommendNum}
 	    WHERE boardNum = #{boardNum}
 	</update>
+	
+	<!-- 현재 글의 이전 글 목록 -->
+	<select id="prevPost" parameterType="int" resultType="DebugBoardDTO">
+		select 	boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
+		from 	debugboarddb
+		where 	boardNum =(
+	    				select max(boardnum)
+	    				from debugboarddb
+	    				where #{boardnum} > boardNum
+	)
+	</select>
+	
+	<!-- 현재 글의 다음 글 목록 -->
+	<select id="nextPost" parameterType="int" resultType="DebugBoardDTO">
+		select 	boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
+		from 	debugboarddb
+		where 	boardNum =(
+	    				select min(boardnum)
+	    				from debugboarddb
+	    				where boardnum > #{boardnum}
+	)
+	</select>
 	
 	
 	
