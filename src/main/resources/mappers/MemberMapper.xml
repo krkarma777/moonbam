@@ -22,7 +22,7 @@
 	<!-- 게시판 목록 출력 -->
 	<select id="viewDBoardList" resultType="DebugBoardDTO">
 		SELECT
-			boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
+			boardNum, nickname, title, category, edittedDate, viewCount, recommendNum, disRecommendNum
 		FROM
 			debugBoardDB
 		<choose>
@@ -34,7 +34,7 @@
 	            ORDER BY viewCount desc
 	        </when>
 	        <when test="orderBy == 'recommendNum'">			<!-- 추천글 -->
-	        	WHERE recommendNum > 5
+	        	WHERE recommendNum-disRecommendNum > 5
 	            ORDER BY recommendNum desc
 	        </when>
 	        <when test="orderBy == '정보'">			<!-- 정보 카테고리 -->
@@ -87,7 +87,7 @@
 	<!-- 게시판 글 출력 -->
 	<select id="viewDBoardContent" resultType="DebugBoardDTO" parameterType="int">
 		SELECT
-			boardNum, nickname, password, title, category, content, edittedDate, viewCount, recommendNum
+			boardNum, nickname, password, title, category, content, edittedDate, viewCount, recommendNum, disRecommendNum
 		FROM
 			debugBoardDB
 		WHERE
@@ -130,17 +130,26 @@
 	    WHERE boardNum = #{boardNum}
 	</update>
 	
-	<!-- 게시판글 추천수 수정 -->
-	<update id="updateDBoardRecommendNum" parameterType="DebugBoardDTO">
+	<!-- 게시판글 추천수 증가 -->
+	<update id="increaseDBoardRecommendNum" parameterType="Integer">
 	    UPDATE debugBoardDB
 	    SET 
-	        recommendNum = #{recommendNum}
+	        recommendNum = recommendNum+1
 	    WHERE boardNum = #{boardNum}
 	</update>
 	
+	<!-- 게시판글 비추천수 증가 -->
+	<update id="decreaseDBoardRecommendNum" parameterType="Integer">
+	    UPDATE debugBoardDB
+	    SET 
+	        disRecommendNum = disRecommendNum+1
+	    WHERE boardNum = #{boardNum}
+	</update>
+	
+	
 	<!-- 현재 글의 이전 글 목록 -->
 	<select id="prevPost" parameterType="int" resultType="DebugBoardDTO">
-		select 	boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
+		select 	boardNum, nickname, title, category, edittedDate, viewCount, recommendNum, disRecommendNum
 		from 	debugboarddb
 		where 	boardNum =(
 	    				select max(boardnum)
@@ -151,7 +160,7 @@
 	
 	<!-- 현재 글의 다음 글 목록 -->
 	<select id="nextPost" parameterType="int" resultType="DebugBoardDTO">
-		select 	boardNum, nickname, title, category, edittedDate, viewCount, recommendNum
+		select 	boardNum, nickname, title, category, edittedDate, viewCount, recommendNum, disRecommendNum
 		from 	debugboarddb
 		where 	boardNum =(
 	    				select min(boardnum)

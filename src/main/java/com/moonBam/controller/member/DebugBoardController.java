@@ -2,19 +2,26 @@ package com.moonBam.controller.member;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.DebugBoardDTO;
@@ -28,35 +35,36 @@ public class DebugBoardController {
 	
 	//게시판 글 목록 보기
 	@GetMapping("/viewDBoardList/{orderBy}")
-	public ModelAndView viewDBoardList(@PathVariable("orderBy") String orderBy, HttpServletRequest request) {
+	public ModelAndView viewDBoardList(@PathVariable("orderBy") String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
-		//게시판으로 바로 들어왔을 경우, 사용자 식별을 위한 값 저장
-		ServletContext application = request.getServletContext();
-		String key = (String) application.getAttribute("save");
-		if(key == null) {
-			key = getNum();
-			application.setAttribute("save", key);
+		//글 번호 순서로 정렬된 전체 글 가져오기
+		List<DebugBoardDTO> list = serv.viewDBoardList(orderBy);
+
+		//리스트의 날짜 형식 변경
+		for (DebugBoardDTO debugBoardDTO : list) {
+			debugBoardDTO.setEdittedDate(chooseDateForm(debugBoardDTO.getEdittedDate()));
 		}
 		
-		List<DebugBoardDTO> list = serv.viewDBoardList(orderBy);
 		ModelAndView mav = new ModelAndView();
 			mav.addObject("list", list);
 			mav.setViewName("member/Test/viewDBoardList");
 		return mav;
 	}
 	
+	
 	//현재 글의 이전 글 보기
-	public DebugBoardDTO prevPost(int boardNum) {
+	public DebugBoardDTO prevPost(int boardNum) throws ParseException {
 		DebugBoardDTO prevPost = serv.prevPost(boardNum);
 		return prevPost;
 	}
 	
 	
 	//현재 글의 다음 글 보기
-	public DebugBoardDTO nextPost(int boardNum) {
+	public DebugBoardDTO nextPost(int boardNum) throws ParseException {
 		DebugBoardDTO nextPost = serv.nextPost(boardNum);
 		return nextPost;
 	}
+	
 	
 	//게시판 글 검색하기
 	@PostMapping("/searchPost")
@@ -71,23 +79,31 @@ public class DebugBoardController {
 		return mav; 
 	}
 	
+	
 	//게시판 글 쓰기 화면으로 이동
-	@PostMapping("/newPost")
+	@PostMapping("/viewDBoardList/newPost")
 	public ModelAndView newPost() {
 		ModelAndView mav = new ModelAndView();
 			mav.setViewName("member/Test/newPost");
 		return mav;
 	}
 	
+	
 	//게시판 글 등록(PRG 패턴을 통해 중복 등록 방지)
-	@PostMapping("/insertPost")
+	@PostMapping("/viewDBoardList/insertPost")
 	public ModelAndView insertPost(DebugBoardDTO dto) {
-		System.out.println(dto);
+		//추천|비추천 입력
+		dto.setRecommendNum(0);
+		dto.setDisRecommendNum(0);
 		
-		// 현재 날짜와 시간을 dto에 입력
-	    Date now = new Date();
+		//날짜 형식 변경
+	    Date nowDate = new Date();
+	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now = format.format(nowDate);
 	    dto.setPostDate(now);
-		
+		System.out.println(dto);
+
+	    
 		serv.insertPost(dto);
 		List<DebugBoardDTO> list = serv.viewDBoardList("boardNum");
 		ModelAndView mav = new ModelAndView();
@@ -96,55 +112,92 @@ public class DebugBoardController {
 		return mav;
 	}
 	
+	
 	//게시판 글 보기
 	@GetMapping("/viewDBoardContent/{bNum}")
-	public ModelAndView viewDBoardContent(@PathVariable("bNum") int boardNum, HttpServletRequest request) {
+	public ModelAndView viewDBoardContent(@PathVariable("bNum") int boardNum, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
-		//게시판 글로 바로 들어왔을 경우, 사용자 식별을 위한 값 저장
-		ServletContext application = request.getServletContext();
-		String key = (String) application.getAttribute("save");
-		if(key == null) {
-			key = getNum();
-			application.setAttribute("save", key);
+		//쿠키에 user 식별 key 있는지 확인
+		String userKey = "";
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			System.out.println("key 탐색");
+		    for (Cookie cookie : cookies) {
+		        if (cookie.getName().equals("key")) {
+		        	userKey = cookie.getValue();
+		            break; // 찾았으면 루프 종료
+		        }
+		    }
 		}
+		
+		//글로 바로 들어왔을 경우, 사용자 식별을 위한 값을 쿠키에 저장
+		if(userKey == "") {
+			userKey = getNum();
+			Cookie key= new Cookie("userKey", userKey);
+			key.setMaxAge(60*60*24);
+			response.addCookie(key);
+			System.out.println("userKey Cookie 생성");
+		}
+		System.out.println("userKey: " + userKey);
+		
+		
+		//현재 게시판에 접속한 유저가 추천을 눌렀는지 쿠키에서 출력
+		String LikeCookieKey = "K"+userKey+"N"+boardNum+"Like";
+		String userBylike = "";
+		cookies = request.getCookies();
+		if (cookies != null) {
+			System.out.println("CookieKey 탐색");
+		    for (Cookie cookie : cookies) {
+		        if (cookie.getName().equals(LikeCookieKey)) {
+		        	userBylike = cookie.getValue();
+		            break; 
+		        }
+		    }
+		}
+		System.out.println("recommendVal: "+ userBylike);
+		
+		
+		//현재 게시판에 접속한 유저가 비추천을 눌렀는지 쿠키에서 출력
+		String disLikeCookieKey = "K"+userKey+"N"+boardNum+"disLike";
+		String userBydislike = "";
+		cookies = request.getCookies();
+		if (cookies != null) {
+			System.out.println("CookieKey 탐색");
+		    for (Cookie cookie : cookies) {
+		        if (cookie.getName().equals(disLikeCookieKey)) {
+		        	userBydislike = cookie.getValue();
+		            break; 
+		        }
+		    }
+		}
+		System.out.println("disRecommendVal: "+ userBydislike);
+		
 		ModelAndView mav = new ModelAndView();
-		
-		
-		
-		//현재 키와 application 안의 키를 비교한다(이때 application 순회를 돌아서 일치하는 키를 찾는다)
-		//그 안에서 가려고 하는 페이지 (boardNum)과 일치하는 Key값을 찾는다
-		//그 key를 통해 value(추천/비추천/노말) 여부를 찾는다
-		//이걸 mav로 넘긴다
-		
-		
-		
-		String recommendVal = (String) application.getAttribute("recommendVal");
-		System.out.println(recommendVal);					////////////////////////////////////////////
-		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
-		mav.addObject("recommendVal", recommendVal);		///////////////////////////////////////			
-		
-		
-		
-		
-		
-		//게시판 글 조회수 올리기
-		serv.updateDBoardViewCount(boardNum);					//조회수 증가 안 됨  - 이유 모름
-
-		
-		
-		
-		
 		
 		//이전글 | 다음글 가져오기
 		DebugBoardDTO prev = prevPost(boardNum);
+		if(prev != null) {							//마지막 글은 prev가 null값
+			prev.setEdittedDate(chooseDateForm(prev.getEdittedDate()));
+		}
 		DebugBoardDTO next = nextPost(boardNum);
-			
+		if(next != null) {							//가장 최신 글은 next가 null값
+			next.setEdittedDate(chooseDateForm(next.getEdittedDate()));
+		}
+		
+		//날짜 형식 변경
+		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
+		dto.setEdittedDate(chooseDateForm(dto.getEdittedDate()));
+		
+		mav.addObject("userBylike", userBylike);
+		mav.addObject("userBydislike", userBydislike);
+		mav.addObject("userKey", userKey);
 		mav.addObject("dto", dto);
 		mav.addObject("prev", prev);
 		mav.addObject("next", next);
 		mav.setViewName("member/Test/viewDBoardContent");
 		return mav;
 	}
+	
 	
 	//게시판 글 수정하기	전 비밀번호 확인
 	@PostMapping("/checkUpdatePost/{bNum}")
@@ -155,6 +208,7 @@ public class DebugBoardController {
 	    return mav;
 	}
 		
+	
 	//게시판 글 수정화면으로 이동
 	@PostMapping("/checkUpdatePost/modifyPost")
 	public ModelAndView modifyPost(int boardNum) {
@@ -165,16 +219,21 @@ public class DebugBoardController {
 	return mav;
 	}
 
+	
 	//게시판 글 수정하기
 	@PostMapping("/checkUpdatePost/updateDBoard")
 	public String updateDBoard(DebugBoardDTO dto) {
 
 		// 현재 날짜와 시간을 dto에 입력
-	    Date now = new Date();
+		Date nowDate = new Date();
+	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now = format.format(nowDate);
 	    dto.setEdittedDate(now);
+	    
 	    serv.updateDBoard(dto);
 	    return "redirect:/viewDBoardContent/"+dto.getBoardNum();
 	}
+	
 	
 	//게시판 글 삭제 전 비밀번호 확인
 	@PostMapping("/checkDeletePost/{bNum}")
@@ -185,12 +244,14 @@ public class DebugBoardController {
 	    return mav;
 	}
 		
+	
 	//게시판 글 삭제하기	
 	@PostMapping("/deletePost")
 	public String  deletePost(String nickname, int boardNum) {
 		serv.deleteDBoard(boardNum);
 		return "redirect:/viewDBoardList/"+boardNum;
 	}
+	
 	
 	//게시판 사용자 어플리케이션용 무작위 16자리 숫자 가져오기
 	public String getNum() {
@@ -199,10 +260,10 @@ public class DebugBoardController {
 	    for (int i = 0; i < 16; i++) {
 	        randomNumber.append(r.nextInt(10));
 	    }
-	    System.out.println(randomNumber.toString());
 	    return randomNumber.toString();
 	}
 
+	
 	//게시판 사용자 어플리케이션용 암호화 IP 가져오기(현재 미사용***************************)
 	public static String getIp(){
 	    String result = null;
@@ -214,5 +275,28 @@ public class DebugBoardController {
 	    result = SecurityController.encrypt(result);
 	   return result; 
 	}//*********************************************************************
-	
+
+
+	//글을 게시한 날짜와 오늘 날짜를 비교하는 함수
+	public String chooseDateForm(String date) throws ParseException {
+		
+		Date today = new Date();												//현재 시간
+		
+		String str = date;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date edittedDate = format.parse(str);									//등록, 수정된 날짜
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");	//연월일 Format
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH시 mm분 ss초");		//시분초 Format
+		
+		String todayForm = dateFormat.format(new Date());						//현재 시간의 연월일
+		String edittedDateForm = dateFormat.format(edittedDate);				//등록, 수정된 날짜의 연월일
+		String edittedDateTime = timeFormat.format(edittedDate);				//등록, 수정된 날짜의 시분초
+		
+		if(todayForm.equals(edittedDateForm)) {									//오늘이 글을 쓴 날짜일 경우
+			return edittedDateTime;												//jsp에 시분초 전송
+		} else {
+			return edittedDateForm;												//jsp에 연월일 전송
+		}
+	}
 }

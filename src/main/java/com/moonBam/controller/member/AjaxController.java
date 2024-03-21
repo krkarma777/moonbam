@@ -6,7 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -142,46 +144,91 @@ public class AjaxController {
 	//***************************************************************************************************************
 		
 	
-	//게시판 추천수 증감
-	@PostMapping("/updateDBoardRecommendNum")
-	public int updateDBoardRecommendNum(int boardNum, String recommendVal, HttpServletRequest request) {
+	//익명 유저가 게시판에 추천을 했는지 여부를 쿠키로 저장
+	@PostMapping("/increaseDBoardRecommendNum")
+	public int increaseDBoardRecommendNum(String userKey, int boardNum, String recommendVal, HttpServletRequest request, HttpServletResponse response) {
 		
 		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		int recommendNum = dto.getRecommendNum();
-		int num = 0;
 		
-		System.out.println(recommendVal);
+		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
+		System.out.println("userKey: " + userKey);
+		System.out.println("boardNum: "+ boardNum);
+		System.out.println("recommendVal: "+recommendVal);
+		
+		String LikeCookieKey = "K"+userKey+"N"+boardNum+"Like";
+		System.out.println(LikeCookieKey);
+		
 		if(recommendVal.equals("like")) {
-			num = 1;
-		} else if(recommendVal.equals("dislike")) {
-			num = -2;
-		} else if(recommendVal.equals("normal")){
-			num = 1;
-		}
-		recommendNum += num;
-
-		
-		// 추천|비추|일반 상태 ***************************************
-		ServletContext application = request.getServletContext();
-		String id = (String) application.getAttribute("save");
-		HashMap<Integer, String> numNrecommend = new HashMap<>();
-			numNrecommend.put(boardNum, recommendVal);
-		HashMap<String, Object> idNnumNrecommend = new HashMap<>();
-			idNnumNrecommend.put(id, numNrecommend);
+			dServ.increaseDBoardRecommendNum(boardNum);
+			dto = dServ.viewDBoardContent(boardNum);
+			recommendNum = dto.getRecommendNum();
 			
-		application.setAttribute("idNnumNrecommend", idNnumNrecommend);
-		// 추천|비추|일반 상태 ***************************************
-
+			Cookie key= new Cookie(LikeCookieKey, recommendVal);
+			key.setMaxAge(60*60*24);
+			response.addCookie(key);
+			System.out.println("userKey에 따른 페이지 좋아요 Cookie 생성");
+		}
 		
-		
-		
-		HashMap<String, Integer> map = new HashMap<>();
-			map.put("boardNum", boardNum);
-			map.put("recommendNum", recommendNum);
-		
-		dServ.updateDBoardRecommendNum(map);
 		return recommendNum;
 	}
+	
+	//익명 유저가 게시판에 비추천을 했는지 여부를 쿠키로 저장
+	@PostMapping("/decreaseDBoardRecommendNum")
+	public int decreaseDBoardRecommendNum(String userKey, int boardNum, String disrecommendVal, HttpServletRequest request, HttpServletResponse response) {
+		
+		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		int disRecommendNum = dto.getDisRecommendNum();
+		
+		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
+		System.out.println("userKey: " + userKey);
+		System.out.println("boardNum: "+ boardNum);
+		System.out.println("disrecommendVal: "+disrecommendVal);
+		
+		String disLikeCookieKey = "K"+userKey+"N"+boardNum+"disLike";
+		System.out.println(disLikeCookieKey);
+		
+		if(disrecommendVal.equals("dislike")) {
+			dServ.decreaseDBoardRecommendNum(boardNum);
+			dto = dServ.viewDBoardContent(boardNum);
+			disRecommendNum = dto.getDisRecommendNum();
+			
+			Cookie key= new Cookie(disLikeCookieKey, disrecommendVal);
+			key.setMaxAge(60*60*24);
+			response.addCookie(key);
+			System.out.println("userKey에 따른 페이지 싫어요 Cookie 생성");
+		}
+		
+		return disRecommendNum;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//글 수정 / 글 삭제 시 비밀번호 확인
 	@PostMapping("/checkPostPW")

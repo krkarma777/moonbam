@@ -43,9 +43,12 @@ public class DebugBoardService {
 		
 	}
 
-	public void updateDBoardRecommendNum(HashMap<String, Integer> map) {
-		dao.updateDBoardRecommendNum(map);
-		
+	public void increaseDBoardRecommendNum(int boardNum) {
+		dao.increaseDBoardRecommendNum(boardNum);
+	}
+	
+	public void decreaseDBoardRecommendNum(int boardNum) {
+		dao.decreaseDBoardRecommendNum(boardNum);
 	}
 
 	public DebugBoardDTO prevPost(int boardNum) {
@@ -62,5 +65,6 @@ public class DebugBoardService {
 		List<DebugBoardDTO> list = dao.searchList(map);
 		return list;
 	}
+
 
 }
