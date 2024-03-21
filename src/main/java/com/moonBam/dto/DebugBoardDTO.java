@@ -13,22 +13,24 @@ public class DebugBoardDTO {
 	private String title;			//글 제목
 	private String category;		//글 카테고리
 	private String content;			//글 내용
-	private Date postDate;			//작성 날짜		//글 작성 시 sysDate
-	private Date edittedDate;		//수정 날짜		//글 작성 시  postDate와 동일값
+	private String postDate;		//작성 날짜	//글 작성 시 sysDate
+	private String edittedDate;		//수정 날짜	//글 작성 시  postDate와 동일값
 	private int viewCount;			//조회수		//default 0
 	private int recommendNum;		//추천수		//default 0
+	private int disRecommendNum;	//비추천수		//default 0
 	@Override
 	public String toString() {
 		return "DebugBoardDTO [boardNum=" + boardNum + ", nickname=" + nickname + ", password=" + password + ", title="
 				+ title + ", category=" + category + ", content=" + content + ", postDate=" + postDate
-				+ ", edittedDate=" + edittedDate + ", viewCount=" + viewCount + ", recommendNum=" + recommendNum + "]";
+				+ ", edittedDate=" + edittedDate + ", viewCount=" + viewCount + ", recommendNum=" + recommendNum
+				+ ", disRecommendNum=" + disRecommendNum + "]";
 	}
 	public DebugBoardDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public DebugBoardDTO(int boardNum, String nickname, String password, String title, String category, String content,
-			Date postDate, Date edittedDate, int viewCount, int recommendNum) {
+			String postDate, String edittedDate, int viewCount, int recommendNum, int disRecommendNum) {
 		super();
 		this.boardNum = boardNum;
 		this.nickname = nickname;
@@ -40,6 +42,7 @@ public class DebugBoardDTO {
 		this.edittedDate = edittedDate;
 		this.viewCount = viewCount;
 		this.recommendNum = recommendNum;
+		this.disRecommendNum = disRecommendNum;
 	}
 	public int getBoardNum() {
 		return boardNum;
@@ -77,16 +80,16 @@ public class DebugBoardDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getPostDate() {
+	public String getPostDate() {
 		return postDate;
 	}
-	public void setPostDate(Date postDate) {
+	public void setPostDate(String postDate) {
 		this.postDate = postDate;
 	}
-	public Date getEdittedDate() {
+	public String getEdittedDate() {
 		return edittedDate;
 	}
-	public void setEdittedDate(Date edittedDate) {
+	public void setEdittedDate(String edittedDate) {
 		this.edittedDate = edittedDate;
 	}
 	public int getViewCount() {
@@ -101,7 +104,12 @@ public class DebugBoardDTO {
 	public void setRecommendNum(int recommendNum) {
 		this.recommendNum = recommendNum;
 	}
-	
+	public int getDisRecommendNum() {
+		return disRecommendNum;
+	}
+	public void setDisRecommendNum(int disRecommendNum) {
+		this.disRecommendNum = disRecommendNum;
+	}
 	
 }
 

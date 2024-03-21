@@ -42,9 +42,12 @@ public class DebugBoardDAO {
 		session.delete("com.config.MemberMapper.deleteDBoard", boardNum);		
 	}
 
-	public void updateDBoardRecommendNum(HashMap<String, Integer> map) {
-		session.update("com.config.MemberMapper.updateDBoardRecommendNum", map);
-		
+	public void increaseDBoardRecommendNum(int boardNum) {
+		session.update("com.config.MemberMapper.increaseDBoardRecommendNum", boardNum);
+	}
+	
+	public void decreaseDBoardRecommendNum(int boardNum) {
+		session.update("com.config.MemberMapper.decreaseDBoardRecommendNum", boardNum);
 	}
 
 	public DebugBoardDTO prevPost(int boardNum) {
@@ -61,6 +64,7 @@ public class DebugBoardDAO {
 		List<DebugBoardDTO> list = session.selectList("com.config.MemberMapper.searchList", map);	
 		return list;
 	}
+
 	
 	
 }
