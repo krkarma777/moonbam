@@ -1,13 +1,16 @@
 package com.moonBam.controller.member;
 
+import java.awt.print.Pageable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -17,11 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.DebugBoardDTO;
@@ -34,11 +39,27 @@ public class DebugBoardController {
 	DebugBoardService serv;
 	
 	//게시판 글 목록 보기
-	@GetMapping("/viewDBoardList/{orderBy}")
-	public ModelAndView viewDBoardList(@PathVariable("orderBy") String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+	@GetMapping("/viewDBoardList")
+	public ModelAndView viewDBoardList( 
+			@RequestParam(defaultValue = "1") int currentPage, 
+            @RequestParam(defaultValue = "10") int perPage,
+			String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
 		//글 번호 순서로 정렬된 전체 글 가져오기
-		List<DebugBoardDTO> list = serv.viewDBoardList(orderBy);
+//		List<DebugBoardDTO> list = serv.viewDBoardList(orderBy);
+//		System.out.println(list.size());				//전체 글 개수
+
+		// 전체 글 개수 가져오기 (페이지네이션에 사용될 수 있음)
+	    List<DebugBoardDTO> allPosts  = serv.viewDBoardList(orderBy);
+	    int totalPosts = allPosts.size();
+		
+		// 현재 페이지에 해당하는 글 목록 생성
+	    List<DebugBoardDTO> list = new ArrayList<>();
+	    int startIndex = (currentPage - 1) * perPage;
+	    int endIndex = Math.min(startIndex + perPage, totalPosts);
+	    for (int i = startIndex; i < endIndex; i++) {
+	        list.add(allPosts.get(i));
+	    }
 
 		//리스트의 날짜 형식 변경
 		for (DebugBoardDTO debugBoardDTO : list) {
@@ -46,6 +67,13 @@ public class DebugBoardController {
 		}
 		
 		ModelAndView mav = new ModelAndView();
+		
+			mav.addObject("currentPage", currentPage);
+		    mav.addObject("perPage", perPage);
+		    mav.addObject("orderBy", orderBy);
+		    mav.addObject("totalPosts", totalPosts);
+		
+		
 			mav.addObject("list", list);
 			mav.setViewName("member/Test/viewDBoardList");
 		return mav;
@@ -68,12 +96,37 @@ public class DebugBoardController {
 	
 	//게시판 글 검색하기
 	@PostMapping("/searchPost")
-	public ModelAndView searchPost(String searchTag, String searchData) {
+	public ModelAndView searchPost(
+			@RequestParam(defaultValue = "1") int currentPage, 
+            @RequestParam(defaultValue = "10") int perPage,
+            String orderBy, String searchTag, String searchData) throws ParseException {
 		HashMap<String, String> map = new HashMap<>();
 			map.put("searchTag", searchTag);
 			map.put("searchData", searchData);
-		List<DebugBoardDTO> list = serv.searchList(map);
+			map.put("category", orderBy);
+		
+		List<DebugBoardDTO> allPosts  = serv.searchList(map);
+	    int totalPosts = allPosts.size();
+		
+		// 현재 페이지에 해당하는 글 목록 생성
+	    List<DebugBoardDTO> list = new ArrayList<>();
+	    int startIndex = (currentPage - 1) * perPage;
+	    int endIndex = Math.min(startIndex + perPage, totalPosts);
+	    for (int i = startIndex; i < endIndex; i++) {
+	        list.add(allPosts.get(i));
+	    }
+
+		//리스트의 날짜 형식 변경
+		for (DebugBoardDTO debugBoardDTO : list) {
+			debugBoardDTO.setEdittedDate(chooseDateForm(debugBoardDTO.getEdittedDate()));
+		}
+		
 		ModelAndView mav = new ModelAndView();
+			mav.addObject("currentPage", currentPage);
+		    mav.addObject("perPage", perPage);
+		    mav.addObject("orderBy", orderBy);
+		    mav.addObject("totalPosts", totalPosts);
+		
 			mav.addObject("list", list);
 			mav.setViewName("member/Test/viewDBoardList");
 		return mav; 
@@ -81,7 +134,7 @@ public class DebugBoardController {
 	
 	
 	//게시판 글 쓰기 화면으로 이동
-	@PostMapping("/viewDBoardList/newPost")
+	@PostMapping("/newPost")
 	public ModelAndView newPost() {
 		ModelAndView mav = new ModelAndView();
 			mav.setViewName("member/Test/newPost");
@@ -90,55 +143,56 @@ public class DebugBoardController {
 	
 	
 	//게시판 글 등록(PRG 패턴을 통해 중복 등록 방지)
-	@PostMapping("/viewDBoardList/insertPost")
+	@PostMapping("/insertPost")
 	public ModelAndView insertPost(DebugBoardDTO dto) {
 		//추천|비추천 입력
 		dto.setRecommendNum(0);
 		dto.setDisRecommendNum(0);
+		dto.setViewCount(0);
+		
 		
 		//날짜 형식 변경
 	    Date nowDate = new Date();
 	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String now = format.format(nowDate);
 	    dto.setPostDate(now);
-		System.out.println(dto);
 
 	    
 		serv.insertPost(dto);
 		List<DebugBoardDTO> list = serv.viewDBoardList("boardNum");
 		ModelAndView mav = new ModelAndView();
 			mav.addObject("list", list);
-			mav.setViewName("redirect:/viewDBoardList/boardNum");
+			mav.setViewName("redirect:/viewDBoardList");
 		return mav;
 	}
 	
 	
 	//게시판 글 보기
-	@GetMapping("/viewDBoardContent/{bNum}")
-	public ModelAndView viewDBoardContent(@PathVariable("bNum") int boardNum, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+	@GetMapping("/viewDBoardContent")
+	public ModelAndView viewDBoardContent(int boardNum, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
 		//쿠키에 user 식별 key 있는지 확인
 		String userKey = "";
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
-			System.out.println("key 탐색");
+			//	System.out.println("userKey 탐색");
 		    for (Cookie cookie : cookies) {
-		        if (cookie.getName().equals("key")) {
+		        if (cookie.getName().equals("userKey")) {
 		        	userKey = cookie.getValue();
 		            break; // 찾았으면 루프 종료
 		        }
 		    }
+		    
+			//글로 바로 들어왔을 경우, 사용자 식별을 위한 값을 쿠키에 저장
+			if(userKey == "") {
+				userKey = getNum();
+				Cookie key= new Cookie("userKey", userKey);
+				key.setMaxAge(60*60*24);
+				response.addCookie(key);
+				//System.out.println("====userKey Cookie 생성====");
+			}
 		}
-		
-		//글로 바로 들어왔을 경우, 사용자 식별을 위한 값을 쿠키에 저장
-		if(userKey == "") {
-			userKey = getNum();
-			Cookie key= new Cookie("userKey", userKey);
-			key.setMaxAge(60*60*24);
-			response.addCookie(key);
-			System.out.println("userKey Cookie 생성");
-		}
-		System.out.println("userKey: " + userKey);
+		//System.out.println("userKey: " + userKey);
 		
 		
 		//현재 게시판에 접속한 유저가 추천을 눌렀는지 쿠키에서 출력
@@ -146,7 +200,7 @@ public class DebugBoardController {
 		String userBylike = "";
 		cookies = request.getCookies();
 		if (cookies != null) {
-			System.out.println("CookieKey 탐색");
+			//	System.out.println("CookieKey 탐색");
 		    for (Cookie cookie : cookies) {
 		        if (cookie.getName().equals(LikeCookieKey)) {
 		        	userBylike = cookie.getValue();
@@ -154,7 +208,7 @@ public class DebugBoardController {
 		        }
 		    }
 		}
-		System.out.println("recommendVal: "+ userBylike);
+		//System.out.println("recommendVal: "+ userBylike);
 		
 		
 		//현재 게시판에 접속한 유저가 비추천을 눌렀는지 쿠키에서 출력
@@ -162,7 +216,7 @@ public class DebugBoardController {
 		String userBydislike = "";
 		cookies = request.getCookies();
 		if (cookies != null) {
-			System.out.println("CookieKey 탐색");
+			//	System.out.println("CookieKey 탐색");
 		    for (Cookie cookie : cookies) {
 		        if (cookie.getName().equals(disLikeCookieKey)) {
 		        	userBydislike = cookie.getValue();
@@ -170,9 +224,7 @@ public class DebugBoardController {
 		        }
 		    }
 		}
-		System.out.println("disRecommendVal: "+ userBydislike);
-		
-		ModelAndView mav = new ModelAndView();
+		//System.out.println("disRecommendVal: "+ userBydislike);
 		
 		//이전글 | 다음글 가져오기
 		DebugBoardDTO prev = prevPost(boardNum);
@@ -184,17 +236,24 @@ public class DebugBoardController {
 			next.setEdittedDate(chooseDateForm(next.getEdittedDate()));
 		}
 		
+		
+		//조회수 증가
+		serv.updateDBoardViewCount(boardNum);
+		
+		
 		//날짜 형식 변경
 		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
-		dto.setEdittedDate(chooseDateForm(dto.getEdittedDate()));
+			dto.setEdittedDate(chooseDateForm(dto.getEdittedDate()));
 		
-		mav.addObject("userBylike", userBylike);
-		mav.addObject("userBydislike", userBydislike);
-		mav.addObject("userKey", userKey);
-		mav.addObject("dto", dto);
-		mav.addObject("prev", prev);
-		mav.addObject("next", next);
-		mav.setViewName("member/Test/viewDBoardContent");
+			
+		ModelAndView mav = new ModelAndView();
+			mav.addObject("userBylike", userBylike);
+			mav.addObject("userBydislike", userBydislike);
+			mav.addObject("userKey", userKey);
+			mav.addObject("dto", dto);
+			mav.addObject("prev", prev);
+			mav.addObject("next", next);
+			mav.setViewName("member/Test/viewDBoardContent");
 		return mav;
 	}
 	
@@ -249,7 +308,7 @@ public class DebugBoardController {
 	@PostMapping("/deletePost")
 	public String  deletePost(String nickname, int boardNum) {
 		serv.deleteDBoard(boardNum);
-		return "redirect:/viewDBoardList/"+boardNum;
+		return "redirect:/viewDBoardList/boardNum/1";
 	}
 	
 	

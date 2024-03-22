@@ -26,8 +26,7 @@ public class DebugBoardDAO {
 	}
 
 	public void updateDBoardViewCount(int boardNum) {
-		System.out.println(boardNum+"번 글 조회수 +1");
-		session.update("com.config.MemberMapper.viewDBoardContent", boardNum);
+		session.update("com.config.MemberMapper.updateDBoardViewCount", boardNum);
 	}
 
 	public void insertPost(DebugBoardDTO dto) {

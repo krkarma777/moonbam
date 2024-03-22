@@ -152,12 +152,12 @@ public class AjaxController {
 		int recommendNum = dto.getRecommendNum();
 		
 		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
-		System.out.println("userKey: " + userKey);
-		System.out.println("boardNum: "+ boardNum);
-		System.out.println("recommendVal: "+recommendVal);
+		//System.out.println("userKey: " + userKey);
+		//System.out.println("boardNum: "+ boardNum);
+		//System.out.println("recommendVal: "+recommendVal);
 		
 		String LikeCookieKey = "K"+userKey+"N"+boardNum+"Like";
-		System.out.println(LikeCookieKey);
+		//System.out.println(LikeCookieKey);
 		
 		if(recommendVal.equals("like")) {
 			dServ.increaseDBoardRecommendNum(boardNum);
@@ -167,7 +167,7 @@ public class AjaxController {
 			Cookie key= new Cookie(LikeCookieKey, recommendVal);
 			key.setMaxAge(60*60*24);
 			response.addCookie(key);
-			System.out.println("userKey에 따른 페이지 좋아요 Cookie 생성");
+			//System.out.println("userKey에 따른 페이지 좋아요 Cookie 생성");
 		}
 		
 		return recommendNum;
@@ -181,12 +181,12 @@ public class AjaxController {
 		int disRecommendNum = dto.getDisRecommendNum();
 		
 		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
-		System.out.println("userKey: " + userKey);
-		System.out.println("boardNum: "+ boardNum);
-		System.out.println("disrecommendVal: "+disrecommendVal);
+		//System.out.println("userKey: " + userKey);
+		//System.out.println("boardNum: "+ boardNum);
+		//System.out.println("disrecommendVal: "+disrecommendVal);
 		
 		String disLikeCookieKey = "K"+userKey+"N"+boardNum+"disLike";
-		System.out.println(disLikeCookieKey);
+		//System.out.println(disLikeCookieKey);
 		
 		if(disrecommendVal.equals("dislike")) {
 			dServ.decreaseDBoardRecommendNum(boardNum);
@@ -196,38 +196,11 @@ public class AjaxController {
 			Cookie key= new Cookie(disLikeCookieKey, disrecommendVal);
 			key.setMaxAge(60*60*24);
 			response.addCookie(key);
-			System.out.println("userKey에 따른 페이지 싫어요 Cookie 생성");
+			//	System.out.println("userKey에 따른 페이지 싫어요 Cookie 생성");
 		}
 		
 		return disRecommendNum;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	//글 수정 / 글 삭제 시 비밀번호 확인

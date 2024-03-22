@@ -59,7 +59,7 @@
 	<form action="<c:url value='/checkDeletePost'/>/${dto.boardNum}" method="post" style="display: inline-block;">
 		<input type="submit" id="delete" value="글 삭제">
 	</form>
-	<form action="<c:url value='/viewDBoardList/boardNum'/>" method="get" style="display: inline-block;">
+	<form action="<c:url value='/viewDBoardList'/>" method="get" style="display: inline-block;">
 		<input type="submit" id="list" value="글 목록">
 	</form>
 </div>
@@ -106,21 +106,18 @@
 		}
 	})
 	
-	
 
 	// 이전글, 다음글에서 제목을 누르면 세부글로 이동
 	function submitForm(boardNum) {
-	    window.location.href ="<c:url value='/viewDBoardContent'/>/"+boardNum;
+	    window.location.href ="<c:url value='/viewDBoardContent'/>?boardNum="+boardNum;
 	}
+	
 	
 	//추천을 위한 이미지 클릭 시 추천 숫자 변경 및 이미지 변경을 위한 ajax
 	$("#recommendVal").on("click", function(){
 		var userKey = $("#userKey").val();
 		var boardNum = $("#boardNum").val();
 		var recommendVal = $(this).attr("data-val");
-		console.log("추천 버튼 클릭")
-		console.log(recommendVal)
-		
 		
 		if (recommendVal === "like") {
 			$.ajax({
@@ -145,17 +142,14 @@
 		} else (
 		   	alert("좋아요는 1일 1회만 가능합니다.")
 		)
-		
-		
 	})
+	
 	
 	//비추천을 위한 이미지 클릭 시 추천 숫자 변경 및 이미지 변경을 위한 ajax
 	$("#disrecommendVal").on("click", function(){
 		var userKey = $("#userKey").val();
 		var boardNum = $("#boardNum").val();
 		var disrecommendVal = $(this).attr("data-val");
-		console.log("비추천 버튼 클릭")
-		console.log(disrecommendVal)
 		
 		if (disrecommendVal === "dislike") {
 			$.ajax({
@@ -181,10 +175,6 @@
 		)
 	})
 	
-	
-	
-	
-
 </script>
 
 

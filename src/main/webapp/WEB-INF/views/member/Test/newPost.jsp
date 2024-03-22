@@ -32,7 +32,7 @@ $(function(){
 </head>
 <body>
 
-<form id="board" action="insertPost" method="post">
+<form id="board" action="insertPost" method="POST">
 
 	<input type="hidden" id="category" name="category" value="정보">
 	<input type="hidden" id="content" name="content">
