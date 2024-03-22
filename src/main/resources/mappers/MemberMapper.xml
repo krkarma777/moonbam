@@ -30,11 +30,11 @@
 	            ORDER BY boardNum desc
 	        </when>
 	        <when test="orderBy == 'viewCount'">			<!-- 인기글 -->
-	        	WHERE viewcount > 10
+	        	WHERE viewcount > 100
 	            ORDER BY viewCount desc
 	        </when>
 	        <when test="orderBy == 'recommendNum'">			<!-- 추천글 -->
-	        	WHERE recommendNum-disRecommendNum > 5
+	        	WHERE recommendNum-disRecommendNum > 10
 	            ORDER BY recommendNum desc
 	        </when>
 	        <when test="orderBy == '정보'">			<!-- 정보 카테고리 -->
@@ -58,7 +58,7 @@
 	            ORDER BY boardNum desc
 	        </when>
 	        <otherwise>
-	            ORDER BY boardNum desc 						<!-- 기본정렬 -->
+	            ORDER BY boardNum desc 				<!-- 기본정렬 -->
 	        </otherwise>
     	</choose>
 	</select>
@@ -123,8 +123,8 @@
 	    WHERE BOARDNUM = #{boardNum}
 	</delete>
 	
-	<!-- 게시판글 조회수 수정 --><!-- ***************** -->
-	<update id="updateDBoardViewCount" parameterType="int">
+	<!-- 게시판글 조회수 수정 -->
+	<update id="updateDBoardViewCount" parameterType="Integer">
 	    UPDATE debugBoardDB
 	    SET viewCount = viewCount + 1
 	    WHERE boardNum = #{boardNum}
