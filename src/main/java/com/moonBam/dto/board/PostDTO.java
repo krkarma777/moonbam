@@ -28,7 +28,7 @@ public class PostDTO implements IPost {
     private Long contId;
 
 	@NotBlank
-	@Size(max = 15)
+	@Size(max = 40)
     private String postTitle;
 
     private Date postDate;
