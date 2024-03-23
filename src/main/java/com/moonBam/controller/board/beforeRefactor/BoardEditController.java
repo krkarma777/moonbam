@@ -1,4 +1,4 @@
-package com.moonBam.controller.board;
+package com.moonBam.controller.board.beforeRefactor;
 
 import java.util.Map;
 

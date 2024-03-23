@@ -1,4 +1,4 @@
-package com.moonBam.controller.board;
+package com.moonBam.controller.board.beforeRefactor;
 
 
 import com.moonBam.dto.board.ScrapDTO;
