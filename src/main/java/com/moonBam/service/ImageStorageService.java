@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageStorageService {
 
     // 이미지를 저장할 디렉토리 경로
-    private final Path rootLocation = Paths.get("src/main/resources/static/board");
+    private final Path rootLocation = Paths.get("uploaded-images");
 
     public ImageStorageService() {
         try {
@@ -50,7 +50,7 @@ public class ImageStorageService {
             // 파일 저장
             file.transferTo(destinationFile);
             System.out.println(filename);
-            return "/acorn/resources/board/" + filename; // 변경된 경로 반환
+            return "/acorn/images/" + filename; // 변경된 경로 반환
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);
         }

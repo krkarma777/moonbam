@@ -193,17 +193,34 @@
 		}
 
 	</style>
-
-
 	<script>
-
-
 		// jQuery를 사용한 입력란 이벤트 처리
 		$(document).ready(function () {
 
-			// 폼 제출 시 validateForm 함수 호출
 			$('form').submit(function (event) {
-				validateForm(event);
+				event.preventDefault();
+
+				const postData = {
+					postTitle: $('#postTitle').val(),
+					postText: editorInstance.getData(),
+					categoryId: $("#postCategory").val(),
+					postBoard: "<%= boardName%>"
+				};
+
+				$.ajax({
+					url: '/acorn/api/post',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(postData),
+					success: function(response) { // 요청이 성공했을 때 실행할 함수
+						alert('게시글이 성공적으로 등록되었습니다. 게시글 ID: ' + response.postID);
+						location.href="/acorn/board/content?postId="+ response.postID + "&bn=" + "<%= boardName%>";
+					},
+					error: function(xhr, status, error) {
+						var errorMessage = JSON.parse(xhr.responseText).message;
+						alert('게시글 등록에 실패했습니다. 오류: ' + errorMessage);
+					}
+				});
 			});
 
 			// 임시저장 버튼 클릭 시 호출되는 함수
@@ -220,15 +237,19 @@
 				};
 			}
 
-			// 에디터 설정에 플러그인 추가
+			var editorInstance;
+
 			ClassicEditor
 					.create(document.querySelector('#editor'), {
-						extraPlugins: [MyCustomUploadAdapterPlugin],
-						// 다른 설정
+						extraPlugins: [MyCustomUploadAdapterPlugin], // 필요한 추가 플러그인 설정
+					})
+					.then(editor => {
+						editorInstance = editor; // 에디터 인스턴스 저장
 					})
 					.catch(error => {
 						console.error(error);
 					});
+
 
 			var uploadedImages = []; // 업로드한 이미지를 저장할 배열
 
@@ -409,7 +430,7 @@
 
 
 <div class="container mt-5 editor-wrapper">
-	<form method="post" action="${pageContext.request.contextPath}/acorn/board/write" enctype="multipart/form-data">
+	<form method="post" action="${pageContext.request.contextPath}/board/write" enctype="multipart/form-data">
 		<!-- 말머리 선택 버튼 그룹 -->
 		<div class="mb-3 btn-group" role="group">
 			<%
@@ -516,9 +537,6 @@
 </div>
 
 <script>
-
-
-
 	//버튼 클릭 했을 때 색깔 나타나는 함수
 	function setCategory(category) {
 		// 모든 버튼의 'active' 클래스 제거
@@ -535,8 +553,6 @@
 
 		document.getElementById('postCategory').value = category;
 	}
-
 </script>
-
 </body>
 </html>
