@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -40,7 +41,7 @@ public class PostDTO implements IPost {
 	@NotBlank
     private String nickname;
 
-	@NotBlank
+	@NotNull
     private Long categoryId;
     
 	public PostDTO() {
