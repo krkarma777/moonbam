@@ -409,7 +409,7 @@
 
 
 <div class="container mt-5 editor-wrapper">
-	<form method="post" action="${pageContext.request.contextPath}/acorn/board/write" enctype="multipart/form-data">
+	<form method="post" action="${pageContext.request.contextPath}/board/write" enctype="multipart/form-data">
 		<!-- 말머리 선택 버튼 그룹 -->
 		<div class="mb-3 btn-group" role="group">
 			<%
