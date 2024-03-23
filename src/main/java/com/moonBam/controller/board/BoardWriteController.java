@@ -28,7 +28,7 @@ public class BoardWriteController {
 	@PostMapping("/board/write")
 	public String write(Map<String, String> paramMap, Model model, HttpSession session) {
         MemberDTO member = (MemberDTO)session.getAttribute("loginUser");
-        
+
         String userId = member.getUserId();
         model.addAttribute("userId", userId);
         
@@ -37,7 +37,7 @@ public class BoardWriteController {
 		
         PostDTO post = createPostDTO(paramMap);
 
-        Long postId = postService.insertContent(post);
+        Long postId = postService.save(post);
 
         String postBoard = paramMap.get("bn");
         String redirectURL = String.format("/Acorn/board/content?postId=%d&bn=%s", postId, postBoard);

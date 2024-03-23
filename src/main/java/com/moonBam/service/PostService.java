@@ -18,7 +18,7 @@ public class PostService {
 	PostDAO dao;
 
 	// 글 추가
-	public Long insertContent(PostDTO post) {
+	public Long save(PostDTO post) {
 		dao.insertContent(post);
 		return post.getPostId();
 	}
