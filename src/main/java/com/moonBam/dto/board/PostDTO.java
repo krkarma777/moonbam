@@ -21,6 +21,7 @@ public class PostDTO implements IPost {
 	@NotBlank
     private String postBoard;
 
+	@NotBlank
     private String userId;
 
     private Long contId;
