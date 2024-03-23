@@ -32,7 +32,6 @@ public class BoardAPIController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = bindingResult.getFieldErrors().stream()
                     .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "입력 값에 오류가 있습니다.", "errors", errors));
         }
@@ -44,6 +43,7 @@ public class BoardAPIController {
         }
 
         postDTO.setUserId(loginUser.getUserId());
+        postDTO.setNickname(loginUser.getNickname());
         Long postID = postService.save(postDTO);
         return ResponseEntity.ok(Map.of("postID", postID)); // 동적으로 ajax success function에서 redirect 시킬 용도
     }

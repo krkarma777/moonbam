@@ -22,7 +22,6 @@ public class PostDTO implements IPost {
 	@NotBlank
     private String postBoard;
 
-	@NotBlank
     private String userId;
 
     private Long contId;
@@ -38,7 +37,6 @@ public class PostDTO implements IPost {
 	@NotBlank
     private String postText;
 
-	@NotBlank
     private String nickname;
 
 	@NotNull
