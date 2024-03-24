@@ -1,31 +1,24 @@
 package com.moonBam.controller.member;
 
-import java.awt.print.Pageable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,10 +38,6 @@ public class DebugBoardController {
             @RequestParam(defaultValue = "10") int perPage,
 			String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
-		//글 번호 순서로 정렬된 전체 글 가져오기
-//		List<DebugBoardDTO> list = serv.viewDBoardList(orderBy);
-//		System.out.println(list.size());				//전체 글 개수
-
 		// 전체 글 개수 가져오기 (페이지네이션에 사용될 수 있음)
 	    List<DebugBoardDTO> allPosts  = serv.viewDBoardList(orderBy);
 	    int totalPosts = allPosts.size();
@@ -290,7 +279,7 @@ public class DebugBoardController {
 	    dto.setEdittedDate(now);
 	    
 	    serv.updateDBoard(dto);
-	    return "redirect:/viewDBoardContent/"+dto.getBoardNum();
+	    return "redirect:/viewDBoardContent/?boardNum="+dto.getBoardNum();
 	}
 	
 	
@@ -308,7 +297,7 @@ public class DebugBoardController {
 	@PostMapping("/deletePost")
 	public String  deletePost(String nickname, int boardNum) {
 		serv.deleteDBoard(boardNum);
-		return "redirect:/viewDBoardList/boardNum/1";
+		return "redirect:/viewDBoardList/";
 	}
 	
 	
@@ -339,14 +328,12 @@ public class DebugBoardController {
 	//글을 게시한 날짜와 오늘 날짜를 비교하는 함수
 	public String chooseDateForm(String date) throws ParseException {
 		
-		Date today = new Date();												//현재 시간
-		
 		String str = date;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date edittedDate = format.parse(str);									//등록, 수정된 날짜
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");	//연월일 Format
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH시 mm분 ss초");		//시분초 Format
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. MM. dd.");	//연월일 Format
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH시 mm분");			//시분 Format
 		
 		String todayForm = dateFormat.format(new Date());						//현재 시간의 연월일
 		String edittedDateForm = dateFormat.format(edittedDate);				//등록, 수정된 날짜의 연월일

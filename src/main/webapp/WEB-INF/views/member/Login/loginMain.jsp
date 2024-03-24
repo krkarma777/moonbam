@@ -55,9 +55,9 @@
 	      
 	      <div class="row" id="rowBar">
               <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
-              <div class="col-4 save-label" style="font-size: 13px">아이디 저장</div>
+              <div class="col-4 save-label" style="font-size: 15px">아이디<br>저장</div>
               <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
-              <div class="col-4 auto-login-label" style="font-size: 13px">자동 로그인</div>
+              <div class="col-4 auto-login-label" style="font-size: 15px">자동<br>로그인</div>
 		  </div>	 
 	      <div class="row">
               <div class="col"><a href="<c:url value='/FindInfo'/>">회원정보 찾기</a></div>

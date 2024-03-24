@@ -34,15 +34,15 @@
 	            ORDER BY viewCount desc
 	        </when>
 	        <when test="orderBy == 'recommendNum'">			<!-- 추천글 -->
-	        	WHERE recommendNum-disRecommendNum > 10
+	        	WHERE recommendNum-disRecommendNum >= 20
 	            ORDER BY recommendNum desc
 	        </when>
 	        <when test="orderBy == '정보'">			<!-- 정보 카테고리 -->
 	        	WHERE category = '정보'
 	            ORDER BY boardNum desc
 	        </when>
-	        <when test="orderBy == '문제 보고'">		<!-- 문제 보고 카테고리 -->
-	        	WHERE category = '문제 보고'
+	        <when test="orderBy == '문제'">			<!-- 문제 카테고리 -->
+	        	WHERE category = '문제'
 	            ORDER BY boardNum desc
 	        </when>
 	        <when test="orderBy == '질문'">			<!-- 질문 카테고리 -->
