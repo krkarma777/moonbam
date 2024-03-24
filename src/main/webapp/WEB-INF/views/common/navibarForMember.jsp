@@ -39,7 +39,7 @@
 			
 			<li><hr class="dropdown-divider"></li>
 			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList?orderBy=정보'/>">정보</a></li>
-			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList?orderBy=문제%20보고'/>">문제 보고</a></li>
+			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList?orderBy=문제'/>">문제</a></li>
 			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList?orderBy=질문'/>">질문</a></li>
 			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList?orderBy=정리'/>">정리</a></li>
 			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList?orderBy=잡담'/>">잡담</a></li>

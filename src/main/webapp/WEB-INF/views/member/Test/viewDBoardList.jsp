@@ -5,122 +5,174 @@
 
 <!DOCTYPE html>
 <html>
-
-<!-- 게시판 리스트 -->
-
 <head>
-	<meta charset="UTF-8">
-	<title>글 목록</title>
-	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-	<!-- 외부파일 css -->
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/member/unfound.css'/>">
-	<!-- 부트 스트랩 -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	
+    <meta charset="UTF-8">
+    <title>글 목록</title>
+    <!-- 부트스트랩 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- 외부 CSS -->
+    <style>
+        body {
+            padding: 20px;
+            max-width: 960px;
+            margin: auto;
+        }
+        .btn-group {
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 0;
+        }
+        #listHead{
+        	font-size: 11px;
+        	vertical-align: middle;
+        }
+	    #timeText{
+        	font-size: 10px;
+        	vertical-align: middle;
+        }  
+        #cateHeadText{
+        	font-size: 10px
+        }
+        #nameText{
+        	font-size: 11px;
+        	vertical-align: middle;
+        }
+        #titleText{
+        	cursor: pointer;
+        }
+        .badge {
+       	 	padding: 8px 10px;
+        	cursor: pointer;
+   		}
+	      
+    </style>
 </head>
-
 <body>
-
-<!-- 헤더 네비게이션바 -->
-<div id="header">
-    <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
-</div>
-
-<!-- 글 정렬 -->
-<button name="orderBy" value="boardNum" onClick="changeList('boardNum')">일반</button>
-<button name="orderBy" value="viewCount" onClick="changeList('viewCount')">인기</button>
-<button name="orderBy" value="recommendNum" onClick="changeList('recommendNum')">추천</button>	
-
-<!-- 카테고리 검색 -->
-<span name="category" value="정보" onClick="changeList('정보')">정보</span> |
-<span name="category" value="문제 보고" onClick="changeList('문제 보고')">문제 보고</span> |
-<span name="category" value="질문" onClick="changeList('질문')">질문</span> |
-<span name="category" value="정리" onClick="changeList('정리')">정리</span> |
-<span name="category" value="잡담" onClick="changeList('잡담')">잡담</span>
-
-
-<!-- 게시판 글 리스트업 -->
-	<c:forEach var="db" items="${list}" varStatus="vs">
-			<p>
-			    글번호: 	<c:out value="${db.boardNum}"/> | 카테고리: <c:out value="${db.category}"/> |
-			    제목: 	<span onclick="submitForm(${db.boardNum})">${db.title}</span> |
-			    닉네임: 	<c:out value="${db.nickname}"/> |
-			    작성 날짜:	<c:out value="${db.edittedDate}"/> |
-			    조회수: 	<c:out value="${db.viewCount}"/> |
-			    추천수: 	<c:out value="${db.recommendNum-db.disRecommendNum}"/>
-		    </p>
-		    <br>
-	</c:forEach>
-
-
-<!-- 페이지 번호 표시 -->
-<div>
-    <!-- 이전 버튼 -->
-    <span>
-    	<!-- 첫 페이지에서는 출력되지 않음 -->
-        <c:if test="${currentPage > 1}">
-	        <c:url var="prevPageURL" value="/viewDBoardList">
-	            <c:param name="currentPage" value="${currentPage - 1}"/>
-	            <c:param name="perPage" value="${perPage}"/>
-	            <c:param name="orderBy" value="${orderBy}"/>
-	        </c:url>
-            <a href="${prevPageURL}">Prev</a>
-        </c:if>
-    </span>
-    <!-- 페이지 번호 -->
-	<c:choose>
-	    <c:when test="${currentPage <= 5}">
-	        <c:set var="startPage" value="1" />
-	    </c:when>
-	    <c:otherwise>
-	        <c:set var="startPage" value="${currentPage - 5}" />
-	    </c:otherwise>
-	</c:choose>
+    <!-- 헤더 네비게이션바 -->
+    <div id="header">
+        <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
+ 		<jsp:include page="/WEB-INF/views/common/categoryNavForDBoard.jsp" flush="true"></jsp:include>
+    </div>
+    
 	
-	<c:forEach begin="${startPage}" end="${startPage + 9}" var="pageNum">
-	    <c:if test="${pageNum > 0 && pageNum <= (totalPosts + perPage - 1) / perPage}">
-	        <c:url var="pageURL" value="/viewDBoardList">
-	            <c:param name="currentPage" value="${pageNum}"/>
-	            <c:param name="perPage" value="${perPage}"/>
-	            <c:param name="orderBy" value="${orderBy}"/>
-	        </c:url>
-	        <a href="${pageURL}">${pageNum}</a>
-	    </c:if>
-	</c:forEach>
-    <!-- 다음 버튼 -->
-    <span>
-    	<!-- 마지막 페이지에서는 출력되지 않음 -->
-        <c:if test="${currentPage < (totalPosts + perPage - 1) / perPage -1}">
-	        <c:url var="nextPageURL" value="/viewDBoardList">
-	            <c:param name="currentPage" value="${currentPage + 1}"/>
-	            <c:param name="perPage" value="${perPage}"/>
-	            <c:param name="orderBy" value="${orderBy}"/>
-	        </c:url>
-	        <a href="${nextPageURL}">Next</a>
-		</c:if>
-    </span>
-</div>
+	<!-- 게시판 글 리스트업 -->
+	<div class="card text-center">
+	    <div class="card-body">
+	        <table class="table table-striped">
+				 <thead>
+				    <tr id="listHead">
+				        <th class="col-1">글번호</th>
+				        <th class="col-1"  id="cateHeadText">카테고리</th>
+				        <th class="col-auto">제목</th>
+				        <th class="col-1">닉네임</th>
+				        <th class="col-2">작성 날짜</th>
+				        <th class="col-1">조회수</th>
+				        <th class="col-1">추천수</th>
+				    </tr>
+				</thead>
+	            <tbody>
+	                <c:forEach var="db" items="${list}" varStatus="vs">
+	                    <tr>
+	                        <td><span class="badge bg-info"><c:out value="${db.boardNum}"/></span></td>
+	                        <td><span class="badge bg-secondary"><c:out value="${db.category}"/></span></td>
+	                        <td class="text-start"><span id="titleText" class="link-primary" onclick="submitForm(${db.boardNum})">${db.title}</span></td>
+	                        <td id="nameText"><c:out value="${db.nickname}"/></td>
+	                        <td id="timeText"><c:out value="${db.edittedDate}"/></td>
+	                        <td><span class="badge bg-warning text-dark"><c:out value="${db.viewCount > 9999 ? '9999+' : db.viewCount}"/></span></td>
+							<td><span class="badge bg-success"><c:out value="${Math.min(Math.max(db.recommendNum - db.disRecommendNum, -999), 999)}"/></span></td>
+	                    </tr>
+	                </c:forEach>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+
+    <!-- 페이지 번호 표시 -->
+    <nav aria-label="페이지 네비게이션">
+        <ul class="pagination justify-content-center">
+            <!-- 이전 버튼 -->
+            <li class="page-item">
+                <c:if test="${currentPage > 1}">
+                    <c:url var="prevPageURL" value="/viewDBoardList">
+                        <c:param name="currentPage" value="${currentPage - 1}"/>
+                        <c:param name="perPage" value="${perPage}"/>
+                        <c:param name="orderBy" value="${orderBy}"/>
+                    </c:url>
+                    <a class="page-link" href="${prevPageURL}" aria-label="Previous">이전</a>
+                </c:if>
+            </li>
+            <!-- 페이지 번호 -->
+            <c:choose>
+			    <c:when test="${currentPage <= 5}">
+			        <c:set var="startPage" value="1" />
+			    </c:when>
+			    <c:otherwise>
+			        <c:set var="startPage" value="${currentPage - 5}" />
+			    </c:otherwise>
+			</c:choose>
+            <c:forEach begin="${startPage}" end="${startPage + 9}" var="pageNum">
+                <c:if test="${pageNum > 0 && pageNum <= (totalPosts + perPage - 1) / perPage}">
+                    <li class="page-item">
+                        <c:url var="pageURL" value="/viewDBoardList">
+                            <c:param name="currentPage" value="${pageNum}"/>
+                            <c:param name="perPage" value="${perPage}"/>
+                            <c:param name="orderBy" value="${orderBy}"/>
+                        </c:url>
+                        <a class="page-link" href="${pageURL}">${pageNum}</a>
+                    </li>
+                </c:if>
+            </c:forEach>
+            <!-- 다음 버튼 -->
+            <li class="page-item">
+                <c:if test="${currentPage < (totalPosts + perPage - 1) / perPage -1}">
+                    <c:url var="nextPageURL" value="/viewDBoardList">
+                        <c:param name="currentPage" value="${currentPage + 1}"/>
+                        <c:param name="perPage" value="${perPage}"/>
+                        <c:param name="orderBy" value="${orderBy}"/>
+                    </c:url>
+                    <a class="page-link" href="${nextPageURL}" aria-label="Next">다음</a>
+                </c:if>
+            </li>
+        </ul>
+    </nav>
 
 
-<div>
-	<!-- 글 검색 -->
-	<form action="<c:url value='/searchPost'/>" method="post" style="display: inline;">
-	<input type="hidden" name="orderBy" value="${orderBy}">
-	  <select name="searchTag" >
-	    <option value="title_contents">제목 + 내용</option>
-	    <option value="title">제목</option>
-	    <option value="contents">내용</option>
-	    <option value="nickname">닉네임</option>
-	  </select>
-	  <input type="text" name="searchData">
-	  <input type="submit" value="검색">
-	</form>
-	
-	<!-- 게시판 글쓰기 -->
-	<form action="<c:url value='newPost'/>" method="post" style="display: inline-block;">
-		<input type="submit" id="insert" value="글 작성">
-	</form>
-</div>
+<table width="100%">
+    <tr>
+        <td width="30%"></td>
+        <td width="60%">
+            <!-- 글 검색 -->
+            <form action="<c:url value='/searchPost'/>" method="post" class="d-flex">
+                <input type="hidden" name="orderBy" value="${orderBy}">
+                <select class="col-auto" name="searchTag" style="height: 38px;">
+                    <option value="title_contents">제목 + 내용</option>
+                    <option value="title">제목</option>
+                    <option value="contents">내용</option>
+                    <option value="nickname">닉네임</option>
+                </select>
+                <div class="col-auto">&nbsp;</div>
+                <input class="col-auto" type="text" name="searchData" style="height: 38px;">
+                <div class="col-auto">&nbsp;</div>
+                <button class="btn btn-primary col-auto" type="submit">검색</button>
+            </form>
+        </td>
+        <td width="10%"></td>
+        <td width="10%">
+            <!-- 게시판 글쓰기 -->
+            <form action="<c:url value='newPost'/>" method="post">
+                <input type="submit" id="insert" value="글 작성" class="btn btn-success">
+            </form>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+
+
 
 
 <script type="text/javascript">
@@ -129,9 +181,16 @@
 	function submitForm(boardNum) {
         window.location.href ="<c:url value='/viewDBoardContent'/>?boardNum="+boardNum;
     }
+
+	//게시판 리스트 변경
+	function changeList(e) {
+		var orderBy = e.value
+        window.location.href ="<c:url value='/viewDBoardList'/>?orderBy="+orderBy;
+    }
 	
-	//게시판 정렬 변경
-	function changeList(orderBy) {
+	//게시판 탭 변경
+	function changeTab(e) {
+		var orderBy = e.innerText
         window.location.href ="<c:url value='/viewDBoardList'/>?orderBy="+orderBy;
     }
 
@@ -139,13 +198,6 @@
 
 <!-- 부트 스트랩 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script type="text/javascript">
-var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-  return new bootstrap.Popover(popoverTriggerEl)
-})
-</script>
-
 
 </body>
 

@@ -12,84 +12,186 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/member/unfound.css'/>">
 	<!-- 부트 스트랩 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <style>
+        body {
+            padding: 20px;
+            max-width: 960px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .card-subtitle {
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        .card-text {
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            margin-right: 10px;
+        }
+        .btn {
+            margin-bottom: 10px;
+        }
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px solid #dee2e6;
+        }
+        .prev-next {
+            margin-bottom: 20px;
+        }
+        .prev-next p {
+            margin-bottom: 5px;
+        }
+        .prev-next span {
+            cursor: pointer;
+            color: blue;
+        }
+        .prev-next span:hover {
+            text-decoration: underline;
+        }
+	    .button-style {
+	        font-size: 12px;
+	    }
+	    .button-container {
+	        display: flex;
+	        align-items: center; 
+	    }
+		.nameText{
+        	font-size: 13px;
+        }
+	    .timeText{
+        	font-size: 13px;
+        }
+        #titleText{
+        	cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-
-<!-- 헤더 네비게이션바 -->
 <div id="header">
     <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
 </div>
 <hr>
 
-
-<!-- 출력되는 페이지 -->
 <input type="hidden" id="userBylike" name="userBylike" value="${userBylike}">
 <input type="hidden" id="userBydislike" name="userBydislike" value="${userBydislike}">
 <input type="hidden" id="boardNum" name="boardNum" value="${dto.boardNum}">
 <input type="hidden" id="userKey" name="userKey" value="${userKey}">
 <input type="hidden" id="recommendNum" name="recommendNum" value="${dto.recommendNum}">
 <input type="hidden" id="disRecommendNum" name="disRecommendNum" value="${dto.disRecommendNum}">
-작성자:	${dto.nickname}												
-제목:		${dto.title}<br>
-카테고리:	${dto.category}
-작성 날짜:	${dto.edittedDate}
-조회수:	${dto.viewCount}
-추천수:	<span id="resultRecommendNum">${dto.recommendNum - dto.disRecommendNum}</span>
-<br>
-<p>${dto.content}</p>
 
-
-<!-- 추천 상태에 따른 이미지 출력 -->
-<span>
-	<img src="<c:url value='/resources/images/member/well.svg'/>" width="50" height="50" id="recommendVal" data-val="like">
-</span>
-<span>
-	<img src="<c:url value='/resources/images/member/well.svg'/>" width="50" height="50" id="disrecommendVal" data-val="dislike">
-</span>
-<br>
-
-
-<!-- post로 글 수정 / 삭제 / 목록 -->
-<div>
-	<form action="<c:url value='/checkUpdatePost'/>/${dto.boardNum}" method="post" style="display: inline-block;">
-		<input type="submit" id="update" value="글 수정">
-	</form>
-	<form action="<c:url value='/checkDeletePost'/>/${dto.boardNum}" method="post" style="display: inline-block;">
-		<input type="submit" id="delete" value="글 삭제">
-	</form>
-	<form action="<c:url value='/viewDBoardList'/>" method="get" style="display: inline-block;">
-		<input type="submit" id="list" value="글 목록">
-	</form>
+<div class="card">
+    <div class="card-body">
+    
+    	<!-- 글 제목과 카테고리 -->
+        <h5 class="card-title">[${dto.category}] ${dto.title}</h5>
+		<div class="row">
+		
+			<!-- 글 작성자 / 작성 날짜(수정 날짜) / 조회수 / 추천수 -->
+		    <div class="col">
+		        <div class="card-subtitle mb-2 text-muted">작성자: ${dto.nickname}</div>
+		    </div>
+		    <div class="col-auto">
+		        <div class="mb-3">
+		            <div class="card-subtitle mb-2 text-muted">
+		            	<span>작성 날짜: ${dto.edittedDate}</span> |
+		            	<span>조회수: ${dto.viewCount > 9999 ? '9999+' : dto.viewCount}</span> |
+		            	<span>추천수: <span id="resultRecommendNum">${Math.min(Math.max(dto.recommendNum - dto.disRecommendNum, -999), 999)}</span></span>
+		            </div>
+		        </div>
+		    </div>
+		    <hr>
+		</div>
+		
+		<!-- 글 내용 -->
+        <div class="card-text">${dto.content}</div>
+    </div>
+    
+    <!-- 추천 / 비추천 -->
+    <div class="text-center mt-3"> 
+        <img src="<c:url value='/resources/images/member/well.svg'/>" width="50" height="50" id="recommendVal" data-val="like">
+        <img src="<c:url value='/resources/images/member/well.svg'/>" width="50" height="50" id="disrecommendVal" data-val="dislike">
+    </div>
+	<br>
 </div>
+
+
+<!-- 글 수정 / 글 삭제 / 글 목록 -->
+<div class="button-container d-flex justify-content-end">
+    <form action="<c:url value='/checkUpdatePost'/>/${dto.boardNum}" method="post" style="display: inline-block;">
+        <input type="submit" id="update" value="글 수정" class="button-style">
+    </form>
+    <form action="<c:url value='/checkDeletePost'/>/${dto.boardNum}" method="post" style="display: inline-block;">
+        <input type="submit" id="delete" value="글 삭제" class="button-style">
+    </form>
+    <form action="<c:url value='/viewDBoardList'/>" method="get" style="display: inline-block;">
+        <input type="submit" id="list" value="글 목록" class="button-style">
+    </form>
+</div>
+
+
 <hr>
 
 
-<!-- 이전글 / 다음글 출력 -->
-	<c:if test="${prev != null}">
-		<p>
-		이전 글: 
-		    글번호: 	${prev.boardNum} | 카테고리: ${prev.category} |
-		    제목: 	<span onclick="submitForm(${prev.boardNum})">${prev.title}</span> |
-		    닉네임: 	${prev.nickname} |
-		    작성 날짜:	${prev.edittedDate} |
-		    조회수: 	${prev.viewCount} |
-		    추천수: 	${prev.recommendNum - prev.disRecommendNum}
-	    </p>
-	</c:if>
-	<c:if test="${next != null}">	
-		<p>
-		다음 글: 
-		    글번호: 	${next.boardNum} | 카테고리: ${next.category} |
-		    제목: 	<span onclick="submitForm(${next.boardNum})">${next.title}</span> |
-		    닉네임: 	${next.nickname} |
-		    작성 날짜:	${next.edittedDate} |
-		    조회수: 	${next.viewCount} |
-		    추천수: 	${next.recommendNum - next.disRecommendNum}
-	    </p>
-	</c:if>
 
+<!-- 이전 글과 다음 글(없을 경우, 출력되지 않음) -->
+<table width="100%">
+    <colgroup>
+        <col width="9%">
+        <col width="5%">
+        <col width="5%">
+        <col width="30%">
+        <col width="10%">
+        <col width="10%">
+        <col width="5%">
+        <col width="5%">
+    </colgroup>
+    <div class="prev-next">
+        <c:if test="${prev != null}">
+            <tr>
+                <td>이전 글:</td>
+                <td><span class="badge bg-info">${prev.boardNum}</span></td>
+                <td><span class="badge bg-secondary">${prev.category}</span></td>
+                <td><span class="text-start"><span id="titleText" class="link-primary" onclick="submitForm(${prev.boardNum})">${prev.title}</span></span></td>
+                <td><span class="nameText">${prev.nickname}</span></td>
+                <td><span class="timeText">${prev.edittedDate}</span></td>
+                <td><span class="badge bg-warning text-dark">${prev.viewCount > 9999 ? '9999+' : prev.viewCount}</span></td>
+				<td><span class="badge bg-success">${Math.min(Math.max(prev.recommendNum - prev.disRecommendNum, -999), 999)}</span></td>
+
+            </tr>
+        </c:if>
+        <c:if test="${next != null}">
+            <tr>
+                <td>다음 글:</td>
+                <td><span class="badge bg-info">${next.boardNum}</span></td>
+                <td><span class="badge bg-secondary">${next.category}</span></td>
+                <td><span class="text-start"><span id="titleText" class="link-primary" onclick="submitForm(${next.boardNum})">${next.title}</span></span></td>
+                <td><span class="nameText">${next.nickname}</span></td>
+                <td><span class="timeText">${next.edittedDate}</span></td>
+                <td><span class="badge bg-warning text-dark">${next.viewCount > 9999 ? '9999+' : next.viewCount}</span></td>
+				<td><span class="badge bg-success">${Math.min(Math.max(next.recommendNum - next.disRecommendNum, -999), 999)}</span></td>
+            </tr>
+        </c:if>  
+    </div>
+</table> 
 
 <script type="text/javascript">
 
@@ -174,17 +276,10 @@
 		    alert("싫어요는 1일 1회만 가능합니다.")
 		)
 	})
-	
 </script>
 
 
 <!-- 부트 스트랩 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script type="text/javascript">
-var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-  return new bootstrap.Popover(popoverTriggerEl)
-})
-</script>
 </body>
 </html>
