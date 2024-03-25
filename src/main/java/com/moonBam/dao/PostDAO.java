@@ -149,4 +149,7 @@ public class PostDAO {
 		return postsave;
 	}
 
+	public void update(PostUpdateRequestDTO postUpdateRequestDTO) {
+		session.update("update", postUpdateRequestDTO);
+	}
 }// end class
