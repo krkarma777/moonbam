@@ -55,7 +55,7 @@ public class BoardDeleteController {
 
     // postId로 게시글 조회 및 에러 처리 메서드
     private PostDTO getPostOrHandleError(PostService service, Long postId, Model model, String redirectURL) {
-        PostDTO post = service.select(postId);
+        PostDTO post = service.findById(postId);
         if (post == null) {
             // 게시글이 존재하지 않을 경우 모델에 에러 메시지 추가
             model.addAttribute(ERROR, POST_NOT_FOUND);
