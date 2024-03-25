@@ -15,7 +15,7 @@
     <style>
         body {
             padding: 20px;
-            max-width: 960px;
+            max-width: 1080px;
             margin: auto;
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
@@ -81,6 +81,10 @@
         }
         #titleText{
         	cursor: pointer;
+        	display: -webkit-box;
+            -webkit-line-clamp: 1; 					/* 한 칸에 표시할 줄 수 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
     </style>
 </head>

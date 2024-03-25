@@ -14,7 +14,7 @@
     <style>
         body {
             padding: 20px;
-            max-width: 960px;
+            max-width: 1080px;
             margin: auto;
         }
         .btn-group {
@@ -24,26 +24,29 @@
             margin-bottom: 0;
         }
         #listHead{
-        	font-size: 11px;
+        	font-size: 12px;
         	vertical-align: middle;
-        }
+        	white-space: nowrap; 
+        }	
 	    #timeText{
-        	font-size: 10px;
+        	font-size: 13px;
         	vertical-align: middle;
+        	white-space: nowrap; 
         }  
-        #cateHeadText{
-        	font-size: 10px
-        }
         #nameText{
-        	font-size: 11px;
+        	font-size: 13px;
         	vertical-align: middle;
+        	white-space: nowrap; 
         }
         #titleText{
         	cursor: pointer;
+           display: -webkit-box;
+            -webkit-line-clamp: 1; 					/* 한 칸에 표시할 줄 수 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .badge {
        	 	padding: 8px 10px;
-        	cursor: pointer;
    		}
 	      
     </style>
@@ -66,7 +69,7 @@
 				        <th class="col-1"  id="cateHeadText">카테고리</th>
 				        <th class="col-auto">제목</th>
 				        <th class="col-1">닉네임</th>
-				        <th class="col-2">작성 날짜</th>
+				        <th class="col-1">작성 날짜</th>
 				        <th class="col-1">조회수</th>
 				        <th class="col-1">추천수</th>
 				    </tr>

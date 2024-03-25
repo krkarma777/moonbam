@@ -96,9 +96,7 @@
 
     <div class="mb-3">
         <label for="title" class="form-label">제목:</label>
-        <input type="text" id="title" name="title" class="form-control" required="required" 
-            pattern="^[가-힣]{1,14}$|^[a-zA-Z0-9]{1,28}$" 
-            title="한글 14글자 또는 영어+숫자 28글자 이내로 입력해주세요.">
+        <input type="text" id="title" name="title" class="form-control" required="required" maxlength="35">
     </div>
     <div class="row">
         <div class="col-md-6 mb-3">
@@ -110,7 +108,7 @@
         
         <div class="col-md-6 mb-3">
         	<label for="password" class="form-label">비밀번호:</label>
-        	<input type="password" id="password" name="password" class="form-control" maxlength="10">
+        	<input type="password" id="password" name="password" class="form-control" maxlength="10" required="required">
     	</div>
     </div>
     <div class="mb-3">

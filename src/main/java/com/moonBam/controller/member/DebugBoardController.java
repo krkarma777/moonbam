@@ -56,15 +56,12 @@ public class DebugBoardController {
 		}
 		
 		ModelAndView mav = new ModelAndView();
-		
 			mav.addObject("currentPage", currentPage);
 		    mav.addObject("perPage", perPage);
 		    mav.addObject("orderBy", orderBy);
 		    mav.addObject("totalPosts", totalPosts);
-		
-		
 			mav.addObject("list", list);
-			mav.setViewName("member/Test/viewDBoardList");
+			mav.setViewName("member/Board/viewDBoardList");
 		return mav;
 	}
 	
@@ -115,9 +112,8 @@ public class DebugBoardController {
 		    mav.addObject("perPage", perPage);
 		    mav.addObject("orderBy", orderBy);
 		    mav.addObject("totalPosts", totalPosts);
-		
 			mav.addObject("list", list);
-			mav.setViewName("member/Test/viewDBoardList");
+			mav.setViewName("member/Board/viewDBoardList");
 		return mav; 
 	}
 	
@@ -126,7 +122,7 @@ public class DebugBoardController {
 	@PostMapping("/newPost")
 	public ModelAndView newPost() {
 		ModelAndView mav = new ModelAndView();
-			mav.setViewName("member/Test/newPost");
+			mav.setViewName("member/Board/newPost");
 		return mav;
 	}
 	
@@ -242,7 +238,7 @@ public class DebugBoardController {
 			mav.addObject("dto", dto);
 			mav.addObject("prev", prev);
 			mav.addObject("next", next);
-			mav.setViewName("member/Test/viewDBoardContent");
+			mav.setViewName("member/Board/viewDBoardContent");
 		return mav;
 	}
 	
@@ -251,7 +247,7 @@ public class DebugBoardController {
 	@PostMapping("/checkUpdatePost/{bNum}")
 	public ModelAndView checkUpdatePost(@PathVariable("bNum") int boardNum) {
 		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
-	    ModelAndView mav = new ModelAndView("member/Test/checkUpdatePost");
+	    ModelAndView mav = new ModelAndView("member/Board/checkUpdatePost");
 	    	mav.addObject("dto", dto);
 	    return mav;
 	}
@@ -263,7 +259,7 @@ public class DebugBoardController {
 		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("dto", dto);
-		mav.setViewName("member/Test/modifyPost");
+		mav.setViewName("member/Board/modifyPost");
 	return mav;
 	}
 
@@ -287,7 +283,7 @@ public class DebugBoardController {
 	@PostMapping("/checkDeletePost/{bNum}")
 	public ModelAndView checkDeletePost(@PathVariable("bNum") int boardNum) {
 		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
-		ModelAndView mav = new ModelAndView("member/Test/checkDeletePost");
+		ModelAndView mav = new ModelAndView("member/Board/checkDeletePost");
 	    mav.addObject("dto", dto);
 	    return mav;
 	}
