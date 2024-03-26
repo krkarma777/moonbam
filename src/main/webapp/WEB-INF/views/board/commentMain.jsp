@@ -5,7 +5,7 @@
 <%@page import="java.util.List" %>    
 <%@page import="java.util.Map" %>    
 <%@page import="java.util.HashMap" %>  
-<%@page import="com.moonBam.dto.MemberDTO" %>
+<%@page import="com.moonBam.dto.MemberDTO" %>  
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions"%>
 

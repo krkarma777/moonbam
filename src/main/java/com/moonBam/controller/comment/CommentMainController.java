@@ -1,20 +1,22 @@
 package com.moonBam.controller.comment;
 
+import java.util.HashMap;
+import java.util.List;
 
-import com.moonBam.dto.CommentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.CommentService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
+import com.moonBam.dto.CommentDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.service.CommentService;
 
+      
 @Controller
 public class CommentMainController {
 	
@@ -29,22 +31,24 @@ public class CommentMainController {
 	@RequestMapping("/commentMain")
 	public String main(HttpSession session, HttpServletRequest request) {
 		
+		
 		System.out.println("/commentMain주소처리. main");
 		
 		//test용. 나중에 지울거임
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setUserId("kkk333");
 		memberDTO.setNickname("귀염둥이");
-		//session.setAttribute("loginUser", memberDTO);
+		session.setAttribute("loginUser", memberDTO);
 		request.setAttribute("postId", 3); //나중에jsp에서 이거 쓰인 부분 getParameter로 변경하기
-		//얘 servlet으로 빼도 될듯
 		
-		return "commentMain"; //commentMain.jsp로 이동
+		
+		
+		return "/board/commentMain"; //commentMain.jsp로 이동
 		
 	}// main end
 	
 	//전체 댓글 selectALL 하는거
-	@RequestMapping(value="/Acorn/selectAllByPostId", method = RequestMethod.POST)
+	@RequestMapping(value="/Acorn/selectAllByPostId", method = RequestMethod.POST) 
 	@ResponseBody //AJAX 응답
 	public List<CommentDTO> selectAllByPostId(Long postId) {
 		
