@@ -31,10 +31,8 @@ class BoardAPIControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private PostService postService;
-
     private ObjectMapper objectMapper;
     private MockHttpSession mockSession;
 
@@ -103,5 +101,23 @@ class BoardAPIControllerTest {
                 1L // categoryId
         );
         return post;
+    }
+
+    @Test
+    void deletePostSuccessfully() throws Exception{
+
+        PostDTO existingPost = new PostDTO();
+        Long existingPostId = 1L;
+        existingPost.setPostId(existingPostId);
+        existingPost.setUserId("test-user");
+        given(postService.findById(existingPostId)).willReturn(existingPost);
+
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setUserId("test-user");
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/post/" + existingPostId)
+                        .sessionAttr("loginUser", memberDTO))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("삭제가 완료되었습니다."));
     }
 }
