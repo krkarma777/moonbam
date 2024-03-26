@@ -76,4 +76,27 @@ public class BoardAPIController {
         return bindingResult.getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
     }
+
+    @DeleteMapping("{postId}")
+    public ResponseEntity<?> delete(@PathVariable("postId") Long postId, HttpSession session) {
+        PostDTO postDTO = postService.findById(postId);
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+
+        if (postDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "글이 존재하지않습니다."));
+        }
+
+        if (loginUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
+        }
+
+        if (!loginUser.getUserId().equals(postDTO.getUserId())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "글을 삭제할 권한이 없습니다."));
+        }
+
+        postService.delete(postId);
+
+        return ResponseEntity.ok(Map.of("message", "삭제가 완료되었습니다."));
+    }
 }
+
