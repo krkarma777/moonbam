@@ -5,9 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="js/fullpage/jquery.fullPage.css">
+<link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="js/fullpage/jquery.fullPage.js"></script>
+<script src="resources/js/fullpage/jquery.fullPage.js"></script>
 <script>
 $(document).ready(function() {
 	$('#fullpage').fullpage({
