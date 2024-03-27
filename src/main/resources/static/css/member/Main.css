@@ -15,7 +15,7 @@
   width: 100%; 
   margin: -20px 0 50px;
 }
-
+ 
 h1 {
   font-weight: bold;
   margin: 0;
@@ -268,3 +268,8 @@ footer a {
 .col-4.save-label, .col-4.auto-login-label {
   font-size: 15px;
 }
+.cookieT{
+  font-size: 15px;
+  white-space: nowrap;
+}
+

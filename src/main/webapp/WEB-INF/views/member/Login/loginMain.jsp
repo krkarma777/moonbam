@@ -25,9 +25,9 @@
 	    <form action="<c:url value='/RegisterTerms'/>" method="post">
 	      <h1>회원가입</h1>
 	      <div class="social-container">
-	        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-	        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-	        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
 	      <input type="text" id="userName" name="userName" maxlength="10" required placeholder="성함" />
@@ -42,9 +42,9 @@
 	  <form id="loginForm" action="<c:url value='/Logined'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
-	        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-	        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-	        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
 	      <input type="text" id="userId" name="userId" class="loginSet" pattern="[a-zA-Z0-9]{4,}" autofocus autocomplete="off" placeholder="아이디" />
@@ -55,9 +55,9 @@
 	      
 	      <div class="row" id="rowBar">
               <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
-              <div class="col-4 save-label" style="font-size: 15px">아이디<br>저장</div>
+              <div class="col-4 save-label cookieT">아이디 저장</div>
               <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
-              <div class="col-4 auto-login-label" style="font-size: 15px">자동<br>로그인</div>
+              <div class="col-4 auto-login-label cookieT">자동 로그인</div>
 		  </div>	 
 	      <div class="row">
               <div class="col"><a href="<c:url value='/FindInfo'/>">회원정보 찾기</a></div>
