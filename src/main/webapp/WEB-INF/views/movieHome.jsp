@@ -122,7 +122,7 @@
 	<div class="d-flex justify-content-center px-5" style="height: 300px">
 		<div class="mx-1">
 			<table border="1" style="width:392px">
-				<tr><th style="height:30px"><a href="/Acorn/board/movieInfo">정보게시판</a></th></tr>
+				<tr><th style="height:30px"><a href="/acorn/board/movieInfo">정보게시판</a></th></tr>
 		        <% 
 		            for(PostPageDTO post : movieInfoList) {
 		            	String displayDate = cdf.minuteHourDay(post);
@@ -143,7 +143,7 @@
 		</div>
 		<div class="mx-1">
 		    <table border="1" style="width:392px">
-		        <tr><th style="height:30px"><a href="/Acorn/board/movie">자유게시판</a></th></tr>
+		        <tr><th style="height:30px"><a href="/acorn/board/movie">자유게시판</a></th></tr>
 		         <% 
 		            for(PostPageDTO post : movieList) {
 		            	String displayDate = cdf.minuteHourDay(post);
@@ -165,7 +165,7 @@
 
 		<div class="mx-1">
 			<table border="1" style="width:392px">
-				<tr><th style="height:30px"><a href="/Acorn/board/movieMeet">모임게시판</a></th></tr>
+				<tr><th style="height:30px"><a href="/acorn/board/movieMeet">모임게시판</a></th></tr>
 		         <% 
 		            for(PostPageDTO post : movieMeetList) {
 		            	String displayDate = cdf.minuteHourDay(post);
