@@ -170,7 +170,7 @@ public class DebugBoardController {
 		    
 			//글로 바로 들어왔을 경우, 사용자 식별을 위한 값을 쿠키에 저장
 			if(userKey == "") {
-				userKey = getNum();
+				userKey = getNum(16);
 				Cookie key= new Cookie("userKey", userKey);
 				key.setMaxAge(60*60*24);
 				response.addCookie(key);
@@ -297,11 +297,11 @@ public class DebugBoardController {
 	}
 	
 	
-	//게시판 사용자 어플리케이션용 무작위 16자리 숫자 가져오기
-	public String getNum() {
+	//게시판 사용자 어플리케이션용 무작위 N자리 숫자 가져오기
+	public static String getNum(int num) {
 	    Random r = new Random();
 	    StringBuilder randomNumber = new StringBuilder();
-	    for (int i = 0; i < 16; i++) {
+	    for (int i = 0; i < num; i++) {
 	        randomNumber.append(r.nextInt(10));
 	    }
 	    return randomNumber.toString();

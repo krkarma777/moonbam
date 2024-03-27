@@ -182,6 +182,35 @@
 	</select>
 	
 	
+	<!-- **************************************************************** -->
+	<!-- *********************API Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- API 회원 출력 -->
+	<select id="selectOneAPIMember" resultType="MemberDTO">
+		SELECT 	*
+		FROM 	memberDB
+		WHERE	userId = #{userId}
+	</select>
+	
+	<!-- API 회원가입 -->
+	<insert id="insertAPIMember" parameterType="MemberDTO">
+		INSERT INTO memberDB (
+			userId, userPw, userName, 
+			nickname, userEmailId, userEmailDomain
+		)
+		VALUES (
+			#{userId}, #{userPw}, #{userName},
+			#{nickname}, #{userEmailId}, #{userEmailDomain}
+		)
+	</insert>
+	
+	<!-- API 회원가입된 유저 닉네임 변경 -->
+	<update id="updateAPIMemberNickname" parameterType="hashmap">
+		UPDATE 	memberDB
+		SET		nickname = #{nickname}
+		WHERE	userId = #{userId}
+	</update>
 	
 
 	<!-- **************************************************************** -->

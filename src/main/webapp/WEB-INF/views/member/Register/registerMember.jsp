@@ -531,6 +531,11 @@
 			}
 		}
 
+		
+		$("#register_button").on("click", function(){
+			window.removeEventListener('beforeunload', f5Control);
+		})
+		
 		//submit 제한규칙
 		$("#registerForm").submit(function(event) {
 			return validateForm(event);
