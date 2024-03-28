@@ -3,6 +3,7 @@ package com.moonBam.controller.board;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.board.PostDTO;
+import com.moonBam.dto.board.PostUpdateRequestDTO;
 import com.moonBam.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,15 +37,29 @@ class BoardAPIControllerTest {
     private ObjectMapper objectMapper;
     private MockHttpSession mockSession;
 
+    private PostDTO post;
+
     @BeforeEach
     void setup() {
         objectMapper = new ObjectMapper();
         mockSession = new MockHttpSession();
+
+        post = new PostDTO(
+                1L, // postId
+                "BoardName", // postBoard
+                "UserId123", // userId
+                1L, // contId
+                "Post Title Example", // postTitle
+                new Date(), // postDate
+                null, // postEditDate
+                "This is the content of the post.", // postText
+                "Nickname", // nickname
+                1L // categoryId
+        );
     }
 
     @Test
     void createPostWhenNotLoggedIn() throws Exception {
-        PostDTO post = getValidPostDTO();
         String content = objectMapper.writeValueAsString(post);
 
         mockMvc.perform(post("/api/post")
@@ -59,8 +74,6 @@ class BoardAPIControllerTest {
         MemberDTO loginUser = new MemberDTO(); // 적절한 MemberDTO 값 설정
         loginUser.setUserId("testUser");
         mockSession.setAttribute("loginUser", loginUser);
-
-        PostDTO post = getValidPostDTO();
 
         String content = objectMapper.writeValueAsString(post);
 
@@ -86,22 +99,6 @@ class BoardAPIControllerTest {
                 .andExpect(jsonPath("$.message").value("입력 값에 오류가 있습니다."));
     }
 
-    private PostDTO getValidPostDTO() {
-        // PostDTO 객체 생성
-        PostDTO post = new PostDTO(
-                1L, // postId
-                "BoardName", // postBoard
-                "UserId123", // userId
-                1L, // contId
-                "Post Title Example", // postTitle
-                new Date(), // postDate
-                null, // postEditDate
-                "This is the content of the post.", // postText
-                "Nickname", // nickname
-                1L // categoryId
-        );
-        return post;
-    }
 
     @Test
     void deletePostSuccessfully() throws Exception{
@@ -119,5 +116,47 @@ class BoardAPIControllerTest {
                         .sessionAttr("loginUser", memberDTO))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("삭제가 완료되었습니다."));
+    }
+
+    @Test
+    void updatePostSuccessfully() throws Exception {
+        MemberDTO loginUser = new MemberDTO(); // 로그인된 사용자 설정
+        loginUser.setUserId("UserId123"); // 게시물 작성자와 동일한 ID
+        mockSession.setAttribute("loginUser", loginUser);
+
+        PostUpdateRequestDTO updateRequestDTO = new PostUpdateRequestDTO(); // 업데이트 요청 DTO 생성 및 필요한 값 설정
+        updateRequestDTO.setPostTitle("Updated Title");
+        updateRequestDTO.setPostText("Updated content of the post.");
+        updateRequestDTO.setCategoryId(1L);
+
+        given(postService.findById(1L)).willReturn(post);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/post/1")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postID").value(1L));
+    }
+
+    @Test
+    void updatePostWithUnauthorizedUser() throws Exception {
+        MemberDTO anotherUser = new MemberDTO(); // 다른 사용자 설정
+        anotherUser.setUserId("AnotherUser");
+        mockSession.setAttribute("loginUser", anotherUser);
+
+        PostUpdateRequestDTO updateRequestDTO = new PostUpdateRequestDTO(); // 업데이트 요청 DTO 생성 및 필요한 값 설정
+        updateRequestDTO.setPostTitle("Attempted Update Title");
+        updateRequestDTO.setPostText("Attempted update content of the post.");
+        updateRequestDTO.setCategoryId(1L);
+
+        given(postService.findById(1L)).willReturn(post); // postService의 findById 메소드가 호출되면 사전에 설정한 post 반환
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/post/1")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequestDTO)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("글을 수정할 권한이 없습니다."));
     }
 }
