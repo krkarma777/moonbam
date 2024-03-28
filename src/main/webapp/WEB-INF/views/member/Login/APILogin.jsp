@@ -23,6 +23,7 @@
                     <input type="text" id="nickname" name="nickname" value="${dto.nickname}" minlength="2" required autofocus="autofocus" class="form-control mb-3">
                     <span id="confirmNicknameError" style="color: red;"></span>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                    	<input type="button" id="autoNickname" name="clickType" value="자동 닉네임 생성" class="btn btn-success me-md-2">
                         <input type="submit" name="clickType" value="변경하기" class="btn btn-primary me-md-2">
                         <input type="submit" name="clickType" value="그대로 사용하기" class="btn btn-secondary">
                     </div>
@@ -32,7 +33,45 @@
     </div>
 
     <script type="text/javascript">
-        $(function(){
+
+	  	//새로고침, 뒤로가기, 나가기 시 경고창 함수
+		function f5Control(event){
+			event.preventDefault();
+		    event.returnValue = '';
+		}
+    
+    	$(function(){
+    		
+			//새로고침, 뒤로가기, 나가기 시 경고창 함수 출력
+			window.addEventListener('beforeunload', f5Control);
+			
+			//뒤로가기 단축키을 누르면 로그인 메인으로 이동(Alt + <- 기능)(브라우저 뒤로가기 버튼은 막히지 않음)
+			window.history.pushState(null, null, window.location.href);
+			window.onpopstate = function(event) {
+				window.history.pushState(null, null, window.location.href);
+				window.location.href= "<c:url value='/'/>"; 
+			};
+   		    
+			$(".btn").on("click", function(){
+				window.removeEventListener('beforeunload', f5Control);
+	 		})
+        	
+        	//자동 닉네임 생성기
+        	$("#autoNickname").on("click", function(){
+        		var nicknameSpace = $("#nickname");
+        		$.ajax({
+                    type: "POST",
+                    url: "<c:url value='/randomNickname'/>", 
+                    success: function (response) {
+                    	nicknameSpace.val(response);
+                    },
+                    error: function (error) {
+                        console.error("닉네임 자동 생성기 에러:", error);
+                    }
+                })
+        	})
+        	
+        	
             //닉네임 중복 확인
             var prevNickname = ""; 
             $("#nickname").on("focusout", function() {

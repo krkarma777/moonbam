@@ -114,7 +114,7 @@ public class RegisterController {
 		String userGender = dto.getUserGender();
 		if (!(userGender.equals("male") || userGender.equals("female"))) { // 성별 확인
 			failMesg = false;
-			request.setAttribute("mesg", "있을 수 없는 성별입니다. 확인해주세요");
+			request.setAttribute("mesg", "불가능한 성별입니다. 확인해주세요");
 			return result;
 
 		} else { // 성별 규격 통과

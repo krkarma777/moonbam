@@ -25,8 +25,8 @@
 	    <form action="<c:url value='/RegisterTerms'/>" method="post">
 	      <h1>회원가입</h1>
 	      <div class="social-container">
-	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="<%=request.getContextPath()%>/getKakaoAuthUrl" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="<%=request.getContextPath()%>/Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
 	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
@@ -42,8 +42,8 @@
 	  <form id="loginForm" action="<c:url value='/Logined'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
-	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="<%=request.getContextPath()%>/getKakaoAuthUrl" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="<%=request.getContextPath()%>/Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
 	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>

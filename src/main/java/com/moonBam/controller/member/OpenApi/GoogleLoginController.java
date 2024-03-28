@@ -14,7 +14,6 @@ import com.moonBam.controller.member.DebugBoardController;
 import com.moonBam.controller.member.SecurityController;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
-import com.moonBam.service.member.RegisterService;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
@@ -47,13 +46,13 @@ public class GoogleLoginController {
     OpenApiService serv;
     
     @Autowired
-    RegisterService rServ;
-    
-    @Autowired
     DebugBoardController dbc;
     
     @Autowired
     SecurityController sc;
+    
+    @Autowired
+    OpenApiController oac;
 
     // 구글 로그인창 호출
     @GetMapping(value = "Login/getGoogleAuthUrl")
@@ -62,9 +61,9 @@ public class GoogleLoginController {
         String reqUrl = googleLoginUrl + "/o/oauth2/v2/auth?client_id=" + googleClientId + "&redirect_uri=" + googleRedirectUrl
                 + "&response_type=code&scope=email%20profile%20openid&access_type=offline";
 
-        log.info("myLog-LoginUrl : {}",googleLoginUrl);
-        log.info("myLog-ClientId : {}",googleClientId);
-        log.info("myLog-RedirectUrl : {}",googleRedirectUrl);
+//        log.info("myLog-LoginUrl : {}",googleLoginUrl);
+//        log.info("myLog-ClientId : {}",googleClientId);
+//        log.info("myLog-RedirectUrl : {}",googleRedirectUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(reqUrl));
@@ -92,12 +91,12 @@ public class GoogleLoginController {
         
         //받은 토큰을 토큰객체에 저장
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
-        log.info("responseBody {}",googleLoginResponse.toString());
+//        log.info("responseBody {}",googleLoginResponse.toString());
         String googleToken = googleLoginResponse.getId_token();
-
+        
         //받은 토큰을 구글에 보내 유저정보를 얻음
         String requestUrl = UriComponentsBuilder.fromHttpUrl(googleAuthUrl + "/tokeninfo").queryParam("id_token",googleToken).toUriString();
-
+        
         //허가된 토큰의 유저정보를 결과로 받음
         String resultJson = restTemplate.getForObject(requestUrl, String.class);
 
@@ -113,39 +112,39 @@ public class GoogleLoginController {
         //미가입자일 경우, 자동 가입
         if(check == null) {
     	  
-		//MemberDTO 사용을 위한 임의의 값 입력
-		String pw = sc.encrypt("Google"+dbc.getNum(16));
-		String[] emailParts = ((String) map.get("email")).split("@");
-		Date currentDate = new Date();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-			String userSignDate = dateFormat.format(currentDate);
-		  
-		MemberDTO dto = new MemberDTO();
-      		dto.setUserId(sc.encrypt((String) map.get("sub")));
-          	dto.setUserPw(pw);					
-          	dto.setUserName(((String) map.get("name")).replace(" ", ""));
-          	dto.setNickname(dbc.getNum(10)+"-G");
-          	dto.setUserEmailId(emailParts[0]);			
-          	dto.setUserEmailDomain(emailParts[1]);				
-          	dto.setUserSignDate(userSignDate);
-  			dto.setUserType("1");
-  		
-  		//회원가입
-  		serv.insertAPIMember(dto);	
-    	
-  		//닉네임 변경하는 화면으로 이동
-  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
-  		session.setAttribute("loginUser", nDTO);
-  		mav.addObject("dto", nDTO);
-	    mav.setViewName("member/Login/APILogin");
-	    return mav; 
+			//MemberDTO 사용을 위한 임의의 값 입력
+			String pw = sc.encrypt("Google"+dbc.getNum(16));
+			String[] emailParts = ((String) map.get("email")).split("@");
+			Date currentDate = new Date();
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				String userSignDate = dateFormat.format(currentDate);
+			  
+			MemberDTO dto = new MemberDTO();
+	      		dto.setUserId(sc.encrypt((String) map.get("sub")));
+	          	dto.setUserPw(pw);					
+	          	dto.setUserName(((String) map.get("name")).replace(" ", ""));
+	          	dto.setNickname(oac.randomNickname());
+	          	dto.setUserEmailId(emailParts[0]);			
+	          	dto.setUserEmailDomain(emailParts[1]);				
+	          	dto.setUserSignDate(userSignDate);
+	  			dto.setUserType("1");
+	  		
+	  		//회원가입
+	  		serv.insertAPIMember(dto);	
+	    	
+	  		//닉네임 변경하는 화면으로 이동
+	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
+	  		session.setAttribute("loginUser", nDTO);
+	  		mav.addObject("dto", nDTO);
+		    mav.setViewName("member/Login/APILogin");
+		    return mav; 
         
-      //가입자일 경우, 메인으로 이동
-      } else {
-	    session.setAttribute("loginUser", check);
-        mav.setViewName("redirect:/");
-        return mav;
-      }
+	      //가입자일 경우, 메인으로 이동
+	      } else {
+		    session.setAttribute("loginUser", check);
+	        mav.setViewName("redirect:/");
+	        return mav;
+	      }
         
     }
     
