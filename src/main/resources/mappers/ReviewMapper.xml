@@ -21,7 +21,7 @@
 	
 	<update id="updateReview" parameterType="ReviewDTO">
 		<selectKey keyProperty="postId" resultType="Long" order="BEFORE"> 
-			select postId from postdb where (postBoard,userId) in (('review', #{userId}))
+			select postId from postdb where (postBoard,userId, contId) in (('review', #{userId}, #{contId}))
 		</selectKey>
 		update postdb set postText=#{postText} where postid=#{postId}
 		
@@ -48,7 +48,7 @@
 	<select id="selectReviewByUser" parameterType="map" resultType="ReviewDTO">
 		select * 
 		 from postdb left join ratedb using(userId, contId)
-		 where (postBoard,userId) in (('review', #{userId}))
+		 where (postBoard,userId,contId) in (('review', #{userId}, #{contId}))
 	</select>	
 	<select id="selectScore" parameterType="map" resultType="int">
 		select score from ratedb where (userId, contId) in ((#{userId}, #{contId}))

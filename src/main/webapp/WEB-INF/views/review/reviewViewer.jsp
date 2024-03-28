@@ -88,6 +88,8 @@
 	ContentDTO content = (ContentDTO)request.getAttribute("content");
 	String contTitle = content.getContTitle();
 	String contImg = content.getContImg();
+	contImg = "http://image.tmdb.org/t/p/"+"w154/"+contImg;
+	//http://image.tmdb.org/t/p/w342/awmVj0xmD8CP4g0uD7dUrM8nqi.jpg
 
 	String mesg = (String)request.getAttribute("mesg");
 	
@@ -240,7 +242,7 @@
 		<div class="row" id="bottom"></div>
 		
 		
-		<%-- <jsp:include page="../WEB-INF/board/commentMain.jsp"></jsp:include> --%>
+		<jsp:include page="../board/commentMain.jsp"></jsp:include>
 	</div>
 	
 	<!-- 공유기능 모달창 -->
