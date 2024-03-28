@@ -169,7 +169,12 @@
 	Long contId = content.getContId();
 	String contTitle = content.getContTitle();
 	String description = content.getDescription();
+	if(description==null){
+		description= "해당 컨텐츠에 대한 설명이 존재하지 않습니다.";
+	}
 	String contImg = content.getContImg();	
+	contImg = "http://image.tmdb.org/t/p/"+"w342/"+contImg;
+	//http://image.tmdb.org/t/p/w342/awmVj0xmD8CP4g0uD7dUrM8nqi.jpg
 	
 	MemberDTO login = (MemberDTO)session.getAttribute("loginUser");
 	String userId = null;
