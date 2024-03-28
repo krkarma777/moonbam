@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MovieMapper">
+    <insert id="insertMovie" parameterType="MovieResultResponseDto">
+        MERGE INTO contentDB cdb
+        USING (
+            SELECT
+                #{id, jdbcType=NUMERIC} AS contId, 
+                #{title, jdbcType=VARCHAR} AS contTitle,  
+                #{overview, jdbcType=CLOB} AS description, 
+                null AS nation, 
+                #{release_date, jdbcType=DATE} AS releaseDate, 
+                #{vote_average, jdbcType=NUMERIC} AS avgRate, 
+                'movie' AS contType, 
+                #{poster_path, jdbcType=VARCHAR} AS contImg,
+               	#{popularity, jdbcType=NUMERIC} AS popularity
+            FROM dual
+        ) incoming
+        ON (cdb.contId = incoming.contId)
+        WHEN NOT MATCHED THEN 
+            INSERT (contId, contTitle, description, nation, releaseDate, avgRate, contType, contImg, popularity)
+            VALUES (incoming.contId, incoming.contTitle, incoming.description, incoming.nation, incoming.releaseDate, incoming.avgRate, incoming.contType, incoming.contImg, incoming.popularity)
+    </insert>
+</mapper>
