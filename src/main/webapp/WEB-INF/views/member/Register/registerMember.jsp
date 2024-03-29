@@ -119,9 +119,9 @@
 		    event.returnValue = '';
 		}
 	
-		//페이지 로딩되면 기존 인증번호 쿠키 삭제
 	   $(function(){
-		   
+	
+		 	//페이지 로딩되면 기존 인증번호 쿠키 삭제
 		   deleteCookeeFunction();
 		   
 		   //새로고침, 뒤로가기, 나가기 시 경고창 함수 출력

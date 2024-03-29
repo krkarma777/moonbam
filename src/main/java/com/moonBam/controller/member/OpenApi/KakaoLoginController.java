@@ -9,11 +9,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -24,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,8 +41,8 @@ public class KakaoLoginController {
     @Value("${client_id}")
     private String client_id;
 
-    @Value("${redirect_uri}")
-    private String redirect_uri;
+    @Value("${redirect_url}")
+    private String redirect_url;
     
     @Value("${secret_code}")
     private String secret_code;
@@ -66,7 +62,7 @@ public class KakaoLoginController {
     // 카카오에서 토큰 받아오기
     @GetMapping("/getKakaoAuthUrl")
     public ResponseEntity<Object> getKakaoAuthUrl() throws URISyntaxException {
-    	String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&response_type=code";
+    	String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri="+redirect_url+"&response_type=code";
         URI redirectUri = new URI(reqUrl);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(redirectUri);
@@ -165,7 +161,7 @@ public class KakaoLoginController {
             
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=").append(client_id);
-            sb.append("&redirect_uri=").append(redirect_uri);
+            sb.append("&redirect_uri=").append(redirect_url);
             sb.append("&code=").append(code);
             sb.append("&client_secret=").append(secret_code);		
 

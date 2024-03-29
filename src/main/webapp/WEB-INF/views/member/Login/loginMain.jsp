@@ -27,7 +27,7 @@
 	      <div class="social-container">
 	        <a href="<%=request.getContextPath()%>/getKakaoAuthUrl" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
 	        <a href="<%=request.getContextPath()%>/Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
 	      <input type="text" id="userName" name="userName" maxlength="10" required placeholder="성함" />
@@ -44,7 +44,7 @@
 	      <div class="social-container">
 	        <a href="<%=request.getContextPath()%>/getKakaoAuthUrl" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
 	        <a href="<%=request.getContextPath()%>/Login/getGoogleAuthUrl" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="#" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
 	      <input type="text" id="userId" name="userId" class="loginSet" pattern="[a-zA-Z0-9]{4,}" autofocus autocomplete="off" placeholder="아이디" />
