@@ -531,7 +531,7 @@
 			}
 		}
 
-		
+		//submit 시에는 경고창이 뜨지 않음(나가기/새로고침)
 		$("#register_button").on("click", function(){
 			window.removeEventListener('beforeunload', f5Control);
 		})
