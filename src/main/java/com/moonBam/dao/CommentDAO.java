@@ -1,12 +1,13 @@
 package com.moonBam.dao;
 
-import com.moonBam.dto.CommentDTO;
+import java.util.HashMap;
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
+import com.moonBam.dto.CommentDTO;
 
 @Component
 public class CommentDAO {
@@ -53,7 +54,7 @@ public class CommentDAO {
 	}
 
 	
-	public int updateComment(HashMap<String, String> map){
+	public int updateComment(HashMap<String, String> map){ 
 			
 			int num = session.update("updateComment", map);
 			return num;
