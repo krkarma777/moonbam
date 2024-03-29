@@ -441,8 +441,8 @@
 </head>
 <body>
 	<!--네비게이션바  -->
-	<%-- <jsp:include page="//common/navbar.jsp"></jsp:include> --%>
-	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+	<jsp:include page="//common/navbar.jsp"></jsp:include>
+	<!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="#">Navbar</a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -477,7 +477,7 @@
 	      </form>
 	    </div>
 	  </div>
-	</nav>
+	</nav> -->
 	
 	<!--헤더  -->
 	<div class="row" id="header"></div>
@@ -629,7 +629,7 @@
 		      <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
 		        <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
 		      </a>
-		      <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2023 Company, Inc</span>
+		      <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2024 Company, Inc</span>
 		    </div>
 		
 		    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
