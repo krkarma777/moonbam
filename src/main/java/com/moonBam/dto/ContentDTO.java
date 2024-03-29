@@ -6,30 +6,14 @@ import org.apache.ibatis.type.Alias;
 public class ContentDTO {
 	private Long contId;
 	private String contTitle;
-	private Long producerId;
+//	private Long producerId;
 	private String description;
 	private String nation;
 	private String releaseDate;
 	private Integer average;
 	private String contType;
 	private String contImg;
-	public ContentDTO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public ContentDTO(Long contId, String contTitle, Long producerId, String description, String nation,
-			String releaseDate, Integer average, String contType, String contImg) {
-		super();
-		this.contId = contId;
-		this.contTitle = contTitle;
-		this.producerId = producerId;
-		this.description = description;
-		this.nation = nation;
-		this.releaseDate = releaseDate;
-		this.average = average;
-		this.contType = contType;
-		this.contImg = contImg;
-	}
+	private String popularity;
 	public Long getContId() {
 		return contId;
 	}
@@ -41,12 +25,6 @@ public class ContentDTO {
 	}
 	public void setContTitle(String contTitle) {
 		this.contTitle = contTitle;
-	}
-	public Long getProducerId() {
-		return producerId;
-	}
-	public void setProducerId(Long producerId) {
-		this.producerId = producerId;
 	}
 	public String getDescription() {
 		return description;
@@ -84,11 +62,34 @@ public class ContentDTO {
 	public void setContImg(String contImg) {
 		this.contImg = contImg;
 	}
+	public String getPopularity() {
+		return popularity;
+	}
+	public void setPopularity(String popularity) {
+		this.popularity = popularity;
+	}
+	public ContentDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public ContentDTO(Long contId, String contTitle, String description, String nation, String releaseDate,
+			Integer average, String contType, String contImg, String popularity) {
+		super();
+		this.contId = contId;
+		this.contTitle = contTitle;
+		this.description = description;
+		this.nation = nation;
+		this.releaseDate = releaseDate;
+		this.average = average;
+		this.contType = contType;
+		this.contImg = contImg;
+		this.popularity = popularity;
+	}
 	@Override
 	public String toString() {
-		return "ContentDTO [contId=" + contId + ", contTitle=" + contTitle + ", producerId=" + producerId
-				+ ", description=" + description + ", nation=" + nation + ", releaseDate=" + releaseDate + ", average="
-				+ average + ", contType=" + contType + ", contImg=" + contImg + "]";
+		return "ContentDTO [contId=" + contId + ", contTitle=" + contTitle + ", description=" + description
+				+ ", nation=" + nation + ", releaseDate=" + releaseDate + ", average=" + average + ", contType="
+				+ contType + ", contImg=" + contImg + ", popularity=" + popularity + "]";
 	}
 	
 }
