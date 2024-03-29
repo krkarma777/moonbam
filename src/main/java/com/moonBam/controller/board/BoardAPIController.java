@@ -82,12 +82,12 @@ public class BoardAPIController {
         PostDTO postDTO = postService.findById(postId);
         MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
 
-        if (postDTO == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "글이 존재하지않습니다."));
-        }
-
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
+        }
+
+        if (postDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "글이 존재하지않습니다."));
         }
 
         if (!loginUser.getUserId().equals(postDTO.getUserId())) {
