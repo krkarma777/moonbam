@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moonBam.controller.member.DebugBoardController;
+import com.moonBam.controller.member.AnonymousBoardController;
 import com.moonBam.controller.member.SecurityController;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
@@ -51,7 +51,7 @@ public class KakaoLoginController {
     OpenApiService serv;
     
     @Autowired
-    DebugBoardController dbc;
+    AnonymousBoardController dbc;
     
     @Autowired
     SecurityController sc;
@@ -96,11 +96,6 @@ public class KakaoLoginController {
             //비밀번호
             String pw = sc.encrypt("Kakao"+dbc.getNum(16));
 
-            //이름
-            String jsonString = objectMapper.writeValueAsString(map.get("properties"));
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
-            String name = jsonNode.get("nickname").asText();
-
             //닉네임
             String nickname = oac.randomNickname();
             		
@@ -118,7 +113,6 @@ public class KakaoLoginController {
     		MemberDTO dto = new MemberDTO();
 	    		dto.setUserId(id);
 	          	dto.setUserPw(pw);					
-	          	dto.setUserName(name);
 	          	dto.setNickname(nickname);
 	          	dto.setUserEmailId(emailParts[0]);			
 	          	dto.setUserEmailDomain(emailParts[1]);				

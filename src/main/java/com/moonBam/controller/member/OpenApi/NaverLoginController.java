@@ -40,7 +40,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moonBam.controller.member.DebugBoardController;
+import com.moonBam.controller.member.AnonymousBoardController;
 import com.moonBam.controller.member.SecurityController;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
@@ -62,7 +62,7 @@ public class NaverLoginController {
     OpenApiService serv;
     
     @Autowired
-    DebugBoardController dbc;
+    AnonymousBoardController dbc;
     
     @Autowired
     SecurityController sc;
@@ -120,9 +120,6 @@ public class NaverLoginController {
             //비밀번호
             String pw = sc.encrypt("Naver"+dbc.getNum(16));
 
-            //이름
-            String name = (String) userInfoMap2.get("name");
-
             //닉네임
             String nickname = oac.randomNickname();
             		
@@ -138,7 +135,6 @@ public class NaverLoginController {
     		MemberDTO dto = new MemberDTO();
 	    		dto.setUserId(id);
 	          	dto.setUserPw(pw);					
-	          	dto.setUserName(name);
 	          	dto.setNickname(nickname);
 	          	dto.setUserEmailId(emailParts[0]);			
 	          	dto.setUserEmailDomain(emailParts[1]);				

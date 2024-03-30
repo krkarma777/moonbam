@@ -18,7 +18,7 @@
 <body>
 
 	<h2>찾은 아이디 정보</h2>
-	<div>${dto.getUserName()}님의 아이디는
+	<div>회원님의 아이디는
 		${dto.getUserId()}입니다.
 	</div>
 	<div id="sitesShortCut">

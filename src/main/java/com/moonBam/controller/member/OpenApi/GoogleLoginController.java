@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moonBam.controller.member.DebugBoardController;
+import com.moonBam.controller.member.AnonymousBoardController;
 import com.moonBam.controller.member.SecurityController;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
@@ -46,7 +46,7 @@ public class GoogleLoginController {
     OpenApiService serv;
     
     @Autowired
-    DebugBoardController dbc;
+    AnonymousBoardController dbc;
     
     @Autowired
     SecurityController sc;
@@ -122,7 +122,6 @@ public class GoogleLoginController {
 			MemberDTO dto = new MemberDTO();
 	      		dto.setUserId(sc.encrypt((String) map.get("sub")));
 	          	dto.setUserPw(pw);					
-	          	dto.setUserName(((String) map.get("name")).replace(" ", ""));
 	          	dto.setNickname(oac.randomNickname());
 	          	dto.setUserEmailId(emailParts[0]);			
 	          	dto.setUserEmailDomain(emailParts[1]);				

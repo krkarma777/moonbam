@@ -19,7 +19,7 @@
 <body>
 
 	<h2>찾은 유저 정보</h2>
-	<p>${dto.getUserName()}님은 기존 회원이십니다.<br>
+	<p>${dto.getNickname()}님은 기존 회원이십니다.<br>
 		아이디:	${dto.getUserId()}<br>
 		가입일:	${dto.getUserSignDate()}
 	</p>

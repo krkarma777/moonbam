@@ -224,9 +224,8 @@
 		FROM 
 			memberDB
 		WHERE 
-			userName = #{userName}
-			AND userSSN1 = #{ssn1}
-			AND userSSN2 = #{ssn2}
+			userEmailId = #{userEmailId}
+			AND userEmailDomain = #{userEmailDomain}
 	</select>
 
 	<!-- 비밀번호 찾기 -->
@@ -236,13 +235,12 @@
 		FROM 
 			memberDB
 		WHERE 
-			userName = #{userName}
-			AND userId = #{userId}
-			AND userSSN1 = #{ssn1}
-			AND userSSN2 = #{ssn2}
+			userId = #{userId}
+			AND userEmailId = #{userEmailId}
+			AND userEmailDomain = #{userEmailDomain}
 	</select>
 	
-		<!-- 로그인 -->
+	<!-- 로그인 -->
 	<select id="login" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
 			*
@@ -277,19 +275,8 @@
 		FROM memberDB
 		WHERE 
 			userid = #{userid}
-			AND userEmailId = #{userEmailId}
-			AND userEmailDomain = #{userEmailDomain}
-	</select>
-	
-	<!-- 전체 비밀번호 - 핸드폰 번호로 찾기 -->
-	<select id="findPWbyPhoneNum" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userid = #{userid}
-			AND userPhoneNum1 = #{userPhoneNum1}
-			AND userPhoneNum2 = #{userPhoneNum2}
-			AND userPhoneNum3 = #{userPhoneNum3}
+			AND restoreUserEmailId = #{restoreUserEmailId}
+			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
 	</select>
 	
 	<!-- 전체 비밀번호 출력용 -->
@@ -309,14 +296,16 @@
 	<!-- 회원가입 -->
 	<insert id="insertNewMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-		userId, userPw, userName, userSSN1, userSSN2, 
-		userGender, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3,
-		userEmailId, userEmailDomain
+		userId, userPw, nickname, 
+		userEmailId, userEmailDomain,
+		restoreUserEmailId, restoreUserEmailDomain,
+		userSignDate, userType
 		)
 		VALUES (
-		#{userId}, #{userPw}, #{userName}, #{userSSN1}, #{userSSN2},
-		#{userGender}, #{nickname}, #{userPhoneNum1}, #{userPhoneNum2},
-		#{userPhoneNum3}, #{userEmailId}, #{userEmailDomain}
+		#{userId}, #{userPw}, #{nickname},
+		#{userEmailId}, #{userEmailDomain},
+		#{restoreUserEmailId}, #{restoreUserEmailDomain},
+		#{userSignDate}, #{userType}
 		)
 	</insert>
 
@@ -334,16 +323,6 @@
 		WHERE nickname = #{nickname}
 	</select>
 
-	<!-- 핸드폰 번호 중복 검사 에이젝스 -->
-	<select id="isUserPNDuplicate" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userPhoneNum1 = #{userPhoneNum1}
-			AND userPhoneNum2 = #{userPhoneNum2}
-			AND userPhoneNum3 = #{userPhoneNum3}
-	</select>
-	
 	<!-- 이메일 중복 검사 에이젝스 -->
 	<select id="isUserEmailDuplicate" resultType="int" parameterType="hashmap">
 		SELECT COUNT(*)

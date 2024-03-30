@@ -50,7 +50,8 @@ body {
         }
 
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="email"] {
             background-color: #eee;
             border: none;
             padding: 12px 15px;

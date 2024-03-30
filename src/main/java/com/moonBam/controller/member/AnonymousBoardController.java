@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.moonBam.dto.DebugBoardDTO;
-import com.moonBam.service.member.DebugBoardService;
+import com.moonBam.dto.AnonymousBoardDTO;
+import com.moonBam.service.member.AnonymousBoardService;
 
 @Controller
-public class DebugBoardController {
+public class AnonymousBoardController {
 
 	@Autowired
-	DebugBoardService serv;
+	AnonymousBoardService serv;
 	
 	//게시판 글 목록 보기
 	@GetMapping("/viewDBoardList")
@@ -39,11 +39,11 @@ public class DebugBoardController {
 			String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
 		// 전체 글 개수 가져오기 (페이지네이션에 사용될 수 있음)
-	    List<DebugBoardDTO> allPosts  = serv.viewDBoardList(orderBy);
+	    List<AnonymousBoardDTO> allPosts  = serv.viewDBoardList(orderBy);
 	    int totalPosts = allPosts.size();
 		
 		// 현재 페이지에 해당하는 글 목록 생성
-	    List<DebugBoardDTO> list = new ArrayList<>();
+	    List<AnonymousBoardDTO> list = new ArrayList<>();
 	    int startIndex = (currentPage - 1) * perPage;
 	    int endIndex = Math.min(startIndex + perPage, totalPosts);
 	    for (int i = startIndex; i < endIndex; i++) {
@@ -51,7 +51,7 @@ public class DebugBoardController {
 	    }
 
 		//리스트의 날짜 형식 변경
-		for (DebugBoardDTO debugBoardDTO : list) {
+		for (AnonymousBoardDTO debugBoardDTO : list) {
 			debugBoardDTO.setEdittedDate(chooseDateForm(debugBoardDTO.getEdittedDate()));
 		}
 		
@@ -67,15 +67,15 @@ public class DebugBoardController {
 	
 	
 	//현재 글의 이전 글 보기
-	public DebugBoardDTO prevPost(int boardNum) throws ParseException {
-		DebugBoardDTO prevPost = serv.prevPost(boardNum);
+	public AnonymousBoardDTO prevPost(int boardNum) throws ParseException {
+		AnonymousBoardDTO prevPost = serv.prevPost(boardNum);
 		return prevPost;
 	}
 	
 	
 	//현재 글의 다음 글 보기
-	public DebugBoardDTO nextPost(int boardNum) throws ParseException {
-		DebugBoardDTO nextPost = serv.nextPost(boardNum);
+	public AnonymousBoardDTO nextPost(int boardNum) throws ParseException {
+		AnonymousBoardDTO nextPost = serv.nextPost(boardNum);
 		return nextPost;
 	}
 	
@@ -91,11 +91,11 @@ public class DebugBoardController {
 			map.put("searchData", searchData);
 			map.put("category", orderBy);
 		
-		List<DebugBoardDTO> allPosts  = serv.searchList(map);
+		List<AnonymousBoardDTO> allPosts  = serv.searchList(map);
 	    int totalPosts = allPosts.size();
 		
 		// 현재 페이지에 해당하는 글 목록 생성
-	    List<DebugBoardDTO> list = new ArrayList<>();
+	    List<AnonymousBoardDTO> list = new ArrayList<>();
 	    int startIndex = (currentPage - 1) * perPage;
 	    int endIndex = Math.min(startIndex + perPage, totalPosts);
 	    for (int i = startIndex; i < endIndex; i++) {
@@ -103,7 +103,7 @@ public class DebugBoardController {
 	    }
 
 		//리스트의 날짜 형식 변경
-		for (DebugBoardDTO debugBoardDTO : list) {
+		for (AnonymousBoardDTO debugBoardDTO : list) {
 			debugBoardDTO.setEdittedDate(chooseDateForm(debugBoardDTO.getEdittedDate()));
 		}
 		
@@ -129,7 +129,7 @@ public class DebugBoardController {
 	
 	//게시판 글 등록(PRG 패턴을 통해 중복 등록 방지)
 	@PostMapping("/insertPost")
-	public ModelAndView insertPost(DebugBoardDTO dto) {
+	public ModelAndView insertPost(AnonymousBoardDTO dto) {
 		//추천|비추천 입력
 		dto.setRecommendNum(0);
 		dto.setDisRecommendNum(0);
@@ -144,7 +144,7 @@ public class DebugBoardController {
 
 	    
 		serv.insertPost(dto);
-		List<DebugBoardDTO> list = serv.viewDBoardList("boardNum");
+		List<AnonymousBoardDTO> list = serv.viewDBoardList("boardNum");
 		ModelAndView mav = new ModelAndView();
 			mav.addObject("list", list);
 			mav.setViewName("redirect:/viewDBoardList");
@@ -212,11 +212,11 @@ public class DebugBoardController {
 		//System.out.println("disRecommendVal: "+ userBydislike);
 		
 		//이전글 | 다음글 가져오기
-		DebugBoardDTO prev = prevPost(boardNum);
+		AnonymousBoardDTO prev = prevPost(boardNum);
 		if(prev != null) {							//마지막 글은 prev가 null값
 			prev.setEdittedDate(chooseDateForm(prev.getEdittedDate()));
 		}
-		DebugBoardDTO next = nextPost(boardNum);
+		AnonymousBoardDTO next = nextPost(boardNum);
 		if(next != null) {							//가장 최신 글은 next가 null값
 			next.setEdittedDate(chooseDateForm(next.getEdittedDate()));
 		}
@@ -227,7 +227,7 @@ public class DebugBoardController {
 		
 		
 		//날짜 형식 변경
-		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = serv.viewDBoardContent(boardNum);
 			dto.setEdittedDate(chooseDateForm(dto.getEdittedDate()));
 		
 			
@@ -246,7 +246,7 @@ public class DebugBoardController {
 	//게시판 글 수정하기	전 비밀번호 확인
 	@PostMapping("/checkUpdatePost/{bNum}")
 	public ModelAndView checkUpdatePost(@PathVariable("bNum") int boardNum) {
-		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = serv.viewDBoardContent(boardNum);
 	    ModelAndView mav = new ModelAndView("member/Board/checkUpdatePost");
 	    	mav.addObject("dto", dto);
 	    return mav;
@@ -256,7 +256,7 @@ public class DebugBoardController {
 	//게시판 글 수정화면으로 이동
 	@PostMapping("/checkUpdatePost/modifyPost")
 	public ModelAndView modifyPost(int boardNum) {
-		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = serv.viewDBoardContent(boardNum);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("dto", dto);
 		mav.setViewName("member/Board/modifyPost");
@@ -266,7 +266,7 @@ public class DebugBoardController {
 	
 	//게시판 글 수정하기
 	@PostMapping("/checkUpdatePost/updateDBoard")
-	public String updateDBoard(DebugBoardDTO dto) {
+	public String updateDBoard(AnonymousBoardDTO dto) {
 
 		// 현재 날짜와 시간을 dto에 입력
 		Date nowDate = new Date();
@@ -282,7 +282,7 @@ public class DebugBoardController {
 	//게시판 글 삭제 전 비밀번호 확인
 	@PostMapping("/checkDeletePost/{bNum}")
 	public ModelAndView checkDeletePost(@PathVariable("bNum") int boardNum) {
-		DebugBoardDTO dto = serv.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = serv.viewDBoardContent(boardNum);
 		ModelAndView mav = new ModelAndView("member/Board/checkDeletePost");
 	    mav.addObject("dto", dto);
 	    return mav;

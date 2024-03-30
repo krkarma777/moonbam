@@ -64,12 +64,6 @@ public class LoginDAO {
 		return num > 0;
 	}
 	
-	//전체 비밀번호 - 핸드폰 번호로 찾기
-	public boolean findPWbyPhoneNum(Map<String, String> phoneNumMap) {
-		int num = session.selectOne("com.config.MemberMapper.findPWbyPhoneNum", phoneNumMap);
-		return num > 0;
-	}
-	
 	//전체 비밀번호 출력용
 	public MemberDTO selectMemberData(String userId) {
 		MemberDTO dto = session.selectOne("com.config.MemberMapper.selectMemberData", userId);

@@ -45,7 +45,7 @@
 
 <h1>이메일 발송 성공!</h1>
 
-    <p>${dto.getUserName()}님의 비밀번호는  
+    <p>${dto.getNickname()}님의 비밀번호는  
     <a href="http://www.${dto.getUserEmailDomain()}" target="_blank">${dto.getUserEmailId()}@${dto.getUserEmailDomain()}로 전송되었습니다.</a>
     <p>확인 후 로그인 부탁드립니다.</p>
 
