@@ -4,15 +4,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MyPageMapper">
 <!-- updateMember -->
-<update id="updateMember" parameterType="MemberDTO">
+<update id="updateUser" parameterType="MemberDTO">
      update member
      set 
+     userName=#{userName},
      nickname = #{nickname},
      userPhoneNum1 = #{userPhoneNum1},
      userPhoneNum2 = #{userPhoneNum2},
-     userPhoneNum3 = #{userPhoneNum3},
-     userEmailId = #{userEmailId },
-     userEmailDomain = #{userEmailDomain}
+     userPhoneNum3 = #{userPhoneNum3}
      
     where userId = #{userId}
    </update>
