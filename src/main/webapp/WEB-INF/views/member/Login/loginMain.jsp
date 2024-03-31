@@ -30,7 +30,7 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
-	      <input type="email" id="email" name="email" required placeholder="가입할 이메일을 입력하세요" />
+	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" />
 	      <button>회원가입으로</button>
 	    </form>
 	  </div>
@@ -45,15 +45,15 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
-	      <input type="text" id="userId" name="userId" class="loginSet" pattern="[a-zA-Z0-9]{4,}" autofocus autocomplete="off" placeholder="아이디" />
-	      <input type="password" id="userPw" name="userPw" class="loginSet" autocomplete="off" placeholder="패스워드"/>
+	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" />
+	      <input type="password" id="userPw" name="userPw" class="loginSet" placeholder="패스워드"/>
 	      <button type="button" id="showPasswd" class="loginButtons">비밀번호 보이기</button>
 	      <button class="loginButtons">로그인</button>
 		  <div id="confirmUserIdPwError" style="font-size: 14px; color: red;"></div>	    
 	      
 	      <div class="row" id="rowBar">
               <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
-              <div class="col-4 save-label cookieT">아이디 저장</div>
+              <div class="col-4 save-label cookieT">이메일 저장</div>
               <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
               <div class="col-4 auto-login-label cookieT">자동 로그인</div>
 		  </div>	 
@@ -88,7 +88,7 @@
 	    //로그인과 회원가입 탭 전환*******************************************
 	    $('#signUp').on('click', function () {
 	        $('#container').addClass("right-panel-active");
-	        $('#email').focus();
+	        $('#register_userId').focus();
 	    });
 	    
 	    function changeTab(){

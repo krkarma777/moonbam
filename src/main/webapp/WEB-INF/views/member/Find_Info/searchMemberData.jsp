@@ -16,28 +16,19 @@
 		
 		$(function() {
 	
-			//*********userId 관련 JS*********************
 			$("#findIdForm").submit(function(event) {
 				//이름 공백 확인
-				if ($("#ID_email").val().trim() === "") {
-					alert("아이디를 확인해주세요");
-					$("#ID_email").focus();
+				if ($("#restoreEmail").val().trim() === "") {
+					alert("예비 이메일을 입력해주세요");
+					$("#restoreEmail").focus();
 					return false;
 				}
 			})
-			//*********userId 관련 JS*********************
-	
-			//*********Passwd 관련 JS*********************
 			$("#findPWForm").submit(function(event) {
 	    		//아이디 공백 여부 확인
-	    		if ($("#PW_userId").val().trim() === "") {
-					alert("아이디를 확인해주세요");
-					$("#PW_userId").focus();
-					return false;
-				}
-	    		if ($("#PW_email").val().trim() === "") {
-					alert("이메일을 확인해주세요");
-					$("#PW_email").focus();
+	    		if ($("#userId").val().trim() === "") {
+					alert("아이디 이메일을 확인해주세요");
+					$("#userId").focus();
 					return false;
 				}
 			})
@@ -55,7 +46,7 @@
 	 <table>
         <tr>
         	<td>
-				<input type="email" id="ID_email" name="email" autofocus placeholder="이메일을 입력하세요">
+				<input type="email" id="restoreEmail" name="restoreEmail" autofocus placeholder="예비 이메일 입력">
 			</td>
 		</tr>
 		<tr>
@@ -67,15 +58,13 @@
 	</form>
 	 </div>	 
 	
-	
 	<div class="col">
 	<h2>비밀번호 찾기</h2>
     <form id="findPWForm" action="<c:url value='/SearchPartPW'/>" method="post">
     <table>
         <tr>
         	<td>
-		        <input type="text" id="PW_userId" name="userId" pattern="[a-zA-Z0-9]{4,}" title="4자 이상의 영문 대소문자 또는 숫자를 입력하세요" placeholder="아이디를 입력하세요">
-				<input type="email" id="PW_email" name="email" autofocus placeholder="이메일을 입력하세요">
+				<input type="email" id="userId" name="userId" autofocus placeholder="아이디 이메일 입력">
 			</td>
 		</tr>
 		<tr>

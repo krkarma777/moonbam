@@ -7,36 +7,31 @@ public class MemberDTO{
 	private String userId;
 	private String userPw;
 	private String nickname;
-	private String userEmailId;
-	private String userEmailDomain;
 	private String restoreUserEmailId;
 	private String restoreUserEmailDomain;
-	private char googleConnected;
-	private char naverConnected;
-	private char kakaoConnected;
+	private int googleConnected;
+	private int naverConnected;
+	private int kakaoConnected;
 	private String userSignDate;
 	private String userType;
 	@Override
 	public String toString() {
-		return "MemberDTO [userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname + ", userEmailId="
-				+ userEmailId + ", userEmailDomain=" + userEmailDomain + ", restoreUserEmailId=" + restoreUserEmailId
-				+ ", restoreUserEmailDomain=" + restoreUserEmailDomain + ", googleConnected=" + googleConnected
-				+ ", naverConnected=" + naverConnected + ", kakaoConnected=" + kakaoConnected + ", userSignDate="
-				+ userSignDate + ", userType=" + userType + "]";
+		return "MemberDTO [userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname + ", restoreUserEmailId="
+				+ restoreUserEmailId + ", restoreUserEmailDomain=" + restoreUserEmailDomain + ", googleConnected="
+				+ googleConnected + ", naverConnected=" + naverConnected + ", kakaoConnected=" + kakaoConnected
+				+ ", userSignDate=" + userSignDate + ", userType=" + userType + "]";
 	}
 	public MemberDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MemberDTO(String userId, String userPw, String nickname, String userEmailId, String userEmailDomain,
-			String restoreUserEmailId, String restoreUserEmailDomain, char googleConnected, char naverConnected,
-			char kakaoConnected, String userSignDate, String userType) {
+	public MemberDTO(String userId, String userPw, String nickname, String restoreUserEmailId,
+			String restoreUserEmailDomain, int googleConnected, int naverConnected, int kakaoConnected,
+			String userSignDate, String userType) {
 		super();
 		this.userId = userId;
 		this.userPw = userPw;
 		this.nickname = nickname;
-		this.userEmailId = userEmailId;
-		this.userEmailDomain = userEmailDomain;
 		this.restoreUserEmailId = restoreUserEmailId;
 		this.restoreUserEmailDomain = restoreUserEmailDomain;
 		this.googleConnected = googleConnected;
@@ -63,18 +58,6 @@ public class MemberDTO{
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	public String getUserEmailId() {
-		return userEmailId;
-	}
-	public void setUserEmailId(String userEmailId) {
-		this.userEmailId = userEmailId;
-	}
-	public String getUserEmailDomain() {
-		return userEmailDomain;
-	}
-	public void setUserEmailDomain(String userEmailDomain) {
-		this.userEmailDomain = userEmailDomain;
-	}
 	public String getRestoreUserEmailId() {
 		return restoreUserEmailId;
 	}
@@ -87,34 +70,22 @@ public class MemberDTO{
 	public void setRestoreUserEmailDomain(String restoreUserEmailDomain) {
 		this.restoreUserEmailDomain = restoreUserEmailDomain;
 	}
-	public String getGoogleConnected() {
-		if(googleConnected == 'n') {
-			return "아니오";
-		} else {
-			return "예";
-		}
+	public int getGoogleConnected() {
+		return googleConnected;
 	}
-	public void setGoogleConnected(char googleConnected) {
+	public void setGoogleConnected(int googleConnected) {
 		this.googleConnected = googleConnected;
 	}
-	public String getNaverConnected() {
-		if(naverConnected == 'n') {
-			return "아니오";
-		} else {
-			return "예";
-		}
+	public int getNaverConnected() {
+		return naverConnected;
 	}
-	public void setNaverConnected(char naverConnected) {
+	public void setNaverConnected(int naverConnected) {
 		this.naverConnected = naverConnected;
 	}
-	public String getKakaoConnected() {
-		if(kakaoConnected == 'n') {
-			return "아니오";
-		} else {
-			return "예";
-		}
+	public int getKakaoConnected() {
+		return kakaoConnected;
 	}
-	public void setKakaoConnected(char kakaoConnected) {
+	public void setKakaoConnected(int kakaoConnected) {
 		this.kakaoConnected = kakaoConnected;
 	}
 	public String getUserSignDate() {
@@ -129,6 +100,7 @@ public class MemberDTO{
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	
+
+
 	
 }

@@ -23,11 +23,17 @@
 		
 		<form id="registerForm" action="<c:url value='/InsertData'/>" method="post">
 			
-			<!-- 아이디 입력칸(영어+숫자로 4글자 이상)(반드시 입력되어야 함)(직접 입력은 불가하며, 자식창을 통해서만 입력 가능) -->
-			<label for="userId">*아이디 (영어 + 숫자, 최소 4글자)</label> 
-				<input type="text" id="userId" name="userId" pattern="[a-zA-Z0-9]{4,}" required readonly>
-				<button id = "userIdButton" type="button" onclick="openIdWindow()">아이디 확인</button>
-
+			<!-- 아이디 입력칸(회원가입 1단계 이메일 입력칸 값) -->
+			<label for="userEmailDomain">*이메일 인증</label>
+				<input type="email" id="email" name="userId" class ="userEmail" maxlength="30" value="${userId}" required readonly>
+			
+			<!-- 이메일 인증 버튼 -->
+			<div style="display: flex; gap: 5px;">
+				<input type="text" id="certification" name="certification" required="required">
+				<input type="button" id="certificationBTN" value="인증번호 발송">
+			</div>
+			<span id = "certificationAnswer"></span>
+			
 			<!-- 비밀번호 입력칸(6글자 이상)(반드시 입력되어야 함) -->
 			<label for="userPw">*비밀번호 (최소 6글자)</label> 
 				<input type="password" id="userPw" name="userPw" class="pw" minlength="6" required> 
@@ -41,23 +47,15 @@
 			<!-- 유저 닉네임 입력칸(최소 2글자 이상)(반드시 입력) -->
 			<label for="nickname">*유저 닉네임 (최소 2글자)</label> 
 				<input type="text" id="nickname" name="nickname" maxlength="10" minlength="2" required>
+				<input type="button" id="autoNickname" name="clickType" value="자동 닉네임 생성" class="btn btn-success me-md-2">
 				<!-- DB에 저장된 닉네임이 있을 경우, 문구 출력 --> 
 				<span id="confirmNicknameError" style="color: red;"></span>
 				<span id="loadingSpinner_for_nickname" class="loadingSpinner"></span>
 			
-			<label for="userEmailDomain">*이메일 인증</label>
-				<input type="email" id="email" name="email" class ="userEmail" maxlength="30" value="${email}" required readonly>
-			
-			<div style="display: flex; gap: 5px;">
-				<input type="text" id="certification" name="certification" required="required">
-				<input type="button" id="certificationBTN" value="인증번호 발송">
-			</div>
-			<span id = "certificationAnswer"></span>
-			
 			<!-- 유저 이메일(반드시 입력)(select를 통해 도메인 입력 가능) -->
 			<label for="restoreUserEmail">추가 이메일 기입<br>(비밀번호 찾기 등에서 사용됩니다)</label>
 				<div style="display: flex; gap: 5px;">
-					<input type="text" id="restoreUserEmailId" name="restoreUserEmailId" class ="userEmail" maxlength="30">
+					<input type="text" id="restoreUserEmailId" name="restoreUserEmailId" class ="userEmail" maxlength="30" autocomplete="off" >
 						@ 
 					<input type="text" id="restoreUserEmailDomain" name="restoreUserEmailDomain" class ="userEmail"> 
 					<select id="domainSelect" name="domainSelect" class ="userEmail" onchange="domainSelectMethod(this.value)">
@@ -101,6 +99,21 @@
 		   	window.history.pushState(null, null, window.location.href);
 		    window.location.href= "<c:url value='/Login'/>"; 
 		    };
+		    
+		 	//자동 닉네임 생성기
+        	$("#autoNickname").on("click", function(){
+        		var nicknameSpace = $("#nickname");
+        		$.ajax({
+                    type: "POST",
+                    url: "<c:url value='/randomNickname'/>", 
+                    success: function (response) {
+                    	nicknameSpace.val(response);
+                    },
+                    error: function (error) {
+                        console.error("닉네임 자동 생성기 에러:", error);
+                    }
+                })
+        	})
 	    });
 
 	 	//페이지 로딩되면 기존 인증번호 쿠키 삭제
@@ -129,11 +142,6 @@
 		            console.log('쿠키가 없습니다.');
 		        } 
 	*/
-		}
-		
-		//ID 새창 열기
-		function openIdWindow() {
-			var popup = window.open("<c:url value='/IdDupilicate'/>", "아이디 확인", "width=400,height=200");
 		}
 		
 		//PW입력하면 에러 문구 삭제
@@ -204,7 +212,7 @@
 	        var restoreUserEmailId = $(this).val();
 	        var errorSpan = $("#confirmRestoreUserEmailIdError");
 
-	        var pattern = /^[a-zA-Z0-9]+$/;		// 영어와 숫자만 허용
+	        var pattern = /^[a-zA-Z0-9]+$/;				// 영어와 숫자만 허용
 
 	        if (!pattern.test(restoreUserEmailId)) {	// 영어나 숫자 외 다른 것이 입력될 경우
 	            errorSpan.text("영어와 숫자만 입력 가능합니다.");
@@ -300,12 +308,11 @@
 		    var errorMessage = ""; // 에러 메시지를 저장할 변수
 
 		    switch(true) {
-		        case $("#userId").val() == "":
-		            errorMessage = "아이디를 입력해주세요";
-		            $("#userIdButton").focus();
+			    case $("#confirmUserEmailError").text() != "" && $("#confirmRestoreUserEmailIdError").text() != "":
+		            errorMessage = "이메일 입력 오류입니다. 처음부터 다시 진행해주세요.";
 		            break;
 
-		        case $("#userPw").val() !== $("#userPwConfirm").val():
+			    case $("#userPw").val() !== $("#userPwConfirm").val():
 		            errorMessage = "입력한 비밀번호가 일치하지 않습니다.";
 		            $("#pwMismatch").text(errorMessage);
 		            $("#userPw").focus();
@@ -314,10 +321,6 @@
 		        case $("#confirmNicknameError").text() != "":
 		            errorMessage = "닉네임 중복 여부를 확인해주세요";
 		            $("#nickname").focus();
-		            break;
-
-		        case $("#confirmUserEmailError").text() != "" && $("#confirmRestoreUserEmailIdError").text() != "":
-		            errorMessage = "이메일 입력 오류입니다. 처음부터 다시 진행해주세요.";
 		            break;
 
 		        case $("#certificationAnswer").text() != "확인되었습니다.":
@@ -336,7 +339,6 @@
 		    return false;
 		};
 	</script>
-
 
 
 

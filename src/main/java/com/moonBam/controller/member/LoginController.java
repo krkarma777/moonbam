@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
+import com.moonBam.service.member.OpenApiService;
 
 
 @Controller
@@ -33,6 +34,9 @@ public class LoginController {
 	
 	@Autowired
 	SecurityController sc;
+	
+	@Autowired
+	OpenApiService openApiService;
 	
 	@RequestMapping("/Login")   
 	public String Login() {
@@ -53,7 +57,7 @@ public class LoginController {
 	@PostMapping("/Logined")
 	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realUserPw = sc.encrypt(userPw);
-		System.out.println("아이디 저장: " + userIdSave);					//체크되면 true
+		System.out.println("아이디 저장: " + userIdSave);				//체크되면 true
 		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
 		MemberDTO dto = serv.login(userId, realUserPw);
 
@@ -121,13 +125,12 @@ public class LoginController {
 	
 	//아이디 찾기
 	@PostMapping("/SearchID")
-	public String SearchID(Model model, String email) {
-		String[] emailParts = email.split("@");
+	public String SearchID(Model model, String restoreEmail) {
+		String[] emailParts = restoreEmail.split("@");
 		Map<String, String> map = new HashMap<>();
-			map.put("userEmailId", emailParts[0]);
-			map.put("userEmailDomain", emailParts[1]);
+			map.put("restoreUserEmailId", emailParts[0]);
+			map.put("restoreUserEmailDomain", emailParts[1]);
 		MemberDTO dto = serv.findUserId(map);
-		
 		if (dto != null) {
 			model.addAttribute("dto", dto);
 			return "member/Find_Info/viewID";
@@ -139,18 +142,10 @@ public class LoginController {
 	
 	//비밀번호 찾기
 	@PostMapping("/SearchPartPW")
-	public String SearchPartPW(Model model, HttpServletResponse response, String userId, String email) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+	public String SearchPartPW(Model model, HttpServletResponse response, String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		System.out.println(userId);
-		System.out.println(email);
-		
-		
-		String[] emailParts = email.split("@");
-		Map<String, String> map = new HashMap<>();
-			map.put("userId", userId);	
-			map.put("userEmailId", emailParts[0]);
-			map.put("userEmailDomain", emailParts[1]);
-		
-		MemberDTO dto = serv.findUserPW(map);
+		MemberDTO dto = openApiService.selectOneAPIMember(userId);
+		System.out.println(dto);
 		if (dto != null) {
 			String userPw = sc.decrypt(dto.getUserPw());
 			int visible = (int) Math.ceil(userPw.length() / 2);
@@ -181,19 +176,23 @@ public class LoginController {
 			}
 		}
 		
-		MemberDTO dto = serv.selectMemberData(userId);
+		MemberDTO dto = openApiService.selectOneAPIMember(userId);
 		
 		if (dto != null) {
-			
-			String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();
-			String userPw = sc.decrypt(dto.getUserPw());
-			dto.setUserPw(userPw);
-			
-			model.addAttribute("dto", dto);
-			mc.sendEmail(userEmail, dto);
 
 			Cookie userIdCookie = new Cookie("findPW_userid",null);
 			userIdCookie.setMaxAge(0);
+			
+			String userPw = sc.decrypt(dto.getUserPw());
+			dto.setUserPw(userPw);
+			
+			String[] emailparts = dto.getUserId().split("@");
+			
+			
+			model.addAttribute("dto", dto);
+			model.addAttribute("emailDomain", emailparts[1]);
+			mc.sendEmail(dto.getUserId(), dto);
+
 			response.addCookie(userIdCookie);
 			
 			return "member/Find_Info/viewAllPW";

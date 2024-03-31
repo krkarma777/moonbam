@@ -34,11 +34,11 @@ public class LoginService {
 		return dto;
 	}
 
-	//비밀번호 찾기
-	public MemberDTO findUserPW(Map<String, String> map) {
-		MemberDTO dto = dao.findUserPW(map);
-		return dto;
-	}
+//	//비밀번호 찾기
+//	public MemberDTO findUserPW(Map<String, String> map) {
+//		MemberDTO dto = dao.findUserPW(map);
+//		return dto;
+//	}
 
 	//로그인
 	public MemberDTO login(String userId, String userPw) {
