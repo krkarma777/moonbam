@@ -33,11 +33,7 @@ public class RegisterController {
 
 	//회원가입
 	@PostMapping("/InsertData")
-	public String InsertData(HttpServletRequest request, MemberDTO dto, String email) throws Exception {
-		
-		String[] emailParts = email.split("@");
-			dto.setUserEmailId(emailParts[0]);
-			dto.setUserEmailDomain(emailParts[1]);
+	public String InsertData(HttpServletRequest request, MemberDTO dto) throws Exception {
 		
 		System.out.println(dto);
 		
@@ -103,19 +99,6 @@ public class RegisterController {
 			System.out.println("닉네임 확인");
 		}
 
-		// 이메일 검증
-		boolean isDuplicateEM = serv.isUserEmailDuplicate(dto.getUserEmailId(), dto.getUserEmailDomain());
-		String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();
-		
-		if (isDuplicateEM) { // 이메일 중복 확인(이메일 아이디 + 이메일 도메인이 모두 일치)
-			failMesg = false;
-			request.setAttribute("mesg", "이미 가입된 이메일입니다. 확인해주세요");
-			return result;
-
-		} else { // 이메일 규격 통과
-			System.out.println("이메일 확인");
-		}
-
 		// 가입일 - 가입한 당일 날짜
 		Date currentDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -135,7 +118,7 @@ public class RegisterController {
 			if (num == 1 && failMesg == true) {
 				System.out.println("회원가입 성공");
 				result = "member/Register/registerSuccess";
-				mc.RegisterCompleteEmail(userEmail, dto.getNickname());
+				mc.RegisterCompleteEmail(dto.getUserId(), dto.getNickname());
 				
 			// 모든 데이터가 규격을 통과했음에도 insert되지 않았을 경우, 회원가입 실패 페이지로 이동
 			} else {

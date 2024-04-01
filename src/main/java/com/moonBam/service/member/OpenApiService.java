@@ -26,5 +26,18 @@ public class OpenApiService {
 	public void updateAPIMemberNickname(Map<String, String> map) {
 		dao.updateAPIMemberNickname(map);
 	}
+
+	public void updateAPIMemberGoogleConnected(String userId) {
+		dao.updateAPIMemberGoogleConnected(userId);
+	}
+
+	public void updateAPIMemberNaverConnected(String userId) {
+		dao.updateAPIMemberNaverConnected(userId);
+	}
+
+	public void updateAPIMemberKakaoConnected(String userId) {
+		dao.updateAPIMemberKakaoConnected(userId);
+		
+	}
 	
 }

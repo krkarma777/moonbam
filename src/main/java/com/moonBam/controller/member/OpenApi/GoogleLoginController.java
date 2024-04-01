@@ -106,7 +106,12 @@ public class GoogleLoginController {
         Map<String, Object> map = objectMapper.readValue(resultJson, Map.class);
         
         //이미 가입한 사람인지 확인
-        MemberDTO check  = serv.selectOneAPIMember(sc.encrypt((String) map.get("sub")));
+        MemberDTO check  = serv.selectOneAPIMember((String) map.get("email"));
+
+        if(check != null && check.getGoogleConnected() == 0) {
+        	serv.updateAPIMemberGoogleConnected(check.getUserId());
+        }
+        
         ModelAndView mav = new ModelAndView();
       
         //미가입자일 경우, 자동 가입
@@ -114,19 +119,12 @@ public class GoogleLoginController {
     	  
 			//MemberDTO 사용을 위한 임의의 값 입력
 			String pw = sc.encrypt("Google"+dbc.getNum(16));
-			String[] emailParts = ((String) map.get("email")).split("@");
-			Date currentDate = new Date();
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-				String userSignDate = dateFormat.format(currentDate);
-			  
+
 			MemberDTO dto = new MemberDTO();
-	      		dto.setUserId(sc.encrypt((String) map.get("sub")));
+	      		dto.setUserId((String) map.get("email"));
 	          	dto.setUserPw(pw);					
 	          	dto.setNickname(oac.randomNickname());
-	          	dto.setUserEmailId(emailParts[0]);			
-	          	dto.setUserEmailDomain(emailParts[1]);				
-	          	dto.setUserSignDate(userSignDate);
-	  			dto.setUserType("1");
+	          	dto.setGoogleConnected(1);
 	  		
 	  		//회원가입
 	  		serv.insertAPIMember(dto);	

@@ -29,16 +29,16 @@ public class LoginDAO {
 	}	
 	
 	//아이디 찾기
-	public MemberDTO findUserId(Map<String, String> dataForFindUserId) {
-		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserId", dataForFindUserId);
+	public MemberDTO findUserId(Map<String, String> map) {
+		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserId", map);
 		return dto;
 	}
 
-	//비밀번호 찾기
-	public MemberDTO findUserPW(Map<String, String> dataForFindUserPW) {
-		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserPW", dataForFindUserPW);
-		return dto;
-	}
+//	//비밀번호 찾기
+//	public MemberDTO findUserPW(Map<String, String> dataForFindUserPW) {
+//		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserPW", dataForFindUserPW);
+//		return dto;
+//	}
 	
 	//로그인
 	public MemberDTO login(Map<String, String> idPW) {

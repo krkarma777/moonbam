@@ -107,11 +107,15 @@ public class NaverLoginController {
 		
         
         //아이디
-    	String id64 = sc.encrypt(String.valueOf(userInfoMap2.get("id")));
-    	String id = id64.substring(0, Math.min(id64.length(), 50));
+    	String id = (String) userInfoMap2.get("email");
     	
     	//이미 가입한 사람인지 확인
         MemberDTO check  = serv.selectOneAPIMember(id);
+        
+        if(check != null && check.getNaverConnected() == 0) {
+        	serv.updateAPIMemberNaverConnected(check.getUserId());
+        }
+        
         ModelAndView mav = new ModelAndView();
       
         //미가입자일 경우, 자동 가입
@@ -123,23 +127,11 @@ public class NaverLoginController {
             //닉네임
             String nickname = oac.randomNickname();
             		
-            //이메일
-            String email = (String) userInfoMap2.get("email");
-            String[] emailParts = email.split("@");
-            
-            //유저 가입일
-    		Date currentDate = new Date();
-    			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-    			String userSignDate = dateFormat.format(currentDate);
-        	
     		MemberDTO dto = new MemberDTO();
 	    		dto.setUserId(id);
 	          	dto.setUserPw(pw);					
 	          	dto.setNickname(nickname);
-	          	dto.setUserEmailId(emailParts[0]);			
-	          	dto.setUserEmailDomain(emailParts[1]);				
-	          	dto.setUserSignDate(userSignDate);
-	  			dto.setUserType("1");
+	          	dto.setNaverConnected(1);
         	
 	  		//회원가입
 	  		serv.insertAPIMember(dto);	
@@ -202,12 +194,9 @@ public class NaverLoginController {
         	= rt.exchange("https://nid.naver.com/oauth2.0/token", HttpMethod.POST, accessTokenRequest, String.class
         );
         
-        
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(accessTokenResponse.getBody());
         String accessToken = jsonNode.get("access_token").asText();
-        
-        
         
         return accessToken;
     }    

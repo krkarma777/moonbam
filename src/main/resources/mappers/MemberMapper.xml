@@ -196,12 +196,12 @@
 	<!-- API 회원가입 -->
 	<insert id="insertAPIMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-			userId, userPw, userName, 
-			nickname, userEmailId, userEmailDomain
+			userId, userPw, nickname, 
+			googleConnected, naverConnected, kakaoConnected
 		)
 		VALUES (
-			#{userId}, #{userPw}, #{userName},
-			#{nickname}, #{userEmailId}, #{userEmailDomain}
+			#{userId}, #{userPw}, #{nickname},
+			#{googleConnected}, #{naverConnected}, #{kakaoConnected}
 		)
 	</insert>
 	
@@ -209,6 +209,24 @@
 	<update id="updateAPIMemberNickname" parameterType="hashmap">
 		UPDATE 	memberDB
 		SET		nickname = #{nickname}
+		WHERE	userId = #{userId}
+	</update>
+	
+	<update id="updateAPIMemberGoogleConnected" parameterType="String">
+		UPDATE 	memberDB
+		SET		googleConnected = 1
+		WHERE	userId = #{userId}
+	</update>
+	
+	<update id="updateAPIMemberNaverConnected" parameterType="String">
+		UPDATE 	memberDB
+		SET		naverConnected = 1
+		WHERE	userId = #{userId}
+	</update>
+	
+	<update id="updateAPIMemberKakaoConnected" parameterType="String">
+		UPDATE 	memberDB
+		SET		kakaoConnected = 1
 		WHERE	userId = #{userId}
 	</update>
 	
@@ -224,22 +242,10 @@
 		FROM 
 			memberDB
 		WHERE 
-			userEmailId = #{userEmailId}
-			AND userEmailDomain = #{userEmailDomain}
+			restoreUserEmailId = #{restoreUserEmailId}
+			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
 	</select>
 
-	<!-- 비밀번호 찾기 -->
-	<select id="findUserPW" resultType="MemberDTO" parameterType="hashmap">
-		SELECT
-			*
-		FROM 
-			memberDB
-		WHERE 
-			userId = #{userId}
-			AND userEmailId = #{userEmailId}
-			AND userEmailDomain = #{userEmailDomain}
-	</select>
-	
 	<!-- 로그인 -->
 	<select id="login" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
@@ -297,13 +303,11 @@
 	<insert id="insertNewMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
 		userId, userPw, nickname, 
-		userEmailId, userEmailDomain,
 		restoreUserEmailId, restoreUserEmailDomain,
 		userSignDate, userType
 		)
 		VALUES (
 		#{userId}, #{userPw}, #{nickname},
-		#{userEmailId}, #{userEmailDomain},
 		#{restoreUserEmailId}, #{restoreUserEmailDomain},
 		#{userSignDate}, #{userType}
 		)
