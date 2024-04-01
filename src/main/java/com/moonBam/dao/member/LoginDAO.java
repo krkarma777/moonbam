@@ -23,22 +23,16 @@ public class LoginDAO {
 	}
 	
 	//디버그용 - 회원 삭제
-	public int IDDelete(String userId) {
-		int num = session.delete("IDDelete", userId);
+	public int IDDelete(String username) {
+		int num = session.delete("IDDelete", username);
 	return num;
 	}	
 	
 	//아이디 찾기
-	public MemberDTO findUserId(Map<String, String> map) {
-		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserId", map);
+	public MemberDTO findUsername(Map<String, String> map) {
+		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUsername", map);
 		return dto;
 	}
-
-//	//비밀번호 찾기
-//	public MemberDTO findUserPW(Map<String, String> dataForFindUserPW) {
-//		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserPW", dataForFindUserPW);
-//		return dto;
-//	}
 	
 	//로그인
 	public MemberDTO login(Map<String, String> idPW) {
@@ -65,8 +59,12 @@ public class LoginDAO {
 	}
 	
 	//전체 비밀번호 출력용
-	public MemberDTO selectMemberData(String userId) {
-		MemberDTO dto = session.selectOne("com.config.MemberMapper.selectMemberData", userId);
+	public MemberDTO selectMemberData(String username) {
+		MemberDTO dto = session.selectOne("com.config.MemberMapper.selectMemberData", username);
 		return dto;
+	}
+
+	public void updatePassword(Map<String, String> map) {
+		session.selectOne("com.config.MemberMapper.updatePassword", map);
 	}
 }

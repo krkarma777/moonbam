@@ -22,7 +22,7 @@
 
         <form id="agreementForm" action="<c:url value='/CheckExistUser'/>" method="post">
 		
-			<input type="hidden" name="userId" value="${userId}">
+			<input type="hidden" name="username" value="${username}">
 
             <div><Span>이용약관 동의(필수)</Span>
                 <textarea readonly="readonly">

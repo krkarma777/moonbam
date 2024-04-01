@@ -1,3 +1,5 @@
+<%@page import="com.moonBam.dto.MemberDTO"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -5,15 +7,39 @@
 <!DOCTYPE html>
 <html>
 
-<!-- 모든 비밀번호를 출력하는 창(종료 창) -->
+<!-- 이메일 하이퍼링크를 통해 나오는 비밀번호 변경 페이지의 jsp -->
 
 <head>
 	<meta charset="UTF-8">
-	<title>비밀번호 찾기</title>
+	<title>Update Password</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<body>
+
+	<h2>새로운 비밀번호를 입력하세요!</h2>
+	<form style="width: 300px; height: 300px" method="post" action="UpdatePassword">
+		<input type="hidden" name="username" value="${username}">
+		비밀번호: <input type="text" id="password" name="password" class="pw" placeholder="신규 비밀번호" minlength="6" required>
+		비밀번호 확인: <input type="text" id="password_confirm" name="password_confirm" class="pw" placeholder="신규 비밀번호 확인" minlength="6" required>
+		<span id="pwMismatch" style="color: red;"></span> 
+
+		<input type="submit" id="update" value="변경하기">
+	</form>
+
 <script type="text/javascript">
+
+	//PW입력하면 에러 문구 삭제
+	$(".pw").on("input", function(){
+		$("#pwMismatch").text("");
+	});
+	
+	$("#pwMismatch").on("click", function(){
+		if($("#password").val() != $("#password_confirm").val()){
+			event.preventDefault();
+			$("#pwMismatch").text("입력한 비밀번호가 일치하지 않습니다.");
+		}
+	})
 
 	//새로고침, 뒤로가기, 나가기 시 경고창 함수
 	function f5Control(event){
@@ -34,24 +60,14 @@
 	    window.location.href= "<c:url value='/Login'/>"; 
 	    };
 	    
-	    $("#goLogin").on("click", function(){
+	    $("#update").on("click", function(){
 			window.removeEventListener('beforeunload', f5Control);
 		})
 	});
 
 </script>
 
-<body>
-
-<h1>이메일 발송 성공!</h1>
-
-    <p>${dto.getNickname()}님!<br> 
-    <a href="http://www.${emailDomain}" target="_blank">${dto.getUsername()}로 비밀번호 변경 메일이 전송되었습니다.</a>
-    <p>확인 후 로그인 부탁드립니다.</p>
-
-<div id="sitesShortCut">
-    <a href="<c:url value='/Login'/>" id="goLogin">로그인</a> 
-</div>
 
 </body>
+
 </html>

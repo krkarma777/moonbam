@@ -21,8 +21,8 @@ public class RegisterService {
 	}
 
 	//아이디 중복 검사 에이젝스
-	public boolean isUserIdDuplicate(String userId) {
-		return dao.isUserIdDuplicate(userId);
+	public boolean isUsernameDuplicate(String username) {
+		return dao.isUsernameDuplicate(username);
 	}
 
 	//닉네임 중복 검사 에이젝스

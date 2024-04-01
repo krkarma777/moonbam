@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
@@ -55,19 +56,19 @@ public class LoginController {
 	
 	//로그인
 	@PostMapping("/Logined")
-	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		String realUserPw = sc.encrypt(userPw);
-		System.out.println("아이디 저장: " + userIdSave);				//체크되면 true
+	public String LoginToMypage(String username, String password, HttpSession session, boolean usernameSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		String realPassword = sc.encrypt(password);
+		System.out.println("아이디 저장: " + usernameSave);				//체크되면 true
 		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
-		MemberDTO dto = serv.login(userId, realUserPw);
+		MemberDTO dto = serv.login(username, realPassword);
 
 		if (dto != null) {
 			session.setAttribute("loginUser", dto);
 
 			if(autoLogin) {
 				
-				Cookie autoId= new Cookie("userId", userId);
-				Cookie autoPW= new Cookie("userPw", userPw);
+				Cookie autoId= new Cookie("username", username);
+				Cookie autoPW= new Cookie("password", password);
 				autoId.setMaxAge(60*60*24);
 				autoPW.setMaxAge(60*60*24);
 				response.addCookie(autoId);
@@ -78,8 +79,8 @@ public class LoginController {
 
 			} else {
 				
-				Cookie autoId= new Cookie("userId", null);
-				Cookie autoPW= new Cookie("userPw", null);
+				Cookie autoId= new Cookie("username", null);
+				Cookie autoPW= new Cookie("password", null);
 				autoId.setMaxAge(0);
 				autoPW.setMaxAge(0);
 				response.addCookie(autoId);
@@ -88,14 +89,14 @@ public class LoginController {
 //				System.out.println("삭제 오토 아이디"+ autoId);
 //				System.out.println("삭제 오토 패스"+ autoPW);
 				
-				if(userIdSave) {
-					Cookie id= new Cookie("userId", userId);
+				if(usernameSave) {
+					Cookie id= new Cookie("username", username);
 					id.setMaxAge(60*60*24);
 					response.addCookie(id);
 					
 //					System.out.println("등록 저장 아이디"+ id);
 				} else {
-					Cookie id= new Cookie("userId", null);
+					Cookie id= new Cookie("username", null);
 					id.setMaxAge(0);
 					response.addCookie(id);
 					
@@ -130,7 +131,7 @@ public class LoginController {
 		Map<String, String> map = new HashMap<>();
 			map.put("restoreUserEmailId", emailParts[0]);
 			map.put("restoreUserEmailDomain", emailParts[1]);
-		MemberDTO dto = serv.findUserId(map);
+		MemberDTO dto = serv.findUsername(map);
 		if (dto != null) {
 			model.addAttribute("dto", dto);
 			return "member/Find_Info/viewID";
@@ -142,21 +143,21 @@ public class LoginController {
 	
 	//비밀번호 찾기
 	@PostMapping("/SearchPartPW")
-	public String SearchPartPW(Model model, HttpServletResponse response, String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		System.out.println(userId);
-		MemberDTO dto = openApiService.selectOneAPIMember(userId);
+	public String SearchPartPW(Model model, HttpServletResponse response, String username) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		System.out.println(username);
+		MemberDTO dto = openApiService.selectOneAPIMember(username);
 		System.out.println(dto);
 		if (dto != null) {
-			String userPw = sc.decrypt(dto.getUserPw());
-			int visible = (int) Math.ceil(userPw.length() / 2);
-			String masked = "*".repeat(userPw.length() - visible);
-			String maskedPW = userPw.substring(0, visible) + masked;
+			String password = sc.decrypt(dto.getPassword());
+			int visible = (int) Math.ceil(password.length() / 2);
+			String masked = "*".repeat(password.length() - visible);
+			String maskedPW = password.substring(0, visible) + masked;
 			
-			Cookie userIdCookie = new Cookie("findPW_userid",userId);
-			userIdCookie.setMaxAge(30*60);
-			response.addCookie(userIdCookie);
+			Cookie usernameCookie = new Cookie("findPW_username",username);
+			usernameCookie.setMaxAge(30*60);
+			response.addCookie(usernameCookie);
 			
-			model.addAttribute("userId", userId);
+			model.addAttribute("dto", dto);
 			model.addAttribute("maskedPW", maskedPW);
 			return "member/Find_Info/viewPartPW";
 		} else {
@@ -164,42 +165,66 @@ public class LoginController {
 		}
 	}
 	
-	//전체 비밀번호 출력용
+	//비밀번호 변경을 위한 메일 송신
 	@GetMapping("/SearchAllPW")
 	public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
 		
-		String userId = "";
+		String username = "";
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("findPW_userid")) {
-				userId = cookie.getValue();
+			if (cookie.getName().equals("findPW_username")) {
+				username = cookie.getValue();
 			}
 		}
 		
-		MemberDTO dto = openApiService.selectOneAPIMember(userId);
+		MemberDTO dto = openApiService.selectOneAPIMember(username);
 		
 		if (dto != null) {
 
-			Cookie userIdCookie = new Cookie("findPW_userid",null);
-			userIdCookie.setMaxAge(0);
+			Cookie usernameCookie = new Cookie("findPW_username",null);
+			usernameCookie.setMaxAge(0);
 			
-			String userPw = sc.decrypt(dto.getUserPw());
-			dto.setUserPw(userPw);
-			
-			String[] emailparts = dto.getUserId().split("@");
-			
+			String[] emailparts = dto.getUsername().split("@");
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("emailDomain", emailparts[1]);
-			mc.sendEmail(dto.getUserId(), dto);
+			mc.sendEmail(dto.getUsername(), dto);
 
-			response.addCookie(userIdCookie);
+			response.addCookie(usernameCookie);
 			
 			return "member/Find_Info/viewAllPW";
 		} else {
 			return "member/Find_Info/emailErrorPage";
 		}
 
+	}
+	
+	//이메일 하이퍼링크를 통해 들어오는 비밀번호 변경 페이지
+	@GetMapping("/UpdatePasswordPage")
+	public ModelAndView UpdatePasswordPage(String username) {
+		ModelAndView mav = new ModelAndView();
+			mav.addObject("username", username);
+			mav.setViewName("member/Find_Info/updatePassword");
+		return mav;
+	}
+	
+	//비밀번호 변경
+	@PostMapping("/UpdatePassword")
+	public String UpdatePassword(String username, String password) {
+		
+		String realPassword = sc.encrypt(password);
+		
+		Map<String, String> map = new HashMap<>();
+			map.put("username", username);
+			map.put("password", realPassword);
+			serv.updatePassword(map);
+		return "redirect:/UpdateComplete";
+	}
+	
+	//비밀번호 변경 완료
+	@GetMapping("UpdateComplete")
+	public String UpdateComplete() {
+		return "member/Find_Info/updateComplete";
 	}
 	
 	

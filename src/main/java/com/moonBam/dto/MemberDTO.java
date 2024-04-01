@@ -4,8 +4,8 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("MemberDTO")
 public class MemberDTO{
-	private String userId;
-	private String userPw;
+	private String username;
+	private String password;
 	private String nickname;
 	private String restoreUserEmailId;
 	private String restoreUserEmailDomain;
@@ -16,21 +16,21 @@ public class MemberDTO{
 	private String userType;
 	@Override
 	public String toString() {
-		return "MemberDTO [userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname + ", restoreUserEmailId="
-				+ restoreUserEmailId + ", restoreUserEmailDomain=" + restoreUserEmailDomain + ", googleConnected="
-				+ googleConnected + ", naverConnected=" + naverConnected + ", kakaoConnected=" + kakaoConnected
-				+ ", userSignDate=" + userSignDate + ", userType=" + userType + "]";
+		return "MemberDTO [username=" + username + ", password=" + password + ", nickname=" + nickname
+				+ ", restoreUserEmailId=" + restoreUserEmailId + ", restoreUserEmailDomain=" + restoreUserEmailDomain
+				+ ", googleConnected=" + googleConnected + ", naverConnected=" + naverConnected + ", kakaoConnected="
+				+ kakaoConnected + ", userSignDate=" + userSignDate + ", userType=" + userType + "]";
 	}
 	public MemberDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MemberDTO(String userId, String userPw, String nickname, String restoreUserEmailId,
+	public MemberDTO(String username, String password, String nickname, String restoreUserEmailId,
 			String restoreUserEmailDomain, int googleConnected, int naverConnected, int kakaoConnected,
 			String userSignDate, String userType) {
 		super();
-		this.userId = userId;
-		this.userPw = userPw;
+		this.username = username;
+		this.password = password;
 		this.nickname = nickname;
 		this.restoreUserEmailId = restoreUserEmailId;
 		this.restoreUserEmailDomain = restoreUserEmailDomain;
@@ -40,17 +40,17 @@ public class MemberDTO{
 		this.userSignDate = userSignDate;
 		this.userType = userType;
 	}
-	public String getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	public String getUserPw() {
-		return userPw;
+	public String getPassword() {
+		return password;
 	}
-	public void setUserPw(String userPw) {
-		this.userPw = userPw;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getNickname() {
 		return nickname;
@@ -100,7 +100,4 @@ public class MemberDTO{
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-
-
-	
 }

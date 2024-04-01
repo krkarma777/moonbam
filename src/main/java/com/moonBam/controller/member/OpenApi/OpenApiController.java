@@ -26,14 +26,14 @@ public class OpenApiController {
 	@PostMapping("/changeNickname")
 	public String changeNickname(HttpSession session, MemberDTO dto, String nickname, String clickType) {
 		if(clickType.equals("변경하기")) {
-			MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
+			MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUsername());
 	        
 	        Map<String, String> map = new HashMap<>();
-	        	map.put("userId", dto.getUserId());
+	        	map.put("username", dto.getUsername());
 	        	map.put("nickname", nickname);
 	        
 	        serv.updateAPIMemberNickname(map);
-	        MemberDTO nnDTO  = serv.selectOneAPIMember(dto.getUserId());
+	        MemberDTO nnDTO  = serv.selectOneAPIMember(dto.getUsername());
 			session.setAttribute("loginUser", dto);
 		} 
 		

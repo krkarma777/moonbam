@@ -26,9 +26,9 @@
 			})
 			$("#findPWForm").submit(function(event) {
 	    		//아이디 공백 여부 확인
-	    		if ($("#userId").val().trim() === "") {
+	    		if ($("#username").val().trim() === "") {
 					alert("아이디 이메일을 확인해주세요");
-					$("#userId").focus();
+					$("#username").focus();
 					return false;
 				}
 			})
@@ -64,7 +64,7 @@
     <table>
         <tr>
         	<td>
-				<input type="email" id="userId" name="userId" autofocus placeholder="아이디 이메일 입력">
+				<input type="email" id="username" name="username" autofocus placeholder="아이디 이메일 입력">
 			</td>
 		</tr>
 		<tr>
