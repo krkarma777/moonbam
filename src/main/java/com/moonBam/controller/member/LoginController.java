@@ -3,6 +3,8 @@ package com.moonBam.controller.member;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -119,8 +121,13 @@ public class LoginController {
 	
 	//아이디 찾기
 	@PostMapping("/SearchID")
-	public String SearchID(Model model, String userName, String ssn1, String ssn2) {
-		MemberDTO dto = serv.findUserId(userName, ssn1, ssn2);
+	public String SearchID(Model model, String email) {
+		String[] emailParts = email.split("@");
+		Map<String, String> map = new HashMap<>();
+			map.put("userEmailId", emailParts[0]);
+			map.put("userEmailDomain", emailParts[1]);
+		MemberDTO dto = serv.findUserId(map);
+		
 		if (dto != null) {
 			model.addAttribute("dto", dto);
 			return "member/Find_Info/viewID";
@@ -132,18 +139,30 @@ public class LoginController {
 	
 	//비밀번호 찾기
 	@PostMapping("/SearchPartPW")
-	public String SearchPartPW(Model model, HttpServletResponse response, String userId, String userName, String ssn1, String ssn2) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		MemberDTO dto = serv.findUserPW(userId, userName, ssn1, ssn2);
-				
+	public String SearchPartPW(Model model, HttpServletResponse response, String userId, String email) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		System.out.println(userId);
+		System.out.println(email);
+		
+		
+		String[] emailParts = email.split("@");
+		Map<String, String> map = new HashMap<>();
+			map.put("userId", userId);	
+			map.put("userEmailId", emailParts[0]);
+			map.put("userEmailDomain", emailParts[1]);
+		
+		MemberDTO dto = serv.findUserPW(map);
 		if (dto != null) {
 			String userPw = sc.decrypt(dto.getUserPw());
-			dto.setUserPw(userPw);
+			int visible = (int) Math.ceil(userPw.length() / 2);
+			String masked = "*".repeat(userPw.length() - visible);
+			String maskedPW = userPw.substring(0, visible) + masked;
 			
 			Cookie userIdCookie = new Cookie("findPW_userid",userId);
 			userIdCookie.setMaxAge(30*60);
 			response.addCookie(userIdCookie);
 			
-			model.addAttribute("dto", dto);
+			model.addAttribute("userId", userId);
+			model.addAttribute("maskedPW", maskedPW);
 			return "member/Find_Info/viewPartPW";
 		} else {
 			return "member/Find_Info/cantFindUserdata";

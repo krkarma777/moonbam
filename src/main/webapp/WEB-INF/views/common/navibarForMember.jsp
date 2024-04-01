@@ -7,7 +7,6 @@
     nav {
         background-color: gray;
     }
-
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,7 +27,7 @@
 
 		<!-- 익명게시판 -->        
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">익명 게시판(정렬🤮🤮🤮)</a>
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">익명 게시판</a>
 
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 			<li><a class="dropdown-item" href="<c:url value='/viewDBoardList'/>">메인</a></li>

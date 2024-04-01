@@ -22,9 +22,7 @@
 
         <form id="agreementForm" action="<c:url value='/CheckExistUser'/>" method="post">
 		
-			<input type="hidden" name="userName" value="${userName}">
-			<input type="hidden" name="ssn1" value="${ssn1}">
-			<input type="hidden" name="ssn2" value="${ssn2}">
+			<input type="hidden" name="email" value="${email}">
 
             <div>
                 <textarea readonly="readonly">

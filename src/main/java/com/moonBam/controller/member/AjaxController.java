@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moonBam.dto.DebugBoardDTO;
-import com.moonBam.service.member.DebugBoardService;
+import com.moonBam.dto.AnonymousBoardDTO;
+import com.moonBam.service.member.AnonymousBoardService;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
 
@@ -34,7 +34,7 @@ public class AjaxController {
 	SecurityController sc;
 
 	@Autowired
-	DebugBoardService dServ;
+	AnonymousBoardService dServ;
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
@@ -67,9 +67,8 @@ public class AjaxController {
 		// 선택된 질문에 따라 사용되는 Method 변경**************************
 		if (userInfo.equals("nickname")) {
 		can_All_PW = lServ.findPWbyNickname(answer, userId);
-		} else if (userInfo.equals("userPhoneNum")) {
-		can_All_PW = lServ.findPWbyPhoneNum(answer, userId);
-		} else if (userInfo.equals("userEmail")) {
+		} 
+		if (userInfo.equals("restoreUserEmail")) {
 		can_All_PW = lServ.findPWbyEmail(answer, userId);
 		}
 		// 선택된 질문에 따라 사용되는 Method 변경**************************
@@ -116,29 +115,6 @@ public class AjaxController {
 		return mesg;
 	}
 		
-	//회원가입 자식창에서 이메일 중복 에이젝스
-	@PostMapping("/AjaxEmailDuplicate")
-	public String AjaxEmailDuplicate(String userEmailId, String userEmailDomain) {
-		boolean isDuplicate = rServ.isUserEmailDuplicate(userEmailId, userEmailDomain);
-		String mesg = "notDuplicate";
-		if (isDuplicate) {
-			mesg = "duplicate"; 
-        } 
-		return mesg;
-	}		
-	
-	//회원가입 자식창에서 핸드폰 번호 중복 에이젝스
-	@PostMapping("/AjaxPhoneNumDuplicate")
-	public String AjaxPhoneNumDuplicate(String userPhoneNum1, String userPhoneNum2, String userPhoneNum3) {
-		boolean isDuplicate = rServ.isUserPNDuplicate(userPhoneNum1, userPhoneNum2, userPhoneNum3);
-		String mesg = "notDuplicate";
-		if (isDuplicate) {
-			mesg = "duplicate"; 
-        } 
-		return mesg;
-	}	
-	
-	
 	//***************************************************************************************************************
 	//***************************************************게 시 판*******************************************************
 	//***************************************************************************************************************
@@ -148,7 +124,7 @@ public class AjaxController {
 	@PostMapping("/increaseDBoardRecommendNum")
 	public int increaseDBoardRecommendNum(String userKey, int boardNum, String recommendVal, HttpServletRequest request, HttpServletResponse response) {
 		
-		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		int recommendNum = dto.getRecommendNum();
 		
 		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
@@ -177,7 +153,7 @@ public class AjaxController {
 	@PostMapping("/decreaseDBoardRecommendNum")
 	public int decreaseDBoardRecommendNum(String userKey, int boardNum, String disrecommendVal, HttpServletRequest request, HttpServletResponse response) {
 		
-		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		int disRecommendNum = dto.getDisRecommendNum();
 		
 		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
@@ -206,7 +182,7 @@ public class AjaxController {
 	//글 수정 / 글 삭제 시 비밀번호 확인
 	@PostMapping("/checkPostPW")
 	public String checkPostPW(int boardNum, String password) {
-		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		if(dto.getPassword().equals(password)) {
 			return "yes";
 		} else {

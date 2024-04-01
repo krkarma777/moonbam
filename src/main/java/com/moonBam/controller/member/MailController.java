@@ -30,15 +30,15 @@ public class MailController {
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
 
 	//단순 메일 전송
-    public void RegisterCompleteEmail(String userEmail, String username) throws Exception {
+    public void RegisterCompleteEmail(String userEmail, String nickname) throws Exception {
     		Map<String, String> changeData = new HashMap<>();
     		
     		//******************복사 후 수정하는 부분******************
     		String emailPath = "static/emailFiles/RegisterCompleteEmail.html";	//HTML 경로
 
-    		String EMAIL_SUBJECT = "[회원가입안내] 문화인의 밤에 오신 것을 환영합니다!";		//이메일 제목
+    		String EMAIL_SUBJECT = "[회원가입안내] 문화인의 밤에 오신 것을 환영합니다!";			//이메일 제목
     		
-    		changeData.put("##유저_이름##", username);								//HTML에서 치환할 데이터
+    		changeData.put("##유저_닉네임##", nickname);
     		
     		String innerImageName = "Register_Main";							//내부 이미지 파일 명
     		String innerImagePath = "/static/images/email/Register_Main.png";	//내부 이미지 파일 경로
@@ -50,7 +50,7 @@ public class MailController {
         	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
     }	
 	
-  //단순 메일 전송
+    //단순 메일 전송 - 비밀번호 전송
     public void sendEmail(String userEmail, MemberDTO dto) throws Exception {
 
     		Map<String, String> changeData = new HashMap<>();
@@ -61,7 +61,7 @@ public class MailController {
     		String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";		
     		
 			changeData.put("##유저_아이디##", dto.getUserId());					
-    		changeData.put("##유저_이름##", dto.getUserName());
+    		changeData.put("##유저_닉네임##", dto.getNickname());
     		changeData.put("##유저_비밀번호##", dto.getUserPw());
 
 	    	String innerImageName = "FindPW";
@@ -74,21 +74,19 @@ public class MailController {
         	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
     }
     
-    //단순 메일 전송
+    //단순 메일 전송 - 회원가입을 위한 인증법호 전송
     @PostMapping("/joinEmail")
-    public String joinEmail(String userEmail, String userName) throws Exception {
+    public String joinEmail(String userEmail) throws Exception {
     		String authNumber = makeRandomNumber();
     		Map<String, String> changeData = new HashMap<>();
     		
     		System.out.println(userEmail);
-    		System.out.println(userName);
     		
     		//******************복사 후 수정하는 부분******************
     		String emailPath = "static/emailFiles/JoinEmail.html";
 			
     		String EMAIL_SUBJECT = "[회원가입알림] 문화인의 밤을 이용해주셔서 감사합니다.";
     		
-    		changeData.put("##유저_이름##", userName);
     		changeData.put("##인증번호##", authNumber);
     		changeData.put("##인증번호_유효기간##", expireDate);
 

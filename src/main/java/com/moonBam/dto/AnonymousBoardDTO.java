@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.ibatis.type.Alias;
 
 @Alias("DebugBoardDTO")
-public class DebugBoardDTO {
+public class AnonymousBoardDTO {
 
 	private int boardNum;			//글 번호		//시퀸스 사용
 	private String nickname;		//작성자		//로그인 시 닉네임 | 직접 입력 | 자동입력
@@ -25,11 +25,11 @@ public class DebugBoardDTO {
 				+ ", edittedDate=" + edittedDate + ", viewCount=" + viewCount + ", recommendNum=" + recommendNum
 				+ ", disRecommendNum=" + disRecommendNum + "]";
 	}
-	public DebugBoardDTO() {
+	public AnonymousBoardDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public DebugBoardDTO(int boardNum, String nickname, String password, String title, String category, String content,
+	public AnonymousBoardDTO(int boardNum, String nickname, String password, String title, String category, String content,
 			String postDate, String edittedDate, int viewCount, int recommendNum, int disRecommendNum) {
 		super();
 		this.boardNum = boardNum;
