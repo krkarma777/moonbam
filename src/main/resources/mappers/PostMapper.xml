@@ -98,7 +98,17 @@
             postEditDate = SYSTIMESTAMP
         WHERE postId = #{postId}
     </update>
-    
+
+	<!-- 업데이트 -->
+    <update id="update" parameterType="PostUpdateRequestDTO">
+        UPDATE postdb
+        SET postTitle = #{postTitle},
+            postText = #{postText},
+            CATEGORYID = #{categoryId},
+            postEditDate = #{postEditDate}
+        WHERE postId = #{postId}
+    </update>
+
 
 	<!-- 페이지네이션을 위한 게시물 조회 (좋아요 수, 조회수, 댓글 수, 카테고리 이름 포함) -->
 	<select id="selectAllByPage" resultType="PostPageDTO">

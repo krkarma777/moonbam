@@ -6,6 +6,7 @@ import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,10 +32,8 @@ class BoardAPIControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private PostService postService;
-
     private ObjectMapper objectMapper;
     private MockHttpSession mockSession;
 
@@ -104,4 +103,73 @@ class BoardAPIControllerTest {
         );
         return post;
     }
+
+    @Test
+    void deletePostSuccessfully() throws Exception{
+
+        PostDTO existingPost = new PostDTO();
+        Long existingPostId = 1L;
+        existingPost.setPostId(existingPostId);
+        existingPost.setUserId("test-user");
+        given(postService.findById(existingPostId)).willReturn(existingPost);
+
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setUserId("test-user");
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/post/" + existingPostId)
+                        .sessionAttr("loginUser", memberDTO))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("삭제가 완료되었습니다."));
+    }
+
+    @Test
+    void deletePostWhenNotLoggedIn() throws Exception{
+        PostDTO existingPost = new PostDTO();
+        Long existingPostId = 1L;
+        existingPost.setPostId(existingPostId);
+        given(postService.findById(existingPostId)).willReturn(existingPost);
+
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setUserId(("test-user"));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/post/" + existingPostId))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."));
+    }
+    @Test
+    void deletePostWhenNotFound() throws Exception{
+        //글이 존재하지 않는 상황을 가정
+        //given
+        Long nonExistingPostId = 9999L;
+
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setUserId("test-user");
+
+        //when then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/post/" + nonExistingPostId)
+                        .sessionAttr("loginUser",memberDTO))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("글이 존재하지않습니다."));
+    }
+
+    @Test
+    void deletePostWhenUserHasNoPermission() throws  Exception{
+        //글은 존재하는데 아이디가 일치하지 않는 상황을 가정
+        PostDTO existingPost = new PostDTO();
+        Long existingPostId = 1L;
+        existingPost.setPostId(existingPostId);
+        existingPost.setUserId("test-user");
+
+        given(postService.findById(existingPostId)).willReturn(existingPost);
+
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setUserId("another-user");
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/post/" + existingPostId)
+                        .sessionAttr("loginUser",memberDTO))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("글을 삭제할 권한이 없습니다."));
+    }
+
 }
+

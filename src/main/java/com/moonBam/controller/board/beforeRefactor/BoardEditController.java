@@ -1,4 +1,4 @@
-package com.moonBam.controller.board;
+package com.moonBam.controller.board.beforeRefactor;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class BoardEditController {
 
 	@GetMapping
 	public String editForm(Model model, @RequestParam("postId") Long postId) {
-		PostDTO post = postService.select(postId);
+		PostDTO post = postService.findById(postId);
 		if (post == null) {
 			model.addAttribute(ERROR, INVALID_REQUEST);
 		}
@@ -45,7 +45,7 @@ public class BoardEditController {
 	public String edit(Map<String, String> paramMap, Model model, HttpSession session,
 			@RequestParam("postId") Long postId) {
 
-		PostDTO post = postService.select(postId);
+		PostDTO post = postService.findById(postId);
 		if (post == null) {
 			model.addAttribute(ERROR, INVALID_REQUEST);
 			return ERROR_PAGE;
