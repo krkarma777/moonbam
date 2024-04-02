@@ -42,9 +42,9 @@ public class AjaxController {
 	
 	//메인에서 로그인 여부 확인 에이젝스
 	@PostMapping("AjaxCheckIDPW")
-	public String AjaxCheckIDPW(String userId, String userPw) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		String realUserPw = sc.encrypt(userPw);
-		boolean canLogin = lServ.loginPossible(userId, realUserPw);
+	public String AjaxCheckIDPW(String username, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		String realPassword = sc.encrypt(password);
+		boolean canLogin = lServ.loginPossible(username, realPassword);
 		String mesg = "loginSuccess";
 		if (!canLogin) {
 			mesg = "loginFail";                
@@ -54,22 +54,22 @@ public class AjaxController {
 	
 	//전체 비밀번호 찾기에서 질문에 따른 대답 확인 에이젝스
 	@PostMapping("AjaxMatchQnA")
-	public String AjaxMatchQnA(String userInfo, String answer, String userId) {
+	public String AjaxMatchQnA(String userInfo, String answer, String username) {
 		
 		boolean can_All_PW = false;
 		String mesg = "correct_Answer";
 																        //디버그 코드*****************************
 																        System.out.println(userInfo);
 																        System.out.println(answer);
-																        System.out.println(userId);
+																        System.out.println(username);
 																        //*************************************
         
 		// 선택된 질문에 따라 사용되는 Method 변경**************************
 		if (userInfo.equals("nickname")) {
-		can_All_PW = lServ.findPWbyNickname(answer, userId);
+		can_All_PW = lServ.findPWbyNickname(answer, username);
 		} 
 		if (userInfo.equals("restoreUserEmail")) {
-		can_All_PW = lServ.findPWbyEmail(answer, userId);
+		can_All_PW = lServ.findPWbyEmail(answer, username);
 		}
 		// 선택된 질문에 따라 사용되는 Method 변경**************************
 		
@@ -95,8 +95,8 @@ public class AjaxController {
 	
 	//회원가입 자식창에서 아이디 중복 에이젝스
 	@PostMapping("/AjaxIDDuplicate")
-	public String AjaxIDDuplicate(String userId) {
-		boolean isDuplicate = rServ.isUserIdDuplicate(userId);
+	public String AjaxIDDuplicate(String username) {
+		boolean isDuplicate = rServ.isUsernameDuplicate(username);
 		String mesg = "notDuplicate";
 		if (isDuplicate) {
 			mesg = "duplicate"; 

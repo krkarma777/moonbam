@@ -98,8 +98,8 @@ td {
 		</tr>
 		<c:forEach var="dto" items="${memberList}">
 			<tr>
-				<td>${dto.userId}</td>
-				<td><div class="pw" data-pw="${dto.getUserPw()}">${dto.getUserPw()}</div></td>
+				<td>${dto.username}</td>
+				<td><div class="pw" data-pw="${dto.getPassword()}">${dto.getPassword()}</div></td>
 				<td>${dto.getNickname()}</td>
 				<td>${dto.getRestoreUserEmailId()}</td>
 				<td>${dto.getRestoreUserEmailDomain()}</td>
@@ -108,7 +108,7 @@ td {
 				<td>${dto.getKakaoConnected()}</td>
 				<td>${dto.getUserSignDate()}</td>
 				<td>${dto.getUserType()}</td>
-				<td><button class="deleteBtn" data-id="${dto.getUserId()}">삭제(참조 시 X)</button></td>
+				<td><button class="deleteBtn" data-id="${dto.getUsername()}">삭제(참조 시 X)</button></td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -121,14 +121,14 @@ td {
 		$(function() {
 
 			$(".deleteBtn").on("click", function() {
-				var userId = $(this).attr("data-id");
+				var username = $(this).attr("data-id");
 				var tr = $(this)
 				
 				$.ajax({
 					type: "GET",
 					url: "<c:url value='/IDDelete'/>", 
 					data: {
-						userId : userId
+						username : username
 						},
 					dataType: "text",
 					success: function(){
@@ -144,16 +144,16 @@ td {
 
 				var rp = $(this);
 				var ecPW = rp.attr("data-pw");
-				var userPw = rp.text();
+				var password = rp.text();
 				//console.log(ecPW);
 
-				if (ecPW == userPw) {
+				if (ecPW == password) {
 					
 					$.ajax({
 						type : "GET",
 						url : "<c:url value='/decrypt'/>",
 						data : {
-							mesg : userPw
+							mesg : password
 						},
 						dataType : "text",
 						success : function(response) {
@@ -170,7 +170,7 @@ td {
 						type : "GET",
 						url : "<c:url value='/encrypt'/>",
 						data : {
-							mesg : userPw
+							mesg : password
 						},
 						dataType : "text",
 						success : function(response) {

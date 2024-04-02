@@ -113,7 +113,7 @@ public class NaverLoginController {
         MemberDTO check  = serv.selectOneAPIMember(id);
         
         if(check != null && check.getNaverConnected() == 0) {
-        	serv.updateAPIMemberNaverConnected(check.getUserId());
+        	serv.updateAPIMemberNaverConnected(check.getUsername());
         }
         
         ModelAndView mav = new ModelAndView();
@@ -128,8 +128,8 @@ public class NaverLoginController {
             String nickname = oac.randomNickname();
             		
     		MemberDTO dto = new MemberDTO();
-	    		dto.setUserId(id);
-	          	dto.setUserPw(pw);					
+	    		dto.setUsername(id);
+	          	dto.setPassword(pw);					
 	          	dto.setNickname(nickname);
 	          	dto.setNaverConnected(1);
         	
@@ -137,7 +137,7 @@ public class NaverLoginController {
 	  		serv.insertAPIMember(dto);	
 	    	
 	  		//닉네임 변경하는 화면으로 이동
-	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
+	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUsername());
 	  		session.setAttribute("loginUser", nDTO);
 	  		mav.addObject("dto", nDTO);
 		    mav.setViewName("member/Login/APILogin");

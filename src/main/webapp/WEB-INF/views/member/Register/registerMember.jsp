@@ -25,7 +25,7 @@
 			
 			<!-- 아이디 입력칸(회원가입 1단계 이메일 입력칸 값) -->
 			<label for="userEmailDomain">*이메일 인증</label>
-				<input type="email" id="email" name="userId" class ="userEmail" maxlength="30" value="${userId}" required readonly>
+				<input type="email" id="email" name="username" class ="userEmail" maxlength="30" value="${username}" required readonly>
 			
 			<!-- 이메일 인증 버튼 -->
 			<div style="display: flex; gap: 5px;">
@@ -35,12 +35,12 @@
 			<span id = "certificationAnswer"></span>
 			
 			<!-- 비밀번호 입력칸(6글자 이상)(반드시 입력되어야 함) -->
-			<label for="userPw">*비밀번호 (최소 6글자)</label> 
-				<input type="password" id="userPw" name="userPw" class="pw" minlength="6" required> 
+			<label for="password">*비밀번호 (최소 6글자)</label> 
+				<input type="password" id="password" name="password" class="pw" minlength="6" required> 
 
 			<!-- 비밀번호 재입력칸(6글자 이상)(반드시 입력되어야 함) -->
-			<label for="userPwConfirm">*비밀번호 재입력</label> 
-				<input type="password" id="userPwConfirm" name="userPwConfirm" class="pw" minlength="6" required>
+			<label for="passwordConfirm">*비밀번호 재입력</label> 
+				<input type="password" id="passwordConfirm" name="passwordConfirm" class="pw" minlength="6" required>
 				<!-- 비밀번호와 비밀번호 재입력이 상이할 경우, 문구 출력 -->
 				<span id="pwMismatch" style="color: red;"></span> 
 			
@@ -167,7 +167,7 @@
 	                	$("#loadingSpinner_for_nickname").show();
 	                	// 가입 버튼 비활성화
 	                	$("#register_button").prop("disabled", true);
-	                	$("#userIdButton").prop("disabled", true);
+	                	$("#usernameButton").prop("disabled", true);
 	              },
 	                
 	                success: function (response) {
@@ -187,7 +187,7 @@
 	                	$("#loadingSpinner_for_nickname").hide();
 	                	// 가입 버튼 활성화
 		               	$("#register_button").prop("disabled", false);
-		               	$("#userIdButton").prop("disabled", false);
+		               	$("#usernameButton").prop("disabled", false);
 	                }
 				})
 				prevNickname = nickname;
@@ -312,10 +312,10 @@
 		            errorMessage = "이메일 입력 오류입니다. 처음부터 다시 진행해주세요.";
 		            break;
 
-			    case $("#userPw").val() !== $("#userPwConfirm").val():
+			    case $("#password").val() !== $("#passwordConfirm").val():
 		            errorMessage = "입력한 비밀번호가 일치하지 않습니다.";
 		            $("#pwMismatch").text(errorMessage);
-		            $("#userPw").focus();
+		            $("#password").focus();
 		            break;
 
 		        case $("#confirmNicknameError").text() != "":

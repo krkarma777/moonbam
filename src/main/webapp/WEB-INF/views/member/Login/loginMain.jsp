@@ -30,7 +30,7 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
-	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" />
+	      <input type="email" id="register_username" name="username" required placeholder="가입할 이메일을 입력하세요" />
 	      <button>회원가입으로</button>
 	    </form>
 	  </div>
@@ -45,14 +45,14 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
-	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" />
-	      <input type="password" id="userPw" name="userPw" class="loginSet" placeholder="패스워드"/>
+	      <input type="email" id="username" name="username" class="loginSet" autofocus placeholder="이메일" />
+	      <input type="password" id="password" name="password" class="loginSet" placeholder="패스워드"/>
 	      <button type="button" id="showPasswd" class="loginButtons">비밀번호 보이기</button>
 	      <button class="loginButtons">로그인</button>
-		  <div id="confirmUserIdPwError" style="font-size: 14px; color: red;"></div>	    
+		  <div id="confirmUsernamePwError" style="font-size: 14px; color: red;"></div>	    
 	      
 	      <div class="row" id="rowBar">
-              <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
+              <div class="col-2"><input type="checkbox" id="usernameSave" name="usernameSave" class="loginSet"></div>
               <div class="col-4 save-label cookieT">이메일 저장</div>
               <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
               <div class="col-4 auto-login-label cookieT">자동 로그인</div>
@@ -88,13 +88,13 @@
 	    //로그인과 회원가입 탭 전환*******************************************
 	    $('#signUp').on('click', function () {
 	        $('#container').addClass("right-panel-active");
-	        $('#register_userId').focus();
+	        $('#register_username').focus();
 	    });
 	    
 	    function changeTab(){
 	    	$('#container').removeClass("right-panel-active");
 	        $('#email').val('');
-	        $('#userId').focus();
+	        $('#username').focus();
 	    }
 
 	    $('#signIn').on('click', function () {
@@ -107,8 +107,8 @@
 	    var currentAjaxRequest = null;
 
 		//쿠키 불러오기
-	    var cookieID = getCookie("userId");
-	    var cookiePW = getCookie("userPw");
+	    var cookieID = getCookie("username");
+	    var cookiePW = getCookie("password");
 	   
 													  //  쿠키 디버그 코드
 													  console.log("아이디 쿠키: "+ cookieID);
@@ -116,19 +116,19 @@
 													  
 	    //아이디 쿠키가 있으면 아이디 창에 입력 + 아이디 저장 체크
 	    if(cookieID){
-	    	$("#userId").val(cookieID)
-	    	$("#userIdSave").prop("checked",true);
+	    	$("#username").val(cookieID)
+	    	$("#usernameSave").prop("checked",true);
 	    } else {
-	    	$("#userId").val("")
-	    	$("#userIdSave").prop("checked",false);
+	    	$("#username").val("")
+	    	$("#usernameSave").prop("checked",false);
 	    }
 	    
 	    //비밀번호 쿠키가 있으면 비밀번호 창에 입력 + 자동로그인 체크
 	    if(cookiePW){
-	    	$("#userPw").val(cookiePW)
+	    	$("#password").val(cookiePW)
 	    	$("#autoLogin").prop("checked",true);
 	    } else {
-	    	$("#userPw").val("")
+	    	$("#password").val("")
 	    	$("#autoLogin").prop("checked",false);
 	    }
 	    
@@ -150,18 +150,18 @@
 	            currentAjaxRequest.abort();
 	        }
 	        
-	        var userId = $("#userId").val();
-	        var userPw = $("#userPw").val();
-	        var errorSpan = $("#confirmUserIdPwError");
+	        var username = $("#username").val();
+	        var password = $("#password").val();
+	        var errorSpan = $("#confirmUsernamePwError");
 
 	        //아이디와 비밀번호를 모두 입력한 경우
-	        if (userId && userPw) {
+	        if (username && password) {
 	            $.ajax({
 	                type: "POST",
 	                url: "<c:url value='/AjaxCheckIDPW'/>", 
 	                data: {
-	                    userId: userId,
-	                    userPw: userPw,
+	                    username: username,
+	                    password: password,
 	                },
 	                
 	                beforeSend: function() {
@@ -195,22 +195,22 @@
 	        }
 	        
 	        // ID 공백 여부 확인
-	        if (userId.trim() === "") {
+	        if (username.trim() === "") {
 	            alert("아이디를 입력하세요");
-	            $("#userId").focus();
+	            $("#username").focus();
 	            return false;
 	        }
 
 	        // PW 공백 여부 확인
-	        if (userPw.trim() === "") {
+	        if (password.trim() === "") {
 	            alert("비밀번호를 입력하세요");
-	            $("#userPw").focus();
+	            $("#password").focus();
 	            return false;
 	        }
 	        
 	        //에러 메세지가 있는지 확인
-	        if($("#confirmUserIdPwError").text() != ""){
-	            $("#userId").focus();
+	        if($("#confirmUsernamePwError").text() != ""){
+	            $("#username").focus();
 	            return false;
 	        }
 	            
@@ -220,7 +220,7 @@
 	    
 	    //비밀번호를 볼 수 있도록 해주는 method
 	    $("#showPasswd").click(function () {
-	        var showPW = $("#userPw");
+	        var showPW = $("#password");
 	        showPW.attr("type", showPW.attr("type") == "password" ? "text" : "password");
 	    });
 
@@ -256,6 +256,6 @@
 　█　　　　　　　 █▀▀▀▀▀▀▀█　　　　　　　　　　   █
 　　▀▅　　　　▅▀　　　　　▀▅　　　　　　　   ▅▀
 
- -->
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 
 

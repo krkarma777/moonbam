@@ -36,7 +36,7 @@ public class CommentMainController {
 		
 		//test용. 나중에 지울거임
 		MemberDTO memberDTO = new MemberDTO();
-		memberDTO.setUserId("kkk333");
+		memberDTO.setUsername("kkk333");
 		memberDTO.setNickname("귀염둥이");
 		session.setAttribute("loginUser", memberDTO);
 		request.setAttribute("postId", 3); //나중에jsp에서 이거 쓰인 부분 getParameter로 변경하기

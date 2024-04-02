@@ -18,7 +18,7 @@
             <div class="card-body">
                 <h3 class="card-title">닉네임을 변경하시겠습니까?</h3>
                 <form action="<c:url value='/changeNickname'/>" method="post">
-                    <input type="hidden" name="userId" value="${dto.userId}">
+                    <input type="hidden" name="username" value="${dto.getUsername()}">
                     <input type="hidden" id="check" value="${dto.nickname}">
                     <input type="text" id="nickname" name="nickname" value="${dto.nickname}" minlength="2" required autofocus="autofocus" class="form-control mb-3">
                     <span id="confirmNicknameError" style="color: red;"></span>

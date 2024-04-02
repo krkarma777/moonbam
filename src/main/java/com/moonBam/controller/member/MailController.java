@@ -29,7 +29,7 @@ public class MailController {
 	
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
 
-	//단순 메일 전송
+	//회원가입 완료 시 발송
     public void RegisterCompleteEmail(String userEmail, String nickname) throws Exception {
     		Map<String, String> changeData = new HashMap<>();
     		
@@ -50,7 +50,7 @@ public class MailController {
         	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
     }	
 	
-    //단순 메일 전송 - 비밀번호 전송
+    //비밀번호 변경 메일 전송
     public void sendEmail(String userEmail, MemberDTO dto) throws Exception {
 
     		Map<String, String> changeData = new HashMap<>();
@@ -60,9 +60,9 @@ public class MailController {
 	    	
     		String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";		
     		
-			changeData.put("##유저_아이디##", dto.getUserId());					
+    		changeData.put("##유저_링크##", "http://localhost:8090/acorn/UpdatePasswordPage?username=##유저_아이디##");
+			changeData.put("##유저_아이디##", dto.getUsername());					
     		changeData.put("##유저_닉네임##", dto.getNickname());
-    		changeData.put("##유저_비밀번호##", dto.getUserPw());
 
 	    	String innerImageName = "FindPW";
     		String innerImagePath = "/static/images/email/FindPW.png";
@@ -74,7 +74,7 @@ public class MailController {
         	serv.sendEmail(FROM_EMAIL, TO_EMAIL, EMAIL_SUBJECT, EMAIL_BODY, innerImageName, innerImagePath);
     }
     
-    //단순 메일 전송 - 회원가입을 위한 인증법호 전송
+    //회원가입 인증번호 전송
     @PostMapping("/joinEmail")
     public String joinEmail(String userEmail) throws Exception {
     		String authNumber = makeRandomNumber();

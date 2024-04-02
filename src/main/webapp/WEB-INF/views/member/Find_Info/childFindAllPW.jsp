@@ -14,7 +14,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	<script type="text/javascript">
 	
-		var userId;
+		var username;
 		
 		$(function () {
 			//진행 중인 Ajax 요청을 저장할 변수
@@ -40,7 +40,7 @@
 																			
 		//질문에 따른 대답과 관련된 ajax와 method
 		function checkUserAnswer(event) {
-			 userId = $("#userId").val()
+			 username = $("#username").val()
 			 
 			 var userInfo = $("#confirmUserInfo").val();
 	         var answer = $("#userAnswer").val();
@@ -59,7 +59,7 @@
 					data : {
 						userInfo : userInfo,
 						answer : answer,
-						userId: userId
+						username: username
 					},
 					
 					success : function(response) {
@@ -106,26 +106,26 @@
 <body>
 
 <%
-    String userIdFromPartPW = (String) request.getAttribute("userId");
+    String usernameFromPartPW = (String) request.getAttribute("username");
     Cookie[] cookies = request.getCookies();
 
     if (cookies != null) {
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("findPW_userid")) {
-                userIdFromPartPW = cookie.getValue();
+            if (cookie.getName().equals("findPW_username")) {
+                usernameFromPartPW = cookie.getValue();
                 break;
             }
         }
     }
 
-    System.out.println("전체 비밀번호 페이지에서 불러온 아이디: " + userIdFromPartPW);
+    System.out.println("전체 비밀번호 페이지에서 불러온 아이디: " + usernameFromPartPW);
 
-	if(userIdFromPartPW != null){
+	if(usernameFromPartPW != null){
 %>
-	<input type="hidden" id="userId" name="userId" value="<%=userIdFromPartPW%>">
+	<input type="hidden" id="username" name="username" value="<%=usernameFromPartPW%>">
 	
 		<form id="confirmForm">
-	        <label for="confirmUserId">전체 비밀번호 확인을 위한 질문</label>
+	        <label for="confirmUsername">전체 비밀번호 확인을 위한 질문</label>
 	        <select id="confirmUserInfo" name="confirmUserInfo">
 	            <option value="nickname">본인의 닉네임은?</option>
 	            <option value="restoreUserEmail">본인의 복구 이메일 주소는?</option>
