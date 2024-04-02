@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @Alias("MemberDTO")
 public class MemberDTO{
-	private String username;
+	private String userId;
 	private String password;
 	private String nickname;
 	private String restoreUserEmailId;
@@ -27,11 +27,11 @@ public class MemberDTO{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public MemberDTO(String username, String password, String nickname, String restoreUserEmailId,
-			String restoreUserEmailDomain, int googleConnected, int naverConnected, int kakaoConnected,
-			String userSignDate, String userType) {
+	public MemberDTO(String userId, String password, String nickname, String restoreUserEmailId,
+					 String restoreUserEmailDomain, int googleConnected, int naverConnected, int kakaoConnected,
+					 String userSignDate, String userType) {
 		super();
-		this.username = username;
+		this.userId = userId;
 		this.password = password;
 		this.nickname = nickname;
 		this.restoreUserEmailId = restoreUserEmailId;

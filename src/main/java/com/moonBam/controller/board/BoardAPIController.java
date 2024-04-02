@@ -55,7 +55,7 @@ public class BoardAPIController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
         }
 
-        postDTO.setUserId(loginUser.getUsername());
+        postDTO.setUserId(loginUser.getUserId());
         postDTO.setNickname(loginUser.getNickname());
         Long postID = postService.save(postDTO);
         return ResponseEntity.ok(Map.of("postID", postID)); // 동적으로 ajax success function에서 redirect 시킬 용도
@@ -79,7 +79,7 @@ public class BoardAPIController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
         }
 
-        if (!loginUser.getUsername().equals(postDTO.getUserId())) {
+        if (!loginUser.getUserId().equals(postDTO.getUserId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "글을 수정할 권한이 없습니다."));
         }
 
@@ -106,7 +106,7 @@ public class BoardAPIController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "글이 존재하지않습니다."));
         }
 
-        if (!loginUser.getUsername().equals(postDTO.getUserId())) {
+        if (!loginUser.getUserId().equals(postDTO.getUserId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "글을 삭제할 권한이 없습니다."));
         }
 
@@ -125,7 +125,7 @@ public class BoardAPIController {
     	}
     	
     	MemberDTO loginUser = (MemberDTO)session.getAttribute("loginUser");
-        boolean isAuthorized = loginUser.getUsername().equals(pDTO.getUserId());
+        boolean isAuthorized = loginUser.getUserId().equals(pDTO.getUserId());
     	
     	return ResponseEntity.ok(Map.of("pDTO", pDTO, "isAuthorized", isAuthorized));
     }

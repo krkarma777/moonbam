@@ -365,7 +365,7 @@ $RECYCLE.BIN/
 # *.iml
 # *.ipr
 
-config.properties
+src/main/java/com/moonBam/config/config.properties
 
 # CMake
 cmake-build-*/

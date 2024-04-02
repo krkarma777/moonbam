@@ -98,7 +98,7 @@ td {
 		</tr>
 		<c:forEach var="dto" items="${memberList}">
 			<tr>
-				<td>${dto.username}</td>
+				<td>${dto.userId}</td>
 				<td><div class="pw" data-pw="${dto.getPassword()}">${dto.getPassword()}</div></td>
 				<td>${dto.getNickname()}</td>
 				<td>${dto.getRestoreUserEmailId()}</td>
