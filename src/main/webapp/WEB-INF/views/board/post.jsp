@@ -4,6 +4,8 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>		 
 <!DOCTYPE html>
 <html>
 <head>
@@ -227,8 +229,7 @@
 			$('#save').click(save);
 
 			//임시저장목록 버튼 클릭 시 모달창 나타내기
-			$('#saveModal').click(function () {
-			});
+			$('#saveModal').click(saveModal);
 
 			// 어댑터를 CKEditor에 추가
 			function MyCustomUploadAdapterPlugin(editor) {
@@ -279,12 +280,31 @@
 				}
 
 		});//end doc
+		
+		//임시저장 모달창
+		function saveModal(){
+			$('#myModal').modal('show');
+			$.ajax({
+				type: 'post',
+				url: '/acorn/post/saveList',
+				dataType : 'json',
+				success: function(response) {
+					console.log(response);
+					var postSaveList = response;
+					console.log("postSaveList => "+postSaveList);
+					//innerhtml함수
+				},
+				error: function(xhr, status, error) {
+					console.log(error);
+				}
+			});//end ajax
+		}//
 
 		// 임시저장글 불러오기
 		function loadPostSave(postSaveId) {
 			$.ajax({
 				type: 'post',
-				url: '/acorn/board/saveSelect',
+				url: '/acorn/post/saveSelect',
 				dataType : 'json',
 				data: {
 					postSaveId: postSaveId
@@ -310,7 +330,7 @@
 				// 확인 시 AJAX 요청
 				$.ajax({
 					type: 'POST',
-					url: '/acorn/board/saveDelete',
+					url: '/acorn/post/saveDelete',
 					data: {
 						postSaveId: postSaveId
 					},
@@ -365,7 +385,7 @@
 			// AJAX 요청
 			$.ajax({
 				type: 'POST',
-				url: '/acorn/board/save',
+				url: '/acorn/post/save',
 				data: {
 					postTitle: title,
 					postText: content,
@@ -478,63 +498,54 @@
 	</form>
 </div>
 
-<!-- 임시저장 모달 창 -->
-<div id="myModal" class="modal">
-	<div class="modal-content">
-		<span class="close">&times;</span>
-		<table class="table table-bordered"
-			   style="table-layout: fixed; width: 100%;">
-			<colgroup>
-				<col style="width: 15%;">
-				<col style="width: 45%;">
-				<col style="width: 25%;">
-				<col style="width: 15%;">
-			</colgroup>
+<!-- 임시저장 모달창 -->
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold;">임시 저장 목록</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+		<table class="table">
+		    <colgroup>
+		        <col style="width: 75%;">
+		        <col style="width: 25%;">
+		    </colgroup>
 
-			<tr>
-				<th style="text-align: center;">순번</th>
-				<th style="text-align: center;">제목</th>
-				<th style="text-align: center;">저장일</th>
-				<th style="text-align: center;">삭제</th>
-			</tr>
-
-			<%
-				List<PostSaveDTO> postSaveList = (List<PostSaveDTO>) request.getAttribute("postSaveList");
-				if (postSaveList != null && !postSaveList.isEmpty()) {
-					int n = 1;
-					for (int i = 0; i < postSaveList.size(); i++) {
-						PostSaveDTO postSave = postSaveList.get(i);
-						Long postSaveId = postSave.getPostSaveId();
-						String postSaveTitle = postSave.getPostSaveTitle();
-						String postSaveDate = postSave.getPostSaveDate();
-						System.out.println(postSaveDate);
-			%>
-			<tr>
-				<td style="text-align: center;"><%=n%></td>
-				<td><b onclick="loadPostSave(<%=postSaveId%>)"><%=postSaveTitle%></b></td>
-				<td style="text-align: center;"><%=postSaveDate%></td>
-				<td style="text-align: center;">
-					<button class="delete-btn" onclick="deleteSave(<%=postSaveId%>)">
-						<i class="fa-regular fa-trash-can"></i>
-					</button>
-				</td>
-			</tr>
-
-			<%
-					n++;
-				} //end for
-			} else {
-			%>
-			<tr>
-				<td colspan="4" style="text-align: center;">임시 저장된 글이 없습니다.</td>
-			</tr>
-			<%
-				}
-			%>
-
+		
+		    <c:if test="${not empty postSaveList}">
+		        <c:forEach var="saveList" items="${postSaveList}">
+		            <tr>
+		                <td>
+			                <span style="font-size: 20px;">${saveList.postSaveTitle}</span><br>
+			                <span style="color: gray;">${saveList.postSaveDate}</span>
+		                </td>
+		                <td style="text-align: center; vertical-align: middle;">
+		                	<div>
+			                    <button class="delete-btn" onclick="deleteSave(${saveList.postSaveId})" style="background: none; border: none;">
+			                        <i class="fa-regular fa-trash-can"></i>
+			                    </button>
+		                    </div>
+		                </td>
+		            </tr>
+		        </c:forEach>
+		    </c:if>
+		
+		    <c:if test="${empty postSaveList}">
+		        <tr>
+		            <td colspan="4" style="text-align: center;">임시 저장된 글이 없습니다.</td>
+		        </tr>
+		    </c:if>
 		</table>
-	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
 </div>
+<!-- 임시저장 모달창 끝-->
 
 <script>
 	//버튼 클릭 했을 때 색깔 나타나는 함수

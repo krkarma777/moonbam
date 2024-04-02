@@ -29,7 +29,7 @@ public class PostService {
 	}
 
 	// 글 조회
-	public PostDTO select(Long postId) {
+	public PostDTO findById(Long postId) {
 		return dao.select(postId);
 
 	}
@@ -51,6 +51,9 @@ public class PostService {
 	// 글 수정
 	public void update(Long postId, String updatedTitle, String updatedContent, Long postCategory) {
 		dao.updateContent(postId, updatedTitle, updatedContent, postCategory);
+	}
+	public void update(PostUpdateRequestDTO postUpdateRequestDTO) {
+		dao.update(postUpdateRequestDTO);
 	}
 
 	// 글 삭제
