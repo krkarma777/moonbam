@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
@@ -147,16 +148,16 @@ public class LoginController {
 		MemberDTO dto = openApiService.selectOneAPIMember(userId);
 		System.out.println(dto);
 		if (dto != null) {
-			String userPw = sc.decrypt(dto.getUserPw());
-			int visible = (int) Math.ceil(userPw.length() / 2);
-			String masked = "*".repeat(userPw.length() - visible);
-			String maskedPW = userPw.substring(0, visible) + masked;
+			String password = sc.decrypt(dto.getUserPw());
+			int visible = (int) Math.ceil(password.length() / 2);
+			String masked = "*".repeat(password.length() - visible);
+			String maskedPW = password.substring(0, visible) + masked;
 			
-			Cookie userIdCookie = new Cookie("findPW_userid",userId);
+			Cookie userIdCookie = new Cookie("findPW_userId",userId);
 			userIdCookie.setMaxAge(30*60);
 			response.addCookie(userIdCookie);
 			
-			model.addAttribute("userId", userId);
+			model.addAttribute("dto", dto);
 			model.addAttribute("maskedPW", maskedPW);
 			return "member/Find_Info/viewPartPW";
 		} else {
@@ -164,44 +165,68 @@ public class LoginController {
 		}
 	}
 	
-	//전체 비밀번호 출력용
-	@GetMapping("/SearchAllPW")
-	public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
-		
-		String userId = "";
-		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("findPW_userid")) {
-				userId = cookie.getValue();
+	//비밀번호 변경을 위한 메일 송신
+		@GetMapping("/SearchAllPW")
+		public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
+			
+			String userId = "";
+			Cookie[] cookies = request.getCookies();
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("findPW_userId")) {
+					userId = cookie.getValue();
+				}
 			}
+			
+			MemberDTO dto = openApiService.selectOneAPIMember(userId);
+			
+			if (dto != null) {
+
+				Cookie userIdCookie = new Cookie("findPW_userId",null);
+				userIdCookie.setMaxAge(0);
+				
+				String[] emailparts = dto.getUserId().split("@");
+				
+				model.addAttribute("dto", dto);
+				model.addAttribute("emailDomain", emailparts[1]);
+				mc.sendEmail(dto.getUserId(), dto);
+
+				response.addCookie(userIdCookie);
+				
+				return "member/Find_Info/viewAllPW";
+			} else {
+				return "member/Find_Info/emailErrorPage";
+			}
+
 		}
 		
-		MemberDTO dto = openApiService.selectOneAPIMember(userId);
-		
-		if (dto != null) {
-
-			Cookie userIdCookie = new Cookie("findPW_userid",null);
-			userIdCookie.setMaxAge(0);
-			
-			String userPw = sc.decrypt(dto.getUserPw());
-			dto.setUserPw(userPw);
-			
-			String[] emailparts = dto.getUserId().split("@");
-			
-			
-			model.addAttribute("dto", dto);
-			model.addAttribute("emailDomain", emailparts[1]);
-			mc.sendEmail(dto.getUserId(), dto);
-
-			response.addCookie(userIdCookie);
-			
-			return "member/Find_Info/viewAllPW";
-		} else {
-			return "member/Find_Info/emailErrorPage";
+		//이메일 하이퍼링크를 통해 들어오는 비밀번호 변경 페이지
+		@GetMapping("/UpdatePasswordPage")
+		public ModelAndView UpdatePasswordPage(String userId) {
+			ModelAndView mav = new ModelAndView();
+				mav.addObject("userId", userId);
+				mav.setViewName("member/Find_Info/updatePassword");
+			return mav;
 		}
-
-	}
-	
+		
+		//비밀번호 변경
+		@PostMapping("/UpdatePassword")
+		public String UpdatePassword(String userId, String userPw) {
+			
+			String realPassword = sc.encrypt(userPw);
+			
+			Map<String, String> map = new HashMap<>();
+				map.put("userId", userId);
+				map.put("userPw", realPassword);
+				serv.updatePassword(map);
+			return "redirect:/UpdateComplete";
+		}
+		
+		//비밀번호 변경 완료
+		@GetMapping("UpdateComplete")
+		public String UpdateComplete() {
+			return "member/Find_Info/updateComplete";
+		}
+		
 	
 	
 }
