@@ -94,7 +94,7 @@ public class KakaoLoginController {
         
         //기가입자이지만, 카카오 연동이 안된 사람을 연동
         if(check != null && check.getKakaoConnected() == 0) {
-        	serv.updateAPIMemberKakaoConnected(check.getUsername());
+        	serv.updateAPIMemberKakaoConnected(check.getUserId());
         }
         
         ModelAndView mav = new ModelAndView();
@@ -109,7 +109,7 @@ public class KakaoLoginController {
             String nickname = oac.randomNickname();
             		
     		MemberDTO dto = new MemberDTO();
-	    		dto.setUsername(id);
+	    		dto.setUserId(id);
 	          	dto.setPassword(pw);					
 	          	dto.setNickname(nickname);
 	          	dto.setKakaoConnected(1);
@@ -118,7 +118,7 @@ public class KakaoLoginController {
 	  		serv.insertAPIMember(dto);	
 	    	
 	  		//닉네임 변경하는 화면으로 이동
-	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUsername());
+	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
 	  		session.setAttribute("loginUser", nDTO);
 	  		mav.addObject("dto", nDTO);
 		    mav.setViewName("member/Login/APILogin");

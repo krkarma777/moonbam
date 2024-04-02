@@ -109,7 +109,7 @@ public class GoogleLoginController {
         MemberDTO check  = serv.selectOneAPIMember((String) map.get("email"));
 
         if(check != null && check.getGoogleConnected() == 0) {
-        	serv.updateAPIMemberGoogleConnected(check.getUsername());
+        	serv.updateAPIMemberGoogleConnected(check.getUserId());
         }
         
         ModelAndView mav = new ModelAndView();
@@ -121,7 +121,7 @@ public class GoogleLoginController {
 			String pw = sc.encrypt("Google"+dbc.getNum(16));
 
 			MemberDTO dto = new MemberDTO();
-	      		dto.setUsername((String) map.get("email"));
+	      		dto.setUserId((String) map.get("email"));
 	          	dto.setPassword(pw);					
 	          	dto.setNickname(oac.randomNickname());
 	          	dto.setGoogleConnected(1);
@@ -130,7 +130,7 @@ public class GoogleLoginController {
 	  		serv.insertAPIMember(dto);	
 	    	
 	  		//닉네임 변경하는 화면으로 이동
-	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUsername());
+	  		MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
 	  		session.setAttribute("loginUser", nDTO);
 	  		mav.addObject("dto", nDTO);
 		    mav.setViewName("member/Login/APILogin");

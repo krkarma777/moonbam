@@ -184,11 +184,11 @@ public class LoginController {
 			Cookie usernameCookie = new Cookie("findPW_username",null);
 			usernameCookie.setMaxAge(0);
 			
-			String[] emailparts = dto.getUsername().split("@");
+			String[] emailparts = dto.getUserId().split("@");
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("emailDomain", emailparts[1]);
-			mc.sendEmail(dto.getUsername(), dto);
+			mc.sendEmail(dto.getUserId(), dto);
 
 			response.addCookie(usernameCookie);
 			

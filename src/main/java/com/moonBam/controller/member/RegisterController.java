@@ -44,9 +44,9 @@ public class RegisterController {
 		boolean failMesg = true;
 
 		// 아이디 검증
-		boolean isDuplicateID = serv.isUsernameDuplicate(dto.getUsername());
+		boolean isDuplicateID = serv.isUsernameDuplicate(dto.getUserId());
 
-		if (dto.getUsername().length() < 4) { // 아이디 길이 규격확인
+		if (dto.getUserId().length() < 4) { // 아이디 길이 규격확인
 			failMesg = false;
 			request.setAttribute("mesg", "아이디 길이가 규정에 맞지 않습니다. 확인해주세요");
 			return result;
@@ -118,7 +118,7 @@ public class RegisterController {
 			if (num == 1 && failMesg == true) {
 				System.out.println("회원가입 성공");
 				result = "member/Register/registerSuccess";
-				mc.RegisterCompleteEmail(dto.getUsername(), dto.getNickname());
+				mc.RegisterCompleteEmail(dto.getUserId(), dto.getNickname());
 				
 			// 모든 데이터가 규격을 통과했음에도 insert되지 않았을 경우, 회원가입 실패 페이지로 이동
 			} else {
