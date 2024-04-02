@@ -29,7 +29,7 @@ public class OpenApiController {
 			MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
 	        
 	        Map<String, String> map = new HashMap<>();
-	        	map.put("username", dto.getUserId());
+	        	map.put("userId", dto.getUserId());
 	        	map.put("nickname", nickname);
 	        
 	        serv.updateAPIMemberNickname(map);

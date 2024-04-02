@@ -46,7 +46,7 @@
 <h1>이메일 발송 성공!</h1>
 
     <p>${dto.getNickname()}님!<br> 
-    <a href="http://www.${emailDomain}" target="_blank">${dto.getUsername()}로 비밀번호 변경 메일이 전송되었습니다.</a>
+    <a href="http://www.${emailDomain}" target="_blank">${dto.getUserId()}로 비밀번호 변경 메일이 전송되었습니다.</a>
     <p>확인 후 로그인 부탁드립니다.</p>
 
 <div id="sitesShortCut">

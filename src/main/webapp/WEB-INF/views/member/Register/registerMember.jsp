@@ -25,7 +25,7 @@
 			
 			<!-- 아이디 입력칸(회원가입 1단계 이메일 입력칸 값) -->
 			<label for="userEmailDomain">*이메일 인증</label>
-				<input type="email" id="email" name="username" class ="userEmail" maxlength="30" value="${username}" required readonly>
+				<input type="email" id="email" name="userId" class ="userEmail" maxlength="30" value="${userId}" required readonly>
 			
 			<!-- 이메일 인증 버튼 -->
 			<div style="display: flex; gap: 5px;">
@@ -167,7 +167,7 @@
 	                	$("#loadingSpinner_for_nickname").show();
 	                	// 가입 버튼 비활성화
 	                	$("#register_button").prop("disabled", true);
-	                	$("#usernameButton").prop("disabled", true);
+	                	$("#userIdButton").prop("disabled", true);
 	              },
 	                
 	                success: function (response) {
@@ -187,7 +187,7 @@
 	                	$("#loadingSpinner_for_nickname").hide();
 	                	// 가입 버튼 활성화
 		               	$("#register_button").prop("disabled", false);
-		               	$("#usernameButton").prop("disabled", false);
+		               	$("#userIdButton").prop("disabled", false);
 	                }
 				})
 				prevNickname = nickname;

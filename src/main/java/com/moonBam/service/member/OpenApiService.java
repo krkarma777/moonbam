@@ -18,8 +18,8 @@ public class OpenApiService {
 		dao.insertAPIMember(dto);
 	}
 
-	public MemberDTO selectOneAPIMember(String username) {
-		MemberDTO dto = dao.selectOneAPIMember(username);
+	public MemberDTO selectOneAPIMember(String userId) {
+		MemberDTO dto = dao.selectOneAPIMember(userId);
 		return dto;
 	}
 
@@ -27,16 +27,16 @@ public class OpenApiService {
 		dao.updateAPIMemberNickname(map);
 	}
 
-	public void updateAPIMemberGoogleConnected(String username) {
-		dao.updateAPIMemberGoogleConnected(username);
+	public void updateAPIMemberGoogleConnected(String userId) {
+		dao.updateAPIMemberGoogleConnected(userId);
 	}
 
-	public void updateAPIMemberNaverConnected(String username) {
-		dao.updateAPIMemberNaverConnected(username);
+	public void updateAPIMemberNaverConnected(String userId) {
+		dao.updateAPIMemberNaverConnected(userId);
 	}
 
-	public void updateAPIMemberKakaoConnected(String username) {
-		dao.updateAPIMemberKakaoConnected(username);
+	public void updateAPIMemberKakaoConnected(String userId) {
+		dao.updateAPIMemberKakaoConnected(userId);
 		
 	}
 	

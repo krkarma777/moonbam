@@ -37,9 +37,9 @@ public class NewCommerController {
 	
 	//로그인 메인에서 기존 유저 확인		//약관 동의 연결
 	@PostMapping("/RegisterTerms")
-	public String RegisterTerms(HttpServletRequest request, String username, HttpSession session) {
-		System.out.println(username);
-		MemberDTO dto = openApiService.selectOneAPIMember(username);
+	public String RegisterTerms(HttpServletRequest request, String userId, HttpSession session) {
+		System.out.println(userId);
+		MemberDTO dto = openApiService.selectOneAPIMember(userId);
 		
 		//이름과 SSN이 모두 일치하는 DB정보가 있을 경우, 기존 유저 있음 jsp로 이동
 		if (dto != null) {
@@ -48,24 +48,24 @@ public class NewCommerController {
 
 		//이름과 SSN이 모두 일치하는 DB정보가 없을 경우, 회원가입 2단계로 이동
 		} else {
-			request.setAttribute("username", username);
+			request.setAttribute("userId", userId);
 			return "member/Register/registerAgreeTerms";
 		}
 	}
 	
 	//약관 동의		//회원가입 연결
 	@PostMapping("/CheckExistUser")
-	public String CheckExistUser(HttpServletRequest request, String username, 
+	public String CheckExistUser(HttpServletRequest request, String userId, 
 			String checked_Agreement, String checked_Info, String checked_Withdraw, HttpSession session) {
 		
 																			//디버그 코드***************************************************
-																			System.out.println("username "+username);
+																			System.out.println("userId "+userId);
 																			System.out.println(
 																				"checked_Agreement : " + checked_Agreement+"\n"+ 
 																				"checked_Info : " + checked_Info+"\n"+
 																				"checked_Withdraw : " + checked_Withdraw);
 																			//디버그 코드***************************************************		
-			request.setAttribute("username", username);
+			request.setAttribute("userId", userId);
 		return "member/Register/registerMember";
 	}
 	

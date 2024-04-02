@@ -19,7 +19,7 @@
 
 	<h2>새로운 비밀번호를 입력하세요!</h2>
 	<form style="width: 300px; height: 300px" method="post" action="UpdatePassword">
-		<input type="hidden" name="username" value="${username}">
+		<input type="hidden" name="userId" value="${userId}">
 		비밀번호: <input type="text" id="password" name="password" class="pw" placeholder="신규 비밀번호" minlength="6" required>
 		비밀번호 확인: <input type="text" id="password_confirm" name="password_confirm" class="pw" placeholder="신규 비밀번호 확인" minlength="6" required>
 		<span id="pwMismatch" style="color: red;"></span> 

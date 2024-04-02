@@ -44,7 +44,7 @@ public class RegisterController {
 		boolean failMesg = true;
 
 		// 아이디 검증
-		boolean isDuplicateID = serv.isUsernameDuplicate(dto.getUserId());
+		boolean isDuplicateID = serv.isUserIdDuplicate(dto.getUserId());
 
 		if (dto.getUserId().length() < 4) { // 아이디 길이 규격확인
 			failMesg = false;

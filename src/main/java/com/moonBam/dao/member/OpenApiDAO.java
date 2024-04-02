@@ -18,8 +18,8 @@ public class OpenApiDAO {
 		session.insert("insertAPIMember", dto);
 	}
 
-	public MemberDTO selectOneAPIMember(String username) {
-		MemberDTO dto = session.selectOne("selectOneAPIMember", username);
+	public MemberDTO selectOneAPIMember(String userId) {
+		MemberDTO dto = session.selectOne("selectOneAPIMember", userId);
 		return dto;
 	}
 
@@ -28,16 +28,16 @@ public class OpenApiDAO {
 		
 	}
 
-	public void updateAPIMemberGoogleConnected(String username) {
-		session.update("updateAPIMemberGoogleConnected", username);
+	public void updateAPIMemberGoogleConnected(String userId) {
+		session.update("updateAPIMemberGoogleConnected", userId);
 	}
 
-	public void updateAPIMemberNaverConnected(String username) {
-		session.update("updateAPIMemberNaverConnected", username);
+	public void updateAPIMemberNaverConnected(String userId) {
+		session.update("updateAPIMemberNaverConnected", userId);
 	}
 
-	public void updateAPIMemberKakaoConnected(String username) {
-		session.update("updateAPIMemberKakaoConnected", username);
+	public void updateAPIMemberKakaoConnected(String userId) {
+		session.update("updateAPIMemberKakaoConnected", userId);
 	}
 	
 	

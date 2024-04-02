@@ -108,7 +108,7 @@ td {
 				<td>${dto.getKakaoConnected()}</td>
 				<td>${dto.getUserSignDate()}</td>
 				<td>${dto.getUserType()}</td>
-				<td><button class="deleteBtn" data-id="${dto.getUsername()}">삭제(참조 시 X)</button></td>
+				<td><button class="deleteBtn" data-id="${dto.getUserId()}">삭제(참조 시 X)</button></td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -121,14 +121,14 @@ td {
 		$(function() {
 
 			$(".deleteBtn").on("click", function() {
-				var username = $(this).attr("data-id");
+				var userId = $(this).attr("data-id");
 				var tr = $(this)
 				
 				$.ajax({
 					type: "GET",
 					url: "<c:url value='/IDDelete'/>", 
 					data: {
-						username : username
+						userId : userId
 						},
 					dataType: "text",
 					success: function(){

@@ -29,7 +29,7 @@
 	<c:if test="${dto.getKakaoConnected() == 1}">
 	&nbsp;&nbsp;- 카카오 로그인 연결됨<br>
 	</c:if>
-		아이디:	${dto.getUsername()}<br>
+		아이디:	${dto.getUserId()}<br>
 		가입일:	${dto.getUserSignDate()}
 	</p>
 	<div>

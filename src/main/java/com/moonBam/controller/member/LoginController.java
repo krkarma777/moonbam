@@ -56,18 +56,18 @@ public class LoginController {
 	
 	//로그인
 	@PostMapping("/Logined")
-	public String LoginToMypage(String username, String password, HttpSession session, boolean usernameSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+	public String LoginToMypage(String userId, String password, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realPassword = sc.encrypt(password);
-		System.out.println("아이디 저장: " + usernameSave);				//체크되면 true
+		System.out.println("아이디 저장: " + userIdSave);				//체크되면 true
 		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
-		MemberDTO dto = serv.login(username, realPassword);
+		MemberDTO dto = serv.login(userId, realPassword);
 
 		if (dto != null) {
 			session.setAttribute("loginUser", dto);
 
 			if(autoLogin) {
 				
-				Cookie autoId= new Cookie("username", username);
+				Cookie autoId= new Cookie("userId", userId);
 				Cookie autoPW= new Cookie("password", password);
 				autoId.setMaxAge(60*60*24);
 				autoPW.setMaxAge(60*60*24);
@@ -79,7 +79,7 @@ public class LoginController {
 
 			} else {
 				
-				Cookie autoId= new Cookie("username", null);
+				Cookie autoId= new Cookie("userId", null);
 				Cookie autoPW= new Cookie("password", null);
 				autoId.setMaxAge(0);
 				autoPW.setMaxAge(0);
@@ -89,14 +89,14 @@ public class LoginController {
 //				System.out.println("삭제 오토 아이디"+ autoId);
 //				System.out.println("삭제 오토 패스"+ autoPW);
 				
-				if(usernameSave) {
-					Cookie id= new Cookie("username", username);
+				if(userIdSave) {
+					Cookie id= new Cookie("userId", userId);
 					id.setMaxAge(60*60*24);
 					response.addCookie(id);
 					
 //					System.out.println("등록 저장 아이디"+ id);
 				} else {
-					Cookie id= new Cookie("username", null);
+					Cookie id= new Cookie("userId", null);
 					id.setMaxAge(0);
 					response.addCookie(id);
 					
@@ -131,7 +131,7 @@ public class LoginController {
 		Map<String, String> map = new HashMap<>();
 			map.put("restoreUserEmailId", emailParts[0]);
 			map.put("restoreUserEmailDomain", emailParts[1]);
-		MemberDTO dto = serv.findUsername(map);
+		MemberDTO dto = serv.findUserId(map);
 		if (dto != null) {
 			model.addAttribute("dto", dto);
 			return "member/Find_Info/viewID";
@@ -143,9 +143,9 @@ public class LoginController {
 	
 	//비밀번호 찾기
 	@PostMapping("/SearchPartPW")
-	public String SearchPartPW(Model model, HttpServletResponse response, String username) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		System.out.println(username);
-		MemberDTO dto = openApiService.selectOneAPIMember(username);
+	public String SearchPartPW(Model model, HttpServletResponse response, String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		System.out.println(userId);
+		MemberDTO dto = openApiService.selectOneAPIMember(userId);
 		System.out.println(dto);
 		if (dto != null) {
 			String password = sc.decrypt(dto.getPassword());
@@ -153,9 +153,9 @@ public class LoginController {
 			String masked = "*".repeat(password.length() - visible);
 			String maskedPW = password.substring(0, visible) + masked;
 			
-			Cookie usernameCookie = new Cookie("findPW_username",username);
-			usernameCookie.setMaxAge(30*60);
-			response.addCookie(usernameCookie);
+			Cookie userIdCookie = new Cookie("findPW_userId",userId);
+			userIdCookie.setMaxAge(30*60);
+			response.addCookie(userIdCookie);
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("maskedPW", maskedPW);
@@ -169,20 +169,20 @@ public class LoginController {
 	@GetMapping("/SearchAllPW")
 	public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
 		
-		String username = "";
+		String userId = "";
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("findPW_username")) {
-				username = cookie.getValue();
+			if (cookie.getName().equals("findPW_userId")) {
+				userId = cookie.getValue();
 			}
 		}
 		
-		MemberDTO dto = openApiService.selectOneAPIMember(username);
+		MemberDTO dto = openApiService.selectOneAPIMember(userId);
 		
 		if (dto != null) {
 
-			Cookie usernameCookie = new Cookie("findPW_username",null);
-			usernameCookie.setMaxAge(0);
+			Cookie userIdCookie = new Cookie("findPW_userId",null);
+			userIdCookie.setMaxAge(0);
 			
 			String[] emailparts = dto.getUserId().split("@");
 			
@@ -190,7 +190,7 @@ public class LoginController {
 			model.addAttribute("emailDomain", emailparts[1]);
 			mc.sendEmail(dto.getUserId(), dto);
 
-			response.addCookie(usernameCookie);
+			response.addCookie(userIdCookie);
 			
 			return "member/Find_Info/viewAllPW";
 		} else {
@@ -201,21 +201,21 @@ public class LoginController {
 	
 	//이메일 하이퍼링크를 통해 들어오는 비밀번호 변경 페이지
 	@GetMapping("/UpdatePasswordPage")
-	public ModelAndView UpdatePasswordPage(String username) {
+	public ModelAndView UpdatePasswordPage(String userId) {
 		ModelAndView mav = new ModelAndView();
-			mav.addObject("username", username);
+			mav.addObject("userId", userId);
 			mav.setViewName("member/Find_Info/updatePassword");
 		return mav;
 	}
 	
 	//비밀번호 변경
 	@PostMapping("/UpdatePassword")
-	public String UpdatePassword(String username, String password) {
+	public String UpdatePassword(String userId, String password) {
 		
 		String realPassword = sc.encrypt(password);
 		
 		Map<String, String> map = new HashMap<>();
-			map.put("username", username);
+			map.put("userId", userId);
 			map.put("password", realPassword);
 			serv.updatePassword(map);
 		return "redirect:/UpdateComplete";

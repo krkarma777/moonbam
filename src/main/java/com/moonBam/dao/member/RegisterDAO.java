@@ -21,8 +21,8 @@ public class RegisterDAO {
 	}
 
 	//아이디 중복 검사 에이젝스
-	public boolean isUsernameDuplicate(String username) {
-		int num = session.selectOne("com.config.MemberMapper.isUsernameDuplicate", username);
+	public boolean isUserIdDuplicate(String userId) {
+		int num = session.selectOne("com.config.MemberMapper.isUserIdDuplicate", userId);
 		return num > 0;
 	}
 

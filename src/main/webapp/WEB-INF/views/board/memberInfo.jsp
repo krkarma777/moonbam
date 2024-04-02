@@ -13,8 +13,8 @@
 <%
 MemberDTO member = (MemberDTO)request.getAttribute("member");
 String userId=member.getUserId();
-String userName=member.getUserName();
-String userGender=member.getUserGender();
+/* String userName=member.getUserName();
+String userGender=member.getUserGender(); */
 String nickname=member.getNickname();
 String userSignDate=member.getUserSignDate();
 %>
@@ -27,14 +27,14 @@ String userSignDate=member.getUserSignDate();
                 <th scope="row">아이디</th>
                 <td><%= userId %></td>
             </tr>
-            <tr>
+            <%-- <tr>
                 <th scope="row">이름</th>
                 <td><%= userName %></td>
             </tr>
             <tr>
                 <th scope="row">성별</th>
                 <td><%= userGender %></td>
-            </tr>
+            </tr> --%>
             <tr>
                 <th scope="row">닉네임</th>
                 <td><%= nickname %></td>

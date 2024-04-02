@@ -32,7 +32,7 @@ public class TestController {
 	// 멤버 삭제
 	@GetMapping("/IDDelete")
 	@ResponseBody
-	public void IDDelete(String username) {
-		serv.IDDelete(username);
+	public void IDDelete(String userId) {
+		serv.IDDelete(userId);
 	}
 }
