@@ -365,6 +365,8 @@ $RECYCLE.BIN/
 # *.iml
 # *.ipr
 
+config.properties
+
 # CMake
 cmake-build-*/
 
