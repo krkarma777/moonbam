@@ -69,4 +69,8 @@ public class LoginDAO {
 		MemberDTO dto = session.selectOne("com.config.MemberMapper.selectMemberData", userId);
 		return dto;
 	}
+
+	public void updatePassword(Map<String, String> map) {
+		session.selectOne("com.config.MemberMapper.updatePassword", map);
+	}
 }

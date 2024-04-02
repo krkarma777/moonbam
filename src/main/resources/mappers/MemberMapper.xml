@@ -294,6 +294,12 @@
 		WHERE 
 			userId = #{userId}
 	</select>
+	
+	<update id="updatePassword" parameterType="hashmap">
+		UPDATE 	memberDB
+		SET		userPw = #{userPw}
+		WHERE	userId = #{userId}
+	</update>
 
 	<!-- **************************************************************** -->
 	<!-- *********************회원가입 Mapper********************************* -->

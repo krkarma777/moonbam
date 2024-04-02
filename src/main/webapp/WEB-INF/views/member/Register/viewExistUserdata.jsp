@@ -20,6 +20,15 @@
 
 	<h2>찾은 유저 정보</h2>
 	<p>${dto.getNickname()}님은 기존 회원이십니다.<br>
+	<c:if test="${dto.getGoogleConnected() == 1}">
+	&nbsp;&nbsp;- 구글 로그인 연결됨<br>
+	</c:if>
+	<c:if test="${dto.getNaverConnected() == 1}">
+	&nbsp;&nbsp;- 네이버 로그인 연결됨<br>
+	</c:if>
+	<c:if test="${dto.getKakaoConnected() == 1}">
+	&nbsp;&nbsp;- 카카오 로그인 연결됨<br>
+	</c:if>
 		아이디:	${dto.getUserId()}<br>
 		가입일:	${dto.getUserSignDate()}
 	</p>

@@ -81,4 +81,8 @@ public class LoginService {
 		return dto;
 	}
 
+	public void updatePassword(Map<String, String> map) {
+		dao.updatePassword(map);
+	}
+
 }
