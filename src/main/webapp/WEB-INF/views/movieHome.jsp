@@ -17,6 +17,7 @@
 		List<PostPageDTO> movieInfoList = (List<PostPageDTO>)request.getAttribute("movieInfoList");
     	ContentDataFormating cdf = new ContentDataFormating();
     	List<ContentDTO> movieTopList = (List<ContentDTO>)request.getAttribute("movieTopList");
+    	
 %>    
 <html>
 <head>
@@ -93,23 +94,25 @@
 	<div class="carousel-container">
 		<div class="carousel-slide">
 			<div class="inner" id="lastClone">
-				<%for(int i=6; i<=movieTopList.size(); i++){ %>
-					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+				<%for(int i=6; i<=movieTopList.size(); i++){ 
+					System.out.println("http://image.tmdb.org/t/p/w342"+movieTopList.get(i-1).getContImg());
+				%>
+					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
 				<%} %>
 			</div>
 			<div class="inner">
 				<%for(int i=1; i<=movieTopList.size()-5; i++){ %>
-					<a href="showContent?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+					<a href="showContent?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
 				<%} %>
 			</div>
 			<div class="inner">
 				<%for(int i=6; i<=movieTopList.size(); i++){ %>
-					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
 				<%} %>
 			</div>
 			<div class="inner" id="firstClone">
 				<%for(int i=1; i<=movieTopList.size()-5; i++){ %>
-					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
+					<a href="content-page?contId=<%=movieTopList.get(i-1).getContId() %>"><img class="innerImage" src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i-1).getContImg() %>" width="230px" height="330px"></a>
 				<%} %>
 			</div>
 		</div>

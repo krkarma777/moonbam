@@ -41,6 +41,7 @@ public class MovieResultResponseDto {
     private String poster_path;
     //private int vote_count;
     private double popularity;
+    
 	public Long getId() {
 		return id;
 	}
