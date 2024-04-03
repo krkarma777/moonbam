@@ -24,7 +24,7 @@
 			<%}else {%>
 			<!-- 로그인 -->
 			<a href="Logout">로그아웃</a>
-			<a href="MypageServlet">마이페이지</a>
+			<a href="/acorn/userinfo">마이페이지</a>
 			<%} %>
 			<!-- 관리자인 경우 -->
 			<!-- <a href="Logout">로그아웃</a>
