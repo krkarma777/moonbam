@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
@@ -72,5 +73,16 @@ public class NewCommerController {
 	@GetMapping("/CheckExistUser")
 	public String registerErrorPage() {
 		return "member/Register/registerErrorPage";
+	}
+	
+	@PostMapping("/InsertData")
+	public ModelAndView register(MemberDTO dto, HttpServletRequest request) {
+		System.out.println(dto);
+		String userPwConfirm = request.getParameter("userPwConfirm");
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("dto", dto);
+		mav.addObject("userPwConfirm", userPwConfirm);
+		mav.setViewName("member/Register/registerLoading");
+		return mav;
 	}
 }
