@@ -53,7 +53,7 @@ public class GoogleLoginController {
     
     @Autowired
     OpenApiController oac;
-
+    
     // 구글 로그인창 호출
     @GetMapping(value = "Login/getGoogleAuthUrl")
     public ResponseEntity<?> getGoogleAuthUrl(HttpServletRequest request) throws Exception {

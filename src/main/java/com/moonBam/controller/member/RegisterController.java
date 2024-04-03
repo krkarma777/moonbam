@@ -32,10 +32,10 @@ public class RegisterController {
 	MailController mc;
 
 	//회원가입
-	@PostMapping("/InsertData")
+	@PostMapping("/RegisterData")
 	public String InsertData(HttpServletRequest request, MemberDTO dto) throws Exception {
 		
-		System.out.println(dto);
+		System.out.println("RegisterData: "+ dto);
 		
 		String result = "member/Register/registerFailure";
 		

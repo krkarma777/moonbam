@@ -1,0 +1,66 @@
+@charset "UTF-8";
+body {
+  background: #FFFFFF;
+}
+h4 {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  margin: 0;
+  font-weight: 200;
+  font-family: sans-serif;
+  color: #000000;
+}
+#content {
+  margin: -45px -60px;
+  width: 120px;
+  height: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+#dot {
+  background: #FF416C;
+  border-radius: 50%; 
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 30px;
+  left: 27px;
+  transform-origin: center bottom;
+  animation: dot .6s ease-in-out infinite;	/* 0.6초만에 빠르게 상하 이동 */
+}
+@-webkit-keyframes dot {
+ 0% { transform: scale(1,.7) }				/* 가로 1배, 세로 0.7배 - 0생략 */
+ 20% { transform: scale(.7,1.2) }
+ 40% { transform: scale(1,1)} 
+ 50% { bottom: 100px;} 
+ 46% { transform: scale(1,1)} 
+ 80% { transform: scale(.7,1.2) } 
+ 90% { transform: scale(.7,1.2) } 
+ 100% { transform: scale(1,.7) }
+}
+.step {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-top: 2px solid #FF4B2B;
+  top: 0;
+  right:0;
+}
+@-webkit-keyframes anim { 
+  0% { 
+    opacity: 0;					/* 투명 */
+    top: 0; 					/* 화면 상단 */
+    right: 0; 					/* 화면 좌측 */
+  }
+  50% { opacity: 1; }			/* 불투명 / 화면 상단 좌측에 유지 */
+  100% { 
+    top: 90px; 					/* 화면 아래에 위치 */
+    right: 90px;				/* 화면 우측에 위치 */
+    opacity: 0;
+  }
+}
+#s1 { animation: anim 1.8s linear infinite; }			/* 0.6초만에 빠르게 상하 이동하기 때문에 첫 번째 스텝 타이밍 */
+#s2 { animation: anim 1.8s linear infinite -.6s; }		/* 0.6초만에 빠르게 상하 이동하기 때문에 두 번째 스텝 타이밍 */
+#s3 { animation: anim 1.8s linear infinite -1.2s; }		/* 0.6초만에 빠르게 상하 이동하기 때문에 세 번째 스텝 타이밍 */
