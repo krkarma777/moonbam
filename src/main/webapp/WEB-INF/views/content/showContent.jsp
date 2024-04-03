@@ -91,7 +91,7 @@ String contImg = content.getContImg();
 		style="width: 1200px; height: auto; margin: auto;">
 		<div style="display: flex;">
 			<div>	
-				<img src="${content.getContImg() }" height="400px" width="279px">
+				<img src="http://image.tmdb.org/t/p/w342${content.getContImg() }" height="400px" width="279px">
 			</div>
 			<div style="width: auto; padding-left: 10px; align-items: center;">
 				<span style="font-size: 20px;"><b>${content.getContTitle() }</b></span>
