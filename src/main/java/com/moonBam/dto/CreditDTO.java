@@ -19,6 +19,7 @@ public class CreditDTO {
 //    "order": 0
 	private boolean adult;
 	private int gender;
+	private String id;
 	private String known_for_department;
 	private String name;
 	private String original_name;
