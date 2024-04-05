@@ -91,14 +91,17 @@ public class GoogleLoginController {
         
         //받은 토큰을 토큰객체에 저장
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
-//        log.info("responseBody {}",googleLoginResponse.toString());
         String googleToken = googleLoginResponse.getId_token();
+        	log.info("googleToken: {}", googleToken);
+        	System.out.println("googleToken: "+ googleToken);
         
         //받은 토큰을 구글에 보내 유저정보를 얻음
         String requestUrl = UriComponentsBuilder.fromHttpUrl(googleAuthUrl + "/tokeninfo").queryParam("id_token",googleToken).toUriString();
         
         //허가된 토큰의 유저정보를 결과로 받음
         String resultJson = restTemplate.getForObject(requestUrl, String.class);
+    		log.info("resultJson: ", resultJson);        
+        	System.out.println("resultJson: "+ resultJson);
 
         //받은 JSON데이터를 사용할 Map데이터로 변환
         ObjectMapper objectMapper = new ObjectMapper();

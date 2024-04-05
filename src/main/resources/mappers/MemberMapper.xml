@@ -181,6 +181,76 @@
 	)
 	</select>
 	
+	<!-- **************************************************************** -->
+	<!-- *********************댓글 Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- 모든 댓글 찾기 -->	
+	<select id="getAllComments" resultType="AnonymousCommentDTO" parameterType="int">
+		SELECT
+			*
+		FROM
+			ANONYMOUSCOMMENTDB
+		WHERE
+			boardNum = #{boardNum}
+		ORDER BY
+			anonymousCommentNum asc
+	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="addComment" parameterType="AnonymousCommentDTO">
+		INSERT INTO ANONYMOUSCOMMENTDB (
+			anonymousCommentNum, commentNickname, commentPassword, 
+			commentContent, commentPostDate, commentEdittedDate, boardNum
+		)
+		VALUES (
+			ANONYMOUSCOMMENTSEQ.nextval, #{commentNickname}, #{commentPassword},
+			#{commentContent}, #{commentPostDate}, #{commentEdittedDate}, #{boardNum}
+		)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="hashmap">
+		DELETE FROM ANONYMOUSCOMMENTDB
+		WHERE anonymousCommentNum = #{anonymousCommentNum}
+		And commentPassword = #{commentPassword}
+	</delete>
+	
+	
+	<!-- **************************************************************** -->
+	<!-- *********************대댓글 Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- 모든 대댓글 찾기 -->	
+	<select id="getAllReplys" resultType="AnonymousReplyDTO" parameterType="int">
+		SELECT
+			*
+		FROM
+			AnonymousReplyDB
+		WHERE
+			anonymousCommentNum = #{anonymousCommentNum}
+		ORDER BY
+			anonymousReplyNum asc
+	</select>
+	
+	<!-- 대댓글 등록 -->
+	<insert id="addReply" parameterType="AnonymousReplyDTO">
+		INSERT INTO AnonymousReplyDB (
+			anonymousReplyNum, replyNickname, replyPassword, 
+			replyContent, replyPostDate, replyEdittedDate, anonymousCommentNum
+		)
+		VALUES (
+			ANONYMOUSREPLYSEQ.nextval, #{replyNickname}, #{replyPassword},
+			#{replyContent}, #{replyPostDate}, #{replyEdittedDate}, #{anonymousCommentNum}
+		)
+	</insert>
+	
+	<!-- 대댓글 삭제 -->
+	<delete id="deleteReply" parameterType="map">
+		DELETE FROM AnonymousReplyDB
+		WHERE anonymousReplyNum = #{anonymousReplyNum}
+		And replyPassword = #{replyPassword}
+	</delete>
 	
 	<!-- **************************************************************** -->
 	<!-- *********************API Mapper********************************* -->

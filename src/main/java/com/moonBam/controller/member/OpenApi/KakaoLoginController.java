@@ -77,12 +77,11 @@ public class KakaoLoginController {
     	
     	//2. 코드를 통해 토큰 받기
     	String accessToken = getAccessToken(code);
-    	//System.out.println("accessToken: "+accessToken);
     	
     	//3. 사용자 정보 받기
     	Map<String, Object> map = getUserInfo(accessToken);
     	ObjectMapper objectMapper = new ObjectMapper();
-    	System.out.println(map);
+    	log.info("카카오 로그인 시 서버에서 받아오는 유저 정보: "+ map);
 
     	//아이디
         String jsonString2 = objectMapper.writeValueAsString(map.get("kakao_account"));

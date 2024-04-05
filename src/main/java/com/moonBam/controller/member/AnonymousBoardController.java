@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AnonymousBoardDTO;
+import com.moonBam.dto.AnonymousCommentDTO;
 import com.moonBam.service.member.AnonymousBoardService;
 
 @Controller
@@ -30,6 +31,9 @@ public class AnonymousBoardController {
 
 	@Autowired
 	AnonymousBoardService serv;
+	
+	@Autowired
+	AjaxController ajaxController;
 	
 	//게시판 글 목록 보기
 	@GetMapping("/viewDBoardList")
@@ -229,7 +233,6 @@ public class AnonymousBoardController {
 		//날짜 형식 변경
 		AnonymousBoardDTO dto = serv.viewDBoardContent(boardNum);
 			dto.setEdittedDate(chooseDateForm(dto.getEdittedDate()));
-		
 			
 		ModelAndView mav = new ModelAndView();
 			mav.addObject("userBylike", userBylike);
@@ -238,6 +241,7 @@ public class AnonymousBoardController {
 			mav.addObject("dto", dto);
 			mav.addObject("prev", prev);
 			mav.addObject("next", next);
+			
 			mav.setViewName("member/Board/viewDBoardContent");
 		return mav;
 	}
@@ -328,7 +332,7 @@ public class AnonymousBoardController {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date edittedDate = format.parse(str);									//등록, 수정된 날짜
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. MM. dd.");	//연월일 Format
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. MM. dd");		//연월일 Format
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH시 mm분");			//시분 Format
 		
 		String todayForm = dateFormat.format(new Date());						//현재 시간의 연월일
