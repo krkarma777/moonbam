@@ -68,6 +68,17 @@ public class AjaxController {
 		return mesg;
 	}
 	
+	//메인에서 이메일 중복 확인 에이젝스
+	@PostMapping("AjaxCheckEmail")
+	public String AjaxCheckEmail(String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		boolean cantRegister = rServ.RegisterPossible(userId);
+		String mesg = "RegisterSuccess";
+		if (cantRegister) {
+			mesg = "RegisterFail";                
+        }
+		return mesg;
+	}
+	
 	//전체 비밀번호 찾기에서 질문에 따른 대답 확인 에이젝스
 	@PostMapping("AjaxMatchQnA")
 	public String AjaxMatchQnA(String userInfo, String answer, String userId) {

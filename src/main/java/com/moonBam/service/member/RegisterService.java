@@ -47,4 +47,8 @@ public class RegisterService {
 			dataForFindExistEmail.put("userEmailDomain", userEmailDomain);
 		return dao.isUserEmailDuplicate(dataForFindExistEmail);
 	}
+
+	public boolean RegisterPossible(String userId) {
+		return dao.RegisterPossible(userId);
+	}
 }

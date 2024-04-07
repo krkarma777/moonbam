@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>회원 가입</title>
+	<title>회원가입 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_input.css'/>">
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -25,7 +25,7 @@
 			
 			<!-- 아이디 입력칸(회원가입 1단계 이메일 입력칸 값) -->
 			<label for="userEmailDomain">*이메일 인증</label>
-				<input type="email" id="email" name="userId" class ="userEmail" maxlength="30" value="${userId}" required readonly>
+				<input type="email" id="email" name="userId" class ="userEmail" maxlength="30" value="${userId}" required readonly maxlength="40">
 			
 			<!-- 이메일 인증 버튼 -->
 			<div style="display: flex; gap: 5px;">
@@ -36,11 +36,11 @@
 			
 			<!-- 비밀번호 입력칸(6글자 이상)(반드시 입력되어야 함) -->
 			<label for="userPw">*비밀번호 (최소 6글자)</label> 
-				<input type="password" id="userPw" name="userPw" class="pw" minlength="6" required> 
+				<input type="password" id="userPw" name="userPw" class="pw" minlength="6" required maxlength="30"> 
 
 			<!-- 비밀번호 재입력칸(6글자 이상)(반드시 입력되어야 함) -->
 			<label for="userPwConfirm">*비밀번호 재입력</label> 
-				<input type="password" id="userPwConfirm" name="userPwConfirm" class="pw" minlength="6" required>
+				<input type="password" id="userPwConfirm" name="userPwConfirm" class="pw" required maxlength="30">
 				<!-- 비밀번호와 비밀번호 재입력이 상이할 경우, 문구 출력 -->
 				<span id="pwMismatch" style="color: red;"></span> 
 			

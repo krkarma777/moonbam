@@ -11,7 +11,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Found ID</title>
+	<title>아이디 출력 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
 

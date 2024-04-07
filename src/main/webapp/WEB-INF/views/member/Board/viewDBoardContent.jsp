@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>글</title>
+	<title>게시판 게시글 보기</title>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<!-- 외부 css 파일 -->
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/member/unfound.css'/>">

@@ -335,6 +335,14 @@
 			userId = #{userId}
 			AND userPw = #{userPw}
 	</select>
+	
+	<!-- 이메일 중복 확인 에이젝스 -->
+	<select id="registerPossible" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM memberDB
+		WHERE 
+			userId = #{userId}
+	</select>
 		
 	<!-- 전체 비밀번호 - 닉네임으로 찾기 -->
 	<select id="findPWbyNickname" resultType="int" parameterType="hashmap">

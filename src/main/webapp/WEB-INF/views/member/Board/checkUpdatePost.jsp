@@ -7,11 +7,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <title>게시판 글 삭제 확인</title>
+    <title>게시글 수정 비밀번호 확인 페이지</title>
     <!-- 부트스트랩 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     
-    <!-- 사용자 정의 스타일 -->
 <style>
         body {
             padding: 20px;
@@ -70,7 +69,6 @@
     <!-- 부트스트랩 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     
-    <!-- 여기에 이전 페이지에서 복사한 JavaScript 코드를 붙여넣으세요 -->
     <script type="text/javascript">
         $(function(){
             $("#ajaxCheck").on("click", function(){
