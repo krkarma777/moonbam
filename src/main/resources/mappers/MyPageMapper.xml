@@ -4,19 +4,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MyPageMapper">
 <!-- updateMember -->
-<update id="updateMember" parameterType="MemberDTO">
-     update member
+<update id="updateNickname" parameterType="MemberDTO">
+     update memberDB
      set 
-     nickname = #{nickname},
-     userPhoneNum1 = #{userPhoneNum1},
-     userPhoneNum2 = #{userPhoneNum2},
-     userPhoneNum3 = #{userPhoneNum3},
-     userEmailId = #{userEmailId },
-     userEmailDomain = #{userEmailDomain}
-     
+     nickname = #{newNickname}
     where userId = #{userId}
    </update>
-
+<update id="updateRestoreEmailId" parameterType="MemberDTO">
+     update memberDB
+     set 
+     restoreUserEmailId = #{newRestoreEmailId}
+    where userId = #{userId}
+   </update>
+   <update id="updateRestoreEmailDomain" parameterType="MemberDTO">
+     update memberDB
+     set 
+     restoreUserEmailDomain = #{newRestoreUserEmailDomain}
+    where userId = #{userId}
+   </update>
  <!--	 updatePwdMember -->
 
 	<!-- <delete id="deleteMember" parameterType="string">
@@ -27,14 +32,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 where userid = #{userid}
 	</delete>-->
 	
-	<select id="selectMyReview" parameterType="string" resultType="ReviewDTO">
-       select POSTID,POSTBOARD,USERID,POSTTITLE,POSTDATE,POSTTEXT
+	<select id="selectMyPost" parameterType="string" resultType="PostDTO">
+       select postid, postBoard, userid, contid, postTitle, postDate, postEditDate, postText, nickname, categoryId
        from POSTDB
        where userId = #{userId}
 	</select>
 	
 	<select id="selectMyComm" parameterType="string" resultType="CommentDTO">
-       select comid, postid, userId, comdate, comtext, abovecom
+       select  comId, postId , comDate,  comText 
        from commentDB
        where userId = #{userId}
 	</select>
