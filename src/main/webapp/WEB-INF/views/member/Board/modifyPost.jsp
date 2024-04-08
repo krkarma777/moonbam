@@ -105,12 +105,12 @@ $(function(){
 	    <div class="col-md-6 mb-3">
 		    <label for="nickname" class="form-label">닉네임:</label>
 		    <input type="text" name="nickname" value="${dto.nickname}" class="form-control" required="required"
-		        pattern="^[가-힣]{1,6}$|^[a-zA-Z0-9]{1,12}$" 
-		        title="한글 6글자 또는 영어+숫자 12글자 이내로 입력해주세요.">
+			pattern="^[가-힣]{1,20}$|^[a-zA-Z0-9]{1,40}$" 
+			title="한글 20글자 또는 영어+숫자 40글자 이내로 입력해주세요.">
 	    </div>
 	    <div class="col-md-6 mb-3">
 		    <label for="password" class="form-label">비밀번호:</label>
-		    <input type="password" name="password" value="${dto.password}" class="form-control" required="required">
+		    <input type="password" name="password" value="${dto.password}" class="form-control" required="required" maxlength="30">
 		</div>
 	</div>
 	<div class="mb-3">
