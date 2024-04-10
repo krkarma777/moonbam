@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +13,54 @@
 	crossorigin="anonymous">
 
 </head>
+
+<!-- popup 시작 -->
+<script type="text/javascript">
+var list = <%= request.getAttribute("list") %>;   
+
+    $(function (){
+    	// 팝업 창 위치 &크기 변수
+		let sLeft=0;
+		let sTop=0;
+		let width ;
+    	let height ;
+    	
+        for (var i = 0; i < list.length; i++) {
+        	let flag= true;	/*  false 시 팝업 안나옴 */
+        	if(flag){
+        		// 팝업 창의 위치 설정
+        		setPostion(i);
+        		// 팝업 창 띄위기
+        	/* 	console.log(sLeft);
+        		console.log(sTop);
+        		console.log(width);
+        		console.log(height); */
+        		
+        		window.open("ViewPopupController?num=" + list[i], "popup" + i,
+        				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
+        	}
+        }
+        
+        // 팝업 창의 위치 설정
+      
+	function setPostion(i) {
+		console.count();
+			let screenWidth = screen.width;
+			let screenHeight = screen.height;
+			// 창의 크기
+			width = (screenWidth / 4);
+			height = (screenHeight / 3);
+//			console.log("화면 크기: " , width);
+	//		console.log("화면 높이: " ,height);
+			// 창의 시작점
+			sLeft = width * ((i % 4));
+			sTop = height * Math.floor(i / 4);
+	//		console.log("팝업 크기: " , width);
+	//		console.log("팝업 높이: " ,height);
+		}
+	});
+</script>
+<!-- popup 종료 -->
 
 <body class="bg-light" style="height: 100vh;">
 	<!-- 네비게이션 바 -->

@@ -13,7 +13,7 @@ import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.service.MainService;
 import com.moonBam.service.PostService;
-import com.moonBam.service.ReviewService;
+import com.moonBam.service.adminpage.announcement.AnnouncementService;
 
 @Controller
 public class MainController {
@@ -23,6 +23,10 @@ public class MainController {
     @Autowired
     MainService mService;
 
+    // pupop
+    @Autowired
+    AnnouncementService annoService;
+    
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category) {
         String nextPage = "main";
@@ -48,9 +52,14 @@ public class MainController {
             }
         });
 
+        // popup
+        List<Integer> list = annoService.popupNnumList("popup");
+      	
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
+        // popup
+        model.addAttribute("list", list);
 
         if (category != null) {
             switch (category) {
