@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      userPhoneNum1 = #{userPhoneNum1},
      userPhoneNum2 = #{userPhoneNum2},
      userPhoneNum3 = #{userPhoneNum3}
-     
+</update>     
 <update id="updateNickname" parameterType="MemberDTO">
      update memberDB
      set 
