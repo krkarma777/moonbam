@@ -91,7 +91,7 @@ public class MyPageController {
 	        // 마이페이지로 리다이렉트
 	        return "redirect:/member/userinfo";
 	    }
-	}
+	
 
 	 @PostMapping("/updateNickname")
 	    public String updateNickname(
@@ -180,8 +180,10 @@ public class MyPageController {
 	            model.addAttribute("postList", list);
 	            return new ModelAndView("member/MyPage/MypageArticle");
 	        } else {
+	        	System.out.println("myPost의 else");
 	            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
 	            return new ModelAndView("redirect:/Login");
+	            
 	        }
 	    }
 	 @GetMapping("/myComment")
