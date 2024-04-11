@@ -39,13 +39,12 @@ public class NewCommerController {
 	//로그인 메인에서 기존 유저 확인		//약관 동의 연결
 	@PostMapping("/RegisterTerms")
 	public String RegisterTerms(HttpServletRequest request, String userId, HttpSession session) {
-		System.out.println(userId);
 		MemberDTO dto = openApiService.selectOneAPIMember(userId);
 		
-		//이름과 SSN이 모두 일치하는 DB정보가 있을 경우, 기존 유저 있음 jsp로 이동
+		//이름과 SSN이 모두 일치하는 DB정보가 있을 경우, 비정상적 접근 페이지로 이동
 		if (dto != null) {
 			request.setAttribute("dto", dto);
-			return "member/Register/viewExistUserdata";
+			return "member/Find_Info/emailErrorPage";
 
 		//이름과 SSN이 모두 일치하는 DB정보가 없을 경우, 회원가입 2단계로 이동
 		} else {
