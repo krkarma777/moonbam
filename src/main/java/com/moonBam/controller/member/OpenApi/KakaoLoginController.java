@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moonBam.controller.member.DebugBoardController;
+import com.moonBam.controller.member.AnonymousBoardController;
 import com.moonBam.controller.member.SecurityController;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
@@ -51,7 +51,7 @@ public class KakaoLoginController {
     OpenApiService serv;
     
     @Autowired
-    DebugBoardController dbc;
+    AnonymousBoardController dbc;
     
     @Autowired
     SecurityController sc;
@@ -77,17 +77,25 @@ public class KakaoLoginController {
     	
     	//2. 코드를 통해 토큰 받기
     	String accessToken = getAccessToken(code);
-    	//System.out.println("accessToken: "+accessToken);
     	
     	//3. 사용자 정보 받기
     	Map<String, Object> map = getUserInfo(accessToken);
     	ObjectMapper objectMapper = new ObjectMapper();
+    	log.info("카카오 로그인 시 서버에서 받아오는 유저 정보: "+ map);
 
     	//아이디
-    	String id = sc.encrypt(String.valueOf(map.get("id")));
+        String jsonString2 = objectMapper.writeValueAsString(map.get("kakao_account"));
+        JsonNode jsonNode2 = objectMapper.readTree(jsonString2);
+        String id = jsonNode2.get("email").asText();
     	
     	//이미 가입한 사람인지 확인
         MemberDTO check  = serv.selectOneAPIMember(id);
+        
+        //기가입자이지만, 카카오 연동이 안된 사람을 연동
+        if(check != null && check.getKakaoConnected() == 0) {
+        	serv.updateAPIMemberKakaoConnected(check.getUserId());
+        }
+        
         ModelAndView mav = new ModelAndView();
       
         //미가입자일 경우, 자동 가입
@@ -96,34 +104,14 @@ public class KakaoLoginController {
             //비밀번호
             String pw = sc.encrypt("Kakao"+dbc.getNum(16));
 
-            //이름
-            String jsonString = objectMapper.writeValueAsString(map.get("properties"));
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
-            String name = jsonNode.get("nickname").asText();
-
             //닉네임
             String nickname = oac.randomNickname();
             		
-            //이메일
-            String jsonString2 = objectMapper.writeValueAsString(map.get("kakao_account"));
-            JsonNode jsonNode2 = objectMapper.readTree(jsonString2);
-            String email = jsonNode2.get("email").asText();
-            String[] emailParts = email.split("@");
-            
-            //유저 가입일
-    		Date currentDate = new Date();
-    			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-    			String userSignDate = dateFormat.format(currentDate);
-        	
     		MemberDTO dto = new MemberDTO();
 	    		dto.setUserId(id);
 	          	dto.setUserPw(pw);					
-	          	dto.setUserName(name);
 	          	dto.setNickname(nickname);
-	          	dto.setUserEmailId(emailParts[0]);			
-	          	dto.setUserEmailDomain(emailParts[1]);				
-	          	dto.setUserSignDate(userSignDate);
-	  			dto.setUserType("1");
+	          	dto.setKakaoConnected(1);
         	
 	  		//회원가입
 	  		serv.insertAPIMember(dto);	

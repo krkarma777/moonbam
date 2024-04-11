@@ -86,16 +86,12 @@ td {
 		<tr>
 			<th>아이디</th>
 			<th>비밀번호(클릭해서 확인)</th>
-			<th>이름</th>
 			<th>닉네임</th>
-			<th>SSN1</th>
-			<th>SSN2</th>
-			<th>성별</th>
-			<th>핸드폰1</th>
-			<th>핸드폰2</th>
-			<th>핸드폰3</th>
-			<th>이메일 아이디</th>
-			<th>이메일 도메인</th>
+			<th>복구 이메일 아이디</th>
+			<th>복구 이메일 도메인</th>
+			<th>구글 연동 여부</th>
+			<th>네이버 연동 여부</th>
+			<th>카카오 연동 여부</th>
 			<th>가입일</th>
 			<th>유형</th>
 			<th>삭제</th>
@@ -104,16 +100,12 @@ td {
 			<tr>
 				<td>${dto.userId}</td>
 				<td><div class="pw" data-pw="${dto.getUserPw()}">${dto.getUserPw()}</div></td>
-				<td>${dto.getUserName()}</td>
 				<td>${dto.getNickname()}</td>
-				<td>${dto.getUserSSN1()}</td>
-				<td>${dto.getUserSSN2()}</td>
-				<td>${dto.getUserGender()}</td>
-				<td>${dto.getUserPhoneNum1()}</td>
-				<td>${dto.getUserPhoneNum2()}</td>
-				<td>${dto.getUserPhoneNum3()}</td>
-				<td>${dto.getUserEmailId()}</td>
-				<td>${dto.getUserEmailDomain()}</td>
+				<td>${dto.getRestoreUserEmailId()}</td>
+				<td>${dto.getRestoreUserEmailDomain()}</td>
+				<td>${dto.getGoogleConnected()}</td>
+				<td>${dto.getNaverConnected()}</td>
+				<td>${dto.getKakaoConnected()}</td>
 				<td>${dto.getUserSignDate()}</td>
 				<td>${dto.getUserType()}</td>
 				<td><button class="deleteBtn" data-id="${dto.getUserId()}">삭제(참조 시 X)</button></td>
@@ -153,7 +145,7 @@ td {
 				var rp = $(this);
 				var ecPW = rp.attr("data-pw");
 				var userPw = rp.text();
-				console.log(ecPW);
+				//console.log(ecPW);
 
 				if (ecPW == userPw) {
 					

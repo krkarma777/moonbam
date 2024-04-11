@@ -1,10 +1,11 @@
 package com.moonBam.dao.member;
 
 
-import com.moonBam.dto.MemberDTO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.moonBam.dto.MemberDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,16 +30,16 @@ public class LoginDAO {
 	}	
 	
 	//아이디 찾기
-	public MemberDTO findUserId(Map<String, String> dataForFindUserId) {
-		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserId", dataForFindUserId);
+	public MemberDTO findUserId(Map<String, String> map) {
+		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserId", map);
 		return dto;
 	}
 
-	//비밀번호 찾기
-	public MemberDTO findUserPW(Map<String, String> dataForFindUserPW) {
-		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserPW", dataForFindUserPW);
-		return dto;
-	}
+//	//비밀번호 찾기
+//	public MemberDTO findUserPW(Map<String, String> dataForFindUserPW) {
+//		MemberDTO dto = session.selectOne("com.config.MemberMapper.findUserPW", dataForFindUserPW);
+//		return dto;
+//	}
 	
 	//로그인
 	public MemberDTO login(Map<String, String> idPW) {
@@ -64,15 +65,13 @@ public class LoginDAO {
 		return num > 0;
 	}
 	
-	//전체 비밀번호 - 핸드폰 번호로 찾기
-	public boolean findPWbyPhoneNum(Map<String, String> phoneNumMap) {
-		int num = session.selectOne("com.config.MemberMapper.findPWbyPhoneNum", phoneNumMap);
-		return num > 0;
-	}
-	
 	//전체 비밀번호 출력용
 	public MemberDTO selectMemberData(String userId) {
 		MemberDTO dto = session.selectOne("com.config.MemberMapper.selectMemberData", userId);
 		return dto;
+	}
+
+	public void updatePassword(Map<String, String> map) {
+		session.selectOne("com.config.MemberMapper.updatePassword", map);
 	}
 }

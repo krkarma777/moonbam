@@ -1,5 +1,6 @@
 package com.moonBam.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.service.MainService;
 import com.moonBam.service.PostService;
-import com.moonBam.service.ReviewService;
+import com.moonBam.service.adminpage.announcement.AnnouncementService;
 
 @Controller
 public class MainController {
@@ -22,6 +23,9 @@ public class MainController {
     PostService service;
     @Autowired
     MainService mService;
+
+    @Autowired
+    AnnouncementService annoService;
 
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category) {
@@ -48,9 +52,14 @@ public class MainController {
             }
         });
 
+        // popup
+        List<Integer> list = annoService.popupNnumList("popup");
+      	
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
+        // popup
+        model.addAttribute("list", list);
 
         if (category != null) {
             switch (category) {
@@ -71,6 +80,11 @@ public class MainController {
                 break;
             }
         }
+        
+        List<Integer> list = new ArrayList<Integer>();
+		list = annoService.popupNnumList("popup");
+		model.addAttribute("list", list);
+        
         return nextPage;
     }
 

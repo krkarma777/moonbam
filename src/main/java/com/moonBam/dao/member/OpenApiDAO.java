@@ -27,6 +27,18 @@ public class OpenApiDAO {
 		session.update("updateAPIMemberNickname", map);
 		
 	}
+
+	public void updateAPIMemberGoogleConnected(String userId) {
+		session.update("updateAPIMemberGoogleConnected", userId);
+	}
+
+	public void updateAPIMemberNaverConnected(String userId) {
+		session.update("updateAPIMemberNaverConnected", userId);
+	}
+
+	public void updateAPIMemberKakaoConnected(String userId) {
+		session.update("updateAPIMemberKakaoConnected", userId);
+	}
 	
 	
 }

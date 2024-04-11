@@ -181,6 +181,76 @@
 	)
 	</select>
 	
+	<!-- **************************************************************** -->
+	<!-- *********************댓글 Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- 모든 댓글 찾기 -->	
+	<select id="getAllComments" resultType="AnonymousCommentDTO" parameterType="int">
+		SELECT
+			*
+		FROM
+			ANONYMOUSCOMMENTDB
+		WHERE
+			boardNum = #{boardNum}
+		ORDER BY
+			anonymousCommentNum asc
+	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="addComment" parameterType="AnonymousCommentDTO">
+		INSERT INTO ANONYMOUSCOMMENTDB (
+			anonymousCommentNum, commentNickname, commentPassword, 
+			commentContent, commentPostDate, commentEdittedDate, boardNum
+		)
+		VALUES (
+			ANONYMOUSCOMMENTSEQ.nextval, #{commentNickname}, #{commentPassword},
+			#{commentContent}, #{commentPostDate}, #{commentEdittedDate}, #{boardNum}
+		)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="hashmap">
+		DELETE FROM ANONYMOUSCOMMENTDB
+		WHERE anonymousCommentNum = #{anonymousCommentNum}
+		And commentPassword = #{commentPassword}
+	</delete>
+	
+	
+	<!-- **************************************************************** -->
+	<!-- *********************대댓글 Mapper********************************* -->
+	<!-- **************************************************************** -->
+	
+	<!-- 모든 대댓글 찾기 -->	
+	<select id="getAllReplys" resultType="AnonymousReplyDTO" parameterType="int">
+		SELECT
+			*
+		FROM
+			AnonymousReplyDB
+		WHERE
+			anonymousCommentNum = #{anonymousCommentNum}
+		ORDER BY
+			anonymousReplyNum asc
+	</select>
+	
+	<!-- 대댓글 등록 -->
+	<insert id="addReply" parameterType="AnonymousReplyDTO">
+		INSERT INTO AnonymousReplyDB (
+			anonymousReplyNum, replyNickname, replyPassword, 
+			replyContent, replyPostDate, replyEdittedDate, anonymousCommentNum
+		)
+		VALUES (
+			ANONYMOUSREPLYSEQ.nextval, #{replyNickname}, #{replyPassword},
+			#{replyContent}, #{replyPostDate}, #{replyEdittedDate}, #{anonymousCommentNum}
+		)
+	</insert>
+	
+	<!-- 대댓글 삭제 -->
+	<delete id="deleteReply" parameterType="map">
+		DELETE FROM AnonymousReplyDB
+		WHERE anonymousReplyNum = #{anonymousReplyNum}
+		And replyPassword = #{replyPassword}
+	</delete>
 	
 	<!-- **************************************************************** -->
 	<!-- *********************API Mapper********************************* -->
@@ -196,12 +266,12 @@
 	<!-- API 회원가입 -->
 	<insert id="insertAPIMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-			userId, userPw, userName, 
-			nickname, userEmailId, userEmailDomain
+			userId, userPw, nickname, 
+			googleConnected, naverConnected, kakaoConnected
 		)
 		VALUES (
-			#{userId}, #{userPw}, #{userName},
-			#{nickname}, #{userEmailId}, #{userEmailDomain}
+			#{userId}, #{userPw}, #{nickname},
+			#{googleConnected}, #{naverConnected}, #{kakaoConnected}
 		)
 	</insert>
 	
@@ -209,6 +279,24 @@
 	<update id="updateAPIMemberNickname" parameterType="hashmap">
 		UPDATE 	memberDB
 		SET		nickname = #{nickname}
+		WHERE	userId = #{userId}
+	</update>
+	
+	<update id="updateAPIMemberGoogleConnected" parameterType="String">
+		UPDATE 	memberDB
+		SET		googleConnected = 1
+		WHERE	userId = #{userId}
+	</update>
+	
+	<update id="updateAPIMemberNaverConnected" parameterType="String">
+		UPDATE 	memberDB
+		SET		naverConnected = 1
+		WHERE	userId = #{userId}
+	</update>
+	
+	<update id="updateAPIMemberKakaoConnected" parameterType="String">
+		UPDATE 	memberDB
+		SET		kakaoConnected = 1
 		WHERE	userId = #{userId}
 	</update>
 	
@@ -224,25 +312,11 @@
 		FROM 
 			memberDB
 		WHERE 
-			userName = #{userName}
-			AND userSSN1 = #{ssn1}
-			AND userSSN2 = #{ssn2}
+			restoreUserEmailId = #{restoreUserEmailId}
+			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
 	</select>
 
-	<!-- 비밀번호 찾기 -->
-	<select id="findUserPW" resultType="MemberDTO" parameterType="hashmap">
-		SELECT
-			*
-		FROM 
-			memberDB
-		WHERE 
-			userName = #{userName}
-			AND userId = #{userId}
-			AND userSSN1 = #{ssn1}
-			AND userSSN2 = #{ssn2}
-	</select>
-	
-		<!-- 로그인 -->
+	<!-- 로그인 -->
 	<select id="login" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
 			*
@@ -277,19 +351,8 @@
 		FROM memberDB
 		WHERE 
 			userid = #{userid}
-			AND userEmailId = #{userEmailId}
-			AND userEmailDomain = #{userEmailDomain}
-	</select>
-	
-	<!-- 전체 비밀번호 - 핸드폰 번호로 찾기 -->
-	<select id="findPWbyPhoneNum" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userid = #{userid}
-			AND userPhoneNum1 = #{userPhoneNum1}
-			AND userPhoneNum2 = #{userPhoneNum2}
-			AND userPhoneNum3 = #{userPhoneNum3}
+			AND restoreUserEmailId = #{restoreUserEmailId}
+			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
 	</select>
 	
 	<!-- 전체 비밀번호 출력용 -->
@@ -301,6 +364,12 @@
 		WHERE 
 			userId = #{userId}
 	</select>
+	
+	<update id="updatePassword" parameterType="hashmap">
+		UPDATE 	memberDB
+		SET		userPw = #{userPw}
+		WHERE	userId = #{userId}
+	</update>
 
 	<!-- **************************************************************** -->
 	<!-- *********************회원가입 Mapper********************************* -->
@@ -309,14 +378,14 @@
 	<!-- 회원가입 -->
 	<insert id="insertNewMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-		userId, userPw, userName, userSSN1, userSSN2, 
-		userGender, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3,
-		userEmailId, userEmailDomain
+		userId, userPw, nickname, 
+		restoreUserEmailId, restoreUserEmailDomain,
+		userSignDate, userType
 		)
 		VALUES (
-		#{userId}, #{userPw}, #{userName}, #{userSSN1}, #{userSSN2},
-		#{userGender}, #{nickname}, #{userPhoneNum1}, #{userPhoneNum2},
-		#{userPhoneNum3}, #{userEmailId}, #{userEmailDomain}
+		#{userId}, #{userPw}, #{nickname},
+		#{restoreUserEmailId}, #{restoreUserEmailDomain},
+		#{userSignDate}, #{userType}
 		)
 	</insert>
 
@@ -334,16 +403,6 @@
 		WHERE nickname = #{nickname}
 	</select>
 
-	<!-- 핸드폰 번호 중복 검사 에이젝스 -->
-	<select id="isUserPNDuplicate" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userPhoneNum1 = #{userPhoneNum1}
-			AND userPhoneNum2 = #{userPhoneNum2}
-			AND userPhoneNum3 = #{userPhoneNum3}
-	</select>
-	
 	<!-- 이메일 중복 검사 에이젝스 -->
 	<select id="isUserEmailDuplicate" resultType="int" parameterType="hashmap">
 		SELECT COUNT(*)

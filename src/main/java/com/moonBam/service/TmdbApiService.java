@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moonBam.dao.TmdbApiDAO;
-import com.moonBam.dto.MovieResponseDto;
-import com.moonBam.dto.MovieResultResponseDto;
+import com.moonBam.dto.CreditDTO;
+import com.moonBam.dto.MovieResponseDTO;
+import com.moonBam.dto.MovieResultResponseDTO;
 
 
 @Service
@@ -28,10 +29,10 @@ public class TmdbApiService {
 		for(int page=1;page<=limitPage;page++) {
 			
 			// 1. MovieResponseDto getMoviePage(page)
-			MovieResponseDto movieResponse = dao.getMoviePage(page);
+			MovieResponseDTO movieResponse = dao.getMoviePage(page);
 			
 			// movie 데이터들이 담겨있는 list 순회하며 한행씩 insert
-			List<MovieResultResponseDto> movies = movieResponse.getResults();
+			List<MovieResultResponseDTO> movies = movieResponse.getResults();
 			for(int i=0;i<movies.size();i++) {
 				// 2. num insertMovie(dto)
 				int num = dao.insertMovie(movies.get(i));
@@ -50,5 +51,9 @@ public class TmdbApiService {
 		}
 
 		return insertedPage;
+	}
+
+	public List<CreditDTO> getCredits(String contId) {
+		return dao.getCredits(contId);
 	}
 }

@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moonBam.controller.member.DebugBoardController;
+import com.moonBam.controller.member.AnonymousBoardController;
 import com.moonBam.controller.member.SecurityController;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
@@ -46,14 +46,14 @@ public class GoogleLoginController {
     OpenApiService serv;
     
     @Autowired
-    DebugBoardController dbc;
+    AnonymousBoardController dbc;
     
     @Autowired
     SecurityController sc;
     
     @Autowired
     OpenApiController oac;
-
+    
     // 구글 로그인창 호출
     @GetMapping(value = "Login/getGoogleAuthUrl")
     public ResponseEntity<?> getGoogleAuthUrl(HttpServletRequest request) throws Exception {
@@ -91,14 +91,17 @@ public class GoogleLoginController {
         
         //받은 토큰을 토큰객체에 저장
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
-//        log.info("responseBody {}",googleLoginResponse.toString());
         String googleToken = googleLoginResponse.getId_token();
+        	log.info("googleToken: {}", googleToken);
+        	System.out.println("googleToken: "+ googleToken);
         
         //받은 토큰을 구글에 보내 유저정보를 얻음
         String requestUrl = UriComponentsBuilder.fromHttpUrl(googleAuthUrl + "/tokeninfo").queryParam("id_token",googleToken).toUriString();
         
         //허가된 토큰의 유저정보를 결과로 받음
         String resultJson = restTemplate.getForObject(requestUrl, String.class);
+    		log.info("resultJson: ", resultJson);        
+        	System.out.println("resultJson: "+ resultJson);
 
         //받은 JSON데이터를 사용할 Map데이터로 변환
         ObjectMapper objectMapper = new ObjectMapper();
@@ -106,7 +109,12 @@ public class GoogleLoginController {
         Map<String, Object> map = objectMapper.readValue(resultJson, Map.class);
         
         //이미 가입한 사람인지 확인
-        MemberDTO check  = serv.selectOneAPIMember(sc.encrypt((String) map.get("sub")));
+        MemberDTO check  = serv.selectOneAPIMember((String) map.get("email"));
+
+        if(check != null && check.getGoogleConnected() == 0) {
+        	serv.updateAPIMemberGoogleConnected(check.getUserId());
+        }
+        
         ModelAndView mav = new ModelAndView();
       
         //미가입자일 경우, 자동 가입
@@ -114,20 +122,12 @@ public class GoogleLoginController {
     	  
 			//MemberDTO 사용을 위한 임의의 값 입력
 			String pw = sc.encrypt("Google"+dbc.getNum(16));
-			String[] emailParts = ((String) map.get("email")).split("@");
-			Date currentDate = new Date();
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-				String userSignDate = dateFormat.format(currentDate);
-			  
+
 			MemberDTO dto = new MemberDTO();
-	      		dto.setUserId(sc.encrypt((String) map.get("sub")));
+	      		dto.setUserId((String) map.get("email"));
 	          	dto.setUserPw(pw);					
-	          	dto.setUserName(((String) map.get("name")).replace(" ", ""));
 	          	dto.setNickname(oac.randomNickname());
-	          	dto.setUserEmailId(emailParts[0]);			
-	          	dto.setUserEmailDomain(emailParts[1]);				
-	          	dto.setUserSignDate(userSignDate);
-	  			dto.setUserType("1");
+	          	dto.setGoogleConnected(1);
 	  		
 	  		//회원가입
 	  		serv.insertAPIMember(dto);	

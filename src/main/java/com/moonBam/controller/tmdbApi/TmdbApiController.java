@@ -1,11 +1,14 @@
 package com.moonBam.controller.tmdbApi;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.moonBam.dto.CreditDTO;
 import com.moonBam.service.TmdbApiService;
 
 
@@ -37,4 +40,18 @@ public class TmdbApiController {
 		System.out.println("종료 : " + insertedPage + "페이지까지 저장됨");
 		return "종료 : " + insertedPage + "페이지까지 저장됨";
 	}
+	
+	@RequestMapping(value="/CastList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<CreditDTO> getCastList(String contId) {
+		System.out.println(contId);
+		if(contId == null) {
+			return null;
+		} else {
+			List<CreditDTO> credits = tmdbApiService.getCredits(contId);
+			
+			return credits; //json으로 응답
+		}
+	}
+	
 }

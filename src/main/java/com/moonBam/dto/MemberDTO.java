@@ -6,45 +6,37 @@ import org.apache.ibatis.type.Alias;
 public class MemberDTO{
 	private String userId;
 	private String userPw;
-	private String userName;
-	private String userSSN1;
-	private String userSSN2;
-	private String userGender;
 	private String nickname;
-	private String userPhoneNum1;
-	private String userPhoneNum2;
-	private String userPhoneNum3;
-	private String userEmailId;
-	private String userEmailDomain;
+	private String restoreUserEmailId;
+	private String restoreUserEmailDomain;
+	private int googleConnected;
+	private int naverConnected;
+	private int kakaoConnected;
 	private String userSignDate;
 	private String userType;
 	@Override
 	public String toString() {
-		return "MemberDTO [userId=" + userId + ", userPw=" + userPw + ", userName=" + userName + ", userSSN1="
-				+ userSSN1 + ", userSSN2=" + userSSN2 + ", userGender=" + userGender + ", nickname=" + nickname
-				+ ", userPhoneNum1=" + userPhoneNum1 + ", userPhoneNum2=" + userPhoneNum2 + ", userPhoneNum3="
-				+ userPhoneNum3 + ", userEmailId=" + userEmailId + ", userEmailDomain=" + userEmailDomain
+		return "MemberDTO [userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname + ", restoreUserEmailId="
+				+ restoreUserEmailId + ", restoreUserEmailDomain=" + restoreUserEmailDomain + ", googleConnected="
+				+ googleConnected + ", naverConnected=" + naverConnected + ", kakaoConnected=" + kakaoConnected
 				+ ", userSignDate=" + userSignDate + ", userType=" + userType + "]";
 	}
 	public MemberDTO() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-	public MemberDTO(String userId, String userPw, String userName, String userSSN1, String userSSN2, String userGender,
-			String nickname, String userPhoneNum1, String userPhoneNum2, String userPhoneNum3, String userEmailId,
-			String userEmailDomain, String userSignDate, String userType) {
+	public MemberDTO(String userId, String userPw, String nickname, String restoreUserEmailId,
+			String restoreUserEmailDomain, int googleConnected, int naverConnected, int kakaoConnected,
+			String userSignDate, String userType) {
 		super();
 		this.userId = userId;
 		this.userPw = userPw;
-		this.userName = userName;
-		this.userSSN1 = userSSN1;
-		this.userSSN2 = userSSN2;
-		this.userGender = userGender;
 		this.nickname = nickname;
-		this.userPhoneNum1 = userPhoneNum1;
-		this.userPhoneNum2 = userPhoneNum2;
-		this.userPhoneNum3 = userPhoneNum3;
-		this.userEmailId = userEmailId;
-		this.userEmailDomain = userEmailDomain;
+		this.restoreUserEmailId = restoreUserEmailId;
+		this.restoreUserEmailDomain = restoreUserEmailDomain;
+		this.googleConnected = googleConnected;
+		this.naverConnected = naverConnected;
+		this.kakaoConnected = kakaoConnected;
 		this.userSignDate = userSignDate;
 		this.userType = userType;
 	}
@@ -60,65 +52,41 @@ public class MemberDTO{
 	public void setUserPw(String userPw) {
 		this.userPw = userPw;
 	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getUserSSN1() {
-		return userSSN1;
-	}
-	public void setUserSSN1(String userSSN1) {
-		this.userSSN1 = userSSN1;
-	}
-	public String getUserSSN2() {
-		return userSSN2;
-	}
-	public void setUserSSN2(String userSSN2) {
-		this.userSSN2 = userSSN2;
-	}
-	public String getUserGender() {
-		return userGender;
-	}
-	public void setUserGender(String userGender) {
-		this.userGender = userGender;
-	}
 	public String getNickname() {
 		return nickname;
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	public String getUserPhoneNum1() {
-		return userPhoneNum1;
+	public String getRestoreUserEmailId() {
+		return restoreUserEmailId;
 	}
-	public void setUserPhoneNum1(String userPhoneNum1) {
-		this.userPhoneNum1 = userPhoneNum1;
+	public void setRestoreUserEmailId(String restoreUserEmailId) {
+		this.restoreUserEmailId = restoreUserEmailId;
 	}
-	public String getUserPhoneNum2() {
-		return userPhoneNum2;
+	public String getRestoreUserEmailDomain() {
+		return restoreUserEmailDomain;
 	}
-	public void setUserPhoneNum2(String userPhoneNum2) {
-		this.userPhoneNum2 = userPhoneNum2;
+	public void setRestoreUserEmailDomain(String restoreUserEmailDomain) {
+		this.restoreUserEmailDomain = restoreUserEmailDomain;
 	}
-	public String getUserPhoneNum3() {
-		return userPhoneNum3;
+	public int getGoogleConnected() {
+		return googleConnected;
 	}
-	public void setUserPhoneNum3(String userPhoneNum3) {
-		this.userPhoneNum3 = userPhoneNum3;
+	public void setGoogleConnected(int googleConnected) {
+		this.googleConnected = googleConnected;
 	}
-	public String getUserEmailId() {
-		return userEmailId;
+	public int getNaverConnected() {
+		return naverConnected;
 	}
-	public void setUserEmailId(String userEmailId) {
-		this.userEmailId = userEmailId;
+	public void setNaverConnected(int naverConnected) {
+		this.naverConnected = naverConnected;
 	}
-	public String getUserEmailDomain() {
-		return userEmailDomain;
+	public int getKakaoConnected() {
+		return kakaoConnected;
 	}
-	public void setUserEmailDomain(String userEmailDomain) {
-		this.userEmailDomain = userEmailDomain;
+	public void setKakaoConnected(int kakaoConnected) {
+		this.kakaoConnected = kakaoConnected;
 	}
 	public String getUserSignDate() {
 		return userSignDate;
@@ -132,6 +100,7 @@ public class MemberDTO{
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
+
 
 	
 }

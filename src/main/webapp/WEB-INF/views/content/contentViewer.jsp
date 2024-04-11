@@ -10,8 +10,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>문밤</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
 <style>
 
 	@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
@@ -87,17 +90,16 @@
 	#review_col{
 		margin: 10px;
 		background-color: #f8f8f8;
-		border: 1px solid black;
+		border: 1px solid #E2E2E2;
 		border-radius: 16px;
 		padding: 20px;
 		max-width: 25%;
-		min-width: 350px;
+		/* min-width: 350px; */
+		min-width: 200px;
 	}
 	#review_title{
 		margin-top: 50px;
 		margin-bottom: 25px;
-		text-decoration-line: none;
-		color = black;
 	}
 	#review_nick{
 		font_size: 18px;
@@ -147,17 +149,39 @@
 		border-top-left-radius: 8px;
 		border-top-right-radius: 8px;
 	}
-	
-	#reviews_title{
-		text-decoration-line: none;
+	.del_deco{
+		text-decoration: none;
 		color: black;
 	}
+	#castList_title{
+		margin-top: 50px;
+		margin-bottom: 25px;
+	}
 	
+	.castCard{
+		width: 18rem; 
+		margin: 1rem;
+		min-width: 180px;
+	}
+	#castImgWrapper{
+
+		display: flex;
+		justify-content: center;
+		
+	}
+	
+/* 	.slick-next:before {
+	    content:url(./resources/images/right arrow.png);
+	}
+	.slick-prev:before {
+	    content:url(./resources/images/left arrow.png);
+	} */
 	
 </style>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
 
 <%
@@ -172,6 +196,15 @@
 	if(description==null){
 		description= "해당 컨텐츠에 대한 설명이 존재하지 않습니다.";
 	}
+	String releaseDate = content.getReleaseDate();
+	releaseDate = releaseDate.substring(0, releaseDate.indexOf("00:"));	
+	if(releaseDate==null){
+		releaseDate= "";
+	}
+	/* String nation = content.getNation();
+	if(nation==null){
+		nation= "";
+	} */
 	String contImg = content.getContImg();	
 	contImg = "http://image.tmdb.org/t/p/"+"w342/"+contImg;
 	//http://image.tmdb.org/t/p/w342/awmVj0xmD8CP4g0uD7dUrM8nqi.jpg
@@ -207,7 +240,7 @@
 	// 별점이 1개 이상일 때
 	if(rateAmount>0){
 		avgRate = String.format("%.1f", sum/rateAmount/2);
-	}	
+	}
 %>
 	//최대글자수
 	var max_length = 200;
@@ -221,6 +254,10 @@
 		$(".rate input").on("change", rating)  		//별점 선택
 		$(".like_btn").on("click", likeToggle) 		// 공감버튼 클릭
 		
+		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
+		// console.log("tests")
+		// showCredits();
+		
 		//화면 로딩시 내 리뷰 표시 함수 
 		setMyReview();
 		
@@ -229,6 +266,75 @@
 		
 	});//ready
 	
+	// 화면 로딩시 출연진 정보 로딩 및 출력
+	function showCredits(){
+		//ajax 요청
+		// CastList / get / contid 포함
+		$.ajax(
+			{
+				type: "get",
+				url:"CastList",
+				data: {
+					"contId": "<%=contId%>"
+				},
+				dataType: "json",
+				success: function(data, status, xhr){
+					console.log("성공: ",	 data);
+
+					var cardHtml = "";
+					$.each(data, function(i, actor) {
+						if(actor.known_for_department == 'Acting'){
+							if(actor.profile_path ==null){
+								path = "./resources/images/unknown_user_avatar_profile_person_icon.png";
+							} else{
+								path = 'http://image.tmdb.org/t/p/h632/' +  actor.profile_path;
+							}
+							//console.log(actor.original_name);
+							cardHtml += '<div class="card post castCard" style="" id="actor' + actor.id + '">' +
+		                       '<div id="castImgWrapper"><img src="' +  path + '" class="card-img-top" alt="이미지가 존재하지 않습니다." style="width:100%"></div>' +
+		                       '<div class="card-body">' +
+		                       '<p class="card-text"><b>' + actor.original_name + '</b></p>' +
+		                       '<p class="card-text">배역: ' + actor.character + '</p>' +
+		                       '</div></div>';
+		     			   /* $('.slider').slick('slickAdd', cardHtml); */
+		     			   
+							
+						}
+				        
+				     });
+					$('.slider').html(cardHtml);
+					$('.slider').slick({
+						  centerMode: true,
+						  centerPadding: '100px',
+						  slidesToShow: 6,
+						  responsive: [
+						    {
+						      breakpoint: 768,
+						      settings: {
+						        arrows: true,
+						        centerMode: true,
+						        centerPadding: '100px',
+						        slidesToShow: 4
+						      }
+						    },
+						    {
+						      breakpoint: 480,
+						      settings: {
+						        arrows: true,
+						        centerMode: true,
+						        centerPadding: '100px',
+						        slidesToShow: 3
+						      }
+						    }
+						  ]
+					});
+				},
+				error: function(xhr, status, e){
+					console.log("실패: " + xhr.status);
+				}
+			}//ajax	
+		);//ajax
+	}
 	
 	// 별점 막대그래프 높이 설정 함수
 	function setAvgGraph(){
@@ -516,6 +622,7 @@
 			<div class="col-lg-9" id="cont_info">
 				<div class="row" id="cont_title">
 					<h2><%=contTitle %></h2>
+					개봉날짜: <%=releaseDate %> <%-- 제작국가 : <%=nation %> --%>
 				</div>
 				<div class="row" id="con_desc"><%=description %>
 				</div>
@@ -533,7 +640,7 @@
 							  <div class="card-body">
 							    <blockquote class="blockquote mb-0">
 							      <p id="myreview_text">A well-known quote, contained in a blockquote element.</p>
-							      <footer class="blockquote-footer" id="myreview_footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+							      <%-- <footer class="blockquote-footer" id="myreview_footer">Someone famous in <cite title="Source Title"><%=nickname %></cite></footer> --%>
 							    </blockquote>
 							  </div>
 							</div>
@@ -560,10 +667,19 @@
 				
 			</div>
 		</div>
+		<!-- 출연진 표시 -->
+		<div class="row pad_side" id="castList_title">
+			<a href="MoveToAllReview" id="reviews_title" class="del_deco"><h3>출연진 ></h3	></a>
+		</div>
+		<div class="row pad_side" id="castList_row">
+	        <div class="post-wrapper slider">
+
+	        </div>
+		</div>
 		<!--감상평들 표시  -->
 		<!--감상평 리스트 데이터 전달받아야함 (reviewList) -->
 		<div class="row pad_side" id="review_title">
-			<a href="MoveToAllReview" id="reviews_title"><h2>Reviews ></h2></a>
+			<a href="MoveToAllReview" id="reviews_title" class="del_deco"><h3>리뷰 ></h3></a>
 		</div>
 		<div class="row pad_side" id="review_row">
 			<%for(int i=1; i<=2;i++){%>
@@ -666,6 +782,9 @@
 <script>
 	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+</script>
+<script>
+	showCredits();
 </script>
 </body>
 </html>

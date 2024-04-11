@@ -5,7 +5,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="MovieMapper">
-    <insert id="insertMovie" parameterType="MovieResultResponseDto">
+    <insert id="insertMovie" parameterType="MovieResultResponseDTO">
         MERGE INTO contentDB cdb
         USING (
             SELECT

@@ -3,20 +3,30 @@ package com.moonBam.controller.member;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moonBam.dto.DebugBoardDTO;
-import com.moonBam.service.member.DebugBoardService;
+import com.moonBam.dto.AnonymousBoardDTO;
+import com.moonBam.dto.AnonymousCommentDTO;
+import com.moonBam.dto.AnonymousReplyDTO;
+import com.moonBam.service.member.AnonymousBoardService;
+import com.moonBam.service.member.AnonymousCommentService;
+import com.moonBam.service.member.AnonymousReplyService;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
 
@@ -34,7 +44,13 @@ public class AjaxController {
 	SecurityController sc;
 
 	@Autowired
-	DebugBoardService dServ;
+	AnonymousBoardService dServ;
+	
+	@Autowired
+	AnonymousCommentService anonymousCommentService;
+	
+	@Autowired
+	AnonymousReplyService anonymousReplyService;
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
@@ -67,9 +83,8 @@ public class AjaxController {
 		// 선택된 질문에 따라 사용되는 Method 변경**************************
 		if (userInfo.equals("nickname")) {
 		can_All_PW = lServ.findPWbyNickname(answer, userId);
-		} else if (userInfo.equals("userPhoneNum")) {
-		can_All_PW = lServ.findPWbyPhoneNum(answer, userId);
-		} else if (userInfo.equals("userEmail")) {
+		} 
+		if (userInfo.equals("restoreUserEmail")) {
 		can_All_PW = lServ.findPWbyEmail(answer, userId);
 		}
 		// 선택된 질문에 따라 사용되는 Method 변경**************************
@@ -116,29 +131,6 @@ public class AjaxController {
 		return mesg;
 	}
 		
-	//회원가입 자식창에서 이메일 중복 에이젝스
-	@PostMapping("/AjaxEmailDuplicate")
-	public String AjaxEmailDuplicate(String userEmailId, String userEmailDomain) {
-		boolean isDuplicate = rServ.isUserEmailDuplicate(userEmailId, userEmailDomain);
-		String mesg = "notDuplicate";
-		if (isDuplicate) {
-			mesg = "duplicate"; 
-        } 
-		return mesg;
-	}		
-	
-	//회원가입 자식창에서 핸드폰 번호 중복 에이젝스
-	@PostMapping("/AjaxPhoneNumDuplicate")
-	public String AjaxPhoneNumDuplicate(String userPhoneNum1, String userPhoneNum2, String userPhoneNum3) {
-		boolean isDuplicate = rServ.isUserPNDuplicate(userPhoneNum1, userPhoneNum2, userPhoneNum3);
-		String mesg = "notDuplicate";
-		if (isDuplicate) {
-			mesg = "duplicate"; 
-        } 
-		return mesg;
-	}	
-	
-	
 	//***************************************************************************************************************
 	//***************************************************게 시 판*******************************************************
 	//***************************************************************************************************************
@@ -148,7 +140,7 @@ public class AjaxController {
 	@PostMapping("/increaseDBoardRecommendNum")
 	public int increaseDBoardRecommendNum(String userKey, int boardNum, String recommendVal, HttpServletRequest request, HttpServletResponse response) {
 		
-		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		int recommendNum = dto.getRecommendNum();
 		
 		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
@@ -177,7 +169,7 @@ public class AjaxController {
 	@PostMapping("/decreaseDBoardRecommendNum")
 	public int decreaseDBoardRecommendNum(String userKey, int boardNum, String disrecommendVal, HttpServletRequest request, HttpServletResponse response) {
 		
-		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		int disRecommendNum = dto.getDisRecommendNum();
 		
 		//페이지에서 불러온 현재 접속한 유저Key | 페이지 번호 | 좋아요 상태
@@ -206,7 +198,7 @@ public class AjaxController {
 	//글 수정 / 글 삭제 시 비밀번호 확인
 	@PostMapping("/checkPostPW")
 	public String checkPostPW(int boardNum, String password) {
-		DebugBoardDTO dto = dServ.viewDBoardContent(boardNum);
+		AnonymousBoardDTO dto = dServ.viewDBoardContent(boardNum);
 		if(dto.getPassword().equals(password)) {
 			return "yes";
 		} else {
@@ -215,5 +207,123 @@ public class AjaxController {
 	}
 	
 	
+	
+	//***************************************************************************************************************
+	//****************************************************댓 글*******************************************************
+	//***************************************************************************************************************
+	
+	//해당 게시판의 댓글 출력
+	@PostMapping("/allComments")
+    public List<AnonymousCommentDTO> getComments(int boardNum) throws ParseException {
+		List<AnonymousCommentDTO> comments = anonymousCommentService.getAllComments(boardNum);
+		
+		//리스트의 날짜 형식 변경
+		for (AnonymousCommentDTO anonymousCommentDTO : comments) {
+			anonymousCommentDTO.setCommentEdittedDate(chooseDateForm(anonymousCommentDTO.getCommentEdittedDate()));
+		}
+		
+		return comments;
+    }
+
+	//댓글 추가
+	@PostMapping("/addComment")
+    public AnonymousCommentDTO addComment(AnonymousCommentDTO dto) {
+		
+		Date nowDate = new Date();
+		    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        String now = format.format(nowDate);
+		    dto.setCommentPostDate(now);
+		    dto.setCommentEdittedDate(now);
+		    
+		anonymousCommentService.addComment(dto);
+		
+        return dto;
+    }
+	
+	//댓글 삭제
+	@DeleteMapping("/deleteComment")
+    public boolean deleteComment(int anonymousCommentNum, String commentPassword) {
+		
+		Map<String, Object > map = new HashMap<>();
+			map.put("anonymousCommentNum", anonymousCommentNum);
+			map.put("commentPassword", commentPassword);
+		
+		int num = anonymousCommentService.deleteComment(map);
+		
+		if (num == 0) {
+			return false;
+		} else {
+			return true;
+		}
+    }
+	
+	
+	//해당 게시판의 대댓글 출력
+	@PostMapping("/allReplies")
+    public List<AnonymousReplyDTO> getAllReplys(int anonymousCommentNum) throws ParseException {
+		
+		List<AnonymousReplyDTO> replies = anonymousReplyService.getAllReplys(anonymousCommentNum);
+		
+		//리스트의 날짜 형식 변경
+		for (AnonymousReplyDTO anonymousReplyDTO : replies) {
+			anonymousReplyDTO.setReplyEdittedDate(chooseDateForm(anonymousReplyDTO.getReplyEdittedDate()));
+		}
+		
+		return replies;
+    }
+	
+	
+	//대댓글 추가
+	@PostMapping("/addReply")
+    public AnonymousReplyDTO addReply(AnonymousReplyDTO dto) {
+		
+		Date nowDate = new Date();
+		    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        String now = format.format(nowDate);
+		    dto.setReplyPostDate(now);
+		    dto.setReplyEdittedDate(now);
+		    
+		anonymousReplyService.addReply(dto);
+		
+        return dto;
+    }
+	
+	//대댓글 삭제
+	@DeleteMapping("/deleteReply")
+    public boolean deleteReply(int anonymousReplyNum, String replyPassword) {
+		
+		Map<String, Object > map = new HashMap<>();
+			map.put("anonymousReplyNum", anonymousReplyNum);
+			map.put("replyPassword", replyPassword);
+		
+		int num = anonymousReplyService.deleteReply(map);
+		
+		if (num == 0) {
+			return false;
+		} else {
+			return true;
+		}
+    }
+	
+	//글을 게시한 날짜와 오늘 날짜를 비교하는 함수
+	public String chooseDateForm(String date) throws ParseException {
+		
+		String str = date;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date edittedDate = format.parse(str);									//등록, 수정된 날짜
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. MM. dd");		//연월일 Format
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH시 mm분");			//시분 Format
+		
+		String todayForm = dateFormat.format(new Date());						//현재 시간의 연월일
+		String edittedDateForm = dateFormat.format(edittedDate);				//등록, 수정된 날짜의 연월일
+		String edittedDateTime = timeFormat.format(edittedDate);				//등록, 수정된 날짜의 시분초
+		
+		if(todayForm.equals(edittedDateForm)) {									//오늘이 글을 쓴 날짜일 경우
+			return edittedDateTime;												//jsp에 시분초 전송
+		} else {
+			return edittedDateForm;												//jsp에 연월일 전송
+		}
+	}
 	
 }

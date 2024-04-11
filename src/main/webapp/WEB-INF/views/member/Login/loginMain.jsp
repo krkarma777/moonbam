@@ -30,9 +30,7 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
-	      <input type="text" id="userName" name="userName" maxlength="10" required placeholder="성함" />
-	      <input type="text" class="ssn" id="ssn1" name="ssn1" maxlength="6" required placeholder="주민번호 앞자리"/>
-	      <input type="password" class="ssn" id="ssn2" name="ssn2" maxlength="7" required placeholder="주민번호 뒷자리"/>
+	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" />
 	      <button>회원가입으로</button>
 	    </form>
 	  </div>
@@ -47,15 +45,15 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
-	      <input type="text" id="userId" name="userId" class="loginSet" pattern="[a-zA-Z0-9]{4,}" autofocus autocomplete="off" placeholder="아이디" />
-	      <input type="password" id="userPw" name="userPw" class="loginSet" autocomplete="off" placeholder="패스워드"/>
+	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" />
+	      <input type="password" id="userPw" name="userPw" class="loginSet" placeholder="패스워드"/>
 	      <button type="button" id="showPasswd" class="loginButtons">비밀번호 보이기</button>
 	      <button class="loginButtons">로그인</button>
 		  <div id="confirmUserIdPwError" style="font-size: 14px; color: red;"></div>	    
 	      
 	      <div class="row" id="rowBar">
               <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
-              <div class="col-4 save-label cookieT">아이디 저장</div>
+              <div class="col-4 save-label cookieT">이메일 저장</div>
               <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
               <div class="col-4 auto-login-label cookieT">자동 로그인</div>
 		  </div>	 
@@ -90,16 +88,12 @@
 	    //로그인과 회원가입 탭 전환*******************************************
 	    $('#signUp').on('click', function () {
 	        $('#container').addClass("right-panel-active");
-	        $('#userId').val('');
-	        $('#userPw').val('');
-	        $('#userName').focus();
+	        $('#register_userId').focus();
 	    });
 	    
 	    function changeTab(){
 	    	$('#container').removeClass("right-panel-active");
-	        $('#userName').val('');
-	        $('#ssn1').val('');
-	        $('#ssn2').val('');
+	        $('#email').val('');
 	        $('#userId').focus();
 	    }
 
@@ -224,76 +218,14 @@
 	        
 	    }); //$("#loginForm").on("submit", function(event)
 	    
-	    //패턴 속성에 문구 삽입
-	    $("#loginButton").on("click", function(){
-	        console.log("Submit button clicked");
-	        var inputValue = $("#userId").val();
-	        
-	        // 유효한 경우 아무 동작도 하지 않음
-	        if (/^[a-zA-Z0-9]+$/.test(inputValue)) {
-	            $("#userId")[0].setCustomValidity(''); 
-	        } else {
-	            // 유효하지 않은 경우 오류 메시지를 직접 설정
-	            $("#userId")[0].setCustomValidity('영문자 또는 숫자를 입력하세요.');
-	        }
-	    })    
-	    
 	    //비밀번호를 볼 수 있도록 해주는 method
 	    $("#showPasswd").click(function () {
 	        var showPW = $("#userPw");
 	        showPW.attr("type", showPW.attr("type") == "password" ? "text" : "password");
 	    });
 
-
-	    //*************************************************************
-	    
-	    
-	    //기존 회원 여부 확인 관련 함수****************************************
-	    $("#confirmForm").submit(function(event) {
-	        //이름 공백 확인 및 2글자
-	        if ($("#userName").val().trim() === "" || $("#userName").val().length < 2) {
-	            alert("이름를 확인해주세요");
-	            $("#userName").focus();
-	            return false;
-	        }
-	        
-	        //SSN1 길이 확인
-	        if ($("#ssn1").val().length != 6) {
-	            alert("주민등록번호를 확인해주세요");
-	            $("#ssn1").val('').focus();
-	            return false;
-	        }
-	        
-	        //SSN2의 첫 숫자 확인(1~4) + 길이 확인
-	        if ($("#ssn2").val().length != 7) {
-	            alert("주민등록번호를 확인해주세요");
-	            $("#ssn2").val('').focus();
-	            return false;
-	        }
-	        
-	    })
-
-	    //SSN1이 6자리 이상이면 SSN2로 focus
-	    $("#ssn1").on('input', function() {
-	        var maxLength = 6;
-	        if ($(this).val().length >= maxLength) {
-	            $(this).val($(this).val().slice(0, maxLength));
-	            $("#ssn2").val("");
-	            $("#ssn2").focus();
-	        }
-	    });
 	})
 	    
-	//ssn을 숫자로 입력 제한
-	$(".ssn").on("input", function () {
-	    
-	    if (!/^\d*$/.test($(this).val())) {
-	        alert("숫자만 입력 가능합니다.");
-	        $(this).val("");
-	        $(this).focus();
-	    }
-	});
-	//*************************************************************
 		
 	</script>
 
@@ -315,7 +247,7 @@
 
 
 
-<!-- 
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 　　　▅　　　　　　　　　　　　　 ▀█▅　　　▅
 　▅▀　　　█　　　　　██　　　　　　　　▀　　　▀▅
 ▅▀　　　▀　　　　　█　　█　　　　　　　　　　　　▀▅

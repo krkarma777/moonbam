@@ -62,13 +62,18 @@
 	}
 	
 	.link-icon { position: relative; display: inline-block; width: auto; font-size: 14px; font-weight: 500; color: #333; margin-right: 10px; padding-top: 50px; background-repeat: no-repeat;}
-	.link-icon.twitter { background-image: url(./image/icon-twitter.png); background-repeat: no-repeat; }
-	.link-icon.facebook { background-image: url(./image/icon-facebook.png); background-repeat: no-repeat; } 
-	.link-icon.kakao { background-image: url(./image/icon-kakao.png); background-repeat: no-repeat; }
-	.link-icon.copy { background-image: url(./image/icon-copy.png); background-repeat: no-repeat; }
+	.link-icon.twitter { background-image: url(./resources/images/icon-twitter.png); background-repeat: no-repeat; }
+	.link-icon.facebook { background-image: url(./resources/images/icon-facebook.png); background-repeat: no-repeat; } 
+	.link-icon.kakao { background-image: url(./resources/images/icon-kakao.png); background-repeat: no-repeat; }
+	.link-icon.copy { background-image: url(./resources/images/icon-copy.png); background-repeat: no-repeat; }
 
 	#postText{
 		padding-bottom: 50px;
+		overflow: hidden;
+	}
+	
+	#top{
+		margin-top: 30px;
 	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -229,7 +234,7 @@
 					  <ul class="dropdown-menu">
 					    <li><a href="#" class="dropdown-item noEffect" data-bs-toggle="modal" data-bs-target="#exampleModal">공유</a></li>
 					    <li><a href="report?postId=<%=postId %>&reason=부적절한리뷰" class="dropdown-item noEffect">리뷰신고</a></li>
-					    <li><a href="#" class="dropdown-item noEffect">AI</a></li>
+					    <!-- <li><a href="#" class="dropdown-item noEffect">AI</a></li> -->
 					  </ul>
 					</div>
 				</div>
@@ -254,11 +259,11 @@
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <!--한칸 더 추가되는 버그 수정 필요  -->
-	      <div class="btn-group modal-body d-flex justify-content-center" role="group" aria-label="Basic outlined example">
+	      <div class=" modal-body d-flex justify-content-center" role="group" aria-label="Basic outlined example">
 	      		<a id="btnCopy" class="link-icon copy" href="javascript:shareCopy();" />링크복사
 				<a id="btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();" />트위터
 				<a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();" />페이스북    
-				<a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();" />카카오톡
+				<a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();" >카카오톡</a>
 				
 	      </div>
 	    </div>

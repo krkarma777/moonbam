@@ -3,6 +3,8 @@ package com.moonBam.controller.member;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
+import com.moonBam.service.member.OpenApiService;
 
 
 @Controller
@@ -31,6 +35,9 @@ public class LoginController {
 	
 	@Autowired
 	SecurityController sc;
+	
+	@Autowired
+	OpenApiService openApiService;
 	
 	@RequestMapping("/Login")   
 	public String Login() {
@@ -51,7 +58,7 @@ public class LoginController {
 	@PostMapping("/Logined")
 	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		String realUserPw = sc.encrypt(userPw);
-		System.out.println("아이디 저장: " + userIdSave);					//체크되면 true
+		System.out.println("아이디 저장: " + userIdSave);				//체크되면 true
 		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
 		MemberDTO dto = serv.login(userId, realUserPw);
 
@@ -119,8 +126,12 @@ public class LoginController {
 	
 	//아이디 찾기
 	@PostMapping("/SearchID")
-	public String SearchID(Model model, String userName, String ssn1, String ssn2) {
-		MemberDTO dto = serv.findUserId(userName, ssn1, ssn2);
+	public String SearchID(Model model, String restoreEmail) {
+		String[] emailParts = restoreEmail.split("@");
+		Map<String, String> map = new HashMap<>();
+			map.put("restoreUserEmailId", emailParts[0]);
+			map.put("restoreUserEmailDomain", emailParts[1]);
+		MemberDTO dto = serv.findUserId(map);
 		if (dto != null) {
 			model.addAttribute("dto", dto);
 			return "member/Find_Info/viewID";
@@ -132,58 +143,90 @@ public class LoginController {
 	
 	//비밀번호 찾기
 	@PostMapping("/SearchPartPW")
-	public String SearchPartPW(Model model, HttpServletResponse response, String userId, String userName, String ssn1, String ssn2) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		MemberDTO dto = serv.findUserPW(userId, userName, ssn1, ssn2);
-				
+	public String SearchPartPW(Model model, HttpServletResponse response, String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		System.out.println(userId);
+		MemberDTO dto = openApiService.selectOneAPIMember(userId);
+		System.out.println(dto);
 		if (dto != null) {
-			String userPw = sc.decrypt(dto.getUserPw());
-			dto.setUserPw(userPw);
+			String password = sc.decrypt(dto.getUserPw());
+			int visible = (int) Math.ceil(password.length() / 2);
+			String masked = "*".repeat(password.length() - visible);
+			String maskedPW = password.substring(0, visible) + masked;
 			
-			Cookie userIdCookie = new Cookie("findPW_userid",userId);
+			Cookie userIdCookie = new Cookie("findPW_userId",userId);
 			userIdCookie.setMaxAge(30*60);
 			response.addCookie(userIdCookie);
 			
 			model.addAttribute("dto", dto);
+			model.addAttribute("maskedPW", maskedPW);
 			return "member/Find_Info/viewPartPW";
 		} else {
 			return "member/Find_Info/cantFindUserdata";
 		}
 	}
 	
-	//전체 비밀번호 출력용
-	@GetMapping("/SearchAllPW")
-	public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
-		
-		String userId = "";
-		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("findPW_userid")) {
-				userId = cookie.getValue();
+	//비밀번호 변경을 위한 메일 송신
+		@GetMapping("/SearchAllPW")
+		public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
+			
+			String userId = "";
+			Cookie[] cookies = request.getCookies();
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("findPW_userId")) {
+					userId = cookie.getValue();
+				}
 			}
+			
+			MemberDTO dto = openApiService.selectOneAPIMember(userId);
+			
+			if (dto != null) {
+
+				Cookie userIdCookie = new Cookie("findPW_userId",null);
+				userIdCookie.setMaxAge(0);
+				
+				String[] emailparts = dto.getUserId().split("@");
+				
+				model.addAttribute("dto", dto);
+				model.addAttribute("emailDomain", emailparts[1]);
+				mc.sendEmail(dto.getUserId(), dto);
+
+				response.addCookie(userIdCookie);
+				
+				return "member/Find_Info/viewAllPW";
+			} else {
+				return "member/Find_Info/emailErrorPage";
+			}
+
 		}
 		
-		MemberDTO dto = serv.selectMemberData(userId);
-		
-		if (dto != null) {
-			
-			String userEmail = dto.getUserEmailId()+"@"+dto.getUserEmailDomain();
-			String userPw = sc.decrypt(dto.getUserPw());
-			dto.setUserPw(userPw);
-			
-			model.addAttribute("dto", dto);
-			mc.sendEmail(userEmail, dto);
-
-			Cookie userIdCookie = new Cookie("findPW_userid",null);
-			userIdCookie.setMaxAge(0);
-			response.addCookie(userIdCookie);
-			
-			return "member/Find_Info/viewAllPW";
-		} else {
-			return "member/Find_Info/emailErrorPage";
+		//이메일 하이퍼링크를 통해 들어오는 비밀번호 변경 페이지
+		@GetMapping("/UpdatePasswordPage")
+		public ModelAndView UpdatePasswordPage(String userId) {
+			ModelAndView mav = new ModelAndView();
+				mav.addObject("userId", userId);
+				mav.setViewName("member/Find_Info/updatePassword");
+			return mav;
 		}
-
-	}
-	
+		
+		//비밀번호 변경
+		@PostMapping("/UpdatePassword")
+		public String UpdatePassword(String userId, String userPw) {
+			
+			String realPassword = sc.encrypt(userPw);
+			
+			Map<String, String> map = new HashMap<>();
+				map.put("userId", userId);
+				map.put("userPw", realPassword);
+				serv.updatePassword(map);
+			return "redirect:/UpdateComplete";
+		}
+		
+		//비밀번호 변경 완료
+		@GetMapping("UpdateComplete")
+		public String UpdateComplete() {
+			return "member/Find_Info/updateComplete";
+		}
+		
 	
 	
 }

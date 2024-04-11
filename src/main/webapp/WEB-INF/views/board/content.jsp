@@ -7,6 +7,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%
+	String postId = request.getParameter("postId");
+%>
 <meta charset="UTF-8">
 <title>Display Content</title>
 
@@ -24,7 +27,9 @@
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
 	
-
+<!-- jQuery -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	
 	
 	
@@ -44,17 +49,14 @@ function scrollToComments() {
 }
 
 </script>
-
 	
-<!-- jQuery -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 
 <script type="text/javascript">
 $("document").ready(function() {
+		
     $("#commentHead").click(function() {
         var url = "/acorn/board/postLike?postId=" + <%= request.getParameter("postId")%>;
-
         $.ajax({
             type: "POST",
             url: url,
@@ -79,6 +81,7 @@ $("document").ready(function() {
     	userId = dto.getUserId();
     }
     %>
+    
     $("#scrap").on("click",function(){
         $.ajax({
             url:"/acorn/scrap",
@@ -100,14 +103,63 @@ $("document").ready(function() {
                 alert("에러 발생: " + error);
             }
         }); // end ajax call
-    });
+    });//
 
+	
+	$.ajax({
+	    type: 'get',
+	    url: '/acorn/api/post/'+<%= postId %>,
+	    success: function(response) {
+	    	var post = response.pDTO;
+            var isAuthorized = response.isAuthorized;
+            
+            //글 내용
+            var postOneView = '<div class="container mt-4">' +
+            '<div class="post-section">' +
+            '<div class="post-title">' +
+            '<h3>' + response.pDTO.postTitle + '</h3>' +
+            '</div>' +
+            '<div class="post-meta d-flex justify-content-between">' +
+            '<div>' +
+            '<small>' +
+            '작성자: ' + post.nickname + ' | ' +
+            '작성일: ' + post.postDate + // EL(fmt:formatDate) 대신 그대로 post.postDate 사용
+            '</small>' +
+            '</div>' +
+            '<div>' +
+            '<small>' +
+            '조회수: ' + post.viewNum + ' | ' +
+            '추천: ' + post.likeNum + ' | ' +
+            '댓글: ' + post.commentCount +
+            '</small>' +
+            '</div>' +
+            '</div>' +
+            '<hr>' +
+            '<div class="cpost-content">' +
+            post.postText +
+            '</div>' +
+            '</div>' +
+            '</div>';//
+            
+            //수정,삭제 버튼
+				var updatedel = '';
+				if (isAuthorized) {
+				    updatedel = `
+				            <a href="/acorn/board/edit?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
+				            <a href="/acorn/board/delete?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">삭제</button></a>
+				    `;
+				}//
+
+            $('#postOneView').html(postOneView);
+            $('#updatadel').html(updatedel);
+            
+	    },
+	    error: function(xhr, status, error) {
+	        console.log("에러 발생 => ",error);
+	    }
+	});//end ajax
     
-    
-});
-
-
-
+});//end doc
 
 
 </script>
@@ -308,191 +360,108 @@ body{
     margin-bottom: 20px; /* 버튼 아래의 여백을 늘려서 버튼을 위로 올립니다
 }
 
-
-
-
-
-
-
-
 </style>
 
 </head>
 <body>
 
-
-
-
 	<!-- 네비게이션바 -->
-=<jsp:include page="//common/navbar.jsp"></jsp:include>=
-	<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-		<div class="container-fluid">
-			로고
-			<a class="navbar-brand" href="#">로고</a>
-
-			토글 버튼
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarNav"
-				aria-controls="navbarNav" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			네비게이션 항목
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav mx-auto">
-					검색 바
-					<form class="d-flex w-100">
-						<input class="form-control me-2 searchInput" type="search"
-							placeholder="검색" aria-label="Search">
-						<button class="btn btn-outline-success" type="submit">검색</button>
-					</form>
-				</ul>
-				<ul class="navbar-nav">
-					로그인, 마이페이지, 회원가입 버튼
-					<li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav> -->
-
+	<jsp:include page="//common/navbar.jsp"></jsp:include>
+	
 	<div class="container mt-4">
-		<!-- 게시글 출력부분 -->
 		<div class="post-section">
-			<!-- 글 제목 -->
-			<div class="post-title">
-				<h3>${postTitle}</h3>
-			</div>
-			<div class="post-meta d-flex justify-content-between">
-			<fmt:formatDate value="${postDate}" pattern="yyyy.MM.dd hh:dd:ss" var="formattedDate" />
-		    <!-- 왼쪽 부분: 작성자, 작성일 -->
-			    <div>
-			        <small>
-			            작성자: ${nickname} | 
-			            작성일: ${formattedDate}
-			        </small>
-			    </div>
-			    
-			    <!-- 오른쪽 부분: 조회수, 추천, 댓글 -->
-			    <div>
-			        <small>
-			            조회수: ${viewNum} | 
-			            추천: ${likeNum} | 
-			            댓글: ${commentCount}
-			        </small>
-			    </div>
+			<!-- 게시글 보여지는 부분 -->
+			<div id="postOneView"></div>
+			<!-- 좋아요 버튼 -->
+			<div class="text-center" style="margin-top: 100px;">
+			    <button type="button" class="btn btn-custom" id="commentHead" data-bs-toggle="modal" <% if(session.getAttribute("loginUser")==null){%>data-bs-target="#likeModal"<% } %>>
+			        좋아요 <span class="badge text-bg-primary" id="likeNum"> <%=request.getAttribute("likeNum")%></span>
+			    </button>
 			</div>
 			<hr>
-			<!-- 글 내용 -->
-			<div class="cpost-content">
-				${postText}
+			<!-- 좋아요 모달 -->
+			<div class="modal fade" id="likeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body">
+			        로그인이 필요한 기능입니다. <br>
+			        지금 회원가입 혹은 로그인하고 공통의 취향을 나눠보세요.
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
+			      </div>
+			    </div>
+			  </div>
 			</div>
-			            <!-- 좋아요 버튼 -->
-			            <!-- id="commentHead"를 부여해서   -->
-			 <div class="text-center" style="margin-top: 100px;" >           
-			<button type="button" class="btn btn-custom" id="commentHead" data-bs-toggle="modal" <% if(session.getAttribute("loginUser")==null){%>data-bs-target="#likeModal"<% } %>>
-				좋아요 <span class="badge text-bg-primary" id="likeNum"> <%=request.getAttribute("likeNum")%></span>
-			</button>
-			</div>
-			<hr>
-<!-- 모달 -->
-<div class="modal fade" id="likeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-       로그인이 필요한 기능입니다. <br>
-	지금 회원가입 혹은 로그인하고 공통의 취향을 나눠보세요.
-      </div>
-      <div class="modal-footer">
-       
-        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
-        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+			
 			<!--  게시글과 수정/목록 버튼의 공간 여백을 위한 새로운 클래스 적용 -->
-		<div id="comment" class="comment-section">
-
-			<div class="d-flex justify-content-between">
-    <!-- 왼쪽에 위치할 목록 버튼 -->
-    
-    <button type="button" class="btn btn-action btn-spacing" id="scrap">스크랩</button>
-    <div>
-        <a href="/acorn/board/<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing" >목록</button></a>
-    </div>
-
-    <!-- 오른쪽에 위치할 기타 버튼들 -->
-<div>
-
-<%
-    if(session.getAttribute("loginUser")==null) {
-%>
-   <button type="button" class="btn btn-action btn-spacing" data-bs-toggle="modal" data-bs-target="#writeModal">
-  글쓰기
-</button>
-<!-- 모달 -->
-<div class="modal fade" id="writeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        당신의 소중한 순간을 함께 나누세요.<br>
-        지금 바로 회원가입 또는 로그인을 통해, 누구도 가지지 못한 당신만의 이야기를 기록해보세요.
-      </div>
-      <div class="modal-footer">
-       
-        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
-        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<%
-    } else {
-%>
-    <a href="/acorn/board/write?postId=<%=request.getParameter("postId")%>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">글쓰기</button></a>
-<%
-    }
-%> 
-    <%
-    String mismatchError = (String)request.getAttribute("mismatchError");
-    System.out.println(mismatchError);
-    if(mismatchError==null && session.getAttribute("loginUser")!=null){
-    %>
-    <a href="/acorn/board/edit?postId=<%=request.getParameter("postId")%>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
-    <a href="/acorn/board/delete?postId=<%=request.getParameter("postId")%>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">삭제</button></a>
-	<%}%>
-</div>
-
-</div>
-		<div style="margin-top: 10px;">
-		<jsp:include page="commentMain.jsp"></jsp:include>
+   			<div id="comment" class="comment-section">
+   				<div class="d-flex justify-content-between">
+	   				<!-- 왼쪽에 위치할 목록 버튼 -->
+					<button type="button" class="btn btn-action btn-spacing" id="scrap">스크랩</button>
+					<div>
+					    <a href="/acorn/board/<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing" >목록</button></a>
+					</div>
+					
+   					<!-- 오른쪽에 위치할 기타 버튼들 -->
+   					<!-- 글쓰기 버튼 -->
+   					<div>
+   						<%
+							if(session.getAttribute("loginUser")==null) {
+						%>
+						<button type="button" class="btn btn-action btn-spacing" data-bs-toggle="modal" data-bs-target="#writeModal">
+							글쓰기
+						</button>
+						<!-- 글쓰기 모달 -->
+						<div class="modal fade" id="writeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+									    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										당신의 소중한 순간을 함께 나누세요.<br>
+									    지금 바로 회원가입 또는 로그인을 통해, 누구도 가지지 못한 당신만의 이야기를 기록해보세요.
+									</div>
+									<div class="modal-footer">									   
+										<button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
+									    <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 글쓰기 모달 끝 -->						
+						<%
+							} else {
+						%>
+						<a href="/acorn/board/write?postId=<%=request.getParameter("postId")%>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">글쓰기</button></a>
+						<%
+							}
+						%>
+						<!-- 수정, 삭제 버튼-->					
+   						<span id="updatadel"></span>
+   					</div><!-- end 오른쪽 버튼 -->  				
+   				</div><!-- end <div class="d-flex justify-content-between"> -->  				
+   				<!-- 댓글 내용 -->
+				<div style="margin-top: 10px;">
+					<jsp:include page="commentMain.jsp"></jsp:include>
+				</div>				    			
+   			</div><!-- end <div id="comment" class="comment-section"> -->
 		</div>
-				<!-- 댓글 내용 -->
-			</div>
-		</div>
-
+	</div>
 
 	<!-- 사이드바 버튼 생성 -->
 	<div class="sidebar">
-		<button class="my-button" onclick="scrollToTop()">▲</button>
-		<button class="my-button" onclick="scrollToBottom()">▼</button>
-		<button class="my-button" onclick="scrollToComments()">&#x1F4AC;</button>
+	    <button class="my-button" onclick="scrollToTop()">▲</button>
+	    <button class="my-button" onclick="scrollToBottom()">▼</button>
+	    <button class="my-button" onclick="scrollToComments()">&#x1F4AC;</button>
 	</div>
-
-
 
 </body>
 </html>
