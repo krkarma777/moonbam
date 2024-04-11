@@ -1,5 +1,6 @@
 package com.moonBam.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,10 +24,9 @@ public class MainController {
     @Autowired
     MainService mService;
 
-    // pupop
     @Autowired
     AnnouncementService annoService;
-    
+
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category) {
         String nextPage = "main";
@@ -80,6 +80,11 @@ public class MainController {
                 break;
             }
         }
+        
+        List<Integer> list = new ArrayList<Integer>();
+		list = annoService.popupNnumList("popup");
+		model.addAttribute("list", list);
+        
         return nextPage;
     }
 

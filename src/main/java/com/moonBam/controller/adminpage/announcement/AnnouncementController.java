@@ -32,7 +32,9 @@ public class AnnouncementController {
 	// insert
 	// / 추가함
 	@RequestMapping("AdminPage/InsertAnnouncementController")
-	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup) {
+
+	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, @RequestParam(required = false) MultipartFile img) {
+
 		System.out.println("AnnouncementController.InsertAnnouncementController()");
 		
 	
