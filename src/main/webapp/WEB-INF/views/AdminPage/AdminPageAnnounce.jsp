@@ -12,7 +12,6 @@
 </script>
 </head>
 <body>
-
 <div style = "">
 <jsp:include page = "common/top.jsp" flush ="true"></jsp:include><br>
 </div>

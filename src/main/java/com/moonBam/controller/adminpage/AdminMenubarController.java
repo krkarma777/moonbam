@@ -72,7 +72,7 @@ public class AdminMenubarController {
 	@RequestMapping(value = "/AdminPage/toAdminPageAnnounce")
 	public String AdmintoAdminPageAnnounce() {
 		System.out.println("in adminpage.MainController : AdmintoAdminPageAnnounce()");
-		return "/AdminPage/AdminPageAnnounce";
+		return "redirect:/AdminPage/AdminPageAnnounce";
 	}
 	
 	@RequestMapping(value = "/AdminPage/toAdminPageEvent")
