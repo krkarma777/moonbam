@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%> 
-<%@page import="com.moonBam.dto.board.PostDTO"%> <!-- Replace "your.package.name" with your actual package name -->
+<%@ page import="com.moonBam.dto.board.PostDTO"%>
+<%@ page import="java.util.List"%>
 
 <!DOCTYPE html>
 <html>
@@ -24,8 +24,8 @@
 </head>
 <body>
     <div id="header">
-        <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
-             <jsp:include page = "MypageMenu.jsp"  flush ="true"></jsp:include>
+        <%@ include file="/WEB-INF/views/common/navibarForMember.jsp" %><br>
+        <%@ include file="MypageMenu.jsp" %>
     </div>
     <br>
     <br>
@@ -42,7 +42,6 @@
                 <th>Post Title</th>
                 <th>Post Date</th>
                 <th>Post Text</th>
-                <th>Nickname</th>
                 <th>Category ID</th>
                 <th>Delete</th>
             </tr>
@@ -57,10 +56,12 @@
                         <td><%= dto.getPostTitle() %></td>
                         <td><%= dto.getPostDate() %></td>
                         <td><%= dto.getPostText() %></td>
-                        <td><%= dto.getNickname() %></td>
                         <td><%= dto.getCategoryId() %></td>
                         <td>
-                            <button class="delBtn" data-xxx="<%=dto.getPostId()%>">삭제</button>
+                            <form action="/acorn/postDel" method="post">
+                                <input type="hidden" name="postId" value="<%=dto.getPostId()%>">
+                                <button type="submit" class="delBtn">삭제</button>
+                            </form>
                         </td>
                     </tr>
                 <% } %>
@@ -68,19 +69,70 @@
         </tbody>
     </table>
     
+    <!-- 페이지네이션
+    <div class="page-numbers text-center">
+        <ul class="pagination"> -->
+         <%--    <% int curPage = (Integer) request.getAttribute("curPage");
+               int totalPage = (Integer) request.getAttribute("totalPage");
+               int startPage = ((curPage - 1) / 10) * 10 + 1; // 시작 페이지 번호 계산
+               int endPage = Math.min(startPage + 9, totalPage); // 끝 페이지 번호 계산
+
+               // Calculate previous and next page numbers
+               int prevPage = Math.max(startPage - 1, 1); // Ensure prevPage is never less than 1
+               int nextPage = endPage + 1;
+            %>--%>
+
+            <%-- "이전" 버튼 
+            <% if (curPage > 1) { %>
+                <li class="page-item"><a class="page-link"
+                    href="?curPage=<%=prevPage%>">&laquo; 이전 </a></li>
+            <% } else { %>
+                <li class="page-item disabled"><span class="page-link">&laquo; 이전</span></li>
+            <% } %>--%>
+
+            <%-- 페이지 번호 출력 
+            <% for (int i = startPage; i <= endPage; i++) { %>
+                <li class="page-item <%=i == curPage ? "active" : ""%>"><a class="page-link"
+                    href="?curPage=<%=i%>"><%=i%></a></li>
+            <% } %>--%>
+
+            <%-- "다음" 버튼
+            <% if (nextPage <= totalPage) { %>
+                <li class="page-item"><a class="page-link"
+                    href="?curPage=<%=nextPage%>">다음 &raquo; </a></li>
+            <% } else { %>
+                <li class="page-item disabled"><span class="page-link">다음 &raquo;</span></li>
+            <% } %>
+        </ul>
+    </div>  --%>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     
+    <!-- Ajax로 삭제 기능 구현 -->
     <script type="text/javascript">
         $(document).ready(function() {
-            $(".delBtn").on("click", function() {
-                var postId = $(this).data("xxx");
-                location.href = "ReviewDelServlet?postId=" + postId;
+            $('#deleteForm').submit(function(e) {
+                e.preventDefault(); // 폼 기본 동작 방지
+                var form = $(this);
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        alert("게시물이 성공적으로 삭제되었습니다.");
+                        window.location.href = "/myPost";
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         });
     </script>
+
 </body>
 </html>
