@@ -16,6 +16,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+	
 	<script type="text/javascript">
 	<%
 		Date toDate = new Date();
@@ -77,9 +78,7 @@
 			<tr>
 				<td>팝업 허용</td><td colspan="3"><input type="checkbox" id="popup" name="popup" value="popup" ></td>
 			</tr>
-			<tr>
-			<td>자료</td><td>  <input type="file" name="img" accept="image/*"></td>
-			</tr>
+			
 			<tr>
 				<td colspan="4"><input type="submit" value="저장">
 				<button id="close">취소</button></td>
