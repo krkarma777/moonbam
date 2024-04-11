@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>비밀번호 찾기</title>
+	<title>비밀번호 변경 이메일 전송 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

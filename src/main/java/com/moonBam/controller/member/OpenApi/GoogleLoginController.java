@@ -92,8 +92,8 @@ public class GoogleLoginController {
         //받은 토큰을 토큰객체에 저장
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
         String googleToken = googleLoginResponse.getId_token();
-        	log.info("googleToken: {}", googleToken);
-        	System.out.println("googleToken: "+ googleToken);
+        //	log.info("googleToken: {}", googleToken);
+        //	System.out.println("googleToken: "+ googleToken);				//구글에서 받아오는 JSON데이터
         
         //받은 토큰을 구글에 보내 유저정보를 얻음
         String requestUrl = UriComponentsBuilder.fromHttpUrl(googleAuthUrl + "/tokeninfo").queryParam("id_token",googleToken).toUriString();

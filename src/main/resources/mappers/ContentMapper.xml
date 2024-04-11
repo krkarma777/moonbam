@@ -8,6 +8,6 @@
 
     <!-- 추후 탑10만 셀렉되도록 수정해야 함 -->
     <select id="selectTop" resultType="ContentDTO">
-    	select * from contentdb where rownum between 1 and 10 order by popularity desc
+    	select * from contentdb where rownum between 1 and 12 order by popularity desc
     </select>
 </mapper>

@@ -16,19 +16,24 @@ public class AnnouncementService {
 	@Autowired
 	public AnnouncementDAO dao;
 	
-	// popup
+
+	// pop
+
 	// get popup num list
 	public List<Integer> popupNnumList(String popup) {
 		System.out.println("AnnouncementService.popupList()");
 		List<Integer>list = dao.popupNumList(popup);
 		return list;
 	}
-	// popup	
+
+	// pop	
+
 	public List<AnnouncementDTO> popupList(String popup) {
 		System.out.println("AnnouncementService.popupList()");
 		List<AnnouncementDTO>list = dao.popupList(popup);
 		return list;
 	}
+
 	// pop
 	// last Page Number
 	public int lastPage(String word) {
@@ -65,7 +70,5 @@ public class AnnouncementService {
 		System.out.println("AnnouncementService.updateAnnouncement()");
 		 dao.updateAnnouncement(dto);
 	}
-	
-	
 }
 	

@@ -44,4 +44,9 @@ public class RegisterDAO {
 		int num = session.selectOne("com.config.MemberMapper.isUserEmailDuplicate", dataForFindExistEmail);
 		return num > 0;
 	}
+
+	public boolean RegisterPossible(String userId) {
+		int num = session.selectOne("com.config.MemberMapper.registerPossible", userId);
+		return num > 0;
+	}
 }

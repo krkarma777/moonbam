@@ -11,7 +11,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Update Password</title>
+	<title>비밀번호 변경 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 </head>
 
@@ -20,8 +20,8 @@
 	<h2>새로운 비밀번호를 입력하세요!</h2>
 	<form style="width: 300px; height: 300px" method="post" action="UpdatePassword">
 		<input type="hidden" name="userId" value="${userId}">
-		비밀번호: <input type="text" id="userPw" name="userPw" class="pw" placeholder="신규 비밀번호" minlength="6" required>
-		비밀번호 확인: <input type="text" id="password_confirm" name="password_confirm" class="pw" placeholder="신규 비밀번호 확인" minlength="6" required>
+		비밀번호: <input type="text" id="userPw" name="userPw" class="pw" placeholder="신규 비밀번호" minlength="6" required maxlength="30">
+		비밀번호 확인: <input type="text" id="password_confirm" name="password_confirm" class="pw" placeholder="신규 비밀번호 확인" required>
 		<span id="pwMismatch" style="color: red;"></span> 
 
 		<input type="submit" id="update" value="변경하기">
