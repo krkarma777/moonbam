@@ -1,6 +1,5 @@
 package com.moonBam.dao.member;
 
-
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.board.PageDTO;
@@ -20,6 +19,20 @@ public class MemberDAO {
 
 	@Autowired
 	SqlSessionTemplate session;
+
+
+	public void updateUser(String userName, String nickname, String userPhoneNum1, String userPhoneNum2,
+			String userPhoneNum3) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("userName", userName);
+		paramMap.put("nickname", nickname);
+		paramMap.put("userPhoneNum1", userPhoneNum1);
+		paramMap.put("userPhoneNum2", userPhoneNum2);
+		paramMap.put("userPhoneNum3", userPhoneNum3);
+
+		session.update("updateUser", paramMap);
+		
+	}
 
 
 
@@ -80,6 +93,5 @@ public class MemberDAO {
 //			pageDTO.setTotalCount(totalCount);
 //
 //			return pageDTO;
-//		}
-	
+//		}	
 }

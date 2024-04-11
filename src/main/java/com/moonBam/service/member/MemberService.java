@@ -1,6 +1,5 @@
 package com.moonBam.service.member;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -14,18 +13,25 @@ import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostDTO;
 
+
 @Service
 public class MemberService {
 
 	@Autowired
 	MemberDAO dao;
 
-
+	public void update(String userName, String nickname, String userPhoneNum1, String userPhoneNum2,
+			String userPhoneNum3) {
+		dao.updateUser(userName,  nickname,  userPhoneNum1,  userPhoneNum2,
+				 userPhoneNum3);
+		
+	}
 
 	public MemberDTO select(String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	public void updateNickname(String newNickname) {
 		
@@ -62,8 +68,4 @@ public class MemberService {
 //	public PageDTO<PostDTO> selectMyPostPaged(Map<String, Object> map) {
 //		return dao.selectMyPostPaged(map);
 //	}
-
-
-
-
 }
