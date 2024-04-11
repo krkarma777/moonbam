@@ -149,7 +149,7 @@ td {
 	</sec:authorize>
 
 	<div id="sitesShortCut">
-		<a href="<%=request.getContextPath()%>/Login">로그인 화면</a>
+		<a href="<%=request.getContextPath()%>/mainLogin">로그인 화면</a>
 	</div>
 
 </body>

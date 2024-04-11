@@ -1,4 +1,4 @@
-package com.moonBam.controller.springSecurity;
+package com.moonBam.springSecurity;
 
 import java.util.ArrayList;
 import java.util.Collection;

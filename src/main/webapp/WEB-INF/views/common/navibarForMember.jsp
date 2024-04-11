@@ -31,7 +31,7 @@
 	<sec:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
 		<!-- 로그인메인 -->
         <li class="nav-item">
-          <a class="nav-link" href="<c:url value='/Login'/>">로그인창</a>
+          <a class="nav-link" href="<c:url value='/mainLogin'/>">로그인창</a>
         </li>
 	</sec:authorize>
 

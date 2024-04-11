@@ -20,7 +20,7 @@
 		<div class="position-fixed top-0 end-0">
 			<!-- 비로그인 -->
 			<%if(null==dto){ %>
-			<a href="Login">로그인</a>
+			<a href="mainLogin">로그인</a>
 			<%}else {%>
 			<!-- 로그인 -->
 			<a href="Logout">로그아웃</a>

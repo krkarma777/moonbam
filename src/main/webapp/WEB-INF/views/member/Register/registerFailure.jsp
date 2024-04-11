@@ -23,7 +23,7 @@
     </div>
 
     <div id="sitesShortCut">
-        <a href="<c:url value='/Login'/>">로그인</a>
+        <a href="<c:url value='/mainLogin'/>">로그인</a>
     </div>
 </body>
 </html>

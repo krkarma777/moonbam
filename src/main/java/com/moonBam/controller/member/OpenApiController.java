@@ -1,4 +1,4 @@
-package com.moonBam.controller.member.OpenApi;
+package com.moonBam.controller.member;
 
 import java.util.Arrays;
 import java.util.Collections;

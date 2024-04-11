@@ -41,7 +41,7 @@ public class LoginController {
 	@Autowired
 	PasswordEncoder encoder;
 	
-	@RequestMapping("/Login")   
+	@RequestMapping("/mainLogin")   
 	public String Login() {
 		return "member/Login/loginMain";
 	}
@@ -67,7 +67,6 @@ public class LoginController {
 	public String notAuthentic() {
 		return "member/Find_Info/notAuthentic";
 	}
-	
 	
 	//로그인
 //	SpringSecurity_SecurityConfig에서 처리

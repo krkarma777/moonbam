@@ -50,7 +50,7 @@
     <p>확인 후 로그인 부탁드립니다.</p>
 
 <div id="sitesShortCut">
-    <a href="<c:url value='/Login'/>" id="goLogin">로그인</a> 
+    <a href="<c:url value='/mainLogin'/>" id="goLogin">로그인</a> 
 </div>
 
 </body>

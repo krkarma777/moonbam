@@ -87,7 +87,7 @@
 	  </div>	 
 	
 	<div id="sitesShortCut">
-		<a href="<c:url value='/Login'/>">로그인</a>
+		<a href="<c:url value='/mainLogin'/>">로그인</a>
 	</div>
 	<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="보안코드는 회원가입 시 모든 유저분들께 부여되는 고유코드입니다. MyPage에서 확인하실 수 있습니다. 또한 회원가입 시 입력하신 이메일 주소로 사이트에서 발송한 환영메일에도 기입되어 있습니다!">
 	  보안코드가 뭔가요?

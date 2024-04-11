@@ -1,4 +1,4 @@
-package com.moonBam.controller.springSecurity;
+package com.moonBam.springSecurity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,12 +13,9 @@ public class OAuthUser implements OAuth2User {
 	
 	private final String role;
 
-	private final String nickname;
-	
-	public OAuthUser(OAuth2Response oAuth2Response, String role, String nickname) {
+	public OAuthUser(OAuth2Response oAuth2Response, String role) {
 		this.oAuth2Response = oAuth2Response;
 		this.role = role;
-		this.nickname = nickname;
 	}
 
 	@Override
@@ -47,7 +44,4 @@ public class OAuthUser implements OAuth2User {
 	public String getUsername() {
 		return oAuth2Response.getEmail();
 	}
-	
-	
-	
 }

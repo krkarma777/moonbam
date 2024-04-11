@@ -25,9 +25,9 @@
 	    <form id="registerForm" action="<c:url value='/RegisterTerms'/>" method="post">
 	      <h1>회원가입</h1>
 	      <div class="social-container">
-	        <a href="/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
 	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" maxlength="40"/>
@@ -41,9 +41,9 @@
 	  	<form id="loginForm" action="<c:url value='loginProc'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
-	        <a href="/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
 	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" maxlength="40"/>

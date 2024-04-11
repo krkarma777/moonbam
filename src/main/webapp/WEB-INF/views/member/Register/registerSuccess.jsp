@@ -14,7 +14,7 @@
 	<script type="text/javascript">
 		<!-- 5초 뒤, 로그인 메인화면으로 이동 -->
 	   setTimeout(function () {
-            window.location.href = "<c:url value='/Login'/>";
+            window.location.href = "<c:url value='/mainLogin'/>";
         }, 5000);
     </script>
 </head>
@@ -26,7 +26,7 @@
     </div>
 
     <div id="sitesShortCut">
-        <a href="<c:url value='/Login'/>">로그인</a>
+        <a href="<c:url value='/mainLogin'/>">로그인</a>
     </div>
 </body>
 </html>

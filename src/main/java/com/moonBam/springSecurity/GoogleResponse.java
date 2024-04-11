@@ -1,4 +1,4 @@
-package com.moonBam.controller.springSecurity;
+package com.moonBam.springSecurity;
 
 import java.util.Map;
 
@@ -13,11 +13,6 @@ public class GoogleResponse implements OAuth2Response {
 	@Override
 	public String getProvider() {
 		return "google";
-	}
-
-	@Override
-	public String getProviderId() {
-		return attribute.get("sub").toString();
 	}
 
 	@Override

@@ -19,7 +19,7 @@
         <p class="mesg">해당 페이지는 제한된 페이지입니다. <br>
         권한이 있음에도 접속할 수 없다면 관리자에게 문의해주세요.</p>
         <div id="sitesShortCut">
-	        <a href="<%=request.getContextPath()%>/Login" class="links">로그인</a>
+	        <a href="<%=request.getContextPath()%>/mainLogin" class="links">로그인</a>
         </div>
     </div>
 </body>

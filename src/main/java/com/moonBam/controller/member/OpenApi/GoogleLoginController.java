@@ -33,13 +33,13 @@
 //    @Value("${google.login.url}")
 //    private String googleLoginUrl;
 //
-//    @Value("${google.client.id}")
+//    @Value("${google.client-id}")
 //    private String googleClientId;
 //
-//    @Value("${google.redirect.url}")
+//    @Value("${google.redirect-uri}")
 //    private String googleRedirectUrl;
 //
-//    @Value("${google.secret}")
+//    @Value("${google.client-secret}")
 //    private String googleClientSecret;
 //    
 //    @Autowired

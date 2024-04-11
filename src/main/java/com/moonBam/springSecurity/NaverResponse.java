@@ -1,4 +1,4 @@
-package com.moonBam.controller.springSecurity;
+package com.moonBam.springSecurity;
 
 import java.util.Map;
 
@@ -13,11 +13,6 @@ public class NaverResponse implements OAuth2Response{
 	@Override
 	public String getProvider() {
 		return "naver";
-	}
-
-	@Override
-	public String getProviderId() {
-		return attribute.get("id").toString();
 	}
 
 	@Override

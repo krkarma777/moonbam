@@ -1,4 +1,4 @@
-package com.moonBam.controller.springSecurity;
+package com.moonBam.springSecurity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -6,12 +6,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
 
 @Service
 public class SpringSecurityService  implements UserDetailsService {
 	@Autowired
-	SpringSecurityDAO dao;
+	LoginDAO dao;
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {

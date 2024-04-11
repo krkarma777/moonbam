@@ -22,7 +22,7 @@
 		${userId}입니다.
 	</div>
 	<div id="sitesShortCut">
-		<a href="<c:url value='/Login'/>">로그인</a> | <a href="<c:url value='/FindInfo'/>">회원정보 찾기</a>
+		<a href="<c:url value='/mainLogin'/>">로그인</a> | <a href="<c:url value='/FindInfo'/>">회원정보 찾기</a>
 	</div>
 </body>
 

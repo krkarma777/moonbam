@@ -15,15 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moonBam.controller.springSecurity.SpringSecurityDAO;
+import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.AnonymousBoardDTO;
 import com.moonBam.dto.AnonymousCommentDTO;
 import com.moonBam.dto.AnonymousReplyDTO;
@@ -57,7 +54,7 @@ public class AjaxController {
 	PasswordEncoder encoder;
 	
 	@Autowired
-	SpringSecurityDAO dao;
+	LoginDAO dao;
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************

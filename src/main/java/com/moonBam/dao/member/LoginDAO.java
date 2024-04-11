@@ -1,13 +1,11 @@
 package com.moonBam.dao.member;
 
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonBam.dto.MemberDTO;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +14,12 @@ public class LoginDAO {
 
 	@Autowired
 	SqlSessionTemplate session;
+	
+	// 스프링시큐리티용 - 아이디로 회원 정보 찾기
+	public MemberDTO userDetail(String userId) {
+		MemberDTO dto= session.selectOne("userDetail", userId);
+		return dto;
+	}
 	
 	//디버그용 - 회원 정보 찾기
 	public List<MemberDTO> selectAll() {
