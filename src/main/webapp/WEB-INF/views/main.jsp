@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-		
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <!DOCTYPE html>
 <html>
@@ -17,7 +16,6 @@
 <!-- popup 시작 -->
 <script type="text/javascript">
 var list = <%= request.getAttribute("list") %>;   
-
     $(function (){
     	// 팝업 창 위치 &크기 변수
 		let sLeft=0;
@@ -63,6 +61,7 @@ var list = <%= request.getAttribute("list") %>;
 <!-- popup 종료 -->
 
 <body class="bg-light" style="height: 100vh;">  
+
 	<!-- 네비게이션 바 -->
 	<jsp:include page="common/navBar.jsp"></jsp:include>
 	

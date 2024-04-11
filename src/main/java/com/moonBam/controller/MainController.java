@@ -23,10 +23,10 @@ public class MainController {
     PostService service;
     @Autowired
     MainService mService;
+
     @Autowired
     AnnouncementService annoService;
-    
-    
+
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category) {
         String nextPage = "main";
@@ -52,9 +52,14 @@ public class MainController {
             }
         });
 
+        // popup
+        List<Integer> list = annoService.popupNnumList("popup");
+      	
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
+        // popup
+        model.addAttribute("list", list);
 
         if (category != null) {
             switch (category) {

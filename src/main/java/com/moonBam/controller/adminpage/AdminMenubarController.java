@@ -18,7 +18,7 @@ public class AdminMenubarController {
 	@RequestMapping(value = "/AdminPage/toStatistics")
 	public String AdmintoStatistics() {
 		System.out.println("in adminpage.MainController : AdmintoStatistics()");
-		return "/AdminPage/AdminPageStatStat";
+		return "/AdminPage/AdminPageAnnounce";
 	}
 	
 	@RequestMapping(value = "/AdminPage/toStatistics2")
