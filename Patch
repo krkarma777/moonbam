@@ -1,0 +1,147 @@
+pom.xml
+- 스프링 시큐리티 및 스프링 시큐리티 테스트 디펜던시 추가
+
+SQL
+- 유저 Role, State 추가
+
+회원리스트
+- SQL 변경 반영
+
+DTO
+- SQL 변경 반영
+
+Spring Security 폴더 생성
+- SecurityConfig
+- SpringSecurityDAO
+- SpringSecurityService
+- SpringSecurityUser
+
+Login***************************
+- 네비게이션바 일시 중지
+
+Main***************************
+- 네비게이션바 일시 추가
+
+
+
+
+
+	//로그인
+	@PostMapping("/Logined")
+	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+//		String realUserPw = sc.encrypt(userPw);			**************************************************************
+		String realUserPw = userPw;
+		System.out.println("아이디 저장: " + userIdSave);				//체크되면 true
+		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
+		MemberDTO dto = serv.login(userId, realUserPw);
+
+		if (dto != null) {
+			session.setAttribute("loginUser", dto);
+
+			if(autoLogin) {
+				
+				Cookie autoId= new Cookie("userId", userId);
+				Cookie autoPW= new Cookie("userPw", userPw);
+				autoId.setMaxAge(60*60*24);
+				autoPW.setMaxAge(60*60*24);
+				response.addCookie(autoId);
+				response.addCookie(autoPW);
+				
+//				System.out.println("등록 오토 아이디"+ autoId);
+//				System.out.println("등록 오토 패스"+ autoPW);
+
+			} else {
+				
+				Cookie autoId= new Cookie("userId", null);
+				Cookie autoPW= new Cookie("userPw", null);
+				autoId.setMaxAge(0);
+				autoPW.setMaxAge(0);
+				response.addCookie(autoId);
+				response.addCookie(autoPW);
+
+//				System.out.println("삭제 오토 아이디"+ autoId);
+//				System.out.println("삭제 오토 패스"+ autoPW);
+				
+				if(userIdSave) {
+					Cookie id= new Cookie("userId", userId);
+					id.setMaxAge(60*60*24);
+					response.addCookie(id);
+					
+//					System.out.println("등록 저장 아이디"+ id);
+				} else {
+					Cookie id= new Cookie("userId", null);
+					id.setMaxAge(0);
+					response.addCookie(id);
+					
+//					System.out.println("삭제 저장 아이디"+ id);
+				}
+			}
+			
+			return "main";
+		} else {
+			return "member/Find_Info/cantFindUserdata";
+		}
+	}
+
+
+	@GetMapping("/Logout")
+	@GetMapping("/Logout")
+	public String Logout(HttpSession session) {
+		MemberDTO dto = (MemberDTO) session.getAttribute("loginUser");
+		if (dto != null) {
+			session.removeAttribute("loginUser");
+			return "main";
+		} else {
+			return "member/Find_Info/cantFindUserdata";
+		}
+
+	}
+	
+	
+	
+	/* 
+				<div class="pw" data-pw="${dto.getUserPw()}"></div>
+			
+				$(".pw").on("click", function() {
+
+				var rp = $(this);
+				var ecPW = rp.attr("data-pw");
+				var userPw = rp.text();
+				//console.log(ecPW);
+
+				if (ecPW == userPw) {
+					
+					$.ajax({
+						type : "GET",
+						url : "<c:url value='/decrypt'/>",
+						data : {
+							mesg : userPw
+						},
+						dataType : "text",
+						success : function(response) {
+							rp.text(response)
+						},
+						error : function(xhr, status, error) {
+							console.log(error)
+						}
+					})
+					
+				} else {
+					
+					$.ajax({
+						type : "GET",
+						url : "<c:url value='/encrypt'/>",
+						data : {
+							mesg : userPw
+						},
+						dataType : "text",
+						success : function(response) {
+							rp.text(response)
+						},
+						error : function(xhr, status, error) {
+							console.log(error)
+						}
+					})
+
+				}
+			}) */

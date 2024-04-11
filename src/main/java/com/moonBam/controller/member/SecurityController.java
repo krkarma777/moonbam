@@ -15,7 +15,7 @@ public class SecurityController {
  
     //암호화 시작(String 타입으로 출력)
     @GetMapping("/encrypt")
-    public static String encrypt(String mesg) {
+    public String encrypt(String mesg) {
     	byte[] byteMesg = doEncrypt(mesg);
     	String resultString = Base64.getEncoder().encodeToString(byteMesg);
     	return resultString;

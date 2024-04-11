@@ -30,18 +30,18 @@ public class LoginService {
 	}
 	
 	//아이디 찾기
-	public MemberDTO findUserId(Map<String, String> map) {
-		MemberDTO dto = dao.findUserId(map);
+	public String findUserId(String secretCode) {
+		String userId = dao.findUserId(secretCode);
+		return userId;
+	}
+
+	//비밀번호 찾기
+	public MemberDTO mailingPW(Map<String, String> map) {
+		MemberDTO dto = dao.mailingPW(map);
 		return dto;
 	}
 
-//	//비밀번호 찾기
-//	public MemberDTO findUserPW(Map<String, String> map) {
-//		MemberDTO dto = dao.findUserPW(map);
-//		return dto;
-//	}
-
-	//로그인
+	//로그인***************************************************************************************
 	public MemberDTO login(String userId, String userPw) {
 		Map<String, String> idPW = new HashMap<String, String>();
 			idPW.put("userId", userId);
@@ -58,30 +58,7 @@ public class LoginService {
 		return dao.loginPossible(dataForLogin);
 	}
 
-	//전체 비밀번호 - 닉네임으로 찾기
-	public boolean findPWbyNickname(String userAnswer, String userid) {
-		HashMap<String, String> nicknameMap = new HashMap<String, String>();
-			nicknameMap.put("nickname", userAnswer);
-			nicknameMap.put("userid", userid);
-		return dao.findPWbyNickname(nicknameMap);
-	}
-	
-	//전체 비밀번호 - 이메일로 찾기
-	public boolean findPWbyEmail(String userAnswer, String userid) {
-		String[] emailParts = userAnswer.split("@");
-		HashMap<String, String> emailMap = new HashMap<String, String>();
-			emailMap.put("restoreUserEmailId", emailParts[0]);
-			emailMap.put("restoreUserEmailDomain", emailParts[1]);
-			emailMap.put("userid", userid);
-		return dao.findPWbyEmail(emailMap);
-	}
-
-	//전체 비밀번호 출력용
-	public MemberDTO selectMemberData(String userId) {
-		MemberDTO dto = dao.selectMemberData(userId);
-		return dto;
-	}
-
+	//비밀번호 업데이트
 	public void updatePassword(Map<String, String> map) {
 		dao.updatePassword(map);
 	}

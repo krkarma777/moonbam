@@ -21,7 +21,8 @@
 
 <body>
     <div id="successMesg">
-        회원가입 성공
+        회원가입 성공!<br>
+        또한 메일로 보안코드가 발송되었습니다. 확인해보세요!
     </div>
 
     <div id="sitesShortCut">

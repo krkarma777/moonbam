@@ -15,15 +15,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.moonBam.controller.springSecurity.SpringSecurityDAO;
 import com.moonBam.dto.AnonymousBoardDTO;
 import com.moonBam.dto.AnonymousCommentDTO;
 import com.moonBam.dto.AnonymousReplyDTO;
+import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.AnonymousBoardService;
 import com.moonBam.service.member.AnonymousCommentService;
 import com.moonBam.service.member.AnonymousReplyService;
@@ -41,9 +45,6 @@ public class AjaxController {
 	RegisterService rServ;
 	
 	@Autowired
-	SecurityController sc;
-
-	@Autowired
 	AnonymousBoardService dServ;
 	
 	@Autowired
@@ -52,6 +53,12 @@ public class AjaxController {
 	@Autowired
 	AnonymousReplyService anonymousReplyService;
 	
+	@Autowired
+	PasswordEncoder encoder;
+	
+	@Autowired
+	SpringSecurityDAO dao;
+	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
 	//***************************************************************************************************************
@@ -59,12 +66,40 @@ public class AjaxController {
 	//메인에서 로그인 여부 확인 에이젝스
 	@PostMapping("AjaxCheckIDPW")
 	public String AjaxCheckIDPW(String userId, String userPw) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		String realUserPw = sc.encrypt(userPw);
-		boolean canLogin = lServ.loginPossible(userId, realUserPw);
+		
 		String mesg = "loginSuccess";
-		if (!canLogin) {
-			mesg = "loginFail";                
-        }
+		
+		//	로그인 에이젝스 실행 시 입력한 아이디와 비밀번호 출력
+		//	System.out.println(userId);
+		//	System.out.println(userPw);
+			
+		//	아이디로만 확인해봤을 때 데이터가 있는지 확인(비밀번호는 매번 바뀌기 때문에 사용 불가)
+			MemberDTO dto= dao.userDetail(userId);
+
+		//	아이디가 없을 경우에는 바로 Ajax 종료
+			if(dto==null) {  
+				return "loginFail";
+			}
+		
+		//	아이디가 있을 경우	
+		//	DB에 입력된 비밀번호 출력
+		//	System.out.println("dto에 저장된 암호: "+dto.getUserPw());
+		
+		//	False면 활동 정지 상태
+			if (!dto.isEnabled()) {
+			    return "suspendedId";
+			}	
+			
+		//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)		
+			boolean canLogin = encoder.matches(userPw, dto.getUserPw());
+		//	System.out.println(canLogin);
+
+		//	False면 Ajax로 인한 메세지 출력	
+			if (!canLogin) {
+				mesg = "loginFail";                
+			}
+
+		//	True면 Submit 정상 진행
 		return mesg;
 	}
 	
@@ -79,57 +114,9 @@ public class AjaxController {
 		return mesg;
 	}
 	
-	//전체 비밀번호 찾기에서 질문에 따른 대답 확인 에이젝스
-	@PostMapping("AjaxMatchQnA")
-	public String AjaxMatchQnA(String userInfo, String answer, String userId) {
-		
-		boolean can_All_PW = false;
-		String mesg = "correct_Answer";
-																        //디버그 코드*****************************
-																        System.out.println(userInfo);
-																        System.out.println(answer);
-																        System.out.println(userId);
-																        //*************************************
-        
-		// 선택된 질문에 따라 사용되는 Method 변경**************************
-		if (userInfo.equals("nickname")) {
-		can_All_PW = lServ.findPWbyNickname(answer, userId);
-		} 
-		if (userInfo.equals("restoreUserEmail")) {
-		can_All_PW = lServ.findPWbyEmail(answer, userId);
-		}
-		// 선택된 질문에 따라 사용되는 Method 변경**************************
-		
-																		//디버그 코드*****************************                 
-																		System.out.println(can_All_PW);    
-																		//*************************************
-																		
-	    //사용자 ID와 질문과 답변이 일치하지 않을 경우, ajax출력																			
-		if (can_All_PW == false){
-	        mesg = "wrong_Answer";
-	    }						
-
-		//사용자 ID와 질문과 답변이 일치할 경우, ajax출력
-		return mesg;
-			
-	}
-	
-	
-	
 	//***************************************************************************************************************
 	//***************************************************회원 가입*******************************************************
 	//***************************************************************************************************************
-	
-	//회원가입 자식창에서 아이디 중복 에이젝스
-	@PostMapping("/AjaxIDDuplicate")
-	public String AjaxIDDuplicate(String userId) {
-		boolean isDuplicate = rServ.isUserIdDuplicate(userId);
-		String mesg = "notDuplicate";
-		if (isDuplicate) {
-			mesg = "duplicate"; 
-        } 
-		return mesg;
-	}
 	
 	//회원가입 자식창에서 닉네임 중복 에이젝스
 	@PostMapping("/AjaxNicknameDuplicate")

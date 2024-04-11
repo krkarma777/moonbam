@@ -1,10 +1,11 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.moonBam.dto.MemberDTO"%>
-<%@page import="java.util.List"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="com.moonBam.dto.MemberDTO"%>
+<%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -79,45 +80,41 @@ td {
 </head>
 <body>
 
-	<h1>[회원 목록]</h1>
-	<hr>
-
-	<table border=1>
-		<tr>
-			<th>아이디</th>
-			<th>비밀번호(클릭해서 확인)</th>
-			<th>닉네임</th>
-			<th>복구 이메일 아이디</th>
-			<th>복구 이메일 도메인</th>
-			<th>구글 연동 여부</th>
-			<th>네이버 연동 여부</th>
-			<th>카카오 연동 여부</th>
-			<th>가입일</th>
-			<th>유형</th>
-			<th>삭제</th>
-		</tr>
-		<c:forEach var="dto" items="${memberList}">
+	<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+		<h1>[회원 목록]</h1>
+		<hr>
+		<table border=1>
 			<tr>
-				<td>${dto.userId}</td>
-				<td><div class="pw" data-pw="${dto.getUserPw()}">${dto.getUserPw()}</div></td>
-				<td>${dto.getNickname()}</td>
-				<td>${dto.getRestoreUserEmailId()}</td>
-				<td>${dto.getRestoreUserEmailDomain()}</td>
-				<td>${dto.getGoogleConnected()}</td>
-				<td>${dto.getNaverConnected()}</td>
-				<td>${dto.getKakaoConnected()}</td>
-				<td>${dto.getUserSignDate()}</td>
-				<td>${dto.getUserType()}</td>
-				<td><button class="deleteBtn" data-id="${dto.getUserId()}">삭제(참조 시 X)</button></td>
+				<th>아이디</th>
+				<th>비밀번호(클릭해도 확인불가)</th>
+				<th>닉네임</th>
+				<th>보안코드</th>
+				<th>구글 연동 여부</th>
+				<th>네이버 연동 여부</th>
+				<th>카카오 연동 여부</th>
+				<th>가입일</th>
+				<th>역할</th>
+				<th>상태</th>
+				<th>삭제</th>
 			</tr>
-		</c:forEach>
-	</table>
-
-	<div id="sitesShortCut">
-		<a href="<%=request.getContextPath()%>/Login">로그인 폼</a>
-	</div>
-	
-	<script type="text/javascript">
+			<c:forEach var="dto" items="${memberList}">
+				<tr>
+					<td>${dto.userId}</td>
+					<td>${dto.getUserPw()}</td>			
+					<td>${dto.getNickname()}</td>
+					<td>${dto.getSecretCode()}</td>
+					<td>${dto.getGoogleConnected()}</td>
+					<td>${dto.getNaverConnected()}</td>
+					<td>${dto.getKakaoConnected()}</td>
+					<td>${dto.getUserSignDate()}</td>
+					<th>${dto.getRole()}</th>
+					<th>${dto.isEnabled()}</th>
+					<td><button class="deleteBtn" data-id="${dto.getUserId()}">삭제(참조 시 X)</button></td>
+				</tr>
+			</c:forEach>
+		</table>
+		
+		<script type="text/javascript">
 		$(function() {
 
 			$(".deleteBtn").on("click", function() {
@@ -139,52 +136,21 @@ td {
 					}
 				})
 			})
-
-			$(".pw").on("click", function() {
-
-				var rp = $(this);
-				var ecPW = rp.attr("data-pw");
-				var userPw = rp.text();
-				//console.log(ecPW);
-
-				if (ecPW == userPw) {
-					
-					$.ajax({
-						type : "GET",
-						url : "<c:url value='/decrypt'/>",
-						data : {
-							mesg : userPw
-						},
-						dataType : "text",
-						success : function(response) {
-							rp.text(response)
-						},
-						error : function(xhr, status, error) {
-							console.log(error)
-						}
-					})
-					
-				} else {
-					
-					$.ajax({
-						type : "GET",
-						url : "<c:url value='/encrypt'/>",
-						data : {
-							mesg : userPw
-						},
-						dataType : "text",
-						success : function(response) {
-							rp.text(response)
-						},
-						error : function(xhr, status, error) {
-							console.log(error)
-						}
-					})
-
-				}
-			})
 		}) 
 	</script>
+	</sec:authorize>
+	
+	<!-- ******************************************************************************************* -->
+
+	<sec:authorize access="!hasAnyRole('ROLE_ADMIN')">
+		<h1>[권한 없음]</h1>
+		<hr>
+		<div>이곳은 제한된 페이지입니다. 권한이 있음에도 페이지가 보이지 않을 경우, 관리자에게 문의하세요.</div>
+	</sec:authorize>
+
+	<div id="sitesShortCut">
+		<a href="<%=request.getContextPath()%>/Login">로그인 화면</a>
+	</div>
 
 </body>
 </html>

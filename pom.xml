@@ -90,6 +90,43 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		
+		
+		<!-- 스프링 시큐리티 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+		<!-- 테스트 시에만 사용되는 스프링 시큐리티의 테스트 지원 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- 필터 및 웹 보안 인프라 관련 코드 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>5.7.7</version>
+		</dependency>
+		
+		<!-- JSO에서 SpringSecurity Taglib 사용-->
+		<dependency> 
+		    <groupId>org.springframework.security</groupId> 
+		    <artifactId>spring-security-taglibs</artifactId> 
+		    <version>5.7.7</version> 
+		</dependency>
+		
+		<!-- OAuth2LoginAuthenticationFilter  -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-oauth2-client</artifactId>
+		    <version>5.7.7</version>
+		</dependency>
+
+
 
 	</dependencies>
 

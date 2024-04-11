@@ -5,10 +5,15 @@
 <mapper namespace="com.config.MemberMapper">
 
 
+	<!-- Spring Security용 -->
+	<select id="userDetail" resultType="com.moonBam.dto.MemberDTO" parameterType="String">
+	  select * from  memberDB
+	   where userId= #{userId}
+	</select>
+	
 	<!-- **************************************************************** -->
 	<!-- *********************디버그 Mapper********************************* -->
 	<!-- **************************************************************** -->
-
 
 	<!-- 디버그용 - 회원 정보 찾기 -->	
 	<select id="selectAll" resultType="MemberDTO">
@@ -266,11 +271,11 @@
 	<!-- API 회원가입 -->
 	<insert id="insertAPIMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-			userId, userPw, nickname, 
+			userId, userPw, nickname, secretCode,
 			googleConnected, naverConnected, kakaoConnected
 		)
 		VALUES (
-			#{userId}, #{userPw}, #{nickname},
+			#{userId}, #{userPw}, #{nickname}, #{secretCode},
 			#{googleConnected}, #{naverConnected}, #{kakaoConnected}
 		)
 	</insert>
@@ -306,17 +311,16 @@
 	<!-- **************************************************************** -->
 	
 	<!-- 아이디 찾기 -->
-	<select id="findUserId" resultType="MemberDTO" parameterType="hashmap">
+	<select id="findUserId" resultType="String" parameterType="String">
 		SELECT
-			*
+			userId
 		FROM 
 			memberDB
 		WHERE 
-			restoreUserEmailId = #{restoreUserEmailId}
-			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
+			secretCode = #{secretCode}
 	</select>
 
-	<!-- 로그인 -->
+	<!-- 로그인 *******************************************************************************************-->
 	<select id="login" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
 			*
@@ -344,35 +348,18 @@
 			userId = #{userId}
 	</select>
 		
-	<!-- 전체 비밀번호 - 닉네임으로 찾기 -->
-	<select id="findPWbyNickname" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userid = #{userid}
-			AND nickname = #{nickname}
-	</select>
-	
-	<!-- 전체 비밀번호 - 이메일로 찾기 -->
-	<select id="findPWbyEmail" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userid = #{userid}
-			AND restoreUserEmailId = #{restoreUserEmailId}
-			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
-	</select>
-	
-	<!-- 전체 비밀번호 출력용 -->
-	<select id="selectMemberData" resultType="MemberDTO" parameterType="String">
+	<!-- 비밀번호 찾기 -->
+	<select id="mailingPW" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
 			*
-		FROM 
+		FROM
 			memberDB
 		WHERE 
 			userId = #{userId}
+			AND secretCode = #{secretCode}
 	</select>
 	
+	<!-- 비밀번호 업데이트 -->
 	<update id="updatePassword" parameterType="hashmap">
 		UPDATE 	memberDB
 		SET		userPw = #{userPw}
@@ -387,16 +374,16 @@
 	<insert id="insertNewMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
 		userId, userPw, nickname, 
-		restoreUserEmailId, restoreUserEmailDomain,
-		userSignDate, userType
+		secretCode, 
+		userSignDate
 		)
 		VALUES (
 		#{userId}, #{userPw}, #{nickname},
-		#{restoreUserEmailId}, #{restoreUserEmailDomain},
-		#{userSignDate}, #{userType}
+		#{secretCode}, 
+		#{userSignDate}
 		)
 	</insert>
-
+	
 	<!-- 아이디 중복 검사 에이젝스 -->
 	<select id="isUserIdDuplicate" resultType="int" parameterType="String">
 		SELECT COUNT(*)
@@ -411,13 +398,4 @@
 		WHERE nickname = #{nickname}
 	</select>
 
-	<!-- 이메일 중복 검사 에이젝스 -->
-	<select id="isUserEmailDuplicate" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userEmailId = #{userEmailId}
-			AND userEmailDomain = #{userEmailDomain}
-	</select>
-	
 </mapper>

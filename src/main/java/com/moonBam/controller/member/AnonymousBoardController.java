@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,10 @@ public class AnonymousBoardController {
 	
 	@Autowired
 	AjaxController ajaxController;
+	
+	@Autowired
+	static
+	PasswordEncoder encoder;
 	
 	//게시판 글 목록 보기
 	@GetMapping("/viewDBoardList")
@@ -320,8 +325,9 @@ public class AnonymousBoardController {
 	    } catch (UnknownHostException e) {
 	        result = "";
 	    }
-	    result = SecurityController.encrypt(result);
-	   return result; 
+	    result = encoder.encode(result);
+	    
+	    return result; 
 	}//*********************************************************************
 
 
