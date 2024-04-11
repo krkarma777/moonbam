@@ -29,7 +29,7 @@ public class ChatMemberDTO {
 	@Override
 	public String toString() {
 		return "ChatMemberDTO [chatNum=" + chatNum + ", userId=" + userId + "]";
-	}
+	} 
 
 	
 	
