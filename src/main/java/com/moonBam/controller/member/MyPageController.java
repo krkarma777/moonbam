@@ -1,6 +1,5 @@
 package com.moonBam.controller.member;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.PostService;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.MemberService;

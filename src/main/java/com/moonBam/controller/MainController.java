@@ -1,6 +1,5 @@
 package com.moonBam.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,6 +54,7 @@ public class MainController {
         // popup
         List<Integer> list = annoService.popupNnumList("popup");
       	
+
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
@@ -80,10 +80,6 @@ public class MainController {
                 break;
             }
         }
-        
-        List<Integer> list = new ArrayList<Integer>();
-		list = annoService.popupNnumList("popup");
-		model.addAttribute("list", list);
         
         return nextPage;
     }
