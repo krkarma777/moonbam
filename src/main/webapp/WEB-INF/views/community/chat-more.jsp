@@ -35,7 +35,7 @@
 			<th>[내 정보]</th>
 		</tr>
 		<tr>
-		 <td>${sessionScope.loginUser.userId} ( ${sessionScope.loginUser.nickname} ) <button>정보 수정하기</button> </td>
+		 <td>${sessionScope.loginUser.nickname} ( ${sessionScope.loginUser.userId} ) <button>정보 수정하기</button> </td>
 		</tr>
 		<tr align="center">
 			<td>

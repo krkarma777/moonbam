@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReportDTO;
@@ -72,14 +73,17 @@ public class ChatmoreController {
 	}
 	
 	@RequestMapping(value = "/Chatmore/ChatmoreReport", method=RequestMethod.POST)
-	public String ChatmoreReportPost(@RequestParam ReportDTO ReportDTO, @RequestParam("chatNum") String chatNum, HttpSession session) {
-		// ReportDTO DB에 insert 날릴거임
-		System.out.println("ReportDTO"+ReportDTO+"     "+"chatNum"+chatNum);
-		ReportDTO.setPostId("1");
-		chatmoreService.ChatmoreReportPostInsert(ReportDTO);
-		session.setAttribute("mesg", "신고 접수가 완료되었습니다/.");
+	public String ChatmoreReportPost(AdminReportDTO adminReportDTO,@RequestParam("targetId") String chatNum, HttpSession session) {
 		
-		return "redirect:/community/chat-more-report";
+		
+		// AdminReportDTO DB에 insert 날릴거임
+		System.out.println("AdminReportDTO"+adminReportDTO+"     "+"targetId"+chatNum);
+		
+		chatmoreService.ChatmoreReportPostInsert(adminReportDTO);
+		
+		session.setAttribute("mesg", "신고 접수가 완료되었습니다.");
+		
+		return "redirect:/Chatmore";
 	}
 	
 	
