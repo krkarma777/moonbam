@@ -70,7 +70,7 @@ public class MainController {
                 nextPage = "movieHome";
                 break;
             case "community":
-                nextPage = "communityHome";
+                nextPage = "community/communityHome";
                 break;
             case "tv":
                 nextPage = "TvHome";
