@@ -6,7 +6,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-
+	
 %>
 <html>
 <head>
@@ -83,7 +83,7 @@ button {
 		</div>
 		
 		<!-- community목록 -->
-		<table style="margin-top: 5px; width:1200px; height:">
+		<table style="margin-top: 5px; width:1200px; height:795px">
 			<%	int count = 0;
 			for(int i=1; i<=12; i++){ 
 				for(int j=1; j<=3;j++){	%>

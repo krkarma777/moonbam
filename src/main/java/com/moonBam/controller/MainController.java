@@ -1,5 +1,6 @@
 package com.moonBam.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,16 +61,27 @@ public class MainController {
         model.addAttribute("movieInfoList", movieInfoList);
         // popup
         model.addAttribute("list", list);
-
+        
+        List<String> categoryList = new ArrayList<>();;
+        
         if (category != null) {
             switch (category) {
             case "movie":
             	//영화 가져오기(인기 순은 아직)
 	    		List<ContentDTO> movieTopList = mService.selectTop();
 	    		model.addAttribute("movieTopList", movieTopList);
+	    		model.addAttribute("category", category);
+	    		categoryList.add("한국영화");
+	    		categoryList.add("해외영화");
+	    		model.addAttribute("categoryList", categoryList);
                 nextPage = "movieHome";
                 break;
             case "community":
+            	model.addAttribute("category", category);
+	    		categoryList.add("영화");
+	    		categoryList.add("독서");
+	    		categoryList.add("음악");
+	    		model.addAttribute("categoryList", categoryList);
                 nextPage = "community/communityHome";
                 break;
             case "tv":
