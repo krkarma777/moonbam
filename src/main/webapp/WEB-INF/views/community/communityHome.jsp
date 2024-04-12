@@ -1,3 +1,4 @@
+<%@page import="com.moonBam.dto.CommunityPageDTO"%>
 <%@page import="com.moonBam.dto.ChatRoomDTO"%>
 <%@page import="com.moonBam.dto.board.PageDTO"%>
 <%@page import="java.util.Map"%>
@@ -6,7 +7,12 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-
+	CommunityPageDTO cpDTO = (CommunityPageDTO)request.getAttribute("cpDTO");
+	List<ChatRoomDTO> chatRoomList = cpDTO.getList();
+	System.out.println("in communityHome.jps: ");
+	for(int i=0; i<chatRoomList.size(); i++){
+		System.out.println(chatRoomList.get(i));
+	}
 %>
 <html>
 <head>
@@ -83,24 +89,20 @@ button {
 		</div>
 		
 		<!-- community목록 -->
-		<table style="margin-top: 5px; width:1200px; height:">
-			<%	int count = 0;
-			for(int i=1; i<=12; i++){ 
-				for(int j=1; j<=3;j++){	%>
-				<tr id="<%=i%>">
-					<%for(int k=1; k<=4; k++) {
-						if(count==12)break;
-						count++;%>
-					<td style="width: 300px; height: 265px;">
+		<table style="margin-top: 5px; width:1200px; height:795px">
+			<%int count = 0;
+			for(int j=1; j<=3;j++){	%>
+				<tr>
+					<%for(int k=1; k<=4; k++) { %>
+					<td id="<%=count%>" style="width: 300px; height: 265px;">
 						<div class="border rounded-2">
 							<div class="border-bottom" style="height: 30px; width: 100%; background-color: #ff416c; color:white; opacity : 0.3;"></div>
 							<div class="border-top" style="height: 241.5px; width: 100%;"></div>
 						</div>
 					</td>
-					<%} %>
+					<%count++; } %>
 				</tr>
-			<%	}
-			} %>
+			<%} %>
 		</table>
 		
 		<!-- 페이지네이션 -->
