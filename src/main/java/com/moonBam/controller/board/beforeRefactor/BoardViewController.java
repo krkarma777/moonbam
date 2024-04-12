@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +25,12 @@ public class BoardViewController {
     PostService service;
 	
 	@GetMapping("/board/{postBoard}")
-	public String postBoard(@PathVariable("postBoard") String postBoard, Map<String, String> paramMap, Model model) {
+	public String postBoard(@PathVariable("postBoard") String postBoard,
+                            @RequestParam Map<String, String> paramMap,
+                            Model model) {
+        
         // 현재 페이지 번호 설정
-        String curPageStr = paramMap.get("curPage");//
+        String curPageStr = paramMap.get("curPage");
         
         int curPage = 1; // 기본값
         if (curPageStr != null && !curPageStr.isEmpty()) {

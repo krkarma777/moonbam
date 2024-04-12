@@ -24,8 +24,12 @@
 			<c:if test="${memberDto.userId != sessionScope.loginUser.userId }"> <!-- 근데 본인은 제외하고 출력 -->
 				<tr>
 					<td>
+					<ul>
 					<span style="font-size: 13px; color: gray;">가입한 날짜 ${memberDto.userSignDate }</span><br>
-					${memberDto.nickname } ( ${memberDto.userId } ) <button onClick="fnReport('${memberDto.userId }')">신고하기</button> 
+						<li>
+							${memberDto.nickname } ( ${memberDto.userId } ) <button onClick="fnReport('${memberDto.userId }')">신고하기</button>
+						</li>
+					</ul>
 					</td>
 				</tr>
 			</c:if>		
@@ -34,9 +38,17 @@
 		<tr>
 			<th>[내 정보]</th>
 		</tr>
-		<tr>
-		 <td>${sessionScope.loginUser.userId} ( ${sessionScope.loginUser.nickname} ) <button>정보 수정하기</button> </td>
-		</tr>
+		
+			<tr>
+				<td>
+					<ul>
+						<li>
+							${sessionScope.loginUser.nickname} ( ${sessionScope.loginUser.userId} ) <button>정보 수정하기</button>
+						</li>	 
+					</ul>
+				</td>
+			</tr>
+		
 		<tr align="center">
 			<td>
 				<button>방 나가기</button>
@@ -48,6 +60,25 @@
 		</tr>	
 	
 	</table>
+	
+	<!-- 신고가 정상 진행되면 신고 잘 됐다고 알림창 뜨기   -->
+	<% String mesg = (String) session.getAttribute("mesg");
+	if(mesg != null ){	
+		
+		%>	
+		
+		<script>
+		alert("<%= mesg %>");
+		</script>
+	
+	<%} 
+	
+	session.removeAttribute("mesg");
+	
+	%>
+	
+	
+	
 	<script type="text/javascript">
 	
 	var child; //자식팝업창 변수 선언
@@ -56,15 +87,13 @@
 	//회원 신고하기 눌렀을 때 작동되는 fn
 	function fnReport(userId) {
 		
-		var openUrl = "Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatNum};
+		var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatNum};
 		
 		childOpen(openUrl);
 		
 	}
 	
-	
-	
-	
+
 	//button기능에 팝업으로 자식창 띄우기 openUrl 변수에 controller 주소 달면 됨
 	function childOpen(openUrl){
 		//열릴 창(자식 창)의 너비와 높이

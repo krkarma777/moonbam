@@ -10,14 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.moonBam.dto.AdminRprtdDTO;
+import com.moonBam.dto.AdminDeletedPostDTO;
+import com.moonBam.dto.AdminReportDTO;
+import com.moonBam.service.adminpage.AdminDeletedPostService;
 import com.moonBam.service.adminpage.AdminReportService;
 
 @Controller
 public class AdminPostController {
 
 	@Autowired
-	AdminReportService service;
+	AdminReportService rservice;
+	
+	@Autowired
+	AdminDeletedPostService dpservice;
 	
 	//신고글 리스트 조회
 	@RequestMapping(value = "/AdminPage/AdminPostReported")
@@ -31,11 +36,11 @@ public class AdminPostController {
 		map.put("criteria", criteria);
 		map.put("SearchValue", SearchValue);
 		
-		List<AdminRprtdDTO> list = service.SearchReport(map);
+		List<AdminReportDTO> list = rservice.SearchReport(map);
 		System.out.println(map);
 		System.out.println(list);
 		mav.addObject("list",list);
-		mav.setViewName("/AdminPage/AdminPagePostRprtedPost");
+		mav.setViewName("/AdminPage/AdminPageReportedPost");
 		return mav;
 	}
 	
@@ -45,9 +50,9 @@ public class AdminPostController {
 		
 		System.out.println("in adminpage.post.DeletePost");
 		List<String> deletelist = Arrays.asList(postArr);
-		service.delReportedPost(deletelist);
+		rservice.delReportedPost(deletelist);
 		
-		List<AdminRprtdDTO> list = service.SearchReport(null);
+		List<AdminReportDTO> list = rservice.SearchReport(null);
 		
 		mav.addObject("list",list);
 		mav.setViewName("/AdminPage/AdminPagePostRprtedPost");
@@ -56,13 +61,23 @@ public class AdminPostController {
 	}
 	
 	//삭제된 게시글 조회
-	@RequestMapping(value = "/AdminPage/toAdminPageDeletedPost")
-	public String getDeletedPostList() {
-		return "/AdminPage/AdminPageDeletedPost";
+	@RequestMapping(value = "/AdminPage/AdminPageDeletedPost")
+	public ModelAndView getDeletedPostList(String SearchValue, String Criteria, ModelAndView mav) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("searchValue", SearchValue);
+		map.put("criteria", Criteria);
+		List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
+		System.out.println("in controller");
+		System.out.println(list);
+		mav.addObject("list", list);
+		mav.setViewName("/AdminPage/AdminPageDeletedPost");
+		
+		return mav;
 	}
 	
-	//삭제된 글 조회
-	@RequestMapping(value = "/AdminPage/toAdminPageDeletedComment")
+	//삭제된 댓글 조회
+	@RequestMapping(value = "/AdminPage/AdminPageDeletedComment")
 	public String getDeletedCommentList() {
 		return "/AdminPage/AdminPageDeletedComment";
 	}

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moonBam.dao.CommunityChatmoreDAO;
+import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReportDTO;
@@ -30,9 +31,9 @@ public class CommunityChatmoreService {
 		return chatMoreDao.ChatLeaderIdByChatNum(chatNum);
 	}
 
-	public void ChatmoreReportPostInsert(ReportDTO reportDTO) {
+	public void ChatmoreReportPostInsert(AdminReportDTO adminReportDTO) {
 		// TODO Auto-generated method stub
-		chatMoreDao.ChatmoreReportPostInsert(reportDTO);
+		chatMoreDao.ChatmoreReportPostInsert(adminReportDTO);
 	}
 	
 	

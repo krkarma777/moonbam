@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommunityHome">
+
+	<select id="chatRoomTotalCount" resultType="int" parameterType="HashMap">
+		select count(*) from chatroom
+		<where>
+			<if test = "searchCategory == '영화'">
+			 	category = '영화' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '독서'">
+			 	category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '음악'">
+			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+		</where>
+		order by chatnum
+	</select>
+	
+	<select id="chatRoomList" resultType="ChatRoomDTO" parameterType="HashMap">
+		select * from chatroom
+		<where>
+			<if test = "searchCategory == '영화'">
+			 	category = '영화' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '독서'">
+			 	category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '음악'">
+			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+		</where>
+		order by chatnum
+	</select>
+  
+</mapper>

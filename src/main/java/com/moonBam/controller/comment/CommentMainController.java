@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,14 +35,6 @@ public class CommentMainController {
 		
 		System.out.println("/commentMain주소처리. main");
 		
-		//test용. 나중에 지울거임
-		MemberDTO memberDTO = new MemberDTO();
-		memberDTO.setUserId("kkk333");
-		memberDTO.setNickname("귀염둥이");
-		session.setAttribute("loginUser", memberDTO);
-		request.setAttribute("postId", 3); //나중에jsp에서 이거 쓰인 부분 getParameter로 변경하기
-		
-		
 		
 		return "/board/commentMain"; //commentMain.jsp로 이동
 		
@@ -51,6 +44,7 @@ public class CommentMainController {
 	@RequestMapping(value="/Acorn/selectAllByPostId", method = RequestMethod.POST) 
 	@ResponseBody //AJAX 응답
 	public List<CommentDTO> selectAllByPostId(Long postId) {
+		System.out.println("selectAllByPostId 확인");
 		
 		List<CommentDTO> commentListAll =  service.selectAllByPostId(postId);
 		return commentListAll;
@@ -72,7 +66,7 @@ public class CommentMainController {
 	@RequestMapping(value="/Acorn/CommetInsert",  method = RequestMethod.POST)
 	@ResponseBody //AJAX 응답
 	public void CommetInsert(CommentDTO commentDB) {
-		
+		System.out.println("하이 CommetInsert");
 		int num =  service.AddCommnet(commentDB);
 		
 	}//CommetInsert end
