@@ -4,12 +4,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ChatMapper">
  
-     <select id="saveChatRoom" parameterType="ChatRoomDTO">
-         insert into CHATROOM values (
+     <insert id="saveChatRoom" parameterType="ChatRoomDTO">
+         insert into ChatRoom values (
          	chatNum=#{chatNum}, roomTitle=#{roomTitle}, roomText=#{roomText},
          	currentNow=#{currentNow}, amount=#{amount}, loc=#{loc},
-         	cDate=#{cDate}, category=#{category}, leaderId={leaderId}
+         	cDate=null, mDate=null, category=#{category}, leaderId=#{leaderId}
          )
-    </select>
+    </insert>
 	
 </mapper>
