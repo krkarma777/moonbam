@@ -50,6 +50,9 @@
 	padding: 0px;
 	margin: 0px;
 }
+a{
+	text-decoration: none;
+}
 button {
 	border: 1.111;
 	padding-top: 4; padding-bottom: 4;
@@ -92,12 +95,22 @@ button {
 		<table style="margin-top: 5px; width:1200px; height:795px">
 			<%int count = 0;
 			for(int j=1; j<=3;j++){	%>
-				<tr>
-					<%for(int k=1; k<=4; k++) { %>
-					<td id="<%=count%>" style="width: 300px; height: 265px;">
-						<div class="border rounded-2">
-							<div class="border-bottom" style="height: 30px; width: 100%; background-color: #ff416c; color:white; opacity : 0.3;"></div>
-							<div class="border-top" style="height: 241.5px; width: 100%;"></div>
+				<tr style="width: 1200px; height: 265px;">
+					<%for(int k=1; k<=4; k++) { 
+						if(count==chatRoomList.size()) break;
+						ChatRoomDTO chatRoom = chatRoomList.get(count);
+						int chatNum = chatRoom.getChatNum();
+						String roomTitle = chatRoom.getRoomTitle();
+						String roomText = chatRoom.getRoomText();
+					%>
+					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
+						<div class="border rounded-2" style="width: 300px;">
+							<div class="border-bottom" style="height: 30px; width: 300px; background-color: #ff416c; color:white; opacity : 0.3;">
+								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:white; font-size: 19px;"><%=roomTitle %></a>
+							</div>
+							<div class="border-top" style="height: 241.5px; width: 300px;">
+								<%=roomText %>
+							</div>
 						</div>
 					</td>
 					<%count++; } %>
