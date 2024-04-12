@@ -12,14 +12,17 @@ public class ChatRoomDTO {
 	private int amount; //최대 인원수
 	private String loc; //모임 지역
 	private String cDate; //방 생성 날짜
+	private String mDate; //만남 날짜
 	private String category; //방 카테고리
 	private String leaderId; //방장 id
+	
 	public ChatRoomDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ChatRoomDTO(int chatNum, String roomTitle, String roomText, int currentNow, int amount, String loc,
-			String cDate, String category, String leaderId) {
+
+	public ChatRoomDTO(int chatNum, String roomTitle, String roomText, int currentNow, int amount, String loc, String cDate,
+			String mDate, String category, String leaderId) {
 		super();
 		this.chatNum = chatNum;
 		this.roomTitle = roomTitle;
@@ -28,71 +31,96 @@ public class ChatRoomDTO {
 		this.amount = amount;
 		this.loc = loc;
 		this.cDate = cDate;
+		this.mDate = mDate;
 		this.category = category;
 		this.leaderId = leaderId;
 	}
-	@Override
-	public String toString() {
-		return "ChatRoomDTO [chatNum=" + chatNum + ", roomTitle=" + roomTitle + ", roomText=" + roomText
-				+ ", currentNow=" + currentNow + ", amount=" + amount + ", loc=" + loc + ", cDate=" + cDate
-				+ ", category=" + category + ", leaderId=" + leaderId + "]";
-	}
+
 	public int getChatNum() {
 		return chatNum;
 	}
+
 	public void setChatNum(int chatNum) {
 		this.chatNum = chatNum;
 	}
+
 	public String getRoomTitle() {
 		return roomTitle;
 	}
+
 	public void setRoomTitle(String roomTitle) {
 		this.roomTitle = roomTitle;
 	}
+
 	public String getRoomText() {
 		return roomText;
 	}
+
 	public void setRoomText(String roomText) {
 		this.roomText = roomText;
 	}
+
 	public int getCurrentNow() {
 		return currentNow;
 	}
+
 	public void setCurrentNow(int currentNow) {
 		this.currentNow = currentNow;
 	}
+
 	public int getAmount() {
 		return amount;
 	}
+
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+
 	public String getLoc() {
 		return loc;
 	}
+
 	public void setLoc(String loc) {
 		this.loc = loc;
 	}
+
 	public String getcDate() {
 		return cDate;
 	}
+
 	public void setcDate(String cDate) {
 		this.cDate = cDate;
 	}
+
+	public String getmDate() {
+		return mDate;
+	}
+
+	public void setmDate(String mDate) {
+		this.mDate = mDate;
+	}
+
 	public String getCategory() {
 		return category;
 	}
+
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
 	public String getLeaderId() {
 		return leaderId;
 	}
+
 	public void setLeaderId(String leaderId) {
 		this.leaderId = leaderId;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "ChatRoomDTO [chatNum=" + chatNum + ", roomTitle=" + roomTitle + ", roomText=" + roomText
+				+ ", currentNow=" + currentNow + ", amount=" + amount + ", loc=" + loc + ", cDate=" + cDate + ", mDate="
+				+ mDate + ", category=" + category + ", leaderId=" + leaderId + "]";
+	}
 	
 }
