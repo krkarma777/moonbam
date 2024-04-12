@@ -21,25 +21,25 @@
 	    });
 	  });
 
-  //모임 소개글 글자 제한수
-  function checkLength() {
-    const maxLength = 150;
-    const text = document.getElementById("myTextarea").value;
-    const count = text.length;
+	//모임 소개글 글자 제한수
+	function checkLength() {
+		const maxLength = 150;
+		const text = document.getElementById("myTextarea").value;
+		const count = text.length;
       
-    if (count > maxLength) {
-      document.getElementById("myTextarea").value = text.substring(0, maxLength);
-      document.getElementById("charCount").textContent = maxLength;
-    } else {
-      document.getElementById("charCount").textContent = count;
-    }
-  }
+		if (count > maxLength) {
+			document.getElementById("myTextarea").value = text.substring(0, maxLength);
+			document.getElementById("charCount").textContent = maxLength;
+		} else {
+		document.getElementById("charCount").textContent = count;
+		}
+	}
 </script>
 </head>
 <body>
 
 <h1>모임만들기</h1>
-<form action="createChat" method="get">
+<form action="createChat" method="post">
 	<b>카테고리</b>
 		<select name="category">
 			<option value="select">선택하세요</option>
@@ -48,21 +48,19 @@
 			<option value="ect">기타</option>
 		</select>
 	<br><br>
-	<b>모임 이름</b> <input type="text" placeholder="작품명 / 지역구 / 모임날짜">
+	<b>모임 이름</b> <input type="text" placeholder="작품명 / 지역구 / 모임날짜" name="roomTitle">
 	<br><br>
 	<b>인원수</b>
-		<select name="num">
-			<option value="zero">0</option>
-			<option value="one">1</option>
+		<select name="amount">
 			<option value="two">2</option>
 			<option value="three">3</option>
 			<option value="four">4</option>
 			<option value="five">5</option>
 		</select>
 	<br><br>
-	<b>모임 장소</b> 지도 연동
+	<b>모임 장소</b> 지도 연동<input type="text" name="loc">
 	<br><br>
-	<b>모임 날짜</b> <input type="text" id="datepicker" placeholder="날짜를 선택하세요">
+	<b>모임 날짜</b> <input type="text" id="datepicker" placeholder="날짜를 선택하세요" name="cDate">
 	<br><br>
 	<b>모임 소개글</b><br>
 	<textarea id="myTextarea" rows="10" cols="30" oninput="checkLength()"></textarea>
