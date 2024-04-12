@@ -21,21 +21,12 @@ public class ChatController {
 		return "/community/createChat";
 	}
 	
-	@RequestMapping(value = "/saveChat", method=RequestMethod.GET)
+	@RequestMapping(value = "/saveChat", method=RequestMethod.POST)
 	@ResponseBody
 	public String saveChatRoom(@ModelAttribute ChatRoomDTO chatRoom) {
 		
-		chatRoom.setAmount(5);
-		chatRoom.setCategory("asd");
-		chatRoom.setcDate("2024/01/01");
-		chatRoom.setmDate("2024/02/01");
-		chatRoom.setChatNum(2);
-		chatRoom.setCurrentNow(3);
-		chatRoom.setLeaderId("ㅁㄴㅇ");
-		chatRoom.setLoc("저세상 어딘가");
-		chatRoom.setRoomText("영화관 죽돌이");
-		chatRoom.setRoomTitle("내일 지구가 멸망해도 영화를 보겠다");
-		
+		chatRoom.setmDate("2024-4-7");
+		chatRoom.setLeaderId("");
 		int n = 0;
 		n = crService.saveChatRoom(chatRoom);
 		if(n==1) {
