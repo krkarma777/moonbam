@@ -19,6 +19,7 @@
 			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
 			</if>
 		</where>
+		order by chatnum
 	</select>
 	
 	<select id="chatRoomList" resultType="ChatRoomDTO" parameterType="HashMap">
@@ -34,6 +35,7 @@
 			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
 			</if>
 		</where>
+		order by chatnum
 	</select>
   
 </mapper>

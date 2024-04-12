@@ -17,7 +17,7 @@
 	}
 %>
 <style>
-a{
+.top {
 	color: #ff416c;
 	font-size: 30px;
 	text-decoration: none;
@@ -47,10 +47,11 @@ a{
 		<div class="position-fixed top-0 end-0">
 				<!-- 비로그인 -->
 			<%if (null == dto) {%>
-				<a href="Login">로그인</a>
+				<a href="Login" class="top">로그인</a>
 			<%} else {%>
 				<!-- 로그인 -->
-				<a href="Logout">로그아웃/</a><a href="MypageServlet">마이페이지</a>
+				<a href="Logout"  class="top">로그아웃/</a>
+				<a href="MypageServlet"  class="top">마이페이지</a>
 			<%}%>
 			<!-- 관리자인 경우 -->
 			<!-- <a href="Logout">로그아웃</a>
