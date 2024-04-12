@@ -7,9 +7,13 @@
 <body>
 <h1>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Hello world! - _jay push
 =======
 	Hello world!_jay_jay
+>>>>>>> branch 'community' of https://github.com/krkarma777/moonbam
+=======
+	Hello world!_jay_jay_miji_miji
 >>>>>>> branch 'community' of https://github.com/krkarma777/moonbam
 </h1>
 
