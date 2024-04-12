@@ -63,6 +63,7 @@ public class MainController {
 
         if (category != null) {
             switch (category) {
+<<<<<<< HEAD
                 case "movie":
                     //영화 가져오기(인기 순은 아직)
                     List<ContentDTO> movieTopList = mService.selectTop();
@@ -78,6 +79,23 @@ public class MainController {
                 default:
                     nextPage = "main";
                     break;
+=======
+            case "movie":
+            	//영화 가져오기(인기 순은 아직)
+	    		List<ContentDTO> movieTopList = mService.selectTop();
+	    		model.addAttribute("movieTopList", movieTopList);
+                nextPage = "movieHome";
+                break;
+            case "community":
+                nextPage = "communityHome";
+                break;
+            case "tv":
+                nextPage = "TvHome";
+                break;
+            default:
+                nextPage = "main";
+                break;
+>>>>>>> branch 'community' of https://github.com/krkarma777/moonbam
             }
         }
         return nextPage;
