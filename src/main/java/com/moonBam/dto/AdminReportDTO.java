@@ -135,11 +135,4 @@ public class AdminReportDTO {
 				+ ", userId=" + userId + ", sexual=" + sexual + ", lang=" + lang + ", abusing=" + abusing
 				+ ", ruleviolation=" + ruleviolation + ", etc=" + etc + ", cont=" + cont + ", action=" + action + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
 }

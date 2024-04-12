@@ -45,6 +45,16 @@ a{
 			</form>
 		</div>
 		<div class="position-fixed top-0 end-0">
+<<<<<<< HEAD
+			<!-- 비로그인 -->
+			<%if(null==dto){ %>
+			<a href="Login">로그인</a>
+			<%}else {%>
+			<!-- 로그인 -->
+			<a href="Logout">로그아웃</a>
+			<a href="/acorn/userinfo">마이페이지</a>
+			<%} %>
+=======
 				<!-- 비로그인 -->
 			<%if (null == dto) {%>
 				<a href="Login">로그인</a>
@@ -52,6 +62,7 @@ a{
 				<!-- 로그인 -->
 				<a href="Logout">로그아웃/</a><a href="MypageServlet">마이페이지</a>
 			<%}%>
+>>>>>>> branch 'community' of https://github.com/krkarma777/moonbam
 			<!-- 관리자인 경우 -->
 			<!-- <a href="Logout">로그아웃</a>
 			<a href="AdminServlet">관리자페이지</a> -->

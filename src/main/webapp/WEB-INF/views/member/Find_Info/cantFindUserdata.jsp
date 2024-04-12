@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>회원 가입 이력 없음</title>
+	<title>유저 정보 찾기 실패 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/unfound.css'/>">
 </head>
 

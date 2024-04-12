@@ -10,7 +10,7 @@
 <script type = "text/javascript">
 
 /* Parsing List */
-	<%List<AdminRprtdDTO> list = (List<AdminRprtdDTO>)request.getAttribute("list");
+	<%List<AdminReportDTO> list = (List<AdminReportDTO>)request.getAttribute("list");
 	System.out.println("in Rprtedmember.jsp" + list);%>
 </script>
 </head>
@@ -55,11 +55,11 @@
 		<%
 		}else{
 			/* 리스트 있으면 출력 */
-			for(AdminRprtdDTO dto : list){
+			for(AdminReportDTO dto : list){
 		%>
 				<tr>
 					<td><input type = "checkbox"></td>
-					<td><%=dto.getUserid() %></td>
+					<td><%=dto.getUserId() %></td>
 					<td><%=dto.getSexual() %></td>
 					<td><%=dto.getLang() %></td>
 					<td><%=dto.getAbusing() %></td>

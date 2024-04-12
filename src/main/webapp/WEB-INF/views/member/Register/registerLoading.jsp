@@ -9,7 +9,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 중</title>
+    <title>회원가입 로딩 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/member/loading.css'/>">

@@ -1,5 +1,5 @@
 <%@ page import = "java.util.*" %>
-<%@ page import = "com.moonBam.dto.AdminRprtdDTO" %>
+<%@ page import = "com.moonBam.dto.AdminReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page  %>
@@ -20,7 +20,7 @@
 </script>
 
 <%
-List<AdminRprtdDTO>list = (List<AdminRprtdDTO>)request.getAttribute("list");
+List<AdminReportDTO>list = (List<AdminReportDTO>)request.getAttribute("list");
 System.out.println("in jsp");
 System.out.println(list);
 String url = request.getContextPath();
@@ -65,14 +65,14 @@ String url = request.getContextPath();
 				<td colspan = "11" align = "center">검색조건을 입력하세요.</td>
 			</tr> 
 			<%}else{ 
-			for(AdminRprtdDTO dto : list){
+			for(AdminReportDTO dto : list){
 			%>
 					<tr>
-						<td><%=dto.getReportid() %></td>
-						<td><input type = "checkbox" class = "chkPost" data-xxx = <%=dto.getPostid() %>></td>
-						<td><a href = "#" class = "showContent"><%=dto.getPostid() %></a></td>
+						<td><input type = "checkbox" class = "chkPost" data-xxx = <%=dto.getTargetId() %>></td>
+						<td> 신고번호 들어와야됨</td>
+						<td><a href = "#" class = "showContent"><%=dto.getTargetId() %></a></td>
 						<td><%=dto.getReporter() %></td>
-						<td><%=dto.getUserid() %></td>
+						<td><%=dto.getUserId() %></td>
 						<td><%=dto.getSexual() %></td>
 						<td><%=dto.getLang() %></td>
 						<td><%=dto.getAbusing() %></td>

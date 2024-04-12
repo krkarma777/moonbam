@@ -43,7 +43,7 @@ public class CommentDAO {
 	
 	public int deleteComment(String comId){ 
 		
-		int num = session.delete("deleteComment", comId);
+		int num = session.delete("CommentMapper.deleteComment", comId);
 		return num;
 	}
 	

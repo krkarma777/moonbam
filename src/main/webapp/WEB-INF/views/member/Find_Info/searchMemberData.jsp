@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>아이디 찾기</title>
+	<title>유저 정보 찾기 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script type="text/javascript">
@@ -46,7 +46,7 @@
 	 <table>
         <tr>
         	<td>
-				<input type="email" id="restoreEmail" name="restoreEmail" autofocus placeholder="예비 이메일 입력">
+				<input type="email" id="restoreEmail" name="restoreEmail" autofocus placeholder="예비 이메일 입력" maxlength="40">
 			</td>
 		</tr>
 		<tr>
@@ -64,7 +64,7 @@
     <table>
         <tr>
         	<td>
-				<input type="email" id="userId" name="userId" autofocus placeholder="아이디 이메일 입력">
+				<input type="email" id="userId" name="userId" autofocus placeholder="아이디 이메일 입력" maxlength="40">
 			</td>
 		</tr>
 		<tr>
