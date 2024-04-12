@@ -21,7 +21,6 @@ import com.moonBam.service.adminpage.announcement.AnnouncementService;
 
 @Controller
 public class MainController {
-
     @Autowired
     PostService service;
     @Autowired

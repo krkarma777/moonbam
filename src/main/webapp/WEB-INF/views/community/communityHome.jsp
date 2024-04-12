@@ -104,8 +104,8 @@ button {
 						String roomText = chatRoom.getRoomText();
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
-						<div class="border rounded-2" style="width: 300px;">
-							<div class="border-bottom" style="height: 30px; width: 300px; background-color: #ff416c; color:white; opacity : 0.3;">
+						<div class="border rounded-2" style="width: 300px; height: 265px;">
+							<div class="border-bottom" style="height: 30px; width: 300px; background-color: #ff416c; color:white; opacity : 0.3; border-radius: 5px;">
 								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:white; font-size: 19px;"><%=roomTitle %></a>
 							</div>
 							<div class="border-top" style="height: 241.5px; width: 300px;">
