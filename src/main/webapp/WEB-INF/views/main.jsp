@@ -81,8 +81,8 @@ var list = <%= request.getAttribute("list") %>;
 					src="resources/images/tv.png" width="250px" height="250px"></a>
 			</div>
 			<div class="align-self-center" style="background-color: transparent">
-				<a href="/acorn/?cg=book"><img class="rounded-2"
-					src="resources/images/book.svg" width="250px" height="250px"></a>
+				<a href="/acorn/?cg=community"><img class="rounded-2"
+					src="resources/images/community.svg" width="250px" height="250px"></a>
 			</div>
 		</div>
 	</div>

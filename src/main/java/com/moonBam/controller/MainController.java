@@ -69,8 +69,8 @@ public class MainController {
 	    		model.addAttribute("movieTopList", movieTopList);
                 nextPage = "movieHome";
                 break;
-            case "book":
-                nextPage = "BookHome";
+            case "community":
+                nextPage = "communityHome";
                 break;
             case "tv":
                 nextPage = "TvHome";
