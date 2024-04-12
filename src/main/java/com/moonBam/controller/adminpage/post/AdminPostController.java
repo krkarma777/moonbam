@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.moonBam.dto.AdminRprtdDTO;
+import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.service.adminpage.AdminReportService;
 
 @Controller
@@ -31,7 +31,7 @@ public class AdminPostController {
 		map.put("criteria", criteria);
 		map.put("SearchValue", SearchValue);
 		
-		List<AdminRprtdDTO> list = service.SearchReport(map);
+		List<AdminReportDTO> list = service.SearchReport(map);
 		System.out.println(map);
 		System.out.println(list);
 		mav.addObject("list",list);
@@ -47,7 +47,7 @@ public class AdminPostController {
 		List<String> deletelist = Arrays.asList(postArr);
 		service.delReportedPost(deletelist);
 		
-		List<AdminRprtdDTO> list = service.SearchReport(null);
+		List<AdminReportDTO> list = service.SearchReport(null);
 		
 		mav.addObject("list",list);
 		mav.setViewName("/AdminPage/AdminPagePostRprtedPost");

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.AdminRestrictedMemberDTO;
-import com.moonBam.dto.AdminRprtdDTO;
 import com.moonBam.service.adminpage.AdminMemberService;
 import com.moonBam.service.adminpage.AdminReportService;
 
@@ -30,7 +30,7 @@ public class AdminPageMemberController {
 		map.put("SearchValue", SearchValue);
 		map.put("criteria", criteria);
 		
-		List<AdminRprtdDTO> list = rservice.ReportedMemList(map);
+		List<AdminReportDTO> list = rservice.ReportedMemList(map);
 		mav.addObject("list", list);
 		mav.setViewName("/AdminPage/AdminPageMemRprtedMem");
 		return mav;

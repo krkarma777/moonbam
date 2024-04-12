@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReportDTO;
@@ -31,9 +32,9 @@ public class CommunityChatmoreDAO {
 		return session.selectOne("Chatmore.ChatLeaderIdByChatNum",chatNum);
 	}
 
-	public void ChatmoreReportPostInsert(ReportDTO reportDTO) {
+	public void ChatmoreReportPostInsert(AdminReportDTO adminReportDTO) {
 		// TODO Auto-generated method stub
-		session.insert("Chatmore.ChatmoreReportPostInsert",reportDTO);
+		session.insert("Chatmore.ChatmoreReportPostInsert",adminReportDTO);
 	}
 	
 	
