@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminReportMapper">
+ 
+ 
+     <select id="SearchPost" resultType="AdminReportDTO" parameterType="HashMap">
+select * from adminreported
+<choose>
+	<when test = "criteria == 'POSTID'" >
+		where POSTID like '%'||#{SearchValue}||'%'
+	</when>
+	
+	<when test = "criteria == 'REPORTER'" >
+		where REPORTER like '%'||#{SearchValue}||'%'
+	</when>
+	
+	<when test = "criteria == 'USERID'" >
+		where USERID like '%'||#{SearchValue}||'%'
+	</when>
+</choose>
+
+order by REPORTID asc
+    </select>
+    
+<select id = "ReportedMemberList" resultType = "AdminReportDTO" parameterType = "HashMap">
+    	select userid, sum(lang) lang, sum(sexual) sexual, sum(abusing) abusing,
+    	 sum(ruleviolation) ruleviolation, sum(etc) etc from adminreported  
+	<choose>
+	<when test = "criteria == 'userid'" >
+		where userid like '%'||#{SearchValue}||'%'
+	</when>
+	</choose>
+	group by userid
+
+</select>
+	
+<delete id = "delReportedPost" parameterType = "list">
+ delete 
+ from adminreported
+ where postid in
+ <foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
+ #{item}
+ </foreach>
+
+</delete>
+	
+	
+	
+</mapper>

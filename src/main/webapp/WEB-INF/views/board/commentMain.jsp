@@ -28,6 +28,8 @@
 		
 		    $("#comdate").text((year-100)+"년 "+(month+1)+"월 "+date+"일 "+(hours<10?"0"+hours : hours)+":"+(minutes<10?"0"+minutes : minutes)+":"+(seconds<10?"0"+seconds : seconds));
 		    
+		    
+		    
 		}
 		clock();
 		setInterval(clock, 1000); // 1초마다 실행
@@ -38,7 +40,7 @@
 	
 	$(document).ready(function(){
 		
-		
+		document.get
 		// 페이지 로딩 시 댓글 목록을 불러옴
 	    CommentSelectAllServlet();
 		
@@ -48,7 +50,7 @@
 			$.ajax({
 				
 				type: "post",
-				url: "Acorn/CommetInsert",
+				url: "/acorn/Acorn/CommetInsert",
 				data:{
 					postId : $("#postidComment").val(),
 					userId : $.trim($("#useridComment").val()),
@@ -92,7 +94,7 @@
 			$.ajax({
 				
 				type: "post",
-				url: "Acorn/CommentUpdate",
+				url: "/acorn/Acorn/CommentUpdate",
 				data:{
 					//댓글 수정(삭제)를 위해서 서버로 comid를 넘겨주고 있음
 					comId : $(this).attr("id"),
@@ -127,7 +129,7 @@
 			$.ajax({
 					
 					type: "post",
-					url: "Acorn/CommetDelete",
+					url: "/acorn/Acorn/CommetDelete",
 					data:{
 						//댓글 삭제를 위해서 서버로 comid를 넘겨주고 있음
 						comId : comId
@@ -185,7 +187,7 @@
 		$.ajax({
 			
 			type: "post",
-			url: "Acorn/CommentUpdate",
+			url: "/acorn/Acorn/CommentUpdate",
 			data:{
 				//댓글 수정(삭제)를 위해서 서버로 comid를 넘겨주고 있음
 				comId : $(this).attr("data-xxx"),
@@ -222,12 +224,14 @@
 	function CommentSelectAllServlet() {
 		//console.log("CommentSelectAllServlet");
 		
-		 var postId = <%= request.getAttribute("postId")%> /*이거 나중에 Parametget로 바꿔야함(테스트중)  */
+		 var postId = <%= request.getParameter("postId")%>
+		 console.log("아아아",postId);
+		
 		 
 		 $.ajax({
 				
 				type: "post",
-				url: "Acorn/selectAllByPostId",
+				url: "/acorn/Acorn/selectAllByPostId",
 		        data: {
 		            postId: postId // postid 값을 요청에 포함시킴
 		        },
@@ -365,7 +369,7 @@
 				},//success end
 				
 				error : function(xhr, status, error){
-					console.log("에러코드 selectAll"+xhr);
+					console.log("에러코드 selectAll",xhr);
 				}
 				
 			});//selectAll ajax
@@ -388,13 +392,13 @@ function replyCommentInsert(comId) {
 		var aboveComId = comId;
 		var nickname2 =  $("#strong"+comId).text();
 		var userId2 = $("#replyCommentId"+comId).val();
-		var postId = <%= request.getAttribute("postId")%> 
+		var postId = <%= request.getParameter("postId")%> 
 		console.log("replyCommentInsert에서" + nickname2,userId2,postId);
 		
 			$.ajax({
 			
 			type: "post",
-			url: "Acorn/ReplyCommentInsert",
+			url: "/acorn/Acorn/ReplyCommentInsert",
 			data:{
 				aboveComId : aboveComId, //부모댓글id
 				postId : postId, //게시글
@@ -429,7 +433,7 @@ function replyCommentInsert(comId) {
 			
 			type: "post",
 			async: false, 
-			url: "Acorn/ReplyCommentSelectList",
+			url: "/acorn/Acorn/ReplyCommentSelectList",
 			data:{
 				comId : comId
 				},
@@ -456,7 +460,7 @@ function replyCommentInsert(comId) {
 
 </script>	
 
-	 <input type="hidden" id="postidComment" name="postid" value=<%=request.getAttribute("postId")%> > <!-- 굳이 고객한테 보일 필요가 없으니 hidden 태그 -->
+	 <input type="hidden" id="postidComment" name="postid" value=<%=request.getParameter("postId")%> > <!-- 굳이 고객한테 보일 필요가 없으니 hidden 태그 -->
 	 <input type="hidden" id="useridComment" name="userid" value="${sessionScope.loginUser.userId}" > <!--DB저장용 userid -->
 	 <input type="hidden" id="abovecomidComment" name="abovecomid" value="" > 
 

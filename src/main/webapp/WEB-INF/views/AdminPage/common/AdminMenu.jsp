@@ -9,10 +9,10 @@
 <a href="<%=request.getContextPath() %>/AdminPage/toStatistics2">----컨텐츠 통계</a><br>
 
 <a href="#">게시물 관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPagePostRprtedPost">----신고글 관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPagePostRule">----글 작성 규칙 관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageDeletedPost">----삭제된 게시글 관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageDeletedComment">----삭제된 댓글 관리</a><br>
+<a href="<%=request.getContextPath() %>/AdminPage/AdminPostReported">----신고글 관리</a><br>
+<a href="<%=request.getContextPath() %>/AdminPage/AdminPagePostRule">----글 작성 규칙 관리</a><br>
+<a href="<%=request.getContextPath() %>/AdminPage/AdminPageDeletedPost">----삭제된 게시글 관리</a><br>
+<a href="<%=request.getContextPath() %>/AdminPage/AdminPageDeletedComment">----삭제된 댓글 관리</a><br>
 
 <a href="#">회원 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemRprtedMem">----신고회원관리</a><br>

@@ -122,14 +122,5 @@ public class ChatRoomDTO {
 				+ ", currentNow=" + currentNow + ", amount=" + amount + ", loc=" + loc + ", cDate=" + cDate + ", mDate="
 				+ mDate + ", category=" + category + ", leaderId=" + leaderId + "]";
 	}
-
 	
-	
-	
-	
-	
-	
-	
-	
-
 }
