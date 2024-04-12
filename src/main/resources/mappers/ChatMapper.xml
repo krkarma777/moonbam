@@ -11,4 +11,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          	#{cDate}, #{mDate}, #{category}, #{leaderId})
     </insert>
 	
+	<!-- 
+	delete
+	get
+	update
+	 -->
 </mapper>

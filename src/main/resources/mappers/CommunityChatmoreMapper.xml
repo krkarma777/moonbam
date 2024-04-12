@@ -18,8 +18,9 @@
   	select leaderId from chatroom where  chatnum = #{chatNum}
   </select>
   
-  <insert id="ChatmoreReportPostInsert" parameterType="ReportDTO">
-  	insert into reportdb values (#{postId}, #{reason}, #{userId}, sysdate)
+  <insert id="ChatmoreReportPostInsert" parameterType="AdminReportDTO">
+  	insert into adminReported 
+  	values (null, #{targetId}, #{reporter}, #{userId}, #{sexual}, #{lang}, #{abusing}, #{ruleviolation}, #{etc}, #{cont}, null )
   
   </insert>
   
