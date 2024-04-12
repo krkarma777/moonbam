@@ -39,7 +39,7 @@ public class ChatRoomDTO {
 	}
 	public void setCount(int count) {
 		this.count = count;
-	}
+	} 
 	public int getAmount() {
 		return amount;
 	}

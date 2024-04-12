@@ -9,7 +9,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 성공</title>
+    <title>회원가입 성공 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 	<script type="text/javascript">
 		<!-- 5초 뒤, 로그인 메인화면으로 이동 -->

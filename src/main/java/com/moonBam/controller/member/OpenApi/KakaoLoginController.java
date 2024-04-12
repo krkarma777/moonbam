@@ -81,7 +81,7 @@ public class KakaoLoginController {
     	//3. 사용자 정보 받기
     	Map<String, Object> map = getUserInfo(accessToken);
     	ObjectMapper objectMapper = new ObjectMapper();
-    	log.info("카카오 로그인 시 서버에서 받아오는 유저 정보: "+ map);
+    	//log.info("카카오 로그인 시 서버에서 받아오는 유저 정보: "+ map);
 
     	//아이디
         String jsonString2 = objectMapper.writeValueAsString(map.get("kakao_account"));
@@ -173,7 +173,7 @@ public class KakaoLoginController {
             while((line = br.readLine()) != null){
                 responseSb.append(line);
             }
-            System.out.println("responseSb: "+responseSb);
+            //System.out.println("responseSb: "+responseSb);			//카카오에서 받아오는 JSON데이터
             String resultJson = responseSb.toString();
             ObjectMapper objectMapper = new ObjectMapper();
             String resultString = objectMapper.writeValueAsString(resultJson);

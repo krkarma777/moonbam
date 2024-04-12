@@ -11,7 +11,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Found PW</title>
+	<title>비밀번호 출력 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/ID.css'/>">
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script type="text/javascript">

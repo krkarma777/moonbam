@@ -183,9 +183,10 @@
 <form id="commentForm">
     <div class="mb-3">
         <label for="commentContent" class="form-label">댓글 작성</label>
-        <input type="text" id="newCommentNickname" placeholder="닉네임" required="required"> 
-        <input type="text" id="newCommentPassword" placeholder="패스워드" required="required"> <br>
-        <textarea class="form-control" id="newCommentContent" rows="3" placeholder="댓글을 입력하세요"></textarea>
+        <input 	type="text" id="newCommentNickname" placeholder="닉네임" required="required" 
+				pattern="^[가-힣]{1,20}$|^[a-zA-Z0-9]{1,40}$" title="한글 20글자 또는 영어+숫자 40글자 이내로 입력해주세요."> 
+        <input 	type="password" id="newCommentPassword" placeholder="패스워드" required="required" maxlength="30"> <br>
+        <textarea class="form-control" id="newCommentContent" rows="3" placeholder="댓글을 입력하세요" maxlength="100"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">댓글 등록</button>
 </form>
@@ -201,7 +202,7 @@
       </div>
       <div class="modal-body">
         <p>댓글을 삭제하시려면 패스워드를 입력하세요:</p>
-        <input type="password" class="form-control" id="commentPasswordToDelete" placeholder="패스워드">
+        <input type="password" class="form-control" id="commentPasswordToDelete" placeholder="패스워드" maxlength="30">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -222,7 +223,7 @@
       </div>
       <div class="modal-body">
         <p>대댓글을 삭제하시려면 패스워드를 입력하세요:</p>
-        <input type="password" class="form-control" id="replyPasswordToDelete" placeholder="패스워드">
+        <input type="password" class="form-control" id="replyPasswordToDelete" placeholder="패스워드" maxlength="30">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -437,9 +438,9 @@
 
 		            // 대댓글 작성 폼
 	                commentsHTML += 			"<form id='replyForm-" + comment.anonymousCommentNum + "' class='mb-3' style='display: none;'>";
-	                commentsHTML += 				"<input type='text' id='replyNickname-" + comment.anonymousCommentNum + "' placeholder='닉네임' required='required'>";
-	                commentsHTML += 				"<input type='text' id='replyPassword-" + comment.anonymousCommentNum + "' placeholder='패스워드' required='required'> <br>";
-	                commentsHTML += 				"<textarea class='form-control' id='replyContent-" + comment.anonymousCommentNum + "' rows='2' placeholder='대댓글을 입력하세요'></textarea>";
+	                commentsHTML += 				"<input type='text' id='replyNickname-" + comment.anonymousCommentNum + "' placeholder='닉네임' required='required' pattern='^[가-힣]{1,20}$|^[a-zA-Z0-9]{1,40}$' title='한글 20글자 또는 영어+숫자 40글자 이내로 입력해주세요.''>";
+	                commentsHTML += 				"<input type='password' id='replyPassword-" + comment.anonymousCommentNum + "' placeholder='패스워드' required='required' maxlength='30'> <br>";
+	                commentsHTML += 				"<textarea class='form-control' id='replyContent-" + comment.anonymousCommentNum + "' rows='2' placeholder='대댓글을 입력하세요' maxlength='100'></textarea>";
 	                commentsHTML += 				"<button type='button' class='btn btn-primary submit-reply-btn' data-comment-num='" + comment.anonymousCommentNum + "'>대댓글 등록</button>";
 	                commentsHTML += 			"</form>";
 	                

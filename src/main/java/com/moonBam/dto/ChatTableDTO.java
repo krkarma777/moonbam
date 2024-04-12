@@ -21,7 +21,7 @@ public class ChatTableDTO {
 	@Override
 	public String toString() {
 		return "ChatTableDTO [id=" + id + ", chatNum=" + chatNum + ", chatContent=" + chatContent + "]";
-	}
+	} 
 
 
 	public ChatTableDTO(int id, int chatNum, String chatContent) {

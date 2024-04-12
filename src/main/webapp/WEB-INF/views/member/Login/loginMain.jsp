@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>로그인</title>
+    <title>로그인 페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="resources/css/member/Main.css">
@@ -22,7 +22,7 @@
 	<div class="container" id="container">
 	<!-- 회원가입 컨테이너 -->
 	  <div class="form-container sign-up-container">
-	    <form action="<c:url value='/RegisterTerms'/>" method="post">
+	    <form id="registerForm" action="<c:url value='/RegisterTerms'/>" method="post">
 	      <h1>회원가입</h1>
 	      <div class="social-container">
 	        <a href="<%=request.getContextPath()%>/getKakaoAuthUrl" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
@@ -30,7 +30,8 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
-	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" />
+	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" maxlength="40"/>
+	      <div id="confirmUserEmailError" style="font-size: 14px; color: red;"></div>	
 	      <button>회원가입으로</button>
 	    </form>
 	  </div>
@@ -45,8 +46,8 @@
 	        <a href="<%=request.getContextPath()%>/getNaverAuthUrl" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
-	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" />
-	      <input type="password" id="userPw" name="userPw" class="loginSet" placeholder="패스워드"/>
+	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" maxlength="40"/>
+	      <input type="password" id="userPw" name="userPw" class="loginSet" placeholder="패스워드" maxlength="30"/>
 	      <button type="button" id="showPasswd" class="loginButtons">비밀번호 보이기</button>
 	      <button class="loginButtons">로그인</button>
 		  <div id="confirmUserIdPwError" style="font-size: 14px; color: red;"></div>	    
@@ -223,7 +224,57 @@
 	        var showPW = $("#userPw");
 	        showPW.attr("type", showPW.attr("type") == "password" ? "text" : "password");
 	    });
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	  //로그인 전송을 시도할 경우, 발동
+	    $("#registerForm").on("submit", function(event) {
+	    	event.preventDefault(); // 폼이 서버로 전송되지 않도록 기본 동작을 막음
+	        
+	        var userId = $("#register_userId").val();
+	        var errorSpan = $("#confirmUserEmailError");
 
+	        //이메일을 입력
+	        if (userId && userPw) {
+	            $.ajax({
+	                type: "POST",
+	                url: "<c:url value='/AjaxCheckEmail'/>", 
+	                data: {
+	                    userId: userId,
+	                },
+	                
+	                success: function(response) {
+	                    
+	                    // 입력한 아이디 이메일이 DB에 있을 경우, ajax 출력
+	                    if (response === "RegisterFail") {
+	                        errorSpan.text("이미 사용 중인 이메일입니다.");
+	                        
+	                    // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
+	                    } else {
+	                        errorSpan.text("");
+	                        $("#registerForm")[0].submit();
+	                    }
+	                },
+	                error: function(error) {
+	                    console.error("이메일 등록 검사 에러:", error);
+	                },
+	            });
+	        } else {
+	            errorSpan.text("");
+	        }
+	        
+	        //에러 메세지가 있는지 확인
+	        if($("#confirmUserEmailError").text() != ""){
+	            $("#register_userId").focus();
+	            return false;
+	        }
+	        return true;
+	    }); 
 	})
 	    
 		

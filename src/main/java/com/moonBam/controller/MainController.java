@@ -1,5 +1,6 @@
 package com.moonBam.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,10 +24,9 @@ public class MainController {
     @Autowired
     MainService mService;
 
-    // pupop
     @Autowired
     AnnouncementService annoService;
-    
+
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category) {
         String nextPage = "main";
@@ -54,7 +54,7 @@ public class MainController {
 
         // popup
         List<Integer> list = annoService.popupNnumList("popup");
-      	
+
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
@@ -63,24 +63,23 @@ public class MainController {
 
         if (category != null) {
             switch (category) {
-            case "movie":
-            	//영화 가져오기(인기 순은 아직)
-	    		List<ContentDTO> movieTopList = mService.selectTop();
-	    		model.addAttribute("movieTopList", movieTopList);
-                nextPage = "movieHome";
-                break;
-            case "book":
-                nextPage = "BookHome";
-                break;
-            case "tv":
-                nextPage = "TvHome";
-                break;
-            default:
-                nextPage = "main";
-                break;
+                case "movie":
+                    //영화 가져오기(인기 순은 아직)
+                    List<ContentDTO> movieTopList = mService.selectTop();
+                    model.addAttribute("movieTopList", movieTopList);
+                    nextPage = "movieHome";
+                    break;
+                case "book":
+                    nextPage = "BookHome";
+                    break;
+                case "tv":
+                    nextPage = "TvHome";
+                    break;
+                default:
+                    nextPage = "main";
+                    break;
             }
         }
         return nextPage;
     }
-
 }
