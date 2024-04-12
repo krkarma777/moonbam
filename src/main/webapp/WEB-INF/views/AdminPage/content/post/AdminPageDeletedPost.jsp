@@ -1,28 +1,21 @@
 <%@ page import = "java.util.*" %>
-<%@ page import = "com.moonBam.dto.AdminReportDTO" %>
+<%@ page import = "com.moonBam.dto.AdminDeletedPostDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type = text/javascript>
-	
-</script>
-<%
-
-
-List<AdminReportDTO> list = (List<AdminReportDTO>)request.getAttribute("list");
-System.out.println("in jsp :");
-System.out.println(list);
-%>
+	<meta charset="UTF-8">
+	<title>MoonBam</title>
 </head>
 <body>
-<h1>삭제된 댓글 관리</h1>
+<%List<AdminDeletedPostDTO> list = (List<AdminDeletedPostDTO>)request.getAttribute("list"); %>
+<%System.out.println("in jsp"); %>
+<%System.out.println(list); %>
+<h1>삭제된 게시글 관리</h1>
 <hr>
-<form action = "<%=request.getContextPath() %>/AdminPage/AdminPostDeleted">
-	<select name = "SearchCondition">
+<form action = "<%=request.getContextPath() %>/AdminPage/AdminPageDeletedPost">
+	<select name = "Criteria">
 		<option value = "" class = "SearchStandard">글 아이디</option>
 		<option value = "" class = "SearchStandard">글 제목</option>
 		<option value = "" class = "SearchStandard">작성자</option>
@@ -43,34 +36,6 @@ System.out.println(list);
 			<th>처분여부</th>
 			<th>완전삭제예정일</th>
 		</tr>
-		<%
-		
-
-				if (list == null){
-		%>
-			<tr>
-				<td colspan = "6" align = "center">검색조건을 입력하세요.</td>
-			</tr>
-		<%
-		
-
-				}else{
-				for(AdminReportDTO dto : list){
-		%>
-					<tr>
-						<td></td>
-						<td><a href = "#"></a></td>
-						<td><a href = "#"></a></td>
-						<td></td>
-						<td>
-							<!-- <button class = "DelBtn">삭제</button> -->
-						</td>
-						<td></td>
-					</tr>
-			
-			<%} %><!-- for -->
-			<%} %><!-- if else -->
-		<%session.removeAttribute("list"); %>
 	</table>
 </form>
 

@@ -69,6 +69,7 @@ String url = request.getContextPath();
 			%>
 					<tr>
 						<td><input type = "checkbox" class = "chkPost" data-xxx = <%=dto.getTargetId() %>></td>
+						<td> 신고번호 들어와야됨</td>
 						<td><a href = "#" class = "showContent"><%=dto.getTargetId() %></a></td>
 						<td><%=dto.getReporter() %></td>
 						<td><%=dto.getUserId() %></td>
