@@ -113,7 +113,7 @@ button {
 	<!-- 2section -->
 	<section class="section">
 	<div style="height: 910px; width: 1200px; margin: auto;">
-		지도
+		<h1>지도</h1>
 	</div>
 	</section>
 	
