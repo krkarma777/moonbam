@@ -4,6 +4,16 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.config.MemberMapper">
 
+	<select id="findByUserId" resultType="MemberDTO">
+		SELECT 	*
+		FROM 	memberDB
+		WHERE	userId = #{userId}
+	</select>
+
+	<insert id="insert" parameterType="MemberDTO">
+		INSERT INTO memberDB (USERID, USERPW, NICKNAME, RESTOREUSEREMAILID, RESTOREUSEREMAILDOMAIN, USERTYPE)
+		VALUES (#{userId}, #{userPw}, #{nickname}, #{restoreUserEmailId}, #{restoreUserEmailDomain}, #{userType})
+	</insert>
 
 	<!-- **************************************************************** -->
 	<!-- *********************디버그 Mapper********************************* -->

@@ -4,13 +4,12 @@ import com.moonBam.controller.board.util.AuthUtils;
 import com.moonBam.controller.board.util.ErrorMessage;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.service.PostService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class BoardContentController {

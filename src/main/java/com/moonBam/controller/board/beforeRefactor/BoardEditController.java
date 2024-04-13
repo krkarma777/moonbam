@@ -2,7 +2,7 @@ package com.moonBam.controller.board.beforeRefactor;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import com.moonBam.controller.board.util.AuthUtils;
 import com.moonBam.controller.board.util.ErrorMessage;

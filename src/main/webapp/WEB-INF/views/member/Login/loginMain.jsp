@@ -38,7 +38,7 @@
 	  
 	<!-- 로그인 컨테이너 -->
 	  <div class="form-container sign-in-container">
-	  <form id="loginForm" action="<c:url value='/Logined'/>" method="post">
+	  <form id="loginForm" action="<c:url value='/login'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
 	        <a href="<%=request.getContextPath()%>/getKakaoAuthUrl" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
