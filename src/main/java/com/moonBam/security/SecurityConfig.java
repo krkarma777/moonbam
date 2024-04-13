@@ -57,15 +57,6 @@ public class SecurityConfig {
                         .successHandler(customAuthenticationSuccessHandler)
                 );
 
-//                .formLogin((authorize) -> authorize
-//                                .disable()
-//                        .loginPage("/login")
-//                        .loginProcessingUrl("/loginProc")
-//                        .successHandler((HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
-//
-//                        })
-//                        .failureHandler(new LoginAuthenticationFailureHandler()).permitAll())
-//
         http
                 .logout((logoutConfig) ->
                         logoutConfig
