@@ -16,6 +16,7 @@ public class SpringSecurityService  implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		System.out.println(userId);
 	    MemberDTO dto = dao.userDetail(userId);
 	    
 	    if(dto == null) {  // 사용자가 없는 경우

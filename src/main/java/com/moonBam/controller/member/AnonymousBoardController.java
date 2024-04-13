@@ -151,8 +151,8 @@ public class AnonymousBoardController {
         String now = format.format(nowDate);
 	    dto.setPostDate(now);
 
-	    
 		serv.insertPost(dto);
+		
 		List<AnonymousBoardDTO> list = serv.viewDBoardList("boardNum");
 		ModelAndView mav = new ModelAndView();
 			mav.addObject("list", list);

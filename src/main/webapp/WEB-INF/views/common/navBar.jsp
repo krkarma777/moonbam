@@ -1,9 +1,12 @@
+<%@page import="org.apache.catalina.filters.ExpiresFilter.XServletOutputStream"%>
 <%@page import="com.moonBam.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	MemberDTO dto = (MemberDTO)session.getAttribute("loginUser");
+	System.out.println("session: "+dto);
 %>
+
 <nav class=""
 	style="background-color: transparent; position: fixed; top: 0; left: 0; height: 40px; width: 100%">
 	<div class="d-flex container-fluid justify-content-center px-0">

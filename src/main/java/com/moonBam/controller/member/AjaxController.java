@@ -87,9 +87,13 @@ public class AjaxController {
 			    return "suspendedId";
 			}	
 			
-		//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)		
-			boolean canLogin = encoder.matches(userPw, dto.getUserPw());
-		//	System.out.println(canLogin);
+		//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)
+			boolean canLogin = false;
+			try {
+				canLogin = encoder.matches(userPw, dto.getUserPw());
+			} catch (Exception e) {
+				return "socialLogin";
+			}
 
 		//	False면 Ajax로 인한 메세지 출력	
 			if (!canLogin) {

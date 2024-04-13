@@ -310,6 +310,17 @@
 	<!-- *********************로그인 Mapper********************************* -->
 	<!-- **************************************************************** -->
 	
+	<!-- 닉네임 찾기 -->
+	<select id="nicknameByUserId" resultType="String" parameterType="String">
+		SELECT
+			nickname
+		FROM 
+			memberDB
+		WHERE 
+			userId = #{userId}
+	</select>
+	
+	
 	<!-- 아이디 찾기 -->
 	<select id="findUserId" resultType="String" parameterType="String">
 		SELECT

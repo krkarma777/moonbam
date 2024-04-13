@@ -4,7 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -13,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.OpenApiService;
+import com.nimbusds.oauth2.sdk.Response;
 
 
 @Controller
@@ -36,14 +42,45 @@ public class LoginController {
 	MailController mc;
 	
 	@Autowired
-	OpenApiService openApiService;
+	LoginService loginService;
 	
 	@Autowired
 	PasswordEncoder encoder;
 	
 	@RequestMapping("/mainLogin")   
 	public String Login() {
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+		Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+		GrantedAuthority auth = iter.next();
+		String role = auth.getAuthority();
+		
+		System.out.println("name: "+name);
+		System.out.println("role: "+role);
+		
 		return "member/Login/loginMain";
+	}
+	
+	@GetMapping("/logining")   
+	public String logining(Principal principal, HttpSession session) {
+		
+		System.out.println("principal: "+principal);
+		
+		String userId = principal.getName();
+		System.out.println("userId: "+userId);
+		
+		//닉네임 찾기		
+		String nickname = loginService.nicknameByUserId(userId);
+		
+		MemberDTO dto = new MemberDTO();
+			dto.setUserId(userId);
+			dto.setNickname(nickname);
+		System.out.println("dto: "+dto);
+		session.setAttribute("loginUser", dto);
+		return "redirect:/";
 	}
 	
 	@RequestMapping("/FindInfo")   

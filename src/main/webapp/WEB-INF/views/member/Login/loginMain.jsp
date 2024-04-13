@@ -38,7 +38,7 @@
 	  
 	<!-- 로그인 컨테이너 -->
 	  <div class="form-container sign-in-container">
-	  	<form id="loginForm" action="<c:url value='loginProc'/>" method="post">
+	  	<form id="loginForm" action="<c:url value='login'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
 	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
@@ -172,17 +172,22 @@
 	               
 	                success: function(response) {
 	                    
-	                    // 입력한 아이디와 비밀번호가 DB 정보와 일치하지 않을 경우, ajax 출력
-	                    if (response === "loginFail") {
-	                        errorSpan.text("아이디나 비밀번호를 확인해주세요.");
-	                    } else
-	                    
 	                    // 활동 정지된 유저일 경우
 	                    if (response === "suspendedId") {
 	                        errorSpan.html("활동이 정지된 유저입니다.<br>관리자에게 문의해주세요.");
-	                        
-	                    // 입력한 아이디와 비밀번호가 DB 정보와 일치할 경우, submit 정상 작동
-	                    } else {
+	                    } else 
+	                   	
+	                    // 소셜 회원가입자일 경우	
+	                    if (response === "socialLogin") {
+		                        errorSpan.html("소셜 회원가입 유저입니다.");
+	                    } else
+		                        
+		                // 입력한 아이디와 비밀번호가 DB 정보와 일치하지 않을 경우, ajax 출력
+	                    if (response === "loginFail") {
+	                        errorSpan.text("아이디나 비밀번호를 확인해주세요.");
+
+		                // 입력한 아이디와 비밀번호가 DB 정보와 일치할 경우, submit 정상 작동
+	                   	} else {
 	                        errorSpan.text("");
 	                        $("#loginForm")[0].submit();
 	                    }

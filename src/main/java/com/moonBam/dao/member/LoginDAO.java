@@ -61,4 +61,10 @@ public class LoginDAO {
 	public void updatePassword(Map<String, String> map) {
 		session.selectOne("com.config.MemberMapper.updatePassword", map);
 	}
+	
+	//닉네임 찾기
+	public String nicknameByUserId(String userId) {
+		String nickname = session.selectOne("nicknameByUserId", userId);
+		return nickname;
+	}
 }

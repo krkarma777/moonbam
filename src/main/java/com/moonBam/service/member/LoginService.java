@@ -63,4 +63,10 @@ public class LoginService {
 		dao.updatePassword(map);
 	}
 
+	//닉네임 찾기
+	public String nicknameByUserId(String userId) {
+		String nickname = dao.nicknameByUserId(userId);
+		return nickname;
+	}
+
 }
