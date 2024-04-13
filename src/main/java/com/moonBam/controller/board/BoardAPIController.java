@@ -133,51 +133,5 @@ public class BoardAPIController {
     	
     	return ResponseEntity.ok(Map.of("pDTO", pDTO, "isAuthorized", isAuthorized));
     }
-    
-    //boardId에 따라 postList 가져오기
-    @GetMapping
-    public ResponseEntity<?> findAll(
-    		@PathVariable("postBoard") String postBoard,
-    		@RequestParam(value = "curPage", defaultValue = "1") int curPage,
-            @RequestParam(value = "postCategoryId", required = false) String postCategoryId,
-            @RequestParam(value = "searchParam", required = false) String searchParam,
-            @RequestParam(value = "sortParam", required = false) String sortParam, Model model
-    		) {
-    	
-        int perPage = 20;
-        int offset = (curPage - 1) * perPage;
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("postBoard", postBoard);
-        map.put("offset", offset);
-        map.put("perPage", perPage);
-        map.put("curPage", curPage);
-        map.put("postCategoryId", postCategoryId);
-        map.put("searchParam", searchParam);
-        map.put("sortParam", sortParam);
-
-        // 검색 조건 추가
-        // searchBoard(paramMap, map);
-
-        // 정렬 추가
-        // sortIndex(paramMap, map);
-
-        // 페이지 정보 가져오기
-        PageDTO<PostPageDTO> pageDTO = postService.getPostsByPage(map);
-
-        List<PostPageDTO> hotList = postService.selectAll((HashMap<String, String>) Map.of("board", postBoard, "postCount", "5"));
-
-        List<PostPageDTO> popularListAll = postService.popularPostTwoDays((HashMap<String, String>) Map.of("postCount", "10"));
-        
-		final String category = postBoard.contains("movie") ? "movie" : 
-            postBoard.contains("tv") ? "tv" : 
-            postBoard.contains("book") ? "book" : "";
-		
-		List<PostPageDTO> popularListCategory = postService.popularPostTwoDays(
-				(HashMap<String, String>) Map.of("board", category, "board2", category+"Info", "board3", category+"Meet", "postCount", "10"));
-    	    	
-    	return ResponseEntity.ok(Map.of("pageDTO", pageDTO, "postBoard", postBoard, "hotList", hotList, 
-    			"popularListAll", popularListAll, "popularListCategory",popularListCategory));
-	}
 }
 
