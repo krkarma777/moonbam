@@ -21,9 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberDTO memberDTO = memberService.select(username);
-
-
+        MemberDTO memberDTO = memberService.findByUserId(username);
         return new CustomUserDetails(memberDTO);
     }
 
