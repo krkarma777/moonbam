@@ -1,11 +1,13 @@
 package com.moonBam.controller.member.OpenApi;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +23,20 @@ public class OpenApiController {
 
 	@Autowired
 	OpenApiService serv;
+
+	@Autowired
+	MemberLoginService memberLoginService;
 	
 	// 닉네임 변경
 	@PostMapping("/changeNickname")
-	public String changeNickname(HttpSession session, MemberDTO dto, String nickname, String clickType) {
+	public String changeNickname(Principal principal, String nickname, String clickType) {
 		if(clickType.equals("변경하기")) {
-			MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
-	        
-	        Map<String, String> map = new HashMap<>();
-	        	map.put("userId", dto.getUserId());
+			MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+			Map<String, String> map = new HashMap<>();
+	        	map.put("userId", loginUser.getUserId());
 	        	map.put("nickname", nickname);
 	        
 	        serv.updateAPIMemberNickname(map);
-	        MemberDTO nnDTO  = serv.selectOneAPIMember(dto.getUserId());
-			session.setAttribute("loginUser", dto);
 		} 
 		
 		return "member/Login/apiRegisterSuccess";

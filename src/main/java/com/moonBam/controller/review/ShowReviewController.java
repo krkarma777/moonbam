@@ -1,37 +1,36 @@
 package com.moonBam.controller.review;
 
-import java.util.HashMap;
-
+import com.moonBam.dto.ContentDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.ReviewDTO;
+import com.moonBam.service.ReviewService;
+import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.moonBam.dto.ContentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.ReviewDTO;
-import com.moonBam.service.ReviewService;
+import java.security.Principal;
+import java.util.HashMap;
 
 @Controller
 public class ShowReviewController {
 
 	@Autowired
 	ReviewService service;
+
+	@Autowired
+	MemberLoginService memberLoginService;
 	
 	@RequestMapping(value="/review", method=RequestMethod.GET)
-	public String ShowReview(String postId, HttpSession session, HttpServletRequest request) {
+	public String ShowReview(String postId, Principal principal, HttpServletRequest request) {
 		
 		// 세션에서 로그인 정보 파싱
-		MemberDTO login = (MemberDTO) session.getAttribute("loginUser");
-		String likeUserId = null;
-		// 로그인 정보가 존재할 때
-		if(login!=null) {
-			likeUserId = login.getUserId();
-		}
-		
+		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+		String likeUserId = loginUser.getUserId();
+
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("postId", postId);
 		map.put("likeUserId", likeUserId);

@@ -4,12 +4,13 @@ import com.moonBam.controller.board.util.AuthUtils;
 import com.moonBam.controller.board.util.ErrorMessage;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.service.PostService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Controller
 public class BoardContentController {
@@ -21,10 +22,10 @@ public class BoardContentController {
 	AuthUtils authUtils;
 	
 	@GetMapping("/board/content")
-	public String contentView(@RequestParam("postId") Long postId, HttpSession session, Model model) {
+	public String contentView(@RequestParam("postId") Long postId, Principal principal, Model model) {
 		
 		PostPageDTO post = postService.selectPagePost(postId);
-		if(!authUtils.isUserAuthorized(session, post) ) {
+		if(!authUtils.isUserAuthorized(principal, post) ) {
 			model.addAttribute("mismatchError", ErrorMessage.MISMATCH_ERROR.getMessage());
 		}
 		model.addAttribute("postText", post.getPostText()); // 게시글 내용

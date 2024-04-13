@@ -1,21 +1,15 @@
 package com.moonBam.controller.comment;
 
-import java.util.HashMap;
-import java.util.List;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
+import com.moonBam.dto.CommentDTO;
+import com.moonBam.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.moonBam.dto.CommentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.CommentService;
+import java.util.HashMap;
+import java.util.List;
 
       
 @Controller
@@ -30,7 +24,7 @@ public class CommentMainController {
 	}
 	
 	@RequestMapping("/commentMain")
-	public String main(HttpSession session, HttpServletRequest request) {
+	public String main() {
 		
 		
 		System.out.println("/commentMain주소처리. main");

@@ -1,10 +1,12 @@
 package com.moonBam.controller.board;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
@@ -39,9 +41,11 @@ public class BoardAPIController {
 
     private final PostService postService;
 
+    private final MemberLoginService memberLoginService;
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Validated PostDTO postDTO,
-                                    BindingResult bindingResult, HttpSession session) {
+                                    BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = getErrors(bindingResult);
@@ -49,7 +53,7 @@ public class BoardAPIController {
                     .body(Map.of("message", "입력 값에 오류가 있습니다.", "errors", errors));
         }
 
-        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
@@ -63,7 +67,7 @@ public class BoardAPIController {
 
     @PatchMapping("{postId}")
     public ResponseEntity<?> update(@RequestBody @Validated PostUpdateRequestDTO postUpdateRequestDTO, @PathVariable("postId") Long postId,
-                                    BindingResult bindingResult, HttpSession session) {
+                                    BindingResult bindingResult, Principal principal) {
 
         PostDTO postDTO = postService.findById(postId);
 
@@ -73,7 +77,7 @@ public class BoardAPIController {
                     .body(Map.of("message", "입력 값에 오류가 있습니다.", "errors", errors));
         }
 
-        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
@@ -94,9 +98,9 @@ public class BoardAPIController {
     }
 
     @DeleteMapping("{postId}")
-    public ResponseEntity<?> delete(@PathVariable("postId") Long postId, HttpSession session) {
+    public ResponseEntity<?> delete(@PathVariable("postId") Long postId, Principal principal) {
         PostDTO postDTO = postService.findById(postId);
-        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
         if (loginUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요한 서비스입니다."));
@@ -117,14 +121,14 @@ public class BoardAPIController {
     
     
     @GetMapping("/{postId}")
-    public ResponseEntity<?> findOne(@PathVariable("postId") Long postId, HttpSession session){
+    public ResponseEntity<?> findOne(@PathVariable("postId") Long postId, Principal principal){
     	PostPageDTO pDTO = postService.selectPagePost(postId);
     	
     	if (postId == null) {
     		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "존재하지 않는 게시글입니다."));
     	}
-    	
-    	MemberDTO loginUser = (MemberDTO)session.getAttribute("loginUser");
+
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
         boolean isAuthorized = loginUser.getUserId().equals(pDTO.getUserId());
     	
     	return ResponseEntity.ok(Map.of("pDTO", pDTO, "isAuthorized", isAuthorized));
