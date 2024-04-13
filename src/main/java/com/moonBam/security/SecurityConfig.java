@@ -47,8 +47,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (authorize) -> authorize
+                                .requestMatchers("/AdminPage/**").hasRole("ADMIN")
                                 .anyRequest().permitAll()
                 );
+
         http
                 .oauth2Login(oauth2 -> oauth2
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/**"))
@@ -60,9 +62,9 @@ public class SecurityConfig {
                 .logout((logoutConfig) ->
                         logoutConfig
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/acorn")
                                 .invalidateHttpSession(true)
                                 .deleteCookies("AuthToken")
+                                .logoutSuccessUrl("/")
                                 .permitAll());
         //csrf disable
         http

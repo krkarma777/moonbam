@@ -39,7 +39,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (token != null && jwtUtil.validateToken(token)) {
             String username = jwtUtil.getUsername(token);
-            String role = jwtUtil.getRole(token).replace("ROLE_", "");// 접두사 제거
+            String role = jwtUtil.getRole(token);// 접두사 제거
 
             MemberDTO memberDTO = new MemberDTO();
             memberDTO.setUserId(username);

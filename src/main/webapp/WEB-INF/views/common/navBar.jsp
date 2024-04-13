@@ -20,14 +20,13 @@
 			</sec:authorize>
 			<!-- 로그인 -->
 			<sec:authorize access="isAuthenticated()">
-				<a href="Logout">로그아웃</a>
+				<a href="/acorn/logout">로그아웃</a>
 				<a href="/acorn/userinfo">마이페이지</a>
 			</sec:authorize>
 			<!-- 관리자인 경우 -->
-			<!-- <sec:authorize access="hasRole('ADMIN')">
-                <a href="Logout">로그아웃</a>
-                <a href="AdminServlet">관리자페이지</a>
-            </sec:authorize> -->
+			<sec:authorize access="hasRole('ADMIN')">
+                <a href="/AdminPage">관리자페이지</a>
+            </sec:authorize>
 		</div>
 	</div>
 </nav>
