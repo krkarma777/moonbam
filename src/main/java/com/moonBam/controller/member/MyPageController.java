@@ -1,29 +1,23 @@
 package com.moonBam.controller.member;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.moonBam.dto.CommentDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.board.PostDTO;
+import com.moonBam.service.member.LoginService;
+import com.moonBam.service.member.MemberService;
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.PostService;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.moonBam.dto.CommentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.board.PageDTO;
-import com.moonBam.dto.board.PostDTO;
-import com.moonBam.service.member.LoginService;
-import com.moonBam.service.member.MemberService;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -85,7 +79,7 @@ public class MyPageController {
 	        String userPhoneNum2= paramMap.get("userPhoneNum2");
 	        String userPhoneNum3= paramMap.get("userPhoneNum3");
 
-	        new MemberService().update(userName, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3);
+	        mserv.update(userName, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3);
 	       
 
 	        // 마이페이지로 리다이렉트

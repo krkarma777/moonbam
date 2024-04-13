@@ -3,6 +3,7 @@ package com.moonBam.dao.member;
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.board.PostDTO;
+import com.moonBam.dto.member.MemberCreateRequestDTO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,12 +20,16 @@ public class MemberDAO {
 
 
 	public MemberDTO findByUserId(String userId) {
-		return session.selectOne("MemberMapper.findByUserId", userId);
+		return session.selectOne("com.config.MemberMapper.findByUserId", userId);
 	}
 
 	public int insert(MemberDTO memberDTO) {
-		return session.insert("MemberMapper.insert", memberDTO);
+		return session.insert("com.config.MemberMapper.insert", memberDTO);
 	}
+
+    public int insert(MemberCreateRequestDTO requestDTO) {
+        return session.insert("com.config.MemberMapper.insert", requestDTO);
+    }
 
 	// ========================
 	

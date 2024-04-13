@@ -10,7 +10,7 @@
 		WHERE	userId = #{userId}
 	</select>
 
-	<insert id="insert" parameterType="MemberDTO">
+	<insert id="insert" parameterType="MemberCreateRequestDTO">
 		INSERT INTO memberDB (USERID, USERPW, NICKNAME, RESTOREUSEREMAILID, RESTOREUSEREMAILDOMAIN, USERTYPE)
 		VALUES (#{userId}, #{userPw}, #{nickname}, #{restoreUserEmailId}, #{restoreUserEmailDomain}, #{userType})
 	</insert>
