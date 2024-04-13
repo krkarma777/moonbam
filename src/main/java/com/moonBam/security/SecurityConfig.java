@@ -51,9 +51,8 @@ public class SecurityConfig {
                 );
         http
                 .oauth2Login(oauth2 -> oauth2
-                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/**"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))
-                        .loginPage("/login/social")
                         .successHandler(customAuthenticationSuccessHandler)
                 );
 
@@ -61,7 +60,7 @@ public class SecurityConfig {
                 .logout((logoutConfig) ->
                         logoutConfig
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/")
+                                .logoutSuccessUrl("/acorn")
                                 .invalidateHttpSession(true)
                                 .deleteCookies("AuthToken")
                                 .permitAll());

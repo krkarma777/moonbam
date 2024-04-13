@@ -55,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             cookieValue += "; Secure";
         }
         response.addHeader("Set-Cookie", cookieValue);
-        response.sendRedirect("/");
+        response.sendRedirect("/acorn");
     }
 
     @Override

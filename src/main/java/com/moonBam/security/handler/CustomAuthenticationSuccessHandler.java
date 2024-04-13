@@ -1,6 +1,7 @@
 package com.moonBam.security.handler;
 
 
+import com.moonBam.security.oauth2.GoogleOAuth2User;
 import com.moonBam.security.oauth2.KakaoOAuth2User;
 import com.moonBam.security.oauth2.NaverOAuth2User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 token = naverUser.getToken();
             } else if (oauth2User instanceof KakaoOAuth2User kakaoUser) {
                 token = kakaoUser.getToken();
+            } else if (oauth2User instanceof GoogleOAuth2User googleUser) {
+                token = googleUser.getToken();
             }
 
             if (token != null) {
@@ -34,7 +37,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                     cookieValue += "; Secure";
                 }
                 response.addHeader("Set-Cookie", cookieValue);
-                response.sendRedirect("/");
+                response.sendRedirect("/acorn");
             }
         }
     }

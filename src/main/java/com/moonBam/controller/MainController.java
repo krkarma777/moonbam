@@ -1,20 +1,19 @@
 package com.moonBam.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import com.moonBam.dto.ContentDTO;
+import com.moonBam.dto.board.PostPageDTO;
+import com.moonBam.service.MainService;
+import com.moonBam.service.PostService;
+import com.moonBam.service.adminpage.announcement.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.moonBam.dto.ContentDTO;
-import com.moonBam.dto.board.PostPageDTO;
-import com.moonBam.service.MainService;
-import com.moonBam.service.PostService;
-import com.moonBam.service.adminpage.announcement.AnnouncementService;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -28,7 +27,8 @@ public class MainController {
     AnnouncementService annoService;
 
     @GetMapping("/")
-    public String mainView(Model model, @RequestParam(value = "cg", required = false) String category) {
+    public String mainView(Model model, @RequestParam(value = "cg", required = false) String category, Principal principal) {
+        System.out.println("principal = " + principal);
         String nextPage = "main";
 
         List<PostPageDTO> moviePostList = service.selectAll(new HashMap<String, String>() {

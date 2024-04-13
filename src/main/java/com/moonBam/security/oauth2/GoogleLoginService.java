@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoLoginService implements SocialOauth2Service {
+public class GoogleLoginService implements SocialOauth2Service {
 
     private final MemberService memberService;
     private final JWTUtil jwtUtil;
@@ -26,7 +26,7 @@ public class KakaoLoginService implements SocialOauth2Service {
     public String login(Map<String, Object> attributes) {
 
         MemberDTO memberDTO = new MemberDTO();
-        String username = attributes.get("id").toString();
+        String username = attributes.get("email").toString();
         Optional<MemberDTO> kakaoUserOpt = Optional.ofNullable(memberService.findByUserId(username));
 
         String role = "ROLE_USER";
@@ -36,13 +36,14 @@ public class KakaoLoginService implements SocialOauth2Service {
             memberDTO.setRestoreUserEmailDomain(UUID.randomUUID().toString());
             UUID randomUUID = UUID.randomUUID();
             String shortUUID = randomUUID.toString().split("-")[0] + randomUUID.toString().split("-")[1];
-            memberDTO.setNickname("Kakao_" + shortUUID);
+            memberDTO.setNickname("Google_" + shortUUID);
             memberDTO.setUserType("ROLE_USER");
             memberDTO.setUserPw(UUID.randomUUID().toString());
             memberService.insert(memberDTO);
         } else {
             role = kakaoUserOpt.get().getUserType();
         }
+
         // 필요한 정보를 바탕으로 JWT 생성 및 로그 출력
         return jwtUtil.createJwt(username, role, Long.parseLong(expiredMs));
     }

@@ -1,10 +1,7 @@
 package com.moonBam.security;
 
 
-import com.moonBam.security.oauth2.KakaoLoginService;
-import com.moonBam.security.oauth2.KakaoOAuth2User;
-import com.moonBam.security.oauth2.NaverLoginService;
-import com.moonBam.security.oauth2.NaverOAuth2User;
+import com.moonBam.security.oauth2.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,6 +17,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final KakaoLoginService kakaoLoginService;
     private final NaverLoginService naverLoginService;
+    private final GoogleLoginService googleLoginService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -35,6 +33,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (attributes.get("kakao_account") != null) {
             String token = kakaoLoginService.login(attributes);
             return new KakaoOAuth2User(user, token);
+        }
+
+        /* 구글 로그인 로직 */
+        if (attributes.get("sub") != null) {
+            String token = googleLoginService.login(attributes);
+            return new GoogleOAuth2User(user, token);
         }
 
         return null;
