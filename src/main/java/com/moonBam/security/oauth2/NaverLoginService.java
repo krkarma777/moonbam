@@ -46,7 +46,6 @@ public class NaverLoginService implements SocialOauth2Service {
             memberDTO.setNickname("Naver_" + shortUUID);
             memberDTO.setUserType(role); // 모든 사용자를 자영업자로 설정
             memberDTO.setUserPw(UUID.randomUUID().toString());
-            System.out.println("memberDTO = " + memberDTO);
             memberService.insert(memberDTO);
         } else {
             role = naverUserOpt.get().getUserType();

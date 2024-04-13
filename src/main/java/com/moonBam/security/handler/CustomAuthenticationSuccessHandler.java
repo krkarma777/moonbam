@@ -32,7 +32,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             }
 
             if (token != null) {
-                String cookieValue = "AuthToken=" + token + "; Path=/; HttpOnly";
+                String cookieValue = "AuthToken=" + token + "; Path=/acorn; HttpOnly";
                 if (request.isSecure()) { // 여기에서 요청이 안전한지 확인합니다.
                     cookieValue += "; Secure";
                 }

@@ -50,7 +50,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         String token = jwtUtil.createJwt(username, role, expiredMs);
-        String cookieValue = "AuthToken=" + token + "; Path=/; HttpOnly";
+        String cookieValue = "AuthToken=" + token + "; Path=/acorn; HttpOnly";
         if (request.isSecure()) { // HTTPS인 경우에만 Secure 플래그 추가
             cookieValue += "; Secure";
         }
