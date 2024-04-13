@@ -102,14 +102,22 @@ button {
 						int chatNum = chatRoom.getChatNum();
 						String roomTitle = chatRoom.getRoomTitle();
 						String roomText = chatRoom.getRoomText();
+						int currentNow = chatRoom.getCurrentNow();
+						int amount = chatRoom.getAmount();
+						String loc = chatRoom.getLoc();
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
-						<div class="border rounded-2" style="width: 300px;">
+						<div class="border" style="width: 300px; height: 265px;">
 							<div class="border-bottom" style="height: 30px; width: 300px; background-color: #ff416c; color:white; opacity : 0.3;">
 								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:white; font-size: 19px;"><%=roomTitle %></a>
 							</div>
 							<div class="border-top" style="height: 241.5px; width: 300px;">
-								<%=roomText %>
+								<div style=" font-size: 18px;">
+									<%=roomText %>
+								</div>
+								<div style="width: 100%; height:18px;">
+									
+								</div>
 							</div>
 						</div>
 					</td>
