@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.moonBam.dto.board.PostDTO"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
 <%
 
- 	String userId = (String)request.getAttribute("userId");
-
 		String boardName = request.getParameter("bn");
-		System.out.println(boardName);
 
 // 수정할 글의 정보를 받아옵니다.
 PostDTO post = (PostDTO) request.getAttribute("post");
@@ -163,10 +161,8 @@ $(document).ready(function() {
 	    var title = $('#postTitle').val();
 	    var content = tinymce.activeEditor.getContent();
 	    var content2 = $('#postText').text();
-	    var userId = "<%= userId %>";
-	    console.log(content);
-	    console.log(content2);
-	    
+	    var userId = '<sec:authentication property="name"/>';
+
 	    // AJAX 요청
 	    $.ajax({
 	        type: 'POST',

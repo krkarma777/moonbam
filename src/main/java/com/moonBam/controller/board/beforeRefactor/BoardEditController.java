@@ -20,8 +20,8 @@ import java.util.Map;
 @RequestMapping("/board/edit")
 public class BoardEditController {
 
-	AuthUtils authUtils;
-	PostService postService;
+	private final AuthUtils authUtils;
+	private final PostService postService;
 
 	String INVALID_REQUEST = ErrorMessage.INVALID_REQUEST.getMessage();
 	String ERROR_PAGE = ErrorMessage.ERROR_PAGE.getMessage();
@@ -55,9 +55,12 @@ public class BoardEditController {
 		String postTitle = paramMap.get("postTitle");
 		String postText = paramMap.get("postText");
 		String postBoard = paramMap.get("bn");
-		Long postCategory = Long.parseLong(paramMap.get("postCategory"));
-		new PostService().update(postId, postTitle, postText, postCategory);
+		String postCategoryOrigin = paramMap.get("postCategory");
+		if (postCategoryOrigin == null) {
+			postCategoryOrigin = "1";
+		}
+		Long postCategoryId = Long.parseLong(postCategoryOrigin);
+		postService.update(postId, postTitle, postText, postCategoryId);
 		return String.format("redirect:/Acorn/board/content?postId=%d&bn=%s", postId, postBoard);
 	}
-
 }
