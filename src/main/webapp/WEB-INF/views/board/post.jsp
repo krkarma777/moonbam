@@ -28,11 +28,7 @@
 	<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-	<!-- TinyMCE script -->
-	<script
-			src="https://cdn.tiny.cloud/1/ok3w2lvptkyfth3qjjks4fv0f99459nvfx76ire0ttwxcrij/tinymce/6/tinymce.min.js"
-			referrerpolicy="origin"></script>
-
+	<!-- ckeditor script -->
 	<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
 
 	<!-- Font Awesome -->

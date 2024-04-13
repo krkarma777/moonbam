@@ -1,14 +1,11 @@
-<%@page import="java.util.regex.Matcher"%>
-<%@page import="java.util.regex.Pattern"%>
 <%@page import="com.moonBam.controller.board.util.MoviePoster"%>
 <%@page import="com.moonBam.controller.board.util.ContentDataFormating"%>
 <%@page import="com.moonBam.controller.board.util.ViewService"%>
-<%@page import="com.moonBam.dto.MemberDTO"%>
 <%@page import="com.moonBam.dto.board.PostPageDTO"%>
 <%@page import="com.moonBam.dto.board.PageDTO"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Date"%>
-<%@ page import="java.sql.*, java.util.*"%>
+<%@ page import="java.util.*"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
@@ -27,7 +24,6 @@ if (pDTO != null) {
 	list = pDTO.getList();
 }
 String postBoard = (String) request.getAttribute("postBoard");
-MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
 String sortIndex = request.getParameter("sortIndex");
 String selectSearchPositionText = request.getParameter("selectSearchPositionText");
 String inputSearchFreeText = request.getParameter("inputSearchFreeText");

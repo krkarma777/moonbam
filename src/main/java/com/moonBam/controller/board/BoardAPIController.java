@@ -65,7 +65,7 @@ public class BoardAPIController {
         return ResponseEntity.ok(Map.of("postID", postID)); // 동적으로 ajax success function에서 redirect 시킬 용도
     }
 
-    @PatchMapping("{postId}")
+    @PatchMapping("/{postId}")
     public ResponseEntity<?> update(@RequestBody @Validated PostUpdateRequestDTO postUpdateRequestDTO, @PathVariable("postId") Long postId,
                                     BindingResult bindingResult, Principal principal) {
 
@@ -135,7 +135,7 @@ public class BoardAPIController {
     }
     
     //boardId에 따라 postList 가져오기
-    @PatchMapping
+    @GetMapping
     public ResponseEntity<?> findAll(
     		@PathVariable("postBoard") String postBoard,
     		@RequestParam(value = "curPage", defaultValue = "1") int curPage,
