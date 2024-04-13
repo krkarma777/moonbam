@@ -25,7 +25,7 @@
 			</sec:authorize>
 			<!-- 관리자인 경우 -->
 			<sec:authorize access="hasRole('ADMIN')">
-                <a href="/AdminPage">관리자페이지</a>
+                <a href="/acorn/AdminPage">관리자페이지</a>
             </sec:authorize>
 		</div>
 	</div>
