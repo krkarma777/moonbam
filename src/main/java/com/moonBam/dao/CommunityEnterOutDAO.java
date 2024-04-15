@@ -18,7 +18,6 @@ public class CommunityEnterOutDAO {
 
 	public int chatMemberEnterInsert(Map<String, Object> chatMemberInsertMap) {
 		
-		System.out.println("미지 복구 테스트 0415");
 		// TODO Auto-generated method stub
 		int num = session.insert("CommunityChatEnterOutMapper.chatMemberInsertMap", chatMemberInsertMap);
 //		if(num >= 2) { //중복 저장시 롤백

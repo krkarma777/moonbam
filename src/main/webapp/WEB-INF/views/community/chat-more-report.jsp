@@ -54,11 +54,6 @@
 			close();
 	}
 				
-	
-
-
-			
-			
 
 </script>
 </body>

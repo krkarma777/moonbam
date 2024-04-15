@@ -23,6 +23,6 @@
   	values (null, #{targetId}, #{reporter}, #{userId}, #{sexual}, #{lang}, #{abusing}, #{ruleviolation}, #{etc}, #{cont}, null )
   
   </insert>
-  <!--  -->
+  
   
 </mapper>

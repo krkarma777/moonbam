@@ -1,3 +1,4 @@
+
 package com.moonBam.controller.community;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,5 @@ public class ChatController {
 		return ""   ;
 	}
 	
-//asd
+
 }//end class

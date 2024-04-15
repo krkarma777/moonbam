@@ -14,6 +14,7 @@
 </form>
 채팅방Num => ${ChatRoomDTO.chatNum }
 채팅방LeaderId => ${ChatRoomDTO.leaderId }
+
 <!--  -->
 </body>
 </html>

@@ -16,13 +16,10 @@ public class CommunityChatmoreDAO {
 	
 	@Autowired
 	SqlSessionTemplate session;
-	
-	
 
 	public List<String> ChatMemberIdByChatNum(int chatNum) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("미지 복구 테스트 0415");
 		return session.selectList("Chatmore.ChatMemberIdByChatNum", chatNum);
 	}
 

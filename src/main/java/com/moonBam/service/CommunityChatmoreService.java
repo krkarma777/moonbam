@@ -14,7 +14,7 @@ import com.moonBam.dto.ReportDTO;
 @Service
 public class CommunityChatmoreService {
 	
-	////
+	////  
 	
 	@Autowired
 	CommunityChatmoreDAO chatMoreDao;
