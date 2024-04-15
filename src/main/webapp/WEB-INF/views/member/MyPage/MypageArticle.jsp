@@ -1,8 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.moonBam.dto.board.PostDTO"%>
-<%@ page import="java.util.List"%>
+<%@page import="com.moonBam.dto.MyPageDTO"%>
+<%@page import="com.moonBam.dto.board.PageDTO"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 
 <!DOCTYPE html>
+<%
+	MyPageDTO mDTO = (MyPageDTO)request.getAttribute("mDTO");
+	List<PostDTO> selectMyPostPaged = mDTO.getList();
+	System.out.println("myPageArticle: ");
+	for(int i=0; i<selectMyPostPaged.size(); i++){
+		System.out.println(selectMyPostPaged.get(i));
+	}
+%>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -14,12 +25,41 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
     <style>
         .delBtn {
-            background-color: #ff6961; /* Red color for delete button */
+            background-color: #ff416c; /* Red color for delete button */
             color: white;
             border: none;
             padding: 5px 10px;
             cursor: pointer;
         }
+        * {
+	padding: 0px;
+	margin: 0px;
+}
+a{
+	text-decoration: none;
+}
+button {
+	border: 1.111;
+	padding-top: 4; padding-bottom: 4;
+	padding-left: 8; padding-right: 8;
+}
+.pagination{
+	justify-content: center;
+}
+.pagination .page-link{
+	border: none;
+	color:black; 
+	background-color: #ff416c; 
+	opacity:0.8;
+	color: white;
+}
+.pagination .page-item.active .page-link{
+	color:black; 
+	background-color: #ff416c;
+	opacity:0.8; 
+	color: black;
+	border: none;
+}
     </style>
 </head>
 <body>
@@ -47,9 +87,9 @@
             </tr>
         </thead>
         <tbody>
-            <% List<PostDTO> postList = (List<PostDTO>) request.getAttribute("postList"); %>
-            <% if (postList != null) { %>
-                <% for(PostDTO dto : postList) { %>
+           
+            <% if (selectMyPostPaged != null) { %>
+                <% for(PostDTO dto : selectMyPostPaged) { %>
                     <tr>
                         <td><%= dto.getPostId() %></td>
                         <td><%= dto.getPostBoard() %></td>
@@ -69,42 +109,10 @@
         </tbody>
     </table>
     
-    <!-- 페이지네이션
-    <div class="page-numbers text-center">
-        <ul class="pagination"> -->
-         <%--    <% int curPage = (Integer) request.getAttribute("curPage");
-               int totalPage = (Integer) request.getAttribute("totalPage");
-               int startPage = ((curPage - 1) / 10) * 10 + 1; // 시작 페이지 번호 계산
-               int endPage = Math.min(startPage + 9, totalPage); // 끝 페이지 번호 계산
+    <!-- 페이지네이션-->
 
-               // Calculate previous and next page numbers
-               int prevPage = Math.max(startPage - 1, 1); // Ensure prevPage is never less than 1
-               int nextPage = endPage + 1;
-            %>--%>
+            <jsp:include page="MyPagenation.jsp"></jsp:include>
 
-            <%-- "이전" 버튼 
-            <% if (curPage > 1) { %>
-                <li class="page-item"><a class="page-link"
-                    href="?curPage=<%=prevPage%>">&laquo; 이전 </a></li>
-            <% } else { %>
-                <li class="page-item disabled"><span class="page-link">&laquo; 이전</span></li>
-            <% } %>--%>
-
-            <%-- 페이지 번호 출력 
-            <% for (int i = startPage; i <= endPage; i++) { %>
-                <li class="page-item <%=i == curPage ? "active" : ""%>"><a class="page-link"
-                    href="?curPage=<%=i%>"><%=i%></a></li>
-            <% } %>--%>
-
-            <%-- "다음" 버튼
-            <% if (nextPage <= totalPage) { %>
-                <li class="page-item"><a class="page-link"
-                    href="?curPage=<%=nextPage%>">다음 &raquo; </a></li>
-            <% } else { %>
-                <li class="page-item disabled"><span class="page-link">다음 &raquo;</span></li>
-            <% } %>
-        </ul>
-    </div>  --%>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

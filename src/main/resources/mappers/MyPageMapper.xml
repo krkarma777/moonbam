@@ -70,39 +70,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 내가 작성한 게시물 조회 -->
-<!-- 내가 작성한 게시물 조회 -->
-<!-- 내가 작성한 게시물 조회 -->
-<!--  
-<select id="selectMyPostPaged" resultMap="PostDTO">
-    SELECT
-        p.postId,
-        p.postBoard,
-        p.userId,
-        p.contId,
-        p.postTitle,
-        p.postDate,
-        p.postEditDate,
-        p.postText,
-        u.nickname,
-        p.categoryId
-    FROM
-        postDB p
-        JOIN MemberDB m ON p.userId = m.userId
-    WHERE
-        p.userId = #{userId}
+
+
+<select id="selectMyPostPaged" resultType="PostDTO" parameterType="String">
+       select postid, postBoard, userid, contid, postTitle, postDate, postEditDate, postText, nickname, categoryId
+       from POSTDB
+       where userId = #{userId}
     ORDER BY
-        p.postDate DESC, p.postId DESC
-    OFFSET
-        #{offset} ROWS FETCH NEXT #{perPage} ROWS ONLY
-</select>-->
+        postDate DESC
+</select>
 
 
 
-<!-- 내가 작성한 게시물 총 개수 조회 
-<select id="countMyPosts" resultType="int">
+<!-- 내가 작성한 게시물 총 개수 조회 -->
+<select id="countMyPosts" resultType="int" parameterType="String">
     SELECT COUNT(*) FROM postDB
     WHERE userId = #{userId}
-</select> -->
+</select>
 	
 	  <!-- 내댓글 삭제 -->
 	<delete id="commDel" parameterType="int">

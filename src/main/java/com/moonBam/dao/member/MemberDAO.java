@@ -2,10 +2,12 @@ package com.moonBam.dao.member;
 
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.MyPageDTO;
 import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.board.PostPageDTO;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -77,6 +79,27 @@ public class MemberDAO {
 			return n;
 		}
 
+
+
+		public MyPageDTO selectMyPostPaged(String userid, String curPage) {
+			MyPageDTO mDTO = new MyPageDTO();
+		
+			 int perPage = mDTO.getPerPage();
+		        int offset = (Integer.parseInt(curPage)-1)*perPage;
+		        System.err.println(curPage);
+System.out.println("perPage: "+perPage);
+System.out.println("offset: "+offset);
+List<PostDTO> selectMyPostPaged = session.selectList("MyPageMapper.selectMyPostPaged", userid, new RowBounds(offset, perPage));
+
+		        mDTO.setCurPage(Integer.parseInt(curPage));
+		        mDTO.setList(selectMyPostPaged);
+		        mDTO.setTotalCount(totalCount(userid));
+
+		        return mDTO;
+		}
+	    private int totalCount(String userid) {
+	        return session.selectOne("countMyPosts", userid);
+	    }
 //		public PageDTO<PostDTO> selectMyPostPaged(Map<String, Object> map) {
 //			List<PostDTO> list = session.selectList("MyPageMapper.selectMyPostPaged", map);
 //
@@ -94,4 +117,8 @@ public class MemberDAO {
 //
 //			return pageDTO;
 //		}	
+
+
+
+		
 }

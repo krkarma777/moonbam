@@ -12,14 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.PostService;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.MyPageDTO;
 import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.member.LoginService;
@@ -138,54 +138,47 @@ public class MyPageController {
 	     }
 	     return "redirect:/userinfo";
 	 }
-//	 @GetMapping("/myPost")
-//	 public ModelAndView myPost(HttpSession session, @RequestParam(defaultValue = "1") int curPage, Model model) {
-//	     MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-//	     if (loginUser != null) {
-//	         String userId = loginUser.getUserId();
-//	         
-//	         // 페이지당 게시글 수 설정
-//	         int perPage = 20;
-//	         int offset = (curPage - 1) * perPage;
-//	         
-//	         // 매개변수를 담은 Map 생성
-//	         Map<String, Object> map = new HashMap<>();
-//	         map.put("userId", userId);
-//	         map.put("offset", offset);
-//	         map.put("perPage", perPage);
-//	         
-//	         // 해당 사용자의 게시글을 페이지네이션에 맞게 가져옵니다.
-//	         PageDTO<PostDTO> pageDTO = mserv.selectMyPostPaged(map);
-//	         
-//	         // 모델에 게시글 목록을 추가합니다.
-//	         model.addAttribute("postList", pageDTO);
-//	         
-//	         // 모델에 현재 페이지 번호를 추가합니다.
-//	         model.addAttribute("curPage", curPage);
-//	         
-//	         // ModelAndView 객체를 사용하여 뷰를 반환합니다.
-//	         return new ModelAndView("member/MyPage/MypageArticle");
-//	     } else {
-//	         // 로그인되지 않은 경우 로그인 페이지로 리다이렉트합니다.
-//	         session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-//	         return new ModelAndView("redirect:/Login");
-//	     }
-//	 }
 	 @GetMapping("/myPost")
-	 public ModelAndView myPost(HttpSession session, Model model) {
-	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-	        if (loginUser != null) {
-	            String userId = loginUser.getUserId();
-	            List<PostDTO> list = mserv.selectMyPost(userId);
-	            model.addAttribute("postList", list);
-	            return new ModelAndView("member/MyPage/MypageArticle");
-	        } else {
-	        	System.out.println("myPost의 else");
-	            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-	            return new ModelAndView("redirect:/Login");
-	            
-	        }
-	    }
+//	 @ResponseBody
+	 public String myPost(Model model, HttpSession session, String curPage) {
+	     MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+	     if (loginUser != null) {
+	         String userId = loginUser.getUserId();
+	         // curPage 값을 확인하고, 필요한 경우 처리합니다.
+	         if(curPage==null) {
+	        	 curPage="1";
+	         }
+	         // 페이지 처리를 위한 추가 작업이 필요합니다.
+	         MyPageDTO mDTO = mserv.selectMyPostPaged(curPage, userId); // userId도 넘겨줘야 할 것으로 보입니다.
+	        System.out.println("Controller: "+mDTO);
+	         model.addAttribute("mDTO", mDTO);
+	         model.addAttribute("curPage", curPage); // 현재 페이지 정보를 모델에 추가합니다.
+	         
+	         // ModelAndView 객체를 사용하여 뷰를 반환합니다.
+	         return "member/MyPage/MypageArticle";
+	     } else {
+	         // 로그인되지 않은 경우 로그인 페이지로 리다이렉트합니다.
+	         session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+	         return "redirect:/Login";
+	     }
+	 }
+
+
+//	 @GetMapping("/myPost")
+//	 public ModelAndView myPost(HttpSession session, Model model) {
+//	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+//	        if (loginUser != null) {
+//	            String userId = loginUser.getUserId();
+//	            List<PostDTO> list = mserv.selectMyPost(userId);
+//	            model.addAttribute("postList", list);
+//	            return new ModelAndView("member/MyPage/MypageArticle");
+//	        } else {
+//	        	System.out.println("myPost의 else");
+//	            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+//	            return new ModelAndView("redirect:/Login");
+//	            
+//	        }
+//	    }
 	 @GetMapping("/myComment")
 	    public ModelAndView myComment(HttpSession session, Model model) {
 	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");

@@ -1,7 +1,7 @@
 package com.moonBam.service.member;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.moonBam.dao.member.MemberDAO;
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.board.PageDTO;
+import com.moonBam.dto.MyPageDTO;
 import com.moonBam.dto.board.PostDTO;
 
 
@@ -64,6 +64,16 @@ public class MemberService {
 		int n = dao.postDel(postId);
 		return n;
 	}
+
+	public MyPageDTO selectMyPostPaged(String curPage, String userId) {
+//	    // userId를 HashMap에 추가
+//	    map.put("userId", userId);
+	    // 수정된 코드로 MyPageDTO를 가져옴
+	    MyPageDTO mDTO = dao.selectMyPostPaged( userId, curPage);
+	    System.out.println("Service: "+mDTO);
+	    return mDTO;
+	}
+
 
 //	public PageDTO<PostDTO> selectMyPostPaged(Map<String, Object> map) {
 //		return dao.selectMyPostPaged(map);
