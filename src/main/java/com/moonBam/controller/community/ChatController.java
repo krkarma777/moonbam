@@ -1,4 +1,3 @@
-
 package com.moonBam.controller.community;
 
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.service.ChatRoomService;
+
 
 @Controller
 public class ChatController {
@@ -40,6 +40,7 @@ public class ChatController {
 		return ""   ;//TODO해당 채팅방 주소로 가도록 나중에 세팅
 	}
 
+
 	@RequestMapping(value = "/delegateMaster")
 	@ResponseBody
 	public String delegateMaster(
@@ -66,5 +67,4 @@ public class ChatController {
 		return "";
 	}
 	
-
 }//end class

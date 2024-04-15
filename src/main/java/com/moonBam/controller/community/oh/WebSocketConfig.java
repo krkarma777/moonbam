@@ -1,3 +1,4 @@
+
 // package com.moonBam.controller.community.oh;
 
 // import org.springframework.context.annotation.Configuration;
@@ -23,3 +24,4 @@
 // 		registry.setApplicationDestinationPrefixes("/app");
 // 	}
 // }
+
