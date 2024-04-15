@@ -15,6 +15,7 @@
 <body>
 	<h1>chatRoom - ${text}</h1>
 	<form id="chatForm">
+	 <button id="connect">접속</button>
 		<table border="1" style="background: white; width: 500px">
 			<thead>
 				<tr>
@@ -116,9 +117,10 @@
 
 		// 소켓 연결
 		function connect() {
+/* console.log("connect"); */
 			var socket = new SockJS('/chat-socket');
 			stompClient = Stomp.over(socket);
-			stompClient.connect({}, function(frame) {
+			stompClient.connect({}, function() {
 				console.log('Connected: ' + frame);
 				stompClient.subscribe('/topic/messages',
 						function(messageOutput) {
@@ -129,6 +131,7 @@
 		
 		// 소켓 연결 해제
 		function disconnect() {
+			console.log("disconnect");
             if (stompClient !== null) {
                 stompClient.disconnect();
             }
@@ -148,12 +151,14 @@
                 'message': messageContent,
                 'messageType': messageType
             }));
+            
         }
 		
 		// 메세지 출력
 		 function showMessageOutput(messageOutput) {
             $("#messages").append("<tr><td>" + messageOutput.chatRoomId + "</td><td>" + messageOutput.message + "</td></tr>");
         }
+		
 		
 		 $(function () {
 	            $("form").on('submit', function (e) {

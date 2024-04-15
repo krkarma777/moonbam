@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.ReportDTO;
 import com.moonBam.service.CommunityChatmoreService;
 
 
