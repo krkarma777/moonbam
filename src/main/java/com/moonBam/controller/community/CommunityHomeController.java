@@ -37,7 +37,10 @@ public class CommunityHomeController {
 		categoryList.add("음악");
 		model.addAttribute("categoryList", categoryList);
 		
+		System.out.println("미지 복구 테스트 0415");
+		
 		return "community/communityHome";
+		
 	}
 	
 }

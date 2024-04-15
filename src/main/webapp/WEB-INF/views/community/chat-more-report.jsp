@@ -13,6 +13,7 @@
 <input type="hidden" name="targetId" value="chat${chatNum }"> 
 <input type="hidden" name="reporter" value="${sessionScope.loginUser.userId }"> 
 <!--  고객이 볼 필요는 없으니 hidden으로 form에 포함시켜 넘기기-->
+<!--  -->
 	<table border="1">
 		<tr align="center">
 			<td><b>회원 신고 양식</b><br>

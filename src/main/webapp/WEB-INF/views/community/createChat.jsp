@@ -20,7 +20,7 @@
 	      dateFormat: "yy-mm-dd"
 	    });
 	  });
-
+/*  */
 	//모임 소개글 글자 제한수
 	function checkLength() {
 		const maxLength = 150;

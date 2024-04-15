@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          	#{currentNow}, #{amount}, #{loc},
          	#{cDate}, #{mDate}, #{category}, #{leaderId})
     </insert>
-	
+	<!--  -->
 	<!-- 
 	delete
 	get

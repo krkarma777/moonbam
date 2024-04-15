@@ -13,6 +13,8 @@ public class ChatRoomDAO {
 	SqlSessionTemplate session;
 	
 	public int saveChatRoom(ChatRoomDTO chatroom) {
+		
+		System.out.println("미지 복구 테스트 0415");
 		int n = 0;
 		System.out.println("in dao");
 		System.out.println(chatroom);
