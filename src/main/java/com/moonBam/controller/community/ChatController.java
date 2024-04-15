@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'community' of https://github.com/krkarma777/moonbam.git
 package com.moonBam.controller.community;
 
 import java.util.HashMap;
@@ -43,6 +39,7 @@ public class ChatController {
 		
 		return ""   ;//TODO해당 채팅방 주소로 가도록 나중에 세팅
 	}
+
 
 	@RequestMapping(value = "/delegateMaster")
 	@ResponseBody
