@@ -5,7 +5,12 @@
 <head>
 <meta charset="EUC-KR">
 <title>Chat Room</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
 	<h1>chatRoom - ${text}</h1>
@@ -14,13 +19,12 @@
 			<thead>
 				<tr>
 					<td>
-						<!-- 제목, 토글 버튼 -->
-						<input type="checkbox" id="toggle" hidden>
+						<!-- 제목, 토글 버튼 --> <input type="checkbox" id="toggle" hidden>
 						<label for="toggle" class="toggleSwitch"> <span
 							id="toggleIcon" class="toggleButton">▶ ${title}</span>
-						</label>
+					</label>
 					</td>
-					<td style="width: 20px;"> 설정</td>
+					<td style="width: 20px;">설정</td>
 				</tr>
 				<tr>
 					<!-- 첫 화면부터 공간 차지함 -->
@@ -36,12 +40,12 @@
 						<table>
 							<tr>
 								<td><span id="user" style="cursor: pointer;"
-										onclick="openMemberWindow()">user</span></td>
+									onclick="openMemberWindow()">user</span></td>
 								<td>yy/mm/dd/hh:mm</td>
 							</tr>
 							<tr>
 								<td><span id="msg" style="cursor: pointer;"
-										onclick="openReportWindow()">your msg</span></td>
+									onclick="openReportWindow()">your msg</span></td>
 							</tr>
 						</table>
 					</td>
@@ -53,7 +57,7 @@
 								<td>yy/mm/dd/hh:mm</td>
 							</tr>
 							<tr>
-								<td style="word-wrap: break-word"> my msg - ****&*^($%@#*()%*(%)#@)fjkdjfklsdjklfjlskdjflksdjfklsjdfkljskldfjklsdjfklsjdkfsjd;fjklsdjflksdjflkjsdlkfjklssfsdfsdfdjflksdjflkjsdlkfjlskdjlk</td>
+								<td style="word-wrap: break-word">my msg</td>
 							</tr>
 						</table>
 					</td>
@@ -61,31 +65,15 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="2">
-						<input type="text" name="text" style="width: 85%">
-						<input type="button" id="btnSubmit" value="전송">
-					</td>
+					<td colspan="2"><input type="text" name="text"
+						style="width: 85%"> <input type="button" id="btnSubmit"
+						value="전송"></td>
 				</tr>
 			</tfoot>
 		</table>
 	</form>
 
-<!-- 
-<div id='chatt'>
-		<h1>WebSocket Chatting</h1>
-		<input type='text' id='mid' value='홍길동'>
-		<input type='button' value='로그인' id='btnLogin'>
-		<br/>
-		<div id='talk'></div>
-		<div id='sendZone'>
-			<textarea id='msg' value='hi...' ></textarea>
-			<input type='button' value='전송' id='btnSend'>
-		</div>
-	</div>
-	<script src='./js/chatt.js'></script>
 
-<script type="text/javascript" src='resources/js/chat/chatt.js'></script>
- -->
 
 	<script>
 		/* 토글 처리 */
@@ -110,31 +98,6 @@
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
-		/* 메시지 전송 */
-		function submitMessage() {
-			var message = $("input[name='text']").val();
-			var writer = "temp";
-			
-			// String to json, parsing
-			var chatContent = {
-				message: message,
-				writer: writer
-			};
-			
-			$.ajax({
-				url: "chatRoom",
-				method: "POST",
-				data: JSON.stringify(chatContent),
-				contentType: "application/json",
-				success: function(response) {
-					console.log("전송 성공");
-				},
-				error: function(xhr, status, error) {
-					console.error("전송 실패:", error);
-				}
-			});
-		}
-
 		/* 멤버 */
 		function openMemberWindow() {
 			var url = "memberWindow";
@@ -146,6 +109,60 @@
 				submitMessage();
 			});
 		});
+
+		
+
+		var stompClient = null;
+
+		// 소켓 연결
+		function connect() {
+			var socket = new SockJS('/chat-socket');
+			stompClient = Stomp.over(socket);
+			stompClient.connect({}, function(frame) {
+				console.log('Connected: ' + frame);
+				stompClient.subscribe('/topic/messages',
+						function(messageOutput) {
+							showMessageOutput(JSON.parse(messageOutput.body));
+						});
+			});
+		}
+		
+		// 소켓 연결 해제
+		function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            console.log("Disconnected");
+        }
+		
+		
+		/* 메시지 전송 */
+		function sendMessage() {
+            var chatRoomId = $('#chatRoomId').val();
+            var messageContent = $('#messageContent').val();
+            var senderId = $('#senderId').val();
+            var messageType = $('#messageType').val();
+            stompClient.send("/app/chat/send", {}, JSON.stringify({
+                'chatRoomId': chatRoomId,
+                'senderId': senderId,
+                'message': messageContent,
+                'messageType': messageType
+            }));
+        }
+		
+		// 메세지 출력
+		 function showMessageOutput(messageOutput) {
+            $("#messages").append("<tr><td>" + messageOutput.chatRoomId + "</td><td>" + messageOutput.message + "</td></tr>");
+        }
+		
+		 $(function () {
+	            $("form").on('submit', function (e) {
+	                e.preventDefault();
+	            });
+	            $( "#connect" ).click(function() { connect(); });
+	            $( "#disconnect" ).click(function() { disconnect(); });
+	            $( "#send" ).click(function() { sendMessage(); });
+	        });
 	</script>
 </body>
 </html>
