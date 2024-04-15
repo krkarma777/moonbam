@@ -34,7 +34,7 @@
 		
 		//community개설로 이동
 		$("#createCommunity").click(function(){
-			console.log("클릭");
+			window.location.href = "/acorn/createChat";
 		})
 		
 	})

@@ -115,6 +115,7 @@
 
 		// 소켓 연결
 		function connect() {
+// 여기가 문제다
 			var socket = new SockJS('/acorn/chat-socket');
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function() {

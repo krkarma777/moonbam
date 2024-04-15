@@ -19,16 +19,16 @@ public class ChatController {
 		return "/community/createChat";
 	}
 	
-	/*
-	 * @RequestMapping(value = "/saveChat", method=RequestMethod.POST)
-	 * 
-	 * @ResponseBody public String saveChatRoom(@ModelAttribute ChatRoomDTO
-	 * chatRoom) {
-	 * 
-	 * chatRoom.setmDate("2024-4-7"); chatRoom.setLeaderId(""); int n = 0; n =
-	 * crService.saveChatRoom(chatRoom); if(n==1) { System.out.println("채팅방 정상 저장");
-	 * } return ""; }
-	 */
+	
+	  @RequestMapping(value = "/saveChat", method=RequestMethod.POST)
+	  
+	  @ResponseBody public String saveChatRoom(@ModelAttribute ChatRoomDTO
+	  chatRoom) {
+	  
+	  chatRoom.setmDate("2024-4-7"); chatRoom.setLeaderId(""); int n = 0; n =
+	  crService.saveChatRoom(chatRoom); if(n==1) { System.out.println("채팅방 정상 저장");
+	  } return ""; }
+	 
 	
 //asd
 }//end class
