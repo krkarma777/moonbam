@@ -13,6 +13,9 @@ import com.moonBam.dto.CommunityPageDTO;
 
 @Service
 public class CommunityHomeService {
+	
+	////
+	
 	@Autowired
 	SqlSessionTemplate session;
 	@Autowired

@@ -23,7 +23,7 @@
     	
     	
     } */
-    
+    /*  */
  // 현재 화면에 보여질 페이지번호들의 시작페이지번호, 마지막페이지번호 구하기
     // 현재 페이지번호의 블럭번호 구하기
     int curBlock = ( int )Math.ceil( ( double )curPage / perBlock );

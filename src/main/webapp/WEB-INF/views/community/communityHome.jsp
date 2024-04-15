@@ -17,6 +17,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<!--  -->
 <title>문밤</title>
 <link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -104,7 +105,7 @@ button {
 						String roomText = chatRoom.getRoomText();
 						int currentNow = chatRoom.getCurrentNow();
 						int amount = chatRoom.getAmount();
-						String loc = chatRoom.getLoc();
+						/* String loc = chatRoom.getLoc(); */
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">

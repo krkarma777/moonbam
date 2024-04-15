@@ -8,6 +8,7 @@ public class ChatMemberDTO {
 	private int chatNum; //채팅방 번호
 	private String userId; //유저 id
 	private String enterTime; //mapper에서 sysdate 처리하세요!
+	//////
 	
 	public int getChatNum() {
 		return chatNum;

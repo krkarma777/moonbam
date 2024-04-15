@@ -19,6 +19,7 @@ public class CommunityChatmoreDAO {
 
 	public List<String> ChatMemberIdByChatNum(int chatNum) {
 		// TODO Auto-generated method stub
+		
 		return session.selectList("Chatmore.ChatMemberIdByChatNum", chatNum);
 	}
 
