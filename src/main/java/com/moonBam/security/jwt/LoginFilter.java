@@ -60,16 +60,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        String username = request.getParameter("userId"); // 로그인 시도한 사용자 이름 가져오기
-        String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8); // URL에 포함시키기 위해 인코딩
-
-        if (Objects.equals(exception.getMessage(), "이메일 인증이 필요합니다.")) {
-            response.sendRedirect("/verify?username=" + encodedUsername); // 이메일 인증 페이지로 리디렉션
-        } else if (Objects.equals(exception.getMessage(), "차단된 사용자입니다.")) {
-            response.sendRedirect("/banned");
-        } else {
-            // 다른 종류의 인증 실패 처리
-            response.sendRedirect("/login?error=true"); // 기본 로그인 페이지로 리디렉션
-        }
+        response.sendRedirect("/login?error=true"); // 기본 로그인 페이지로 리디렉션
     }
 }

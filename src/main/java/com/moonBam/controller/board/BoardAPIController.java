@@ -1,38 +1,22 @@
 package com.moonBam.controller.board;
 
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.moonBam.service.member.MemberLoginService;
-import jakarta.servlet.http.HttpSession;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.dto.board.PostUpdateRequestDTO;
 import com.moonBam.service.PostService;
-
+import com.moonBam.service.member.MemberLoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -129,8 +113,10 @@ public class BoardAPIController {
     	}
 
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-        boolean isAuthorized = loginUser.getUserId().equals(pDTO.getUserId());
-    	
+        boolean isAuthorized = false;
+        if (loginUser != null) {
+            isAuthorized = loginUser.getUserId().equals(pDTO.getUserId());
+        }
     	return ResponseEntity.ok(Map.of("pDTO", pDTO, "isAuthorized", isAuthorized));
     }
 }

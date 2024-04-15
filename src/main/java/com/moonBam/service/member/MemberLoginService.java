@@ -17,7 +17,7 @@ public class MemberLoginService {
 
     public MemberDTO findByPrincipal(Principal principal) {
         if (principal == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Principal is null");
+            return null;
         }
 
         return Optional.ofNullable(memberService.findByUserId(principal.getName()))

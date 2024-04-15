@@ -25,9 +25,7 @@ public class BoardContentController {
 	public String contentView(@RequestParam("postId") Long postId, Principal principal, Model model) {
 		
 		PostPageDTO post = postService.selectPagePost(postId);
-		if(!authUtils.isUserAuthorized(principal, post) ) {
-			model.addAttribute("mismatchError", ErrorMessage.MISMATCH_ERROR.getMessage());
-		}
+
 		model.addAttribute("postText", post.getPostText()); // 게시글 내용
 		model.addAttribute("postTitle", post.getPostTitle()); // 게시글 제목
 		model.addAttribute("postDate", post.getPostDate()); // 게시글 작성일
