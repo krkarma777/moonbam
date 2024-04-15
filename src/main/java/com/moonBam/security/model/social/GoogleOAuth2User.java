@@ -1,4 +1,4 @@
-package com.moonBam.security.oauth2;
+package com.moonBam.security.model.social;
 
 import lombok.Getter;
 import lombok.Setter;

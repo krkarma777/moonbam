@@ -1,4 +1,4 @@
-package com.moonBam.security.oauth2;
+package com.moonBam.security.model.social;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +10,12 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class NaverOAuth2User implements OAuth2User {
+public class KakaoOAuth2User implements OAuth2User {
 
     private final OAuth2User oauth2User;
     private final String token;
 
-    public NaverOAuth2User(OAuth2User oauth2User, String token) {
+    public KakaoOAuth2User(OAuth2User oauth2User, String token) {
         this.oauth2User = oauth2User;
         this.token = token;
     }
@@ -32,7 +32,8 @@ public class NaverOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        Map<String, Object> response = (Map<String, Object>) oauth2User.getAttributes().get("response");
+        Map<String, Object> response = oauth2User.getAttributes();
         return response.get("id").toString();
     }
+
 }

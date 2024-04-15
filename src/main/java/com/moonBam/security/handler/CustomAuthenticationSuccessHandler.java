@@ -1,9 +1,9 @@
 package com.moonBam.security.handler;
 
 
-import com.moonBam.security.oauth2.GoogleOAuth2User;
-import com.moonBam.security.oauth2.KakaoOAuth2User;
-import com.moonBam.security.oauth2.NaverOAuth2User;
+import com.moonBam.security.model.social.GoogleOAuth2User;
+import com.moonBam.security.model.social.KakaoOAuth2User;
+import com.moonBam.security.model.social.NaverOAuth2User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.moonBam.security.jwt;
 
 
-import com.moonBam.security.CustomUserDetails;
+import com.moonBam.security.model.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

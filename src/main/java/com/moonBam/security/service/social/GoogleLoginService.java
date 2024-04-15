@@ -1,4 +1,4 @@
-package com.moonBam.security.oauth2;
+package com.moonBam.security.service.social;
 
 
 import com.moonBam.dto.MemberDTO;

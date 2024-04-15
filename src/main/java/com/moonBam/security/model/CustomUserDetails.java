@@ -1,4 +1,4 @@
-package com.moonBam.security;
+package com.moonBam.security.model;
 
 
 import com.moonBam.dto.MemberDTO;

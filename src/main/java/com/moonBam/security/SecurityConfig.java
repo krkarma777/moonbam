@@ -5,6 +5,7 @@ import com.moonBam.security.handler.CustomAuthenticationSuccessHandler;
 import com.moonBam.security.jwt.JWTFilter;
 import com.moonBam.security.jwt.JWTUtil;
 import com.moonBam.security.jwt.LoginFilter;
+import com.moonBam.security.service.social.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

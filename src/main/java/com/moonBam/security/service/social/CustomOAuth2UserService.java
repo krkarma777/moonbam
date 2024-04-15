@@ -1,7 +1,9 @@
-package com.moonBam.security;
+package com.moonBam.security.service.social;
 
 
-import com.moonBam.security.oauth2.*;
+import com.moonBam.security.model.social.GoogleOAuth2User;
+import com.moonBam.security.model.social.KakaoOAuth2User;
+import com.moonBam.security.model.social.NaverOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

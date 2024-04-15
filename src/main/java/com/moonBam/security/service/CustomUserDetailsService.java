@@ -1,6 +1,7 @@
-package com.moonBam.security;
+package com.moonBam.security.service;
 
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.security.model.CustomUserDetails;
 import com.moonBam.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
