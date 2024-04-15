@@ -115,6 +115,16 @@ $("document").ready(function() {
 			var post = response.pDTO;
 			var isAuthorized = response.isAuthorized;
 
+			// 날짜 파싱 및 포매팅
+			var date = new Date(post.postDate);
+			var formattedDate = date.toLocaleDateString('ko-KR', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit'
+			});
 			//글 내용
 			var postOneView = '<div class="container mt-4">' +
 					'<div class="post-section">' +
@@ -125,7 +135,7 @@ $("document").ready(function() {
 					'<div>' +
 					'<small>' +
 					'작성자: ' + post.nickname + ' | ' +
-					'작성일: ' + post.postDate + // EL(fmt:formatDate) 대신 그대로 post.postDate 사용
+					'작성일: ' + formattedDate + // EL(fmt:formatDate) 대신 그대로 post.postDate 사용
 					'</small>' +
 					'</div>' +
 					'<div>' +
@@ -359,8 +369,10 @@ body{
 
 /* 좋아요 버튼 여백 조정 */
 #commentHead {
-    margin-bottom: 20px; /* 버튼 아래의 여백을 늘려서 버튼을 위로 올립니다
-}
+	margin-bottom: 20px;
+
+} /* 버튼 아래의 여백을 늘려서 버튼을 위로 올립니다
+
 
 </style>
 
@@ -368,7 +380,7 @@ body{
 <body>
 
 	<!-- 네비게이션바 -->
-	<jsp:include page="//common/navbar.jsp"></jsp:include>
+	<jsp:include page="//common/navbar.jsp"/>
 	
 	<div class="container mt-4">
 		<div class="post-section">
@@ -419,13 +431,7 @@ body{
 					
    					<!-- 오른쪽에 위치할 기타 버튼들 -->
 					<sec:authorize access="isAuthenticated()">
-						<button type="button" class="btn btn-action btn-spacing">글쓰기</button>
-					</sec:authorize>
-					<sec:authorize access="!isAuthenticated()">
-						<!-- 글쓰기 모달 -->
-						<div class="modal fade" id="writeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							...
-						</div>
+						<a href="'${pageContext.request.contextPath}/board/write?bn='${requestScope.}" class="btn btn-action btn-spacing">글쓰기</a>
 					</sec:authorize>
 						<!-- 수정, 삭제 버튼-->					
    						<span id="updatadel"></span>
