@@ -111,14 +111,12 @@
 			});
 		});
 
-		
-
 		var stompClient = null;
 
 		// 소켓 연결
 		function connect() {
-/* console.log("connect"); */
-			var socket = new SockJS('/chat-socket');
+// 여기가 문제다
+			var socket = new SockJS('/acorn/chat-socket');
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function() {
 				console.log('Connected: ' + frame);
@@ -158,7 +156,6 @@
 		 function showMessageOutput(messageOutput) {
             $("#messages").append("<tr><td>" + messageOutput.chatRoomId + "</td><td>" + messageOutput.message + "</td></tr>");
         }
-		
 		
 		 $(function () {
 	            $("form").on('submit', function (e) {
