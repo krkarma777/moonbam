@@ -1,5 +1,19 @@
 package com.moonBam.controller.member;
 
+import com.moonBam.dto.AnonymousBoardDTO;
+import com.moonBam.dto.AnonymousCommentDTO;
+import com.moonBam.dto.AnonymousReplyDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.service.member.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
@@ -9,26 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.moonBam.dto.AnonymousBoardDTO;
-import com.moonBam.dto.AnonymousCommentDTO;
-import com.moonBam.dto.AnonymousReplyDTO;
-import com.moonBam.service.member.AnonymousBoardService;
-import com.moonBam.service.member.AnonymousCommentService;
-import com.moonBam.service.member.AnonymousReplyService;
-import com.moonBam.service.member.LoginService;
-import com.moonBam.service.member.RegisterService;
 
 
 @RestController
@@ -51,21 +45,29 @@ public class AjaxController {
 	
 	@Autowired
 	AnonymousReplyService anonymousReplyService;
+
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	MemberService memberService;
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
 	//***************************************************************************************************************
-	
+
 	//메인에서 로그인 여부 확인 에이젝스
 	@PostMapping("AjaxCheckIDPW")
-	public String AjaxCheckIDPW(String userId, String userPw) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		String realUserPw = sc.encrypt(userPw);
-		boolean canLogin = lServ.loginPossible(userId, realUserPw);
-		String mesg = "loginSuccess";
-		if (!canLogin) {
-			mesg = "loginFail";                
-        }
-		return mesg;
+	public String AjaxCheckIDPW(String userId, String userPw) {
+		MemberDTO memberDTO = memberService.findByUserId(userId);
+		if (memberDTO == null) {
+			return "loginFail";
+		}
+		String userPwOrigin = memberService.findByUserId(userId).getUserPw();
+		if (!bCryptPasswordEncoder.matches(userPw, userPwOrigin)) {
+			return "loginFail";
+		}
+		return "loginSuccess";
 	}
 	
 	//메인에서 이메일 중복 확인 에이젝스
