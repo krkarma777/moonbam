@@ -75,6 +75,7 @@ public class MainController {
 	    		List<ContentDTO> movieTopList = mService.selectTop();
 	    		model.addAttribute("movieTopList", movieTopList);
 	    		model.addAttribute("category", category);
+	    		categoryList.add("전체");
 	    		categoryList.add("한국영화");
 	    		categoryList.add("해외영화");
 	    		model.addAttribute("categoryList", categoryList);
@@ -88,6 +89,7 @@ public class MainController {
             	model.addAttribute("cpDTO", cpDTO);
             	
             	model.addAttribute("category", category);
+            	categoryList.add("전체");
 	    		categoryList.add("영화");
 	    		categoryList.add("독서");
 	    		categoryList.add("음악");
