@@ -24,4 +24,3 @@
 // 		registry.setApplicationDestinationPrefixes("/app");
 // 	}
 // }
-
