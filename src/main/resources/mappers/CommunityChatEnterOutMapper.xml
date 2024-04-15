@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommunityChatEnterOutMapper">
+
+
+	<!-- 방 입장 시 insert 진행 -->
+	<insert id="chatMemberInsertMap" parameterType="hashmap">
+	
+		insert into chatmember values (#{chatNum},#{userId},sysdate)
+	
+	</insert>
+	
+	
+	<!-- 방 입장 검증 하기 위해 select 진행 -->
+	<select id="chatMemberEnterSelect" parameterType="hashmap" resultType="ChatMemberDTO">
+	
+		
+		select * from chatmember where chatnum = #{chatNum} and userid = #{userId}
+		
+	</select>
+	
+	
+	<!-- chatNum 으로 방정보 가져오기 (방 입장시) -->
+	<select id="chatRoomSelectById" parameterType="int" resultType="ChatRoomDTO">
+	
+	select * from chatroom where chatNum = #{chatNum}
+	
+	</select>
+	
+	<delete id="chatMemberDeleteBychatNumAndUserId" parameterType="hashmap">
+	
+	delete from chatmember where userId =#{userId} and chatNum = #{chatNum}
+	
+	</delete>
+	
+	
+</mapper>

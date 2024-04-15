@@ -37,5 +37,7 @@
 		</where>
 		order by chatnum
 	</select>
+	
+	<!--  -->
   
 </mapper>

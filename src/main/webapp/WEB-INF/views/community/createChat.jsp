@@ -13,6 +13,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <script>
+
     $(document).ready(function() {
         // 달력
         $("#datepicker").datepicker({
@@ -49,6 +50,7 @@
             }
         });
     });//end doc
+
 </script>
 <style type="text/css">
 .search { position:absolute;z-index:1000;top:20px;left:20px; }

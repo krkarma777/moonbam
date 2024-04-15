@@ -14,6 +14,9 @@ import com.moonBam.dto.CommunityPageDTO;
 public class CommunityHomeDAO {
 
 	public CommunityPageDTO chatRoomList(SqlSessionTemplate session, HashMap<String, String> map, String curPage) {
+		
+		System.out.println("미지 복구 테스트 0415");
+		
 		CommunityPageDTO cpDTO = new CommunityPageDTO();
 		int perPage = cpDTO.getPerPage();
 		int offset = (Integer.parseInt(curPage)-1)*perPage;

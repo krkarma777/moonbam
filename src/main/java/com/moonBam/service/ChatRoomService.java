@@ -10,6 +10,7 @@ import com.moonBam.dto.ChatRoomDTO;
 
 @Service
 public class ChatRoomService {
+	////
 
 	@Autowired
 	ChatRoomDAO dao;
