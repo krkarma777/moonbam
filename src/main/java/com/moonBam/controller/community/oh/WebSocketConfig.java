@@ -1,4 +1,4 @@
-//package com.moonBam.controller.community.oh;
+//package com.moonBam.config;
 //
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -8,18 +8,17 @@
 //
 //@Configuration
 //@EnableWebSocketMessageBroker
-//public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+//public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 //
-//	@Override
-//	public void registerStompEndpoints(StompEndpointRegistry registry) {
-//		System.out.println("registerStompEndpoints");
-//		registry.addEndpoint("/acorn/chat-socket").setAllowedOrigins("http://localhost:8090").withSockJS();
-//	}
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry config) {
+//        config.enableSimpleBroker("/sub");
+//        config.setApplicationDestinationPrefixes("/pub");
+//    }
 //
-//	@Override
-//	public void configureMessageBroker(MessageBrokerRegistry registry) {
-//		System.out.println("configureMessageBroker");
-//		registry.enableSimpleBroker("/topic/");
-//		registry.setApplicationDestinationPrefixes("/app");
-//	}
-//}
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*").withSockJS();
+//    }
+//
+//}	

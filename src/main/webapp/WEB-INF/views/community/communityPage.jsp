@@ -13,6 +13,8 @@
 	String searchName = (String)request.getAttribute("searchName");
 	String searchValue = (String)request.getAttribute("searchValue");
   	int perBlock = cpDTO.getPerBlock();
+  	
+  	String communityCategory = (String)request.getAttribute("communityCategory");
 	
    /*  for(int i = 1 ; i  <= totalNum ; i++){
     	if(curPage == i){
@@ -23,7 +25,7 @@
     	
     	
     } */
-    /*  */
+    
  // 현재 화면에 보여질 페이지번호들의 시작페이지번호, 마지막페이지번호 구하기
     // 현재 페이지번호의 블럭번호 구하기
     int curBlock = ( int )Math.ceil( ( double )curPage / perBlock );
@@ -42,13 +44,13 @@
     if ( curPage == 1 )
         out.print( "<li class='page-item'><a class='page-link'>처음</a></li>" );
     else
-        out.print( "<li class='page-item'><a class='page-link' href='communitySearch?curPage=1&searchName=" + searchName + "&searchValue=" + searchValue + "'>처음</a></li>" );
+        out.print( "<li class='page-item'><a class='page-link' href='" + communityCategory + "?curPage=1&searchName=" + searchName + "&searchValue=" + searchValue + "'>처음</a></li>" );
 
     // 2. 이전 페이지로 이동
     if ( curPage == 1 )
         out.print( "<li class='page-item'><a class='page-link'>&lt;</a></li>" );
     else
-        out.print( "<li class='page-item'><a class='page-link' href='communitySearch?curPage=" + ( curPage - 1 ) + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>&lt;</a></li>" );
+        out.print( "<li class='page-item'><a class='page-link' href='" + communityCategory + "?curPage=" + ( curPage - 1 ) + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>&lt;</a></li>" );
 
     // 3. 페이지번호들
     for ( int i = startPage; i < endPage; i++  ) { // 마지막페이지번호는 표시 안 하고, for 루프 밑에서 표시( 공백 표시 때문에... )
@@ -56,25 +58,25 @@
         if ( curPage == i )
             out.print( "<li class='page-item active'><a class='page-link'>"+i+"</a></li>" );
         else
-        out.print( "<li class='page-item'><a class='page-link' href='communitySearch?curPage=" + i + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>" + i + "</a></li>" );
+        out.print( "<li class='page-item'><a class='page-link' href='" + communityCategory + "?curPage=" + i + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>" + i + "</a></li>" );
 
     }
     if ( curPage == endPage )
         out.print( "<li class='page-item'><a class='page-link'>"+endPage+"</a></li>" );
     else
-        out.print( "<li class='page-item'><a class='page-link'  href='communitySearch?curPage=" + endPage + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>" + endPage + "</a></li>" );
+        out.print( "<li class='page-item'><a class='page-link'  href='" + communityCategory + "?curPage=" + endPage + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>" + endPage + "</a></li>" );
 
     // 2. 다음 페이지로 이동
     if ( curPage == totalNum )
         out.print( "<li class='page-item'><a class='page-link'>&gt;</a></li>" );
     else
-        out.print( "<li class='page-item'><a class='page-link' href='communitySearch?curPage=" + ( curPage + 1 ) + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>&gt;</a></li>" );
+        out.print( "<li class='page-item'><a class='page-link' href='" + communityCategory + "?curPage=" + ( curPage + 1 ) + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>&gt;</a></li>" );
 
     // 1. 마지막 페이지로 바로 이동
     if ( curPage == totalNum )
         out.print( "<li class='page-item'><a class='page-link'>마지막</a></li>" );
     else
-        out.print( "<li class='page-item'><a class='page-link' href='communitySearch?curPage=" + totalNum + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>마지막</a></li>" );
+        out.print( "<li class='page-item'><a class='page-link' href='" + communityCategory + "?curPage=" + totalNum + "&searchName=" + searchName + "&searchValue=" + searchValue + "'>마지막</a></li>" );
 	out.print("</ul>");
     
 %>
