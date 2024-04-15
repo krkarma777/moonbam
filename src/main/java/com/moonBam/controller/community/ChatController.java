@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'community' of https://github.com/krkarma777/moonbam.git
 package com.moonBam.controller.community;
 
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.service.ChatRoomService;
+
 
 @Controller
 public class ChatController {
@@ -66,5 +70,4 @@ public class ChatController {
 		return "";
 	}
 	
-
 }//end class
