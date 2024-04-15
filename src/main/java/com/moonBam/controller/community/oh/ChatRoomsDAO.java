@@ -1,11 +1,23 @@
-//package com.moonBam.controller.community.oh;
-//
-//import com.chat.dto.chatRoom.ChatRoomCreateRequestDTO;
-//import com.chat.dto.chatRoom.ChatRoomDTO;
-//import com.chat.dto.chatRoom.ChatRoomUpdateRequestDTO;
-//import lombok.RequiredArgsConstructor;
-//import org.mybatis.spring.SqlSessionTemplate;
-//import org.springframework.stereotype.Repository;
+package com.moonBam.controller.community.oh;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor
+public class ChatRoomsDAO {
+
+    private final SqlSessionTemplate session;
+
+    public int create(ChatRoomCreateRequestDTO requestDTO) {
+        return 1;
+    }
+
+//    public int update(ChatRoomUpdateRequestDTO requestDTO) {
+//        return session.update("ChatRoomMapper.update", requestDTO);
+//    }
 //
 //import java.util.List;
 //
