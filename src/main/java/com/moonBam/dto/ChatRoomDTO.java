@@ -10,7 +10,9 @@ public class ChatRoomDTO {
 	private String roomText; //채팅방 소개글
 	private int currentNow; //현재 인원수
 	private int amount; //최대 인원수
-	private String loc; //모임 지역
+	private String post;//모임장소 우편번호
+	private String addr1;//모임장소 도로명주소
+	private String addr2;//모임장소 지번주소
 	private String cDate; //방 생성 날짜
 	private String mDate; //만남 날짜
 	private String category; //방 카테고리
@@ -21,15 +23,17 @@ public class ChatRoomDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ChatRoomDTO(int chatNum, String roomTitle, String roomText, int currentNow, int amount, String loc, String cDate,
-			String mDate, String category, String leaderId) {
+	public ChatRoomDTO(int chatNum, String roomTitle, String roomText, int currentNow, int amount, String post,
+			String addr1, String addr2, String cDate, String mDate, String category, String leaderId) {
 		super();
 		this.chatNum = chatNum;
 		this.roomTitle = roomTitle;
 		this.roomText = roomText;
 		this.currentNow = currentNow;
 		this.amount = amount;
-		this.loc = loc;
+		this.post = post;
+		this.addr1 = addr1;
+		this.addr2 = addr2;
 		this.cDate = cDate;
 		this.mDate = mDate;
 		this.category = category;
@@ -76,12 +80,28 @@ public class ChatRoomDTO {
 		this.amount = amount;
 	}
 
-	public String getLoc() {
-		return loc;
+	public String getPost() {
+		return post;
 	}
 
-	public void setLoc(String loc) {
-		this.loc = loc;
+	public void setPost(String post) {
+		this.post = post;
+	}
+
+	public String getAddr1() {
+		return addr1;
+	}
+
+	public void setAddr1(String addr1) {
+		this.addr1 = addr1;
+	}
+
+	public String getAddr2() {
+		return addr2;
+	}
+
+	public void setAddr2(String addr2) {
+		this.addr2 = addr2;
 	}
 
 	public String getcDate() {
@@ -119,17 +139,10 @@ public class ChatRoomDTO {
 	@Override
 	public String toString() {
 		return "ChatRoomDTO [chatNum=" + chatNum + ", roomTitle=" + roomTitle + ", roomText=" + roomText
-				+ ", currentNow=" + currentNow + ", amount=" + amount + ", loc=" + loc + ", cDate=" + cDate + ", mDate="
-				+ mDate + ", category=" + category + ", leaderId=" + leaderId + "]";
+				+ ", currentNow=" + currentNow + ", amount=" + amount + ", post=" + post + ", addr1=" + addr1
+				+ ", addr2=" + addr2 + ", cDate=" + cDate + ", mDate=" + mDate + ", category=" + category
+				+ ", leaderId=" + leaderId + "]";
 	}
 
 	
-	
-	
-	
-	
-	
-	
-	
-
 }
