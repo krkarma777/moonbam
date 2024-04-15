@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      <insert id="saveChatRoom" parameterType="ChatRoomDTO">
          insert into ChatRoom values (
          	#{chatNum}, #{roomTitle}, #{roomText},
-         	#{currentNow}, #{amount}, #{loc},
+         	#{currentNow}, #{amount}, #{addr1}, #{addr2},
          	#{cDate}, #{mDate}, #{category}, #{leaderId})
     </insert>
 	
