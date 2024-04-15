@@ -60,10 +60,13 @@ public class AjaxController {
 	@PostMapping("AjaxCheckIDPW")
 	public String AjaxCheckIDPW(String userId, String userPw) {
 		MemberDTO memberDTO = memberService.findByUserId(userId);
+		System.out.println("memberDTO = " + memberDTO);
 		if (memberDTO == null) {
 			return "loginFail";
 		}
 		String userPwOrigin = memberService.findByUserId(userId).getUserPw();
+
+		System.out.println("userPwOrigin = " + userPwOrigin);
 		if (!bCryptPasswordEncoder.matches(userPw, userPwOrigin)) {
 			return "loginFail";
 		}
