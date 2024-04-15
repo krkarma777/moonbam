@@ -29,6 +29,7 @@ public class ChatmoreController {
 	@RequestMapping(value = "/Chatmore", method=RequestMethod.GET)
 	public String Chatmore(int chatNum, Model m) {
 		System.out.println("/Chatmore 호출");
+		System.out.println("Chatmore에서의 "+chatNum);
 		
 		
 		//1. chatNum을 이용하여 ChatMember DB에서 방에 들어가있는 user들의 Id를 얻을 수 있음
@@ -58,29 +59,30 @@ public class ChatmoreController {
 	
 	
 	@RequestMapping(value = "/Chatmore/ChatmoreReport", method=RequestMethod.GET)
-	public String ChatmoreReportGet(@Param(value = "userId") String userId, @Param(value = "chatNum") String chatNum, Model m) {
+	public String ChatmoreReportGet(@Param(value = "userId") String userId, @Param(value = "chatNum") int chatNum, Model m) {
 		//회원 신고하기 눌렀을 때 띄워지는 자식 팝업창 리턴.
 		//링크에 신고할 회원의 id와 나의 채팅방 num을 쿼리스트링 방식으로 붙여보냈음
 		
 		m.addAttribute("userId", userId);
 		m.addAttribute("chatNum", chatNum);
+		System.out.println(userId+"4444444444444444444444444  "+chatNum);
 		
 		
 		return "/community/chat-more-report";
 	}
 	
 	@RequestMapping(value = "/Chatmore/ChatmoreReport", method=RequestMethod.POST)
-	public String ChatmoreReportPost(AdminReportDTO adminReportDTO,@RequestParam("targetId") String chatNum, HttpSession session) {
-		
+	public String ChatmoreReportPost(AdminReportDTO adminReportDTO,  @RequestParam("chatNum") int chatNum,  HttpSession session) {
+		//@RequestParam("targetId") String targetId, 내가 이걸 왜?
 		
 		// AdminReportDTO DB에 insert 날릴거임
-		System.out.println("AdminReportDTO"+adminReportDTO+"     "+"targetId"+chatNum);
+		System.out.println("AdminReportDTO"+adminReportDTO+"     "+"chatNum"+chatNum);
 		
 		chatmoreService.ChatmoreReportPostInsert(adminReportDTO);
 		
 		session.setAttribute("mesg", "신고 접수가 완료되었습니다.");
 		
-		return "redirect:/Chatmore";
+		return "redirect:/Chatmore?chatNum="+chatNum;
 	}
 	
 
