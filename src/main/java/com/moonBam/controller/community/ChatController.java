@@ -55,7 +55,7 @@ public class ChatController {
 		
 		//////////////////권한위임 기존 방장이 하는지 검사
 		
-		Boolean checkMaster = oldMaster == crService.checkMaster(chatNum);
+		Boolean checkMaster = (oldMaster == crService.checkMaster(chatNum));
 		
 		if(!checkMaster) {
 			System.out.println("너 방장 아니지");
