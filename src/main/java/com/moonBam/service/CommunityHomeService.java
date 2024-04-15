@@ -13,20 +13,27 @@ import com.moonBam.dto.CommunityPageDTO;
 
 @Service
 public class CommunityHomeService {
-	
-	////
-	
 	@Autowired
 	SqlSessionTemplate session;
 	@Autowired
 	CommunityHomeDAO dao;
 	
 	public CommunityPageDTO chatRoomList(String searchCategory, String searchValue, String curPage) {
-		HashMap<String, String> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<>();
 		map.put("searchCategory", searchCategory);
 		map.put("searchValue", searchValue);
 		
 		CommunityPageDTO cpDTO = dao.chatRoomList(session, map, curPage);
+		
+		return cpDTO;
+	}
+
+	public CommunityPageDTO myChatList(String searchCategory, String searchValue, String curPage, String userid) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("searchCategory", searchCategory);
+		map.put("searchValue", searchValue);
+		
+		CommunityPageDTO cpDTO = dao.myChatList(session, map, curPage, userid);
 		
 		return cpDTO;
 	}

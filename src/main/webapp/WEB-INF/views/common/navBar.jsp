@@ -9,11 +9,13 @@
 	String category = (String)request.getAttribute("category");
 	
 	//카테고리에 따라 검색 action을 다르게
-	String formAction = null;
+	String searchFormAction = null;
 	if("movie".equals(category)){
-		formAction="movieSearch";
+		searchFormAction="movieSearch";
 	}else if("community".equals(category)){
-		formAction="communitySearch";
+		searchFormAction="communitySearch";
+	}else if("myChatList".equals(category)){
+		searchFormAction="myChatList";
 	}
 %>
 <style>
@@ -31,7 +33,7 @@
 			<a href="/acorn" class="top">문밤</a>
 		</div>
 		<div style="width: 500px">
-			<form class="d-flex " role="search" action="<%=formAction%>" method="post">
+			<form class="d-flex " role="search" action="<%=searchFormAction%>" method="post">
 				<%if(null!=category){ %>
 				<select name="searchCategory" class="form-select" style="width: 130px;">
 					<%for(int i=0; i<categoryList.size(); i++){ 

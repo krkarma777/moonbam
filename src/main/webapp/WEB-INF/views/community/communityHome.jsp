@@ -9,15 +9,10 @@
 <%
 	CommunityPageDTO cpDTO = (CommunityPageDTO)request.getAttribute("cpDTO");
 	List<ChatRoomDTO> chatRoomList = cpDTO.getList();
-	System.out.println("in communityHome.jps: ");
-	for(int i=0; i<chatRoomList.size(); i++){
-		System.out.println(chatRoomList.get(i));
-	}
 %>
 <html>
 <head>
 <meta charset="UTF-8">
-<!--  -->
 <title>문밤</title>
 <link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -33,9 +28,15 @@
 	        navigation:true,
 		});
 		
+		//내 채팅방 목록 보기
+		$("#myChatList").click(function(){
+			console.log("myChatList")
+			location.href = "myChatList";
+		})
+		
 		//community개설로 이동
 		$("#createCommunity").click(function(){
-			window.location.href = "/acorn/createChat";
+			console.log("createCommunity");
 		})
 		
 	})
@@ -77,19 +78,23 @@ button {
 	border: none;
 }
 </style>
- 
+
 </head>
 <body class="bg-light" style="height: 100vh;">
 
 	<!-- 바디 -->
-	<main id="fullpage" class="">
+	<main id="fullpage" class=""><b>
 	
 	<!-- 1section -->
 	<section class="section">
 	<div style="height: 910px; width: 1200px; margin: auto;">
-		<!-- 개설 버튼 -->
-		<div style="display: flex">
-			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8;" id="createCommunity"><b>개설</b></button>
+		
+		<!-- 상단 버튼 -->
+		<div style="">
+			<!-- 내 채팅방 목록 보기 버튼 -->
+			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8; " id="myChatList"><b>나의</b></button>
+			<!-- 개설 버튼 -->
+			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8;" id="createCommunity"><b>개설</b></button>
 		</div>
 		
 		<!-- community목록 -->
@@ -105,19 +110,20 @@ button {
 						String roomText = chatRoom.getRoomText();
 						int currentNow = chatRoom.getCurrentNow();
 						int amount = chatRoom.getAmount();
-						/* String loc = chatRoom.getLoc(); */
+						String addr1 = chatRoom.getAddr1();
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">
-							<div class="border-bottom" style="height: 30px; width: 300px; background-color: #ff416c; color:white; opacity : 0.3;">
-								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:white; font-size: 19px;"><%=roomTitle %></a>
+							<div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
+								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;"><%=roomTitle %></a>
 							</div>
-							<div class="border-top" style="height: 241.5px; width: 300px;">
-								<div style=" font-size: 18px;">
+							<div class="border-top" style="height: 225px; width: 300px;">
+								<div style=" font-size: 18px; height: 195px;">
 									<%=roomText %>
 								</div>
-								<div style="width: 100%; height:18px;">
-									
+								<div style="width: 100%; height:20px; font-size: 18px; padding-left: 2px; padding-right: 5px;">
+									<div style="float: left;"><%=addr1 %></div>
+									<div style="float: right;"><%=currentNow %>/<%=amount %></div>
 								</div>
 							</div>
 						</div>
@@ -141,7 +147,7 @@ button {
 	</div>
 	</section>
 	
-	</main>
+	</b></main>
 	
 	<!-- 네비게이션 바 -->
 	<jsp:include page="../common/navBar.jsp"></jsp:include>
