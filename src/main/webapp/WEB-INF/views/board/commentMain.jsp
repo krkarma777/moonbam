@@ -297,7 +297,7 @@
 					            mesg += "&nbsp;&nbsp;&nbsp;<input type='hidden' id='replyCommentId"+comId+"' name='replyuserId' value="+userId2+">"
 					            mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong"+comId+"'>" + nickname2 + "</strong>"; 
 					            mesg += "<br>"
-					            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext"+comId+"' name='replyCommentComtext'></textarea>"; //답글 다는 창
+					            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext"+comId+"' name='replyCommentComtext' maxlength='200'></textarea>"; //답글 다는 창
 					            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert("+comId+")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'>"
 					            mesg += "</div>";
 					            //////////////
@@ -482,7 +482,8 @@ function replyCommentInsert(comId) {
                 </c:if>
                 </span>
                 <br>
-                <textarea id="comtext" class="form-control" name="comtext" style="height: 100px;" placeholder="댓글을 입력하세요. 지나친 욕설/비방 작성 시 사이트 이용에 제재를 받을 수 있습니다."<c:if test="${empty sessionScope.loginUser.userId}">disabled</c:if>></textarea>
+                <textarea id="comtext" class="form-control" name="comtext" style="height: 100px;" placeholder="댓글을 입력하세요. 지나친 욕설/비방 작성 시 사이트 이용에 제재를 받을 수 있습니다."<c:if test="${empty sessionScope.loginUser.userId}">disabled</c:if> maxlength="200"></textarea>
+                
                 <div style="text-align: right">
                     <input type="button" id="sendButton" value="등록" class="btn btn-action btn-spacing" style="margin-top: 10px;">
                 </div>
