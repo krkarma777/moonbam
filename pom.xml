@@ -91,11 +91,11 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-		<dependency>
+<!--	<dependency>
 			<groupId>com.chat</groupId>
 			<artifactId>socket_chat_acorn</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency>-->
 
 <!-- 소켓 통신 -->
 		<dependency>
