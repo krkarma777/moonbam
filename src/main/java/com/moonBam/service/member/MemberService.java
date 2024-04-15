@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.moonBam.dao.member.MemberDAO;
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
 import com.moonBam.dto.board.PostDTO;
 
@@ -72,6 +73,11 @@ public class MemberService {
 	    MyPageDTO mDTO = dao.selectMyPostPaged( userId, curPage);
 	    System.out.println("Service: "+mDTO);
 	    return mDTO;
+	}
+
+	public MyCommentDTO selectmyComm(String curPage, String userId) {
+		MyCommentDTO cDTO = dao.selectmyComm(userId, curPage);
+		return cDTO;
 	}
 
 

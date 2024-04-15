@@ -1,6 +1,6 @@
 package com.moonBam.controller.member;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,16 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
-import com.moonBam.dto.board.PageDTO;
-import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.MemberService;
 
@@ -164,32 +161,23 @@ public class MyPageController {
 	 }
 
 
-//	 @GetMapping("/myPost")
-//	 public ModelAndView myPost(HttpSession session, Model model) {
-//	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-//	        if (loginUser != null) {
-//	            String userId = loginUser.getUserId();
-//	            List<PostDTO> list = mserv.selectMyPost(userId);
-//	            model.addAttribute("postList", list);
-//	            return new ModelAndView("member/MyPage/MypageArticle");
-//	        } else {
-//	        	System.out.println("myPost의 else");
-//	            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-//	            return new ModelAndView("redirect:/Login");
-//	            
-//	        }
-//	    }
+
 	 @GetMapping("/myComment")
-	    public ModelAndView myComment(HttpSession session, Model model) {
+	    public String myComment(Model model, HttpSession session, String curPage) {
 	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
 	        if (loginUser != null) {
 	            String userId = loginUser.getUserId();
-	            List<CommentDTO> list = mserv.selectmyComm(userId);
-	            model.addAttribute("commList", list);
-	            return new ModelAndView("member/MyPage/MyPageComment");
+	            // curPage 값을 확인하고, 필요한 경우 처리합니다.
+		         if(curPage==null) {
+		        	 curPage="1";
+		         }
+		         MyCommentDTO cDTO = mserv.selectmyComm( curPage, userId);
+		         model.addAttribute("cDTO", cDTO);
+		         model.addAttribute("curPage", curPage); // 현재 페이지 정보를 모델에 추가합니다.
+	            return "member/MyPage/MyPageComment";
 	        } else {
 	            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-	            return new ModelAndView("redirect:/Login");
+	            return "redirect:/Login";
 	        }
 	    }
 	 

@@ -1,20 +1,18 @@
 package com.moonBam.dao.member;
 
-import com.moonBam.dto.CommentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.MyPageDTO;
-import com.moonBam.dto.board.PageDTO;
-import com.moonBam.dto.board.PostDTO;
-import com.moonBam.dto.board.PostPageDTO;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.moonBam.dto.CommentDTO;
+import com.moonBam.dto.MyCommentDTO;
+import com.moonBam.dto.MyPageDTO;
+import com.moonBam.dto.board.PostDTO;
 
 @Repository
 public class MemberDAO {
@@ -87,38 +85,32 @@ public class MemberDAO {
 			 int perPage = mDTO.getPerPage();
 		        int offset = (Integer.parseInt(curPage)-1)*perPage;
 		        System.err.println(curPage);
-System.out.println("perPage: "+perPage);
-System.out.println("offset: "+offset);
+
 List<PostDTO> selectMyPostPaged = session.selectList("MyPageMapper.selectMyPostPaged", userid, new RowBounds(offset, perPage));
 
 		        mDTO.setCurPage(Integer.parseInt(curPage));
 		        mDTO.setList(selectMyPostPaged);
-		        mDTO.setTotalCount(totalCount(userid));
+		        mDTO.setTotalCount(totalPostCount(userid));
 
 		        return mDTO;
 		}
-	    private int totalCount(String userid) {
+	    private int totalPostCount(String userid) {
 	        return session.selectOne("countMyPosts", userid);
 	    }
-//		public PageDTO<PostDTO> selectMyPostPaged(Map<String, Object> map) {
-//			List<PostDTO> list = session.selectList("MyPageMapper.selectMyPostPaged", map);
-//
-//			int curPage = (int) map.get("curPage");
-//			int perPage = (int) map.get("perPage");
-//
-//			int totalCount = session.selectOne("countPosts", map);
-//
-//			PageDTO<PostDTO> pageDTO = new PageDTO<>();
-//
-//			pageDTO.setList(list);
-//			pageDTO.setCurPage(curPage);
-//			pageDTO.setPerPage(perPage);
-//			pageDTO.setTotalCount(totalCount);
-//
-//			return pageDTO;
-//		}	
+	    
+		public MyCommentDTO selectmyComm(String userId, String curPage) {
+			MyCommentDTO cDTO = new MyCommentDTO();
+			int perPage = cDTO.getPerPage();
+	        int offset = (Integer.parseInt(curPage)-1)*perPage;
+	        List<CommentDTO> selectmyComm = session.selectList("MyPageMapper.selectmyComm", userId, new RowBounds(offset, perPage));
+	        cDTO.setCurPage(Integer.parseInt(curPage));
+	        cDTO.setList(selectmyComm);
+	        cDTO.setTotalCount(totalCommCount(userId));
 
-
-
+	        return cDTO;
+		}
+		 private int totalCommCount(String userId) {
+		        return session.selectOne("countMyComments", userId);
+		    }
 		
 }

@@ -48,11 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        where userId = #{userId}
 	</select>
 	
-	<select id="selectMyComm" parameterType="string" resultType="CommentDTO">
-       select  comId, postId , comDate,  comText 
-       from commentDB
-       where userId = #{userId}
-	</select>
+
 	
 	 <select id="idCheck" parameterType="string"
 	            resultType="int">
@@ -87,7 +83,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     SELECT COUNT(*) FROM postDB
     WHERE userId = #{userId}
 </select>
+
+		<!-- 내가 작성한 댓글 조회 -->
+	<select id="selectmyComm" parameterType="string" resultType="CommentDTO">
+    SELECT *  FROM commentDB
+     where userId = #{userId}
+    ORDER BY comDate DESC
+</select>
+
 	
+	<!-- 내가 작성한 댓글 총 개수 조회 -->
+<select id="countMyComments" resultType="int" parameterType="String">
+    SELECT COUNT(*) FROM commentDB
+     where userId = #{userId}
+</select>
+
+
+
+
+
 	  <!-- 내댓글 삭제 -->
 	<delete id="commDel" parameterType="int">
     delete
