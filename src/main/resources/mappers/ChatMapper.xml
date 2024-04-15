@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="ChatMapper">
  
      <insert id="saveChatRoom" parameterType="ChatRoomDTO">
@@ -10,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          	#{currentNow}, #{amount}, #{addr1}, #{addr2},
          	#{cDate}, #{mDate}, #{category}, #{leaderId})
     </insert>
+
 	
 	<!-- 채팅방 삭제 -->
 	<delete id = "deleteChatRoom" >
@@ -25,4 +27,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id = "checkMaster" parameterType="String">
 		select leaderid from chatRoom where chatNum=#{chatNum}
 	</select>
+
 </mapper>

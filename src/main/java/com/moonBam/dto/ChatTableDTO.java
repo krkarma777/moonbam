@@ -17,6 +17,7 @@ public class ChatTableDTO {
 	  },
 	 ]
 	 */
+	//////
 	
 	@Override
 	public String toString() {

@@ -36,8 +36,11 @@ public class ChatController {
 		if(n==1) {
 			System.out.println("채팅방 정상 저장");
 		}
-		return "";
+		
+		return ""   ;//TODO해당 채팅방 주소로 가도록 나중에 세팅
 	}
+
+
 	@RequestMapping(value = "/delegateMaster")
 	@ResponseBody
 	public String delegateMaster(
@@ -64,5 +67,4 @@ public class ChatController {
 		return "";
 	}
 	
-//asd
 }//end class
