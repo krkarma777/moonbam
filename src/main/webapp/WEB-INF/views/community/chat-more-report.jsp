@@ -11,6 +11,7 @@
 <h1>회원 신고 화면입니다.</h1>
 <form action="<%=request.getContextPath() %>/Chatmore/ChatmoreReport" method="post">
 <input type="hidden" name="targetId" value="chat${chatNum }"> 
+<input type="hidden" name="chatNum" value="${chatNum }"> 
 <input type="hidden" name="reporter" value="${sessionScope.loginUser.userId }"> 
 <!--  고객이 볼 필요는 없으니 hidden으로 form에 포함시켜 넘기기-->
 <!--  -->

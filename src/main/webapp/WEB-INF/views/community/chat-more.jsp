@@ -109,7 +109,7 @@
 		//회원 신고하기 눌렀을 때 작동되는 fn
 		function fnReport(userId) {
 			
-			var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${sessionScope.chatRoomDto.chatNum}
+			var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatNum}
 			
 			childOpen(openUrl);
 			

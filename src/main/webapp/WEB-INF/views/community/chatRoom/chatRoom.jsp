@@ -13,7 +13,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
-	<h1>chatRoom - ${text}</h1>
+	<h1>chatRoom - ${ChatRoomDTO.roomText}</h1>
 	<form id="chatForm">
 	 <button id="connect">접속</button>
 		<table border="1" style="background: white; width: 500px">
@@ -22,10 +22,17 @@
 					<td>
 						<!-- 제목, 토글 버튼 --> <input type="checkbox" id="toggle" hidden>
 						<label for="toggle" class="toggleSwitch"> <span
-							id="toggleIcon" class="toggleButton">▶ ${title}</span>
+							id="toggleIcon" class="toggleButton">▶ ${ChatRoomDTO.roomTitle}</span>
 					</label>
 					</td>
-					<td style="width: 20px;">설정</td>
+					
+					
+						<td style="width: 20px;">
+							<!-- 설정이 더보기, 더보기로 가는 주소 실행 -->
+							<button onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button>
+						</td>
+					
+					
 				</tr>
 				<tr>
 					<!-- 첫 화면부터 공간 차지함 -->
@@ -83,11 +90,11 @@
 			var checked = $(this).prop('checked');
 			var toggle_state;
 			if (checked) {
-				document.getElementById('toggleIcon').innerHTML = "▼ ${title}";
-				document.getElementById('toggle_state').innerHTML = "${text}";
+				document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
+				document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
 				toggle_state = "on";
 			} else {
-				document.getElementById('toggleIcon').innerHTML = "▶ ${title}";
+				document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
 				document.getElementById('toggle_state').innerHTML = "&nbsp;";
 				toggle_state = "off";
 			}
