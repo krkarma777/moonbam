@@ -11,9 +11,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          	#{cDate}, #{mDate}, #{category}, #{leaderId})
     </insert>
 	
-	<!-- 
-	delete
-	get
-	update
-	 -->
+	<!-- 채팅방 삭제 -->
+	<delete id = "deleteChatRoom" >
+		delete from ChatRoom where chatNum = #{chatNum}
+	</delete>
+	
+	<!-- 방장 권한 위임 -->
+	<update id = "delegateMaster">
+		update chatRoom set leaderid = #{newMaster} where chatNum = #{chatNum}
+	</update>
+	
+	<!-- 방장 일치 여부 확인용 select -->
+	<select id = "checkMaster" parameterType="String">
+		select leaderid from chatRoom where chatNum=#{chatNum}
+	</select>
 </mapper>

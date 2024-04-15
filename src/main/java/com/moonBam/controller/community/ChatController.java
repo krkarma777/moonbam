@@ -34,6 +34,31 @@
 //		}
 //		return "";
 //	}
+//	@RequestMapping(value = "/delegateMaster")
+//	@ResponseBody
+//	public String delegateMaster(
+//			@RequestParam String chatNum, 
+//			@RequestParam String oldMaster, 
+//			@RequestParam String newMaster) {
+//		HashMap<String, String> map = new HashMap<>();
+//		map.put("chatNum", chatNum);
+//		map.put("from", oldMaster);
+//		map.put("to", newMaster);
+//		int n = crService.delegateMaster(map);
+//		
+//		//////////////////권한위임 기존 방장이 하는지 검사
+//		
+//		Boolean checkMaster = oldMaster == crService.checkMaster(chatNum);
+//		
+//		if(!checkMaster) {
+//			System.out.println("너 방장 아니지");
+//		}else {
+//			if(n==1) {System.out.println("권한 위임 정상 처리");}else {System.out.println("권한 위임 실패");}
+//		}
+//		//////////////////
+//		
+//		return "";
+//	}
 //	
 ////asd
 //}//end class
