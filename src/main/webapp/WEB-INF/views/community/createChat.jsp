@@ -11,6 +11,39 @@
 	<!-- jQuery UI -->
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	
+	<!-- 부트 스트랩 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+	}
+	.item{
+		margin-top: 2px;
+		margin-bottom: 5px;
+		margin-left: 10px;
+		width: 450px;
+	}
+	.item2{
+		margin-top: 2px;
+		margin-bottom: 5px;
+		margin-left: 10px;
+		width: 100px;
+	}
+	#myTextarea{
+		border: 1px solid E5E5E5;
+		border-radius: 5px;
+		margin-left: 10px;
+		width: 450px;
+		height: 170px; 
+	}
+	span{
+		font-size: 18px;
+	}
+</style>
 
 <script>
     $(document).ready(function() {
@@ -30,7 +63,7 @@
                 $(this).val(text);
             }
             
-            $("#charCount").text(count + " / " + maxLength);
+            $("#charCount").text(count);
         });      
 
         // 폼 제출 전 양식 확인
@@ -52,52 +85,53 @@
 
     });//end doc
 </script>
-<style type="text/css">
-.search { position:absolute;z-index:1000;top:20px;left:20px; }
-.search #address { width:150px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
-.search #submit { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
-</style>
 </head>
-<body>
+<body class="bg-light" style="height:700px; width:100%; position: relative; border: 0px solid black;">
+<div style="height: 100%; width: 100%">
+	<div style="height: 30px; background-color: #ffb2c4; font-size: 19px; margin-bottom: 5px; color: white;">
+		<b>모임 만들기</b>
+	</div>
+		<form action="/acorn/saveChat" method="post" id="createChat">
+			<span>카테고리</span>
+				<select name="category" class="form-select form-select-sm item">
+					<option value="" selected>선택하세요</option>
+					<option value="movie">영화</option>
+					<option value="book">독서</option>
+					<option value="music">음악</option>
+					<option value="ect">기타</option>
+				</select>
+			<span>모임 이름</span> <input class="form-control form-control-sm item" type="text" placeholder="작품명 / 지역구 / 모임날짜" name="roomTitle">
+			<span>인원수</span>
+				<select name="amount" class="form-select form-select-sm item" style="width: 100px;">
+					<option value=2>2</option>
+					<option value=3>3</option>
+					<option value=4>4</option>
+					<option value=5>5</option>
+				</select>	
+		    <span>모임 장소</span>
+		    <input class="btn" style="background-color: #ff416c; color: white; font-size: 10px; width:70px; type="button" onclick="sample4_execDaumPostcode()" value="주소검색"><br>
+			<!-- 다음주소 시작-->
+			<input class="form-control form-control-sm item2" type="text" name="post" id="sample4_postcode" placeholder="우편번호">			
+			<input class="form-control form-control-sm item" type="text" name="addr1" id="sample4_roadAddress" placeholder="도로명주소">
+			<input class="form-control form-control-sm item" type="text" name="addr2" id="sample4_jibunAddress" placeholder="지번주소">
+			<span id="guide" style="color:#999"></span>
+			<!-- 다음주소 끝 -->
+			<br>
+			<span>모임 날짜</span> <input class="form-control form-control-sm item" type="text" id="datepicker" placeholder="날짜를 선택하세요" name="cDate">
+			<span>모임 소개글</span>
+				<div style="float: right;">
+					<span id="charCount">0</span><span> / 150</span>
+				</div>
+			<div class="form-floating">
+				<textarea class="form-control" id="myTextarea" rows="10" cols="30" oninput="checkLength()" name="roomText"></textarea>
+			</div>
+			<div style="position: absolute; width:490px; margin-left: 4px;">
+				<input class="btn" type="reset" value="초기화" style="background-color: #ff416c; color:white; float: left;">
+				<input class="btn" type="submit" value="만들기" style="background-color: #ff416c; color:white; float: right;">
+			</div>
+		</form>	
+</div>
 
-<h1>모임만들기</h1>
-<form action="/acorn/saveChat" method="post" id="createChat">
-	<b>카테고리</b>
-		<select name="category">
-			<option value="" selected>선택</option>
-			<option value="movie">영화</option>
-			<option value="book">책</option>
-			<option value="ect">기타</option>
-		</select>
-	<br><br>
-	<b>모임 이름</b> <input type="text" placeholder="작품명 / 지역구 / 모임날짜" name="roomTitle">
-	<br><br>
-	<b>인원수</b>
-		<select name="amount">
-			<option value=2>2</option>
-			<option value=3>3</option>
-			<option value=4>4</option>
-			<option value=5>5</option>
-		</select>
-	<br><br>		
-    <b>모임 장소</b><br>
-	<!-- 다음주소 시작-->
-	<input type="text" name="post" id="sample4_postcode" placeholder="우편번호">
-	<input type="button" onclick="sample4_execDaumPostcode()" value="주소검색"><br>
-	<input type="text" name="addr1" id="sample4_roadAddress" placeholder="도로명주소"><br>
-	<input type="text" name="addr2" id="sample4_jibunAddress" placeholder="지번주소">
-	<span id="guide" style="color:#999"></span>
-	<!-- 다음주소 끝 -->	
-	<br><br>
-	<b>모임 날짜</b> <input type="text" id="datepicker" placeholder="날짜를 선택하세요" name="mDate">
-	<br><br>
-	<b>모임 소개글</b><br>
-	<textarea id="myTextarea" rows="10" cols="30" oninput="checkLength()" name="roomText"></textarea>
-	<span id="charCount">0</span> / 150
-	<br><br>
-	<input type="submit" value="만들기">
-	<input type="reset" value="초기화">
-</form>
 
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>

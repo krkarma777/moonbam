@@ -50,9 +50,21 @@
 		})
 		
 		//community개설로 이동
-		$("#createCommunity").click(function(){
-			console.log("createCommunity");
-			window.location.href = "/acorn/createChat";
+		$("#createCommunity").click(function(){			
+			// 새 창에서 소모임 개설 페이지 열기
+		    var newWindow = window.open('about:blank', '_blank', 'width=470px,height=705px');
+			
+		    // 새 창의 위치를 브라우저의 정중앙으로 설정
+		    var screenWidth = window.screen.width;
+		    var screenHeight = window.screen.height;
+		    var windowWidth = 470;
+		    var windowHeight = 705;		
+		    var left = (screenWidth - windowWidth) / 2;
+		    var top = (screenHeight - windowHeight) / 2;
+		    
+		    newWindow.moveTo(left, top);
+		    
+		    newWindow.location.href = 'http://localhost:8090/acorn/createChat';
 		})
 		
 	})
