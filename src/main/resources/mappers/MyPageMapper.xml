@@ -3,109 +3,51 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MyPageMapper">
-<!-- updateMember -->
-<update id="updateUser" parameterType="MemberDTO">
-     update member
-     set 
-     userName=#{userName},
-     nickname = #{nickname},
-     userPhoneNum1 = #{userPhoneNum1},
-     userPhoneNum2 = #{userPhoneNum2},
-     userPhoneNum3 = #{userPhoneNum3}
-</update>     
+
+  
 <update id="updateNickname" parameterType="MemberDTO">
      update memberDB
      set 
      nickname = #{newNickname}
     where userId = #{userId}
    </update>
-<update id="updateRestoreEmailId" parameterType="MemberDTO">
-     update memberDB
-     set 
-     restoreUserEmailId = #{newRestoreEmailId}
-    where userId = #{userId}
-    
-   </update>
-   <update id="updateRestoreEmailDomain" parameterType="MemberDTO">
-     update memberDB
-     set 
-     restoreUserEmailDomain = #{newRestoreUserEmailDomain}
-    where userId = #{userId}
-   </update>
- <!--	 updatePwdMember -->
 
-	<!-- <delete id="deleteMember" parameterType="string">
-	 delete  userId, userPw, userName, userSSN1, userSSN2,  nickname,
-    			userGender,  userPhoneNum1,  userPhoneNum2,  userPhoneNum3, userEmailId,
-    			 userEmailDomain,  userSignDate,  userType
-	 from memberDB
-	 where userid = #{userid}
-	</delete>-->
-	
-	<select id="selectMyPost" parameterType="string" resultType="PostDTO">
+
+<!-- 내가 작성한 게시물 조회 -->
+
+
+<select id="selectMyPostPaged" resultType="PostDTO" parameterType="String">
        select postid, postBoard, userid, contid, postTitle, postDate, postEditDate, postText, nickname, categoryId
        from POSTDB
        where userId = #{userId}
-	</select>
-	
-	<select id="selectMyComm" parameterType="string" resultType="CommentDTO">
-       select  comId, postId , comDate,  comText 
-       from commentDB
-       where userId = #{userId}
-	</select>
-	
-	 <select id="idCheck" parameterType="string"
-	            resultType="int">
-     select count(*)
-     from memberDB
-     where userId = #{userId}
-	</select>
-	
-	<select id="mypage" parameterType="string" resultType="MemberDTO">
-	  select userId, userPw, userName, userSSN1, userSSN2,  nickname,
-    			userGender,  userPhoneNum1,  userPhoneNum2,  userPhoneNum3, userEmailId,
-    			 userEmailDomain,  userSignDate,  userType
-      from memberDB
-      where userId = #{userId}
-	</select>
-	
-	<!-- 내가 작성한 게시물 조회 -->
-<!-- 내가 작성한 게시물 조회 -->
-<!-- 내가 작성한 게시물 조회 -->
-<!--  
-<select id="selectMyPostPaged" resultMap="PostDTO">
-    SELECT
-        p.postId,
-        p.postBoard,
-        p.userId,
-        p.contId,
-        p.postTitle,
-        p.postDate,
-        p.postEditDate,
-        p.postText,
-        u.nickname,
-        p.categoryId
-    FROM
-        postDB p
-        JOIN MemberDB m ON p.userId = m.userId
-    WHERE
-        p.userId = #{userId}
     ORDER BY
-        p.postDate DESC, p.postId DESC
-    OFFSET
-        #{offset} ROWS FETCH NEXT #{perPage} ROWS ONLY
-</select>-->
+        postDate DESC
+</select>
 
 
 
-<!-- 내가 작성한 게시물 총 개수 조회 
-<select id="countMyPosts" resultType="int">
-    SELECT COUNT(*) FROM postDB
+<!-- 내가 작성한 게시물 총 개수 조회 -->
+<select id="countMyPosts" resultType="int" parameterType="String">
+    SELECT COUNT() FROM postDB
     WHERE userId = #{userId}
-</select> -->
-	
-	  <!-- 내댓글 삭제 -->
-	<delete id="commDel" parameterType="int">
+</select>
+
+        <!-- 내가 작성한 댓글 조회 -->
+    <select id="selectmyComm" parameterType="string" resultType="CommentDTO">
+    SELECT  FROM commentDB
+     where userId = #{userId}
+    ORDER BY comDate DESC
+</select>
+
+
+    <!-- 내가 작성한 댓글 총 개수 조회 -->
+<select id="countMyComments" resultType="int" parameterType="String">
+    SELECT COUNT(*) FROM commentDB
+     where userId = #{userId}
+</select>
+
+      <!-- 내댓글 삭제 -->
+    <delete id="commDel" parameterType="int">
     delete
     from commentDB
     where comId = #{comId}

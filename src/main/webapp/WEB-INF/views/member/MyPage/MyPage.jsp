@@ -7,9 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>문밤</title>
-    	<%
-		String userId = (String) request.getAttribute("userId");
-	%>
+    
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="resources/css/member/Main.css">
@@ -28,7 +26,7 @@
 <form id="nicknameForm" action="<c:url value='/updateNickname'/>" method="post">
     <!-- 기존 닉네임 출력 -->
     <p>현재 닉네임: ${loginUser.nickname}</p>
-
+ 
     <!-- 새로운 닉네임 입력 -->
     <label for="newNickname">새로운 닉네임 (최소 2글자)</label>
     <input type="text" id="newNickname" name="newNickname" maxlength="10" minlength="2">
@@ -39,20 +37,6 @@
     <button type="button" id="updateNicknameButton">닉네임 수정</button>
 </form>
 
-<!-- 추가 이메일 수정 폼 -->
-<form id="restoreEmailForm" action="<c:url value='/updateRestoreEmail'/>" method="post">
-    <!-- 기존 추가 이메일 출력 -->
-    <p>현재 추가 이메일: ${loginUser.restoreUserEmailId}@${loginUser.restoreUserEmailDomain}</p>
-
-    <!-- 새로운 추가 이메일 입력 -->
-    <label for="newRestoreUserEmailId">새로운 추가 이메일 아이디</label>
-    <input type="text" id="newRestoreUserEmailId" name="newRestoreEmailId" maxlength="30" autocomplete="off">
-    <label for="newRestoreUserEmailDomain">새로운 추가 이메일 도메인</label>
-    <input type="text" id="newRestoreUserEmailDomain" name="newRestoreEmailDomain">
-
-    <!-- 추가 이메일 수정 버튼 -->
-    <button type="button" id="updateRestoreEmailButton">추가 이메일 수정</button>
-</form>
 
 </div>
 
@@ -64,7 +48,7 @@ $(function() {
     $("#newNickname").on("focusout", function() { // 수정: #nickname -> #newNickname
         var nickname = $("#newNickname").val(); // 수정: #nickname -> #newNickname
         var errorSpan = $("#confirmNicknameError");
-        var userId = "<%=userId%>";
+        var userId = "${loginUser.getUserId()}";
         // 이전에 입력된 닉네임과 다를 경우에만 AJAX 요청을 보냄
         if (nickname !== prevNickname) {
             $.ajax({
@@ -109,15 +93,11 @@ $(function() {
         updateNickname();
     });
 
-    // 추가 이메일 수정 버튼 클릭 시 실행되는 함수
-    $("#updateRestoreEmailButton").on("click", function() {
-        updateRestoreEmail();
-    });
-
+   
     // 수정된 닉네임 정보를 서버에 전송하는 함수
     function updateNickname() {
         var newNickname = $("#newNickname").val(); // 수정: #nickname -> #newNickname
-        var userId = "<%=userId%>";
+        var userId = "${loginUser.getUserId()}";
         $.ajax({
             type: "POST",
             url: "<c:url value='/updateNickname'/>",
@@ -132,33 +112,9 @@ $(function() {
         });
     }
 
-    // 수정된 추가 이메일 정보를 서버에 전송하는 함수
-    function updateRestoreEmail() {
-        var newRestoreEmailId = $("#newRestoreUserEmailId").val(); // 수정: #restoreUserEmailId -> #newRestoreUserEmailId
-        var newRestoreEmailDomain = $("#newRestoreUserEmailDomain").val(); // 수정: #restoreUserEmailDomain -> #newRestoreUserEmailDomain
-        var userId = "<%=userId%>";
-        $.ajax({
-            type: "POST",
-            url: "<c:url value='/updateRestoreEmail'/>",
-            data: {
-                newRestoreEmailId: newRestoreEmailId,
-                newRestoreEmailDomain: newRestoreEmailDomain,
-                userId: userId
-            },
-            success: function(response) {
-                alert("추가 이메일이 성공적으로 수정되었습니다.");
-                // 수정된 정보를 화면에 반영할 수 있도록 필요한 작업 수행
-            },
-            error: function(error) {
-                console.error("추가 이메일 수정 에러:", error);
-            }
-        });
-    }
+   
 });
 
-$("#restoreEmailForm").submit(function(event) {
-    return validateForm(event);
-});
 
 function validateForm(event) {
     var errorMessage = ""; // 에러 메시지를 저장할 변수
