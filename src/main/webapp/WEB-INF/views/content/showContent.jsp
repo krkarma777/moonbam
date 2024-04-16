@@ -24,7 +24,7 @@ String contImg = content.getContImg();
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>문밤</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -84,14 +84,14 @@ String contImg = content.getContImg();
 
 	<!-- 네비게이션바 -->
 	<jsp:include page="../common/navBar.jsp"></jsp:include>
-
+	
+	<div style="height:50px"></div>
+	
 	<!-- 바디 -->
-	<div style="height: 100px"></div>
-	<div
-		style="width: 1200px; height: auto; margin: auto;">
+	<div style="width: 1200px; height: 910px; margin: auto; border: 1px solid grey;">
 		<div style="display: flex;">
 			<div>	
-				<img src="${content.getContImg() }" height="400px" width="279px">
+				<img src="http://image.tmdb.org/t/p/w342${content.getContImg() }" height="375px" width="250px">
 			</div>
 			<div style="width: auto; padding-left: 10px; align-items: center;">
 				<span style="font-size: 20px;"><b>${content.getContTitle() }</b></span>
