@@ -28,7 +28,7 @@ public class ChatController {
 	
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
 	public String createChat() {
-		return "/community/createChat";
+		return "community/createChat";
 	}
 	
 	@RequestMapping(value = "/saveChat", method=RequestMethod.POST)
