@@ -16,6 +16,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 import com.moonBam.springSecurity.JWT.JWTFilter;
 import com.moonBam.springSecurity.JWT.JWTUtil;
@@ -36,6 +37,7 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtil jwtUtil;
 	private final LoginSuccessHandler loginSuccessHandler;
+	private final HttpFirewall customHttpFirewall;
 	
 	@Value("${jwt.expiredMs}") String expiredMs;
 
