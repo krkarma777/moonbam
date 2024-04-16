@@ -149,12 +149,10 @@
             var chatRoomId = $('#chatRoomId').val();
             var messageContent = $('#messageContent').val();
             var senderId = $('#senderId').val();
-            var messageType = $('#messageType').val();
             stompClient.send("/app/chat/send", {}, JSON.stringify({
                 'chatRoomId': chatRoomId,
                 'senderId': senderId,
                 'message': messageContent,
-                'messageType': messageType
             }));
             
         }
