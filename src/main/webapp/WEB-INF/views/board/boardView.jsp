@@ -919,13 +919,13 @@
 
                                         if (imgExist && !videoExist) {
                                     %>
-                                    <img src="/acorn/boardImage/picture.png" alt="description"
+                                    <img src="/acorn/resources/images/picture.png" alt="description"
                                          class="post-thumbnail-picture">
                                     <%
                                             // 이미지 태그가 포함된 경우의 처리
                                         }
                                         if (videoExist) {%>
-                                    <img src="/acorn/boardImage/video.png" alt="description"
+                                    <img src="/acorn/resources/images/video.png" alt="description"
                                          class="post-thumbnail-video">
                                     <%
                                         }
@@ -1042,13 +1042,13 @@
 
                                     if (imgExist && !videoExist) {
                                 %>
-                                <img src="/acorn/boardImage/picture.png" alt="description"
+                                <img src="/acorn/resources/images/picture.png" alt="description"
                                      class="post-thumbnail-picture">
                                 <%
                                         // 이미지 태그가 포함된 경우의 처리
                                     }
                                     if (videoExist) {%>
-                                <img src="/acorn/boardImage/video.png" alt="description" class="post-thumbnail-video">
+                                <img src="/acorn/resources/images/video.png" alt="description" class="post-thumbnail-video">
                                 <%
                                     }
                                 %>
