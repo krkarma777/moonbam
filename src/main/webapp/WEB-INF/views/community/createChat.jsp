@@ -13,12 +13,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <script>
-
     $(document).ready(function() {
         // 달력
         $("#datepicker").datepicker({
             dateFormat: "yy-mm-dd"
         });
+
         // 모임 소개글 글자수 제한
         $("#myTextarea").on("input", function() {
             const maxLength = 150;
@@ -32,25 +32,25 @@
             
             $("#charCount").text(count + " / " + maxLength);
         });      
+
         // 폼 제출 전 양식 확인
         $("#createChat").on("submit", function() {
             const category = $("#category").val();
             const roomTitle = $("#roomTitle").val();
             const amount = $("#amount").val();
-            const loc = $("#loc").val();
             const mDate = $("#mDate").val();
             const roomText = $("#myTextarea").val();
             const postcode = $("#sample4_postcode").val();
             const roadAddress = $("#sample4_roadAddress").val();
             const jibunAddress = $("#sample4_jibunAddress").val();
             
-            if (category === "" || roomTitle === "" || amount === "" || loc === "" || mDate === "" || roomText === "" || postcode === "" || roadAddress === "" || jibunAddress === "") {
+            if (category === "" || roomTitle === "" || amount === "" || mDate === "" || roomText === "" || postcode === "" || roadAddress === "" || jibunAddress === "") {
                 alert("모든 입력 항목을 채워주세요.");
                 return false;
             }
         });
-    });//end doc
 
+    });//end doc
 </script>
 <style type="text/css">
 .search { position:absolute;z-index:1000;top:20px;left:20px; }
@@ -106,10 +106,12 @@
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
                 // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                 var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
                 var extraRoadAddr = ''; // 도로명 조합형 주소 변수
+
                 // 법정동명이 있을 경우 추가한다. (법정리는 제외)
                 // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
                 if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
@@ -127,18 +129,22 @@
                 if(fullRoadAddr !== ''){
                     fullRoadAddr += extraRoadAddr;
                 }
+
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 document.getElementById('sample4_postcode').value = data.zonecode; //5자리 새우편번호 사용
                 document.getElementById('sample4_roadAddress').value = fullRoadAddr;
                 document.getElementById('sample4_jibunAddress').value = data.jibunAddress;
+
                 // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
                 if(data.autoRoadAddress) {
                     //예상되는 도로명 주소에 조합형 주소를 추가한다.
                     var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
                     document.getElementById('guide').innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+
                 } else if(data.autoJibunAddress) {
                     var expJibunAddr = data.autoJibunAddress;
                     document.getElementById('guide').innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+
                 } else {
                     document.getElementById('guide').innerHTML = '';
                 }
