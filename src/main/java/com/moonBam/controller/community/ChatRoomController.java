@@ -1,5 +1,6 @@
 package com.moonBam.controller.community;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class ChatRoomController {
 	
 	/////방 입장을 위해 방 클릭하면 이렇게 먼저 중복제외하고 insert 진행
 	@RequestMapping(value="/chatRoom",  method = RequestMethod.GET)
-	public String chatRoomGet(@Param("chatNum") int chatNum, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String chatRoomGet(@Param("chatNum") int chatNum, HttpSession session, Principal principal, RedirectAttributes redirectAttributes) {
 		//방제목이랑 방설명이 필요함 -> 형
 //		// session에서 id 가져오기
 //		// 현재 시간 
@@ -82,8 +83,7 @@ public class ChatRoomController {
 //		mav.addObject("text", crDto.getRoomText());
 //		return mav;
 		
-		MemberDTO memberDto = (MemberDTO)session.getAttribute("loginUser");
-		String userIdInSession = memberDto.getUserId(); //현재 나의 Id
+		String userIdInSession = principal.getName();//현재 나의 Id
 		
 		//enter를 위한 2개의 data가 들어갈 것임
 		Map<String, Object> chatMemberInsertMap = new HashMap<>();
@@ -92,7 +92,7 @@ public class ChatRoomController {
 		chatMemberInsertMap.put("chatNum", chatNum);
 		System.out.println("chatMemberInsertMap 확인 chatRoomInsert "+chatMemberInsertMap);
 		
-		String nextWhere = "redirect:/chatRoom/enter"; //정상 진행jsp
+		String nextWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; //정상 진행jsp
 		
 		//일단 중복된 데이터가 없는지 확인 후 insert 진행하기 (중복 저장 방지를 위해~)
 		ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberInsertMap);
@@ -116,8 +116,8 @@ public class ChatRoomController {
 		}//if(chatMemberDto ==  null) end
 		
 	
-		//chatRoomSelect 컨트롤러로 data를 넘기기 위해 저장
-		redirectAttributes.addFlashAttribute("chatMemberInsertMap",chatMemberInsertMap);
+//		//chatRoomSelect 컨트롤러로 data를 넘기기 위해 저장
+//		redirectAttributes.addFlashAttribute("chatMemberInsertMap",chatMemberInsertMap);
 		
 		
 		return nextWhere;
@@ -127,13 +127,19 @@ public class ChatRoomController {
 	
 	//DB check 입장 승인할지 말지 결정 (chatNum, UserId 일치여부 확인)
 	@RequestMapping("/chatRoom/enter")
-	public String chatMemberSelect(HttpServletRequest request) {
+	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum) {
 	
 		//chatNum과 userIdInSession을 조건으로 가진 select 결과가 있는지 없는지 ChatMemberDTO가져와서 null이 아닐 때만 링크 접속하게 하기
 		//나중에 여기에 "강퇴"칼럼의 Y,N 값을 확인해야함 (N만 입장 가능)
-		Map<String, ?> flashMap =RequestContextUtils.getInputFlashMap(request);
-		Map<String, Object> chatMemberselectMap = (Map<String, Object>) flashMap.get("chatMemberInsertMap");
+		
+		String userIdInSession = principal.getName();//현재 나의 Id
+		
+		Map<String, Object> chatMemberselectMap = new HashMap<>();
+		chatMemberselectMap.put("userId", userIdInSession);
+		chatMemberselectMap.put("chatNum", chatNum);
 		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
+		
+		
 		
 		//정상진행 시 chatRoom.jsp로 진입
 		String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp

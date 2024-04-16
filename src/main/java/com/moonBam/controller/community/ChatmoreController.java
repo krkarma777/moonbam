@@ -1,5 +1,6 @@
 package com.moonBam.controller.community;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReportDTO;
 import com.moonBam.service.CommunityChatmoreService;
+import com.moonBam.service.member.MemberLoginService;
 
 
 @Controller
@@ -26,8 +28,11 @@ public class ChatmoreController {
 	@Autowired
 	CommunityChatmoreService chatmoreService;
 	
+	@Autowired
+	MemberLoginService memberLoginService;
+	
 	@RequestMapping(value = "/Chatmore", method=RequestMethod.GET)
-	public String Chatmore(int chatNum, Model m) {
+	public String Chatmore(int chatNum, Model m, Principal principal) {
 		System.out.println("/Chatmore 호출");
 		System.out.println("Chatmore에서의 "+chatNum);
 		
@@ -50,9 +55,13 @@ public class ChatmoreController {
 		MemberDTO leadermemberDto =  chatmoreService.memberByChatMemberId(leaderId);
 		
 		
+		//4. session에 저장되었던 login정보를 principal로 바꾸면서 추가한 코드
+		MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+		
 		m.addAttribute("leadermemberDto", leadermemberDto); ////////////리더의 dto정보
 		m.addAttribute("memberDtoList", memberDtoList); ////////////대화방 참여하고 있는 멤버들
 		m.addAttribute("chatNum",chatNum); //////////chatNum
+		m.addAttribute("memberDTO", memberDTO); ////////////내 로그인 정보
 	
 		return "/community/chat-more"; //jsp
 	}
@@ -65,7 +74,7 @@ public class ChatmoreController {
 		
 		m.addAttribute("userId", userId);
 		m.addAttribute("chatNum", chatNum);
-		System.out.println(userId+"4444444444444444444444444  "+chatNum);
+		//System.out.println(userId+"4444444444444444444444444  "+chatNum);
 		
 		
 		return "/community/chat-more-report";
