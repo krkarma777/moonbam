@@ -396,14 +396,12 @@
 	<!-- 회원가입 -->
 	<insert id="insertNewMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-		userId, userPw, nickname, 
-		restoreUserEmailId, restoreUserEmailDomain,
-		userSignDate, userType
+		userId, userPw, nickname, SECRETCODE ,
+		userSignDate, ROLE
 		)
 		VALUES (
-		#{userId}, #{userPw}, #{nickname},
-		#{restoreUserEmailId}, #{restoreUserEmailDomain},
-		#{userSignDate}, #{userType}
+		#{userId}, #{userPw}, #{nickname}, #{secretCode},
+		#{userSignDate}, #{role}
 		)
 	</insert>
 
