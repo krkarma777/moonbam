@@ -35,8 +35,6 @@ public class ChatController {
 	@ResponseBody
 	public String saveChatRoom(@ModelAttribute ChatRoomDTO chatRoom) {
 		
-		chatRoom.setmDate("2024-4-7");
-		chatRoom.setLeaderId("");
 		int n = 0;
 		n = crService.saveChatRoom(chatRoom);
 		if(n==1) {
@@ -62,14 +60,14 @@ public class ChatController {
 		//////////////////권한위임 기존 방장이 하는지 검사
 		
 		String formerMaster = principal.getName();
-//		MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
 		
 		Boolean checkMaster = (formerMaster == crService.checkMaster(chatNum));
 		
 		if(!checkMaster) {
 			System.out.println("너 방장 아니지");
 		}else {
-			if(n==1) {System.out.println("권한 위임 정상 처리");}else {System.out.println("권한 위임 실패");}
+			String mesg = (n==1)? "권한 위임 정상 처리": "권한 위임 실패";
+			System.out.println(mesg);
 		}
 		//////////////////
 		
