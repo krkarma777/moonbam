@@ -144,8 +144,8 @@ public class PostDAO {
 	}
 
 	public PostSaveDTO selectPostSave(String postSaveId) {
-		PostSaveDTO postsave = session.selectOne("selectPostSave", postSaveId);
-		return postsave;
+		System.out.println("postSaveId = " + postSaveId);
+        return session.selectOne("selectPostSave", postSaveId);
 	}
 
 	public void update(PostUpdateRequestDTO postUpdateRequestDTO) {
