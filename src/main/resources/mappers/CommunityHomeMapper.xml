@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommunityHome">
+
+	<select id="chatRoomTotalCount" resultType="int" parameterType="HashMap">
+		select count(*) from chatroom
+		<where>
+			<if test = "searchCategory == '전체'">
+			 	ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '영화'">
+			 	category = '영화' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '독서'">
+			 	category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '음악'">
+			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+		</where>
+		order by chatnum desc
+	</select>
+	
+	<select id="chatRoomList" resultType="ChatRoomDTO" parameterType="HashMap">
+		select * from chatroom
+		<where>
+			<if test = "searchCategory == '전체'">
+			 	ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '영화'">
+			 	category = '영화' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '독서'">
+			 	category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '음악'">
+			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+			</if>
+		</where>
+		order by chatnum desc
+	</select>
+  	
+  	<select id="myChatRoomList" resultType="String" parameterType="String">
+  		select chatnum from chatmember where userid = #{userid} order by chatnum desc
+  	</select>
+  	
+  	<select id="myChatList" resultType="ChatRoomDTO" parameterType="HashMap">
+  		select * from chatroom where chatnum in ${myChatRoomList}
+  		<choose>
+  			<when test="searchCategory == '전체'">
+  				and ROOMTITLE like '%'||#{searchValue}||'%'
+  			</when>
+  			<when test="searchCategory == '영화'">
+  				and category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+  			</when>
+  			<when test="searchCategory == '독서'">
+  				and category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+  			</when>
+  			<when test="searchCategory == '음악'">
+  				and category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+  			</when>
+  		</choose>
+  		
+	</select>
+	
+</mapper>

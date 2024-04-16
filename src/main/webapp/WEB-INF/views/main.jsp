@@ -24,7 +24,7 @@ var list = <%= request.getAttribute("list") %>;
     	let height ;
     	
         for (var i = 0; i < list.length; i++) {
-        	let flag= true;	/*  false 시 팝업 안나옴 */
+        	let flag= false;	/*  false 시 팝업 안나옴 */
         	if(flag){
         		// 팝업 창의 위치 설정
         		setPostion(i);
@@ -80,8 +80,8 @@ var list = <%= request.getAttribute("list") %>;
 					src="resources/images/tv.png" width="250px" height="250px"></a>
 			</div>
 			<div class="align-self-center" style="background-color: transparent">
-				<a href="/acorn/?cg=book"><img class="rounded-2"
-					src="resources/images/book.svg" width="250px" height="250px"></a>
+				<a href="/acorn/?cg=community"><img class="rounded-2"
+					src="resources/images/community.svg" width="250px" height="250px"></a>
 			</div>
 		</div>
 	</div>
