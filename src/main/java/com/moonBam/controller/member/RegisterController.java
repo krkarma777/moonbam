@@ -117,7 +117,6 @@ public class RegisterController {
 			dto.setUserPw(encoder.encode(userPw));
 			dto.setSecretCode(secretCode);
 			dto.setUserSignDate(userSignDate);
-			
 			int num = serv.insertNewMember(dto);
 
 			// 성공적으로 insert된 경우, 회원가입 성공 페이지로 이동

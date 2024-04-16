@@ -1,15 +1,14 @@
 package com.moonBam.dto;
 
-import org.apache.ibatis.type.Alias;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.ibatis.type.Alias;
 
-@ToString
+@Alias("MemberDTO")
 @Getter
 @Setter
-@Alias("MemberDTO")
+@ToString
 public class MemberDTO{
 	private String userId;
 	private String userPw;
