@@ -198,6 +198,7 @@
         </div>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // jQuery를 사용한 입력란 이벤트 처리
     $(document).ready(function () {
@@ -379,7 +380,7 @@
     function save() {
         // 제목과 내용을 가져옴
         var title = $('#postTitle').val();
-        var content = tinymce.activeEditor.getContent();
+        var content = editorInstance.getData();
         var userId = "<sec:authentication property="name"/>";
 
         // 바이트 길이 계산 함수

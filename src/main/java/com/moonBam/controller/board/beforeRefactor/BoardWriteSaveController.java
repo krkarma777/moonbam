@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/post")
@@ -55,11 +56,12 @@ public class BoardWriteSaveController {
 	}
 	
 	@PostMapping("/saveList")
-	public void saveList(Principal principal, Model m) {
+	public ResponseEntity<?> saveList(Principal principal, Model m) {
 		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
         String userId = loginUser.getUserId();
 		List<PostSaveDTO> postSaveList = service.listPostSave(userId);
 		System.out.println("임시저장 목록 => "+postSaveList);
-		m.addAttribute("postSaveList", postSaveList);
+		return ResponseEntity.ok(postSaveList);
 	}
+
 }//end class

@@ -54,8 +54,7 @@ public class PostDAO {
 	}
 
 	public List<PostSaveDTO> listPostSave(String userId) {
-
-		return session.selectList("listPostSave", userId);
+		return session.selectList("postSaveSelect", userId);
 	}
 
 	public void deletePostSave(Long postSaveId) {

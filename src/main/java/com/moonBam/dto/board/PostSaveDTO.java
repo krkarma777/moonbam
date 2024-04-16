@@ -74,9 +74,4 @@ public class PostSaveDTO {
 		return "PostSaveDTO [postSaveId=" + postSaveId + ", userId=" + userId + ", postSaveTitle=" + postSaveTitle
 				+ ", postSaveText=" + postSaveText + ", postSaveDate=" + postSaveDate + "]";
 	}
-	
-	
-
-	
-	
 }//end class

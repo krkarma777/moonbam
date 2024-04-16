@@ -5,7 +5,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>		 
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -191,6 +192,7 @@
 		}
 
 	</style>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		// jQuery를 사용한 입력란 이벤트 처리
 		$(document).ready(function () {
@@ -258,7 +260,7 @@
 						console.log(response);
 						var postSaveList = response;
 						console.log("postSaveList => "+postSaveList);
-						//innerhtml함수
+						re
 					},
 					error: function(xhr, status, error) {
 						console.log(error);
@@ -319,7 +321,7 @@
 				// 제목과 내용을 가져옴
 				var title = $('#postTitle').val();
 				var content = editorInstance.getData();
-				var userId = "<%=userId%>";
+				var userId = "<sec:authentication property="name"/>";
 
 				// 바이트 길이 계산 함수
 				function getByteLength(str) {
