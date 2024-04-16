@@ -250,7 +250,7 @@
 	        var errorSpan = $("#confirmUserEmailError");
 
 	        //이메일을 입력
-	        if (userId && userPw) {
+	        if (userId) {
 	            $.ajax({
 	                type: "POST",
 	                url: "<c:url value='/AjaxCheckEmail'/>", 
@@ -263,8 +263,12 @@
 	                    // 입력한 아이디 이메일이 DB에 있을 경우, ajax 출력
 	                    if (response === "RegisterFail") {
 	                        errorSpan.text("이미 사용 중인 이메일입니다.");
-	                        
-	                    // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
+	                    } else
+	                    // 입력한 아이디 이메일이 소셜네트워크 회원가입자일 경우, ajax 출력
+		                if (response === "socialRegister") {
+		                        errorSpan.text("소셜네트워크 회원가입자입니다.");     
+	                    
+		                // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
 	                    } else {
 	                        errorSpan.text("");
 	                        $("#registerForm")[0].submit();

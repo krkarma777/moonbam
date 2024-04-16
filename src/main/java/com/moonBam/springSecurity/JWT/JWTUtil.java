@@ -1,4 +1,4 @@
-package com.moonBam.springSecurity;
+package com.moonBam.springSecurity.JWT;
 
 import java.security.Key;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.moonBam.springSecurity;
+package com.moonBam.springSecurity.oauth2;
 
 public interface OAuth2Response {
 

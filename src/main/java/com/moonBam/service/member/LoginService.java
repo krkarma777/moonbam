@@ -30,9 +30,9 @@ public class LoginService {
 	}
 	
 	//아이디 찾기
-	public String findUserId(String secretCode) {
-		String userId = dao.findUserId(secretCode);
-		return userId;
+	public MemberDTO findDTOBySecretCode(String secretCode) {
+		MemberDTO dto = dao.findDTOBySecretCode(secretCode);
+		return dto;
 	}
 
 	//비밀번호 찾기

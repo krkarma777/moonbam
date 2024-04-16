@@ -114,7 +114,7 @@
 			<version>5.7.7</version>
 		</dependency>
 		
-		<!-- JSO에서 SpringSecurity Taglib 사용-->
+		<!-- JSP에서 SpringSecurity Taglib 사용-->
 		<dependency> 
 		    <groupId>org.springframework.security</groupId> 
 		    <artifactId>spring-security-taglibs</artifactId> 

@@ -34,9 +34,9 @@ public class LoginDAO {
 	}	
 	
 	//아이디 찾기
-	public String findUserId(String secretCode) {
-		String userId = session.selectOne("com.config.MemberMapper.findUserId", secretCode);
-		return userId;
+	public MemberDTO findDTOBySecretCode(String secretCode) {
+		MemberDTO dto = session.selectOne("com.config.MemberMapper.findDTOBySecretCode", secretCode);
+		return dto;
 	}
 	
 	//비밀번호 찾기

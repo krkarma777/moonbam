@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.OpenApiService;
@@ -43,6 +44,9 @@ public class LoginController {
 	
 	@Autowired
 	LoginService loginService;
+	
+	@Autowired
+	LoginDAO dao;
 	
 	@Autowired
 	PasswordEncoder encoder;
@@ -69,15 +73,22 @@ public class LoginController {
 		
 		System.out.println("principal: "+principal);
 		
+		// principal이 null인지 확인
+	    if (principal == null) {
+	        // 로그인하지 않은 사용자가 접근한 경우에 대한 처리
+	        return "redirect:/";
+	    }
+		
 		String userId = principal.getName();
 		System.out.println("userId: "+userId);
 		
 		//닉네임 찾기		
-		String nickname = loginService.nicknameByUserId(userId);
-		
-		MemberDTO dto = new MemberDTO();
-			dto.setUserId(userId);
-			dto.setNickname(nickname);
+		MemberDTO memberData = dao.userDetail(userId);
+	    MemberDTO dto = new MemberDTO();
+	      	dto.setUserId(userId);
+	      	dto.setNickname(memberData.getNickname());
+	      	dto.setRole(memberData.getRole());
+	      	dto.setEnabled(memberData.isEnabled());
 		System.out.println("dto: "+dto);
 		session.setAttribute("loginUser", dto);
 		return "redirect:/";
@@ -116,9 +127,10 @@ public class LoginController {
 	@PostMapping("/SearchID")
 	public String SearchID(Model model, String secretCode) {
 
-		String userId = serv.findUserId(secretCode);
-		if (userId != null) {
-			model.addAttribute("userId", userId);
+		MemberDTO dto = serv.findDTOBySecretCode(secretCode);
+		System.out.println(dto);
+		if (dto != null) {
+			model.addAttribute("dto", dto);
 			return "member/Find_Info/viewID";
 		} else {
 			return "member/Find_Info/cantFindUserdata";
@@ -136,12 +148,28 @@ public class LoginController {
 		
 		MemberDTO dto = serv.mailingPW(map);
 		
+		model.addAttribute("userId", dto.getUserId());
+		model.addAttribute("nickname", dto.getNickname());
+		
+		//소셜네트워크 회원가입자의 경우
+		if(dto.getKakaoConnected()==1) {
+			System.out.println("카카오 회원가입자");
+			model.addAttribute("kakaoRegister", true);
+		} 
+		if(dto.getGoogleConnected()==1) {
+			System.out.println("구글 회원가입자");
+			model.addAttribute("googleRegister", true);
+		} 
+		if(dto.getNaverConnected()==1) {
+			model.addAttribute("naverRegister", true);
+		} 
+		if(dto.getKakaoConnected()==1 || dto.getGoogleConnected()==1 || dto.getNaverConnected()==1) {
+			return "member/Find_Info/socialRegsiter";
+		}
+		
 		if (dto != null) {
 
 			String[] emailparts = dto.getUserId().split("@");
-			
-			model.addAttribute("userId", dto.getUserId());
-			model.addAttribute("nickname", dto.getNickname());
 			model.addAttribute("emailDomain", emailparts[1]);
 			mc.sendEmail(dto.getUserId(), dto);
 
@@ -149,6 +177,24 @@ public class LoginController {
 		} 
 		return "member/Find_Info/emailErrorPage";
 	}
+	
+	//비밀번호 변경을 위한 메일 송신
+	@PostMapping("/SocialMailingPW")
+	public String SocialMailingPW(Model model, String userId) throws Exception {
+		
+		MemberDTO dto = dao.userDetail(userId);
+		
+		if (dto != null) {
+			String[] emailparts = dto.getUserId().split("@");
+			model.addAttribute("userId", dto.getUserId());
+			model.addAttribute("nickname", dto.getNickname());
+			model.addAttribute("emailDomain", emailparts[1]);
+			mc.sendEmail(dto.getUserId(), dto);
+			return "member/Find_Info/viewAllPW";
+		} 
+		return "member/Find_Info/emailErrorPage";
+	}
+	
 	
 	//메일 전송 완료 화면에서 새로고침 시, 이동
 	@GetMapping("/MailingPW")

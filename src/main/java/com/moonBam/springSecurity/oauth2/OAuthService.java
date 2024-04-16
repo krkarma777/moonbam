@@ -1,4 +1,4 @@
-package com.moonBam.springSecurity;
+package com.moonBam.springSecurity.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

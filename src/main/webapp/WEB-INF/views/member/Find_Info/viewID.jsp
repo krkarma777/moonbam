@@ -19,8 +19,26 @@
 
 	<h2>찾은 아이디 정보</h2>
 	<div>회원님의 아이디는
-		${userId}입니다.
-	</div>
+		${dto.getUserId()}입니다.
+	</div><br>
+	
+	<c:if test="${dto.getGoogleConnected() == '1' || dto.getNaverConnected() == '1' || dto.getKakaoConnected() == '1'}">
+	
+		<c:if test="${dto.getGoogleConnected() == '1'}">
+		&nbsp;&nbsp;- 구글 로그인 연결됨<br>
+		</c:if>
+		<c:if test="${dto.getNaverConnected() == '1'}">
+		&nbsp;&nbsp;- 네이버 로그인 연결됨<br>
+		</c:if>
+		<c:if test="${dto.getKakaoConnected() == '1'}">
+		&nbsp;&nbsp;- 카카오 로그인 연결됨<br>
+		</c:if>
+		<p>
+			소셜 로그인을 확인해보세요!<br>
+		</p>
+	</c:if>
+
+	
 	<div id="sitesShortCut">
 		<a href="<c:url value='/mainLogin'/>">로그인</a> | <a href="<c:url value='/FindInfo'/>">회원정보 찾기</a>
 	</div>

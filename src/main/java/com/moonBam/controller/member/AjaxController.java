@@ -15,9 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moonBam.dao.member.LoginDAO;
@@ -30,6 +34,7 @@ import com.moonBam.service.member.AnonymousCommentService;
 import com.moonBam.service.member.AnonymousReplyService;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
+import com.moonBam.springSecurity.SpringSecurityUser;
 
 
 @RestController
@@ -55,6 +60,26 @@ public class AjaxController {
 	
 	@Autowired
 	LoginDAO dao;
+	
+	
+	//스프링시큐리티
+	@GetMapping("/userinfo")
+    public MemberDTO getUserJWTData() {
+        // 현재 사용자의 인증 객체를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // 인증 객체로부터 현재 사용자의 이름을 가져옴
+        String username = authentication.getName();
+        MemberDTO memberData = dao.userDetail(username);
+        MemberDTO dto = new MemberDTO();
+        	dto.setUserId(username);
+        	dto.setNickname(memberData.getNickname());
+        	dto.setRole(memberData.getRole());
+        	dto.setEnabled(memberData.isEnabled());
+
+        // 사용자의 이름을 반환
+        return dto;
+    }
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
@@ -107,11 +132,19 @@ public class AjaxController {
 	//메인에서 이메일 중복 확인 에이젝스
 	@PostMapping("AjaxCheckEmail")
 	public String AjaxCheckEmail(String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		boolean cantRegister = rServ.RegisterPossible(userId);
+		
+		MemberDTO dto = rServ.findDTOByUserId(userId);
+		//System.out.println("AjaxCheckEmail: "+dto);
+
 		String mesg = "RegisterSuccess";
-		if (cantRegister) {
+		
+		if (dto != null) {
 			mesg = "RegisterFail";                
         }
+		if (dto.getGoogleConnected() == 1 || dto.getKakaoConnected() == 1 || dto.getNaverConnected() == 1) {
+			mesg = "socialRegister";
+		}
+		
 		return mesg;
 	}
 	

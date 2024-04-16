@@ -1,4 +1,4 @@
-package com.moonBam.springSecurity;
+package com.moonBam.springSecurity.JWT;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.moonBam.springSecurity.SpringSecurityUser;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -68,11 +71,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         //아이디와 역할을 통해 JWT토큰 생성(10시간 유지)
-        String token = jwtUtil.createJwt(username, role, 60*60*10L);
-//      System.out.println("LoginFilter token: "+ token);
-        HttpSession session = request.getSession();
-        session.setAttribute("LFtoken", token);
+        String token = jwtUtil.createJwt(username, role, 60*60*12000L);
+        System.out.println("LoginFilter token: "+ token);
         
+        Cookie cookie = new Cookie("JWTtoken", token);
+        	cookie.setMaxAge(60*60*12);
+        	response.addCookie(cookie);
+        	
         // 루트 주소로 리다이렉트
         response.sendRedirect("logining/");
     }

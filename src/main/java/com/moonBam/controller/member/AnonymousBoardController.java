@@ -47,7 +47,7 @@ public class AnonymousBoardController {
             @RequestParam(defaultValue = "10") int perPage,
 			String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
-		// 전체 글 개수 가져오기 (페이지네이션에 사용될 수 있음)
+		// 전체 글 개수 가져오기 (페이지네이션에 사용)
 	    List<AnonymousBoardDTO> allPosts  = serv.viewDBoardList(orderBy);
 	    int totalPosts = allPosts.size();
 		

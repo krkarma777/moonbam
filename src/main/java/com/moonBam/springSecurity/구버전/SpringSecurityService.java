@@ -1,4 +1,4 @@
-package com.moonBam.springSecurity;
+package com.moonBam.springSecurity.구버전;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.springSecurity.SpringSecurityUser;
 
 @Service
 public class SpringSecurityService  implements UserDetailsService {

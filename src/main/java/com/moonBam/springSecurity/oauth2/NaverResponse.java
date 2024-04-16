@@ -1,18 +1,18 @@
-package com.moonBam.springSecurity;
+package com.moonBam.springSecurity.oauth2;
 
 import java.util.Map;
 
-public class GoogleResponse implements OAuth2Response {
+public class NaverResponse implements OAuth2Response{
 
 	private final Map<String, Object> attribute;
 	
-	public GoogleResponse(Map<String, Object> attribute) {
-		this.attribute = attribute;
+	public NaverResponse(Map<String, Object> attribute) {
+		this.attribute = (Map<String, Object>) attribute.get("response");
 	}
 
 	@Override
 	public String getProvider() {
-		return "google";
+		return "naver";
 	}
 
 	@Override

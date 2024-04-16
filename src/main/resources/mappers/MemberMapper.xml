@@ -313,7 +313,7 @@
 	<!-- 닉네임 찾기 -->
 	<select id="nicknameByUserId" resultType="String" parameterType="String">
 		SELECT
-			nickname
+			nickname, googleConnected, naverConnected, kakaoConnected
 		FROM 
 			memberDB
 		WHERE 
@@ -322,9 +322,9 @@
 	
 	
 	<!-- 아이디 찾기 -->
-	<select id="findUserId" resultType="String" parameterType="String">
+	<select id="findDTOBySecretCode" resultType="MemberDTO" parameterType="String">
 		SELECT
-			userId
+			userId, googleConnected, naverConnected, kakaoConnected
 		FROM 
 			memberDB
 		WHERE 
@@ -352,8 +352,8 @@
 	</select>
 	
 	<!-- 이메일 중복 확인 에이젝스 -->
-	<select id="registerPossible" resultType="int" parameterType="String">
-		SELECT COUNT(*)
+	<select id="findDTOByUserId" resultType="MemberDTO" parameterType="String">
+		SELECT userId, googleConnected, naverConnected, kakaoConnected
 		FROM memberDB
 		WHERE 
 			userId = #{userId}
