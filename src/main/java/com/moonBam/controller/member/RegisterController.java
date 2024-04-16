@@ -1,19 +1,16 @@
 package com.moonBam.controller.member;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @Controller
@@ -31,6 +28,9 @@ public class RegisterController {
 	@Autowired
 	MailController mc;
 
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	//회원가입
 	@PostMapping("/RegisterData")
 	public String InsertData(HttpServletRequest request, MemberDTO dto) throws Exception {
@@ -38,7 +38,7 @@ public class RegisterController {
 		System.out.println("RegisterData: "+ dto);
 		
 		String result = "member/Register/registerFailure";
-		
+		System.out.println("dto = " + dto);
 		
 		// 입력한 정보가 타당하지 않으면 false로 전환
 		boolean failMesg = true;
@@ -61,7 +61,7 @@ public class RegisterController {
 
 		// 비밀번호 검증
 		String userPw2 = dto.getUserPw();
-		String userPw = sc.encrypt(userPw2);	
+		String userPw = bCryptPasswordEncoder.encode(userPw2);
 		String userPwConfirm = request.getParameter("userPwConfirm");
 
 		if (!(userPw2.equals(userPwConfirm))) { // 비밀번호와 비밀번호 재확인 번호 일치 확인
@@ -111,7 +111,6 @@ public class RegisterController {
 			dto.setUserPw(userPw);
 			dto.setUserSignDate(userSignDate);
 			dto.setUserType("1");
-			
 			int num = serv.insertNewMember(dto);
 
 			// 성공적으로 insert된 경우, 회원가입 성공 페이지로 이동

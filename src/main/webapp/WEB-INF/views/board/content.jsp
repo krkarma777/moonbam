@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,148 +54,160 @@ function scrollToComments() {
 
 <script type="text/javascript">
 $("document").ready(function() {
-		
-    $("#commentHead").click(function() {
-        var url = "/acorn/board/postLike?postId=" + <%= request.getParameter("postId")%>;
-        $.ajax({
-            type: "POST",
-            url: url,
-            dataType: "json",
-            success: function(response) {
-                if (!response.success) {
-                    /* alert(response.message); */
-                } else {
-                    $("#likeNum").text(response.likeCount);
-                }
-            },
-            error: function(error) {
-                console.error("에러:", error);
-                alert("에러 발생");
-            }
-        });
-    });
-    <%
+
+	$("#commentHead").click(function () {
+		var url = "/acorn/board/postLike?postId=" + <%= request.getParameter("postId")%>;
+		$.ajax({
+			type: "POST",
+			url: url,
+			dataType: "json",
+			success: function (response) {
+				if (!response.success) {
+					/* alert(response.message); */
+				} else {
+					$("#likeNum").text(response.likeCount);
+				}
+			},
+			error: function (error) {
+				console.error("에러:", error);
+				alert("에러 발생");
+			}
+		});
+	});
+	<%
     MemberDTO dto = (MemberDTO)session.getAttribute("loginUser");
     String userId="";
     if(dto!=null){
-    	userId = dto.getUserId();
+        userId = dto.getUserId();
     }
     %>
-    
-    $("#scrap").on("click",function(){
-        $.ajax({
-            url:"/acorn/scrap",
-            type:"post",
-            dataType:"json", // 서버로부터 JSON 응답을 기대함
-            data : {
-                postId:<%=request.getParameter("postId")%>,
-                userId:"<%=userId%>"
-            },
-            success : function(response){
-                if(response.success) {
-                    alert(response.message);
-                } else {
-                    alert(response.message);
-                }
-            },
-            error : function(xhr, status, error){
-                console.log("에러 발생", status, error);
-                alert("에러 발생: " + error);
-            }
-        }); // end ajax call
-    });//
 
-	
+	<sec:authorize access="isAuthenticated()">
+	var userId = '<sec:authentication property="principal.username" />';
+	$("#scrap").on("click", function () {
+		$.ajax({
+			url: "/acorn/scrap",
+			type: "post",
+			dataType: "json",
+			data: {
+				postId: <%= postId %>,
+				userId: userId
+			},
+			success: function (response) {
+				if (response.success) {
+					alert(response.message);
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function (xhr, status, error) {
+				console.log("에러 발생", status, error);
+				alert("에러 발생: " + error);
+			}
+		});
+	});
+	</sec:authorize>
+
 	$.ajax({
-	    type: 'get',
-	    url: '/acorn/api/post/'+<%= postId %>,
-	    success: function(response) {
-	    	var post = response.pDTO;
-            var isAuthorized = response.isAuthorized;
-            
-            //글 내용
-            var postOneView = '<div class="container mt-4">' +
-            '<div class="post-section">' +
-            '<div class="post-title">' +
-            '<h3>' + response.pDTO.postTitle + '</h3>' +
-            '</div>' +
-            '<div class="post-meta d-flex justify-content-between">' +
-            '<div>' +
-            '<small>' +
-            '작성자: ' + post.nickname + ' | ' +
-            '작성일: ' + post.postDate + // EL(fmt:formatDate) 대신 그대로 post.postDate 사용
-            '</small>' +
-            '</div>' +
-            '<div>' +
-            '<small>' +
-            '조회수: ' + post.viewNum + ' | ' +
-            '추천: ' + post.likeNum + ' | ' +
-            '댓글: ' + post.commentCount +
-            '</small>' +
-            '</div>' +
-            '</div>' +
-            '<hr>' +
-            '<div class="cpost-content">' +
-            post.postText +
-            '</div>' +
-            '</div>' +
-            '</div>';//
-            
-            //수정,삭제 버튼
-				var updatedel = '';
-				if (isAuthorized) {
-				    updatedel = `
+		type: 'get',
+		url: '/acorn/api/post/' +<%= postId %>,
+		success: function (response) {
+			var post = response.pDTO;
+			var isAuthorized = response.isAuthorized;
+
+			// 날짜 파싱 및 포매팅
+			var date = new Date(post.postDate);
+			var formattedDate = date.toLocaleDateString('ko-KR', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit'
+			});
+			//글 내용
+			var postOneView = '<div class="container mt-4">' +
+					'<div class="post-section">' +
+					'<div class="post-title">' +
+					'<h3>' + response.pDTO.postTitle + '</h3>' +
+					'</div>' +
+					'<div class="post-meta d-flex justify-content-between">' +
+					'<div>' +
+					'<small>' +
+					'작성자: ' + post.nickname + ' | ' +
+					'작성일: ' + formattedDate + // EL(fmt:formatDate) 대신 그대로 post.postDate 사용
+					'</small>' +
+					'</div>' +
+					'<div>' +
+					'<small>' +
+					'조회수: ' + post.viewNum + ' | ' +
+					'추천: ' + post.likeNum + ' | ' +
+					'댓글: ' + post.commentCount +
+					'</small>' +
+					'</div>' +
+					'</div>' +
+					'<hr>' +
+					'<div class="cpost-content">' +
+					post.postText +
+					'</div>' +
+					'</div>' +
+					'</div>';//
+
+			//수정,삭제 버튼
+			var updatedel = '';
+			if (isAuthorized) {
+				updatedel = `
 				            <a href="/acorn/board/edit?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
 				            <a href="/acorn/board/delete?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">삭제</button></a>
 				    `;
-				}//
+			}//
 
-            $('#postOneView').html(postOneView);
-            $('#updatadel').html(updatedel);
-            
-	    },
-	    error: function(xhr, status, error) {
-	        console.log("에러 발생 => ",error);
-	    }
+			$('#postOneView').html(postOneView);
+			$('#updatadel').html(updatedel);
+
+		},
+		error: function (xhr, status, error) {
+			console.log("에러 발생 => ", error);
+		}
 	});//end ajax
-    
+
 });//end doc
 
 
 </script>
 
 
-<!-- 스타일 태그 시작 -->
-<style>
-.searchInput {
-	width: 70vh;
-}
+	<!-- 스타일 태그 시작 -->
+	<style>
+		.searchInput {
+			width: 70vh;
+		}
 
-/* 댓글 섹션 위에 마진을 추가하는 새로운 CSS 클래스 */
-.comment-section {
-	margin-top: 10px;
-}
+		/* 댓글 섹션 위에 마진을 추가하는 새로운 CSS 클래스 */
+		.comment-section {
+			margin-top: 10px;
+		}
 
-/* 네비게이션바 고정 */
-.fixed-top {
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 1030; /* 다른 요소들 위에 표시되도록 z-index 설정 */
-}
+		/* 네비게이션바 고정 */
+		.fixed-top {
+			position: fixed;
+			top: 0;
+			width: 100%;
+			z-index: 1030; /* 다른 요소들 위에 표시되도록 z-index 설정 */
+		}
 
-.navbar-light {
-    background-color: #f8f9fa; /* 네비게이션바의 배경색 */
-}
+		.navbar-light {
+			background-color: #f8f9fa; /* 네비게이션바의 배경색 */
+		}
 
-/* 검색 버튼 색상 */
-.btn-outline-success {
-    color: #28a745;
-    border-color: #28a745;
-}
+		/* 검색 버튼 색상 */
+		.btn-outline-success {
+			color: #28a745;
+			border-color: #28a745;
+		}
 
-.btn-outline-success:hover {
-    color: white;
+		.btn-outline-success:hover {
+			color: white;
     background-color: #28a745;
     border-color: #28a745;
 }
@@ -357,8 +369,10 @@ body{
 
 /* 좋아요 버튼 여백 조정 */
 #commentHead {
-    margin-bottom: 20px; /* 버튼 아래의 여백을 늘려서 버튼을 위로 올립니다
-}
+	margin-bottom: 20px;
+
+} /* 버튼 아래의 여백을 늘려서 버튼을 위로 올립니다
+
 
 </style>
 
@@ -366,7 +380,7 @@ body{
 <body>
 
 	<!-- 네비게이션바 -->
-	<jsp:include page="//common/navbar.jsp"></jsp:include>
+	<jsp:include page="//common/navbar.jsp"/>
 	
 	<div class="container mt-4">
 		<div class="post-section">
@@ -374,9 +388,16 @@ body{
 			<div id="postOneView"></div>
 			<!-- 좋아요 버튼 -->
 			<div class="text-center" style="margin-top: 100px;">
-			    <button type="button" class="btn btn-custom" id="commentHead" data-bs-toggle="modal" <% if(session.getAttribute("loginUser")==null){%>data-bs-target="#likeModal"<% } %>>
-			        좋아요 <span class="badge text-bg-primary" id="likeNum"> <%=request.getAttribute("likeNum")%></span>
-			    </button>
+				<sec:authorize access="isAuthenticated()">
+					<button type="button" class="btn btn-custom" id="commentHead">
+						좋아요 <span class="badge text-bg-primary" id="likeNum"><%=request.getAttribute("likeNum")%></span>
+					</button>
+				</sec:authorize>
+				<sec:authorize access="!isAuthenticated()">
+					<button type="button" class="btn btn-custom" id="commentHead" data-bs-toggle="modal" data-bs-target="#likeModal">
+						좋아요 <span class="badge text-bg-primary" id="likeNum"><%=request.getAttribute("likeNum")%></span>
+					</button>
+				</sec:authorize>
 			</div>
 			<hr>
 			<!-- 좋아요 모달 -->
@@ -409,41 +430,9 @@ body{
 					</div>
 					
    					<!-- 오른쪽에 위치할 기타 버튼들 -->
-   					<!-- 글쓰기 버튼 -->
-   					<div>
-   						<%
-							if(session.getAttribute("loginUser")==null) {
-						%>
-						<button type="button" class="btn btn-action btn-spacing" data-bs-toggle="modal" data-bs-target="#writeModal">
-							글쓰기
-						</button>
-						<!-- 글쓰기 모달 -->
-						<div class="modal fade" id="writeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
-									    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-									</div>
-									<div class="modal-body">
-										당신의 소중한 순간을 함께 나누세요.<br>
-									    지금 바로 회원가입 또는 로그인을 통해, 누구도 가지지 못한 당신만의 이야기를 기록해보세요.
-									</div>
-									<div class="modal-footer">									   
-										<button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
-									    <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- 글쓰기 모달 끝 -->						
-						<%
-							} else {
-						%>
-						<a href="/acorn/board/write?postId=<%=request.getParameter("postId")%>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">글쓰기</button></a>
-						<%
-							}
-						%>
+					<sec:authorize access="isAuthenticated()">
+						<a href="/acorn/board/write?bn=${requestScope.bn}" class="btn btn-action btn-spacing">글쓰기</a>
+					</sec:authorize>
 						<!-- 수정, 삭제 버튼-->					
    						<span id="updatadel"></span>
    					</div><!-- end 오른쪽 버튼 -->  				

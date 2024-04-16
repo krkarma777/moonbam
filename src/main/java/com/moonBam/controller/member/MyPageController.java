@@ -1,29 +1,25 @@
 package com.moonBam.controller.member;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
+import com.moonBam.dto.CommentDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.board.PostDTO;
+import com.moonBam.service.member.LoginService;
+import com.moonBam.service.member.MemberLoginService;
+import com.moonBam.service.member.MemberService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.PostService;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.moonBam.dto.CommentDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.board.PageDTO;
-import com.moonBam.dto.board.PostDTO;
-import com.moonBam.service.member.LoginService;
-import com.moonBam.service.member.MemberService;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -35,11 +31,14 @@ public class MyPageController {
 	@Autowired
 	MemberService mserv;
 
+	@Autowired
+	MemberLoginService memberLoginService;
+
 	// 멤버 리스트 찾기
 	 @GetMapping("/userinfo")
-	    public ModelAndView userInfo(HttpSession session) {
+	    public ModelAndView userInfo(Principal principal) {
 	        // 세션에서 loginUser 정보 가져오기
-	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+		 MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 	        
 	        // 만약 loginUser가 null이면 로그인되지 않은 상태이므로 로그인 페이지로 리다이렉트 또는 예외 처리할 수 있음
 	        if (loginUser == null) {
@@ -57,8 +56,8 @@ public class MyPageController {
 	
 //회원정보 수정
 	 @GetMapping("/memberUpdate")
-	 public String updateInfo(Model model, HttpSession session) {
-		   MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+	 public String updateInfo(Model model, Principal principal) {
+		 MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 	        
 	        // 만약 loginUser가 null이면 로그인되지 않은 상태이므로 로그인 페이지로 리다이렉트 또는 예외 처리할 수 있음
 	        if (loginUser == null) {
@@ -69,28 +68,31 @@ public class MyPageController {
 	        return "member/MyPage/UpdateForm"; // 회원 정보 수정 폼의 JSP 파일 경로
 	    }
 
-	    @PostMapping("/update")
-	    public String updateUserInfo(Map<String, String> paramMap, Model model
-	                                 ,HttpSession session, @RequestParam("userId") String userId) {
-	        MemberDTO user = mserv.select(userId);
-	        
-	        if (user == null) {
-	            return "redirect:/login";
-	        }
-	        model.addAttribute("userId", paramMap.get("userId"));
-	        // 사용자 정보 업데이트
-	        String userName= paramMap.get("userName");
-	        String nickname= paramMap.get("nickname");
-	        String userPhoneNum1= paramMap.get("userPhoneNum1");
-	        String userPhoneNum2= paramMap.get("userPhoneNum2");
-	        String userPhoneNum3= paramMap.get("userPhoneNum3");
+	@PostMapping("/update")
+	public String updateUserInfo(Map<String, String> paramMap,
+								 Model model,
+								 Principal principal,
+								 @RequestParam("userId") String userId) {
 
-	        new MemberService().update(userName, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3);
-	       
+		MemberDTO user = mserv.select(userId);
 
-	        // 마이페이지로 리다이렉트
-	        return "redirect:/member/userinfo";
-	    }
+		if (user == null) {
+			return "redirect:/login";
+		}
+		model.addAttribute("userId", paramMap.get("userId"));
+		// 사용자 정보 업데이트
+		String userName = paramMap.get("userName");
+		String nickname = paramMap.get("nickname");
+		String userPhoneNum1 = paramMap.get("userPhoneNum1");
+		String userPhoneNum2 = paramMap.get("userPhoneNum2");
+		String userPhoneNum3 = paramMap.get("userPhoneNum3");
+
+		mserv.update(userName, nickname, userPhoneNum1, userPhoneNum2, userPhoneNum3);
+
+
+		// 마이페이지로 리다이렉트
+		return "redirect:/member/userinfo";
+	}
 	
 
 	 @PostMapping("/updateNickname")
@@ -172,8 +174,11 @@ public class MyPageController {
 //	     }
 //	 }
 	 @GetMapping("/myPost")
-	 public ModelAndView myPost(HttpSession session, Model model) {
-	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+
+
+
+	 public ModelAndView myPost(Principal principal, HttpSession session, Model model) {
+		 MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 	        if (loginUser != null) {
 	            String userId = loginUser.getUserId();
 	            List<PostDTO> list = mserv.selectMyPost(userId);
@@ -183,12 +188,12 @@ public class MyPageController {
 	        	System.out.println("myPost의 else");
 	            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
 	            return new ModelAndView("redirect:/Login");
-	            
+
 	        }
 	    }
 	 @GetMapping("/myComment")
-	    public ModelAndView myComment(HttpSession session, Model model) {
-	        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+	    public ModelAndView myComment(Principal principal, HttpSession session, Model model) {
+		 MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 	        if (loginUser != null) {
 	            String userId = loginUser.getUserId();
 	            List<CommentDTO> list = mserv.selectmyComm(userId);

@@ -5,7 +5,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>		 
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,11 +29,7 @@
 	<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-	<!-- TinyMCE script -->
-	<script
-			src="https://cdn.tiny.cloud/1/ok3w2lvptkyfth3qjjks4fv0f99459nvfx76ire0ttwxcrij/tinymce/6/tinymce.min.js"
-			referrerpolicy="origin"></script>
-
+	<!-- ckeditor script -->
 	<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
 
 	<!-- Font Awesome -->
@@ -195,6 +192,7 @@
 		}
 
 	</style>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		// jQuery를 사용한 입력란 이벤트 처리
 		$(document).ready(function () {
@@ -251,6 +249,145 @@
 						console.error(error);
 					});
 
+			//임시저장 모달창
+			function saveModal(){
+				$('#myModal').modal('show');
+				$.ajax({
+					type: 'post',
+					url: '/acorn/post/saveList',
+					dataType : 'json',
+					success: function(response) {
+						updateModalContent(response);
+					},
+					error: function(xhr, status, error) {
+						console.log(error);
+					}
+				});//end ajax
+			}//
+
+			function updateModalContent(postSaveList) {
+				var modalBody = $('.modal-body .table tbody');
+				modalBody.empty();
+
+				if (postSaveList.length === 0) {
+					modalBody.append('<tr><td colspan="2" style="text-align: center;">임시 저장된 글이 없습니다.</td></tr>');
+				} else {
+					postSaveList.forEach(function(postSave) {
+						var row = $('<tr></tr>');
+						row.append(`<td><span style="font-size: 20px;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + postSave.postSaveTitle + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
+						row.append('<td style="text-align: center; vertical-align: middle;"><button class="delete-btn" data-id="' + postSave.postSaveId + '" style="background: none; border: none;"><i class="fa-regular fa-trash-can"></i></button></td>');
+						modalBody.append(row);
+					});
+				}
+			}
+
+
+			// 임시저장글 불러오기
+			$(document).on('click', '.loadPostSave', function () {
+
+				let postSaveId = $(this).data('id');
+				$.ajax({
+					type: 'post',
+					url: '/acorn/post/saveSelect',
+					dataType: 'json',
+					data: {
+						postSaveId: postSaveId
+					},
+					success: function (response) {
+						alert('임시저장글 선택');
+						// 모달 창을 숨김
+
+						// 성공 시 제목과 내용 입력란에 데이터를 채움
+						$('#postTitle').val(response.postSaveTitle);
+						editorInstance.setData(response.postSaveText);
+					},
+					error: function (xhr, status, error) {
+						console.log(error);
+					}
+				});//end ajax
+			});//end loadSavePost
+
+			// 임시저장 삭제 함수
+			$(document).on('click', '.delete-btn', function () {
+
+				let postSaveId = $(this).data('id');
+				// 삭제 전에 사용자에게 확인을 받는다.
+				if (confirm('정말로 삭제하시겠습니까?')) {
+					// 확인 시 AJAX 요청
+					$.ajax({
+						type: 'POST',
+						url: '/acorn/post/saveDelete',
+						data: {
+							postSaveId: postSaveId
+						},
+						success: function(response) {
+							// 성공 시 페이지 새로고침
+							location.reload();
+							alert('임시저장글이 삭제되었습니다.');
+						},
+						error: function(xhr, status, error) {
+							console.error(xhr.responseText);
+						}
+					}); //end ajax
+				}
+			});
+
+
+			//임시저장 버튼 클릭 시 호출되는 함수
+			function save() {
+				console.log("asdasd")
+				// 제목과 내용을 가져옴
+				var title = $('#postTitle').val();
+				var content = editorInstance.getData();
+				var userId = "<sec:authentication property="name"/>";
+
+				// 바이트 길이 계산 함수
+				function getByteLength(str) {
+					var byteLength = 0;
+					for (var i = 0; i < str.length; i++) {
+						var charCode = str.charCodeAt(i);
+						if (charCode <= 0x7f) {
+							byteLength += 1;
+						} else {
+							byteLength += 2; // 한글이나 다른 멀티바이트 문자
+						}
+					}
+					return byteLength;
+				}
+
+				// 제목의 바이트 길이를 확인
+				if (getByteLength(title) > 50) {
+					alert('제목은 50바이트를 초과할 수 없습니다.');
+					event.preventDefault();
+					return;
+				}
+
+				// 제목과 내용이 비어있는지 확인
+				if (title.trim() === '' || content.trim() === '') {
+					alert('제목과 내용을 모두 입력하세요.');
+					event.preventDefault();
+					return;
+				}
+
+				// AJAX 요청
+				$.ajax({
+					type: 'POST',
+					url: '/acorn/post/save',
+					data: {
+						postSaveTitle: title,
+						postSaveText: content,
+						userId: userId
+					},
+					success: function(response) {
+						// 성공 시 알림
+						alert('게시글이 임시저장되었습니다.');
+					},
+					error: function(xhr, status, error) {
+						// 실패 시 오류 메시지 출력
+						console.error(xhr.responseText);
+					}
+				}); //end ajax
+			}//end 임시저장
 
 			var uploadedImages = []; // 업로드한 이미지를 저장할 배열
 
@@ -281,126 +418,7 @@
 
 		});//end doc
 		
-		//임시저장 모달창
-		function saveModal(){
-			$('#myModal').modal('show');
-			$.ajax({
-				type: 'post',
-				url: '/acorn/post/saveList',
-				dataType : 'json',
-				success: function(response) {
-					console.log(response);
-					var postSaveList = response;
-					console.log("postSaveList => "+postSaveList);
-					//innerhtml함수
-				},
-				error: function(xhr, status, error) {
-					console.log(error);
-				}
-			});//end ajax
-		}//
 
-		// 임시저장글 불러오기
-		function loadPostSave(postSaveId) {
-			$.ajax({
-				type: 'post',
-				url: '/acorn/post/saveSelect',
-				dataType : 'json',
-				data: {
-					postSaveId: postSaveId
-				},
-				success: function(response) {
-					alert('임시저장글 선택');
-					// 모달 창을 숨김
-
-					// 성공 시 제목과 내용 입력란에 데이터를 채움
-					$('#postTitle').val(response.postSaveTitle);
-					$('#postText').val(response.postSaveText);
-				},
-				error: function(xhr, status, error) {
-					console.log(error);
-				}
-			});//end ajax
-		}//end loadSavePost
-
-		// 임시저장 삭제 함수
-		function deleteSave(postSaveId){
-			// 삭제 전에 사용자에게 확인을 받는다.
-			if (confirm('정말로 삭제하시겠습니까?')) {
-				// 확인 시 AJAX 요청
-				$.ajax({
-					type: 'POST',
-					url: '/acorn/post/saveDelete',
-					data: {
-						postSaveId: postSaveId
-					},
-					success: function(response) {
-						// 성공 시 페이지 새로고침
-						location.reload();
-						alert('임시저장글이 삭제되었습니다.');
-					},
-					error: function(xhr, status, error) {
-						console.error(xhr.responseText);
-					}
-				}); //end ajax
-			}
-
-		};//end 임시저장 삭제 함수
-
-		//임시저장 버튼 클릭 시 호출되는 함수
-		function save() {
-			// 제목과 내용을 가져옴
-			var title = $('#postTitle').val();
-			var content = tinymce.activeEditor.getContent();
-			var userId = "<%=userId%>";
-
-			// 바이트 길이 계산 함수
-			function getByteLength(str) {
-				var byteLength = 0;
-				for (var i = 0; i < str.length; i++) {
-					var charCode = str.charCodeAt(i);
-					if (charCode <= 0x7f) {
-						byteLength += 1;
-					} else {
-						byteLength += 2; // 한글이나 다른 멀티바이트 문자
-					}
-				}
-				return byteLength;
-			}
-
-			// 제목의 바이트 길이를 확인
-			if (getByteLength(title) > 50) {
-				alert('제목은 50바이트를 초과할 수 없습니다.');
-				event.preventDefault();
-				return;
-			}
-
-			// 제목과 내용이 비어있는지 확인
-			if (title.trim() === '' || content.trim() === '') {
-				alert('제목과 내용을 모두 입력하세요.');
-				event.preventDefault();
-				return;
-			}
-
-			// AJAX 요청
-			$.ajax({
-				type: 'POST',
-				url: '/acorn/post/save',
-				data: {
-					postTitle: title,
-					postText: content,
-					userId: userId
-				},
-				success: function(response) {
-					// 성공 시 알림
-					alert('게시글이 임시저장되었습니다.');
-				},
-				error: function(xhr, status, error) {
-					// 실패 시 오류 메시지 출력
-					console.error(xhr.responseText);
-				}
-			}); //end ajax
-		}//end 임시저장
 
 
 		// form 요소에서 submit 이벤트가 발생할 때 호출되는 함수
@@ -506,39 +524,17 @@
         <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold;">임시 저장 목록</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-		<table class="table">
-		    <colgroup>
-		        <col style="width: 75%;">
-		        <col style="width: 25%;">
-		    </colgroup>
+		<div class="modal-body">
+			<table class="table">
+				<colgroup>
+					<col style="width: 75%;">
+					<col style="width: 25%;">
+				</colgroup>
+				<tbody> <!-- Make sure you have this tag to append the dynamic rows -->
+				</tbody>
+			</table>
+		</div>
 
-		
-		    <c:if test="${not empty postSaveList}">
-		        <c:forEach var="saveList" items="${postSaveList}">
-		            <tr>
-		                <td>
-			                <span style="font-size: 20px;">${saveList.postSaveTitle}</span><br>
-			                <span style="color: gray;">${saveList.postSaveDate}</span>
-		                </td>
-		                <td style="text-align: center; vertical-align: middle;">
-		                	<div>
-			                    <button class="delete-btn" onclick="deleteSave(${saveList.postSaveId})" style="background: none; border: none;">
-			                        <i class="fa-regular fa-trash-can"></i>
-			                    </button>
-		                    </div>
-		                </td>
-		            </tr>
-		        </c:forEach>
-		    </c:if>
-		
-		    <c:if test="${empty postSaveList}">
-		        <tr>
-		            <td colspan="4" style="text-align: center;">임시 저장된 글이 없습니다.</td>
-		        </tr>
-		    </c:if>
-		</table>
-      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
       </div>

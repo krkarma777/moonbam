@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 @Controller
 public class BoardContentController {
@@ -22,12 +22,10 @@ public class BoardContentController {
 	AuthUtils authUtils;
 	
 	@GetMapping("/board/content")
-	public String contentView(@RequestParam("postId") Long postId, HttpSession session, Model model) {
+	public String contentView(@RequestParam("postId") Long postId, Principal principal, Model model) {
 		
 		PostPageDTO post = postService.selectPagePost(postId);
-		if(!authUtils.isUserAuthorized(session, post) ) {
-			model.addAttribute("mismatchError", ErrorMessage.MISMATCH_ERROR.getMessage());
-		}
+
 		model.addAttribute("postText", post.getPostText()); // 게시글 내용
 		model.addAttribute("postTitle", post.getPostTitle()); // 게시글 제목
 		model.addAttribute("postDate", post.getPostDate()); // 게시글 작성일
