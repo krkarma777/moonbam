@@ -3,12 +3,14 @@ package com.moonBam.controller.board.beforeRefactor;
 
 import com.moonBam.dto.board.ScrapDTO;
 import com.moonBam.service.ScrapService;
+import com.moonBam.service.member.MemberLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,14 +19,18 @@ public class BoardScrapController {
 
 	@Autowired
 	ScrapService scrapService;
+
+	@Autowired
+	MemberLoginService memberLoginService;
 	
 	
 	@PostMapping("/scrap")
 	public ResponseEntity<?> scrap(@RequestParam("postId")String postId,
-								   @RequestParam("userId")String userId) {
+								   Principal principal) {
 		HashMap<String,String> map = new HashMap();
 		map.put("postId", postId);
-		map.put("userId", userId);
+		map.put("userId", memberLoginService.findByPrincipal(principal).getUserId());
+		System.out.println("map = " + map);
 		
 		ScrapDTO scrapDTO = scrapService.checkScrap(map);
 		 

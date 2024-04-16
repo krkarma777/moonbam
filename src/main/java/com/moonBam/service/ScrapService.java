@@ -13,19 +13,11 @@ public class ScrapService {
 	@Autowired
 	ScrapDAO dao;
 
-
 	public void insert(HashMap<String, String> map) {
 		dao.insert(map);
 	}
 
 	public ScrapDTO checkScrap(HashMap<String, String> map) {
-		ScrapDTO scrapDTO = dao.checkScrap(map);
-		return scrapDTO;
-		
+        return dao.checkScrap(map);
 	}
-
-
-
-	
-
 }

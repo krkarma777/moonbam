@@ -1,24 +1,39 @@
 package com.moonBam.service.member;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.moonBam.dao.member.MemberDAO;
 import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
-import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostDTO;
+import com.moonBam.dto.member.MemberCreateRequestDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
 
-	@Autowired
-	MemberDAO dao;
+	private final MemberDAO dao;
+
+
+
+	public MemberDTO findByUserId(String UserId) {
+		return dao.findByUserId(UserId);
+	}
+
+	public int insert(MemberDTO memberDTO) {
+		return dao.insert(memberDTO);
+	}
+	public int insert(MemberCreateRequestDTO requestDTO) {
+		return dao.insert(requestDTO);
+	}
+
+	// =========================
 
 	public void update(String userName, String nickname, String userPhoneNum1, String userPhoneNum2,
 			String userPhoneNum3) {
@@ -68,4 +83,6 @@ public class MemberService {
 //	public PageDTO<PostDTO> selectMyPostPaged(Map<String, Object> map) {
 //		return dao.selectMyPostPaged(map);
 //	}
+
+
 }

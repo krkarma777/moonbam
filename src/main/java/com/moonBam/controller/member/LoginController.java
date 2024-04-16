@@ -3,13 +3,15 @@ package com.moonBam.controller.member;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.moonBam.service.member.MemberLoginService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,9 @@ public class LoginController {
 	
 	@Autowired
 	OpenApiService openApiService;
+
+	@Autowired
+	MemberLoginService memberLoginService;
 	
 	@RequestMapping("/Login")   
 	public String Login() {
@@ -52,76 +57,6 @@ public class LoginController {
 	@RequestMapping("/FindAllPW")   
 	public String FindAllPW() {
 		return "member/Find_Info/childFindAllPW";
-	}
-	
-	//로그인
-	@PostMapping("/Logined")
-	public String LoginToMypage(String userId, String userPw, HttpSession session, boolean userIdSave,  HttpServletResponse response, boolean autoLogin) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		String realUserPw = sc.encrypt(userPw);
-		System.out.println("아이디 저장: " + userIdSave);				//체크되면 true
-		System.out.println("자동 로그인: " + autoLogin);					//체크 안 되면 false
-		MemberDTO dto = serv.login(userId, realUserPw);
-
-		if (dto != null) {
-			session.setAttribute("loginUser", dto);
-
-			if(autoLogin) {
-				
-				Cookie autoId= new Cookie("userId", userId);
-				Cookie autoPW= new Cookie("userPw", userPw);
-				autoId.setMaxAge(60*60*24);
-				autoPW.setMaxAge(60*60*24);
-				response.addCookie(autoId);
-				response.addCookie(autoPW);
-				
-//				System.out.println("등록 오토 아이디"+ autoId);
-//				System.out.println("등록 오토 패스"+ autoPW);
-
-			} else {
-				
-				Cookie autoId= new Cookie("userId", null);
-				Cookie autoPW= new Cookie("userPw", null);
-				autoId.setMaxAge(0);
-				autoPW.setMaxAge(0);
-				response.addCookie(autoId);
-				response.addCookie(autoPW);
-
-//				System.out.println("삭제 오토 아이디"+ autoId);
-//				System.out.println("삭제 오토 패스"+ autoPW);
-				
-				if(userIdSave) {
-					Cookie id= new Cookie("userId", userId);
-					id.setMaxAge(60*60*24);
-					response.addCookie(id);
-					
-//					System.out.println("등록 저장 아이디"+ id);
-				} else {
-					Cookie id= new Cookie("userId", null);
-					id.setMaxAge(0);
-					response.addCookie(id);
-					
-//					System.out.println("삭제 저장 아이디"+ id);
-				}
-				
-			}
-			
-			return "main";
-		} else {
-			return "member/Find_Info/cantFindUserdata";
-		}
-	}
-
-	//로그아웃
-	@GetMapping("/Logout")
-	public String Logout(HttpSession session) {
-		MemberDTO dto = (MemberDTO) session.getAttribute("loginUser");
-		if (dto != null) {
-			session.removeAttribute("loginUser");
-			return "main";
-		} else {
-			return "member/Find_Info/cantFindUserdata";
-		}
-
 	}
 	
 	//아이디 찾기
@@ -167,7 +102,7 @@ public class LoginController {
 	
 	//비밀번호 변경을 위한 메일 송신
 		@GetMapping("/SearchAllPW")
-		public String SearchAllPW(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
+		public String SearchAllPW(Model model, HttpServletResponse response, HttpServletRequest request) throws Exception {
 			
 			String userId = "";
 			Cookie[] cookies = request.getCookies();

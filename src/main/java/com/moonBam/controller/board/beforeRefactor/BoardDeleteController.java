@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
+
+import java.security.Principal;
 import java.util.Map;
 
 @Controller
@@ -26,7 +28,7 @@ public class BoardDeleteController {
     String ERROR_PAGE = ErrorMessage.ERROR_PAGE.getMessage();
 
     @GetMapping("/board/delete")
-    public String process(Map<String, String> paramMap, Model model, HttpSession session) {
+    public String process(Map<String, String> paramMap, Model model, Principal principal) {
 
         String postIdParam = paramMap.get("postId");
         String boardName = paramMap.get("bn");
@@ -38,7 +40,7 @@ public class BoardDeleteController {
 
             if (post == null) return "redirect:" + redirectURL;
 
-            if (!authUtils.isUserAuthorized(session, post)) return "redirect:" + redirectURL;
+            if (!authUtils.isUserAuthorized(principal, post)) return "redirect:" + redirectURL;
 
             postService.delete(postId);
         } catch (NumberFormatException e) {

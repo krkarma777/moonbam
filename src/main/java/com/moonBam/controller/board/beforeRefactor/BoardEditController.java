@@ -1,13 +1,10 @@
 package com.moonBam.controller.board.beforeRefactor;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
 import com.moonBam.controller.board.util.AuthUtils;
 import com.moonBam.controller.board.util.ErrorMessage;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,17 +12,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-import lombok.RequiredArgsConstructor;
+import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/board/edit")
 public class BoardEditController {
 
-	AuthUtils authUtils;
-	PostService postService;
+	private final AuthUtils authUtils;
+	private final PostService postService;
 
 	String INVALID_REQUEST = ErrorMessage.INVALID_REQUEST.getMessage();
 	String ERROR_PAGE = ErrorMessage.ERROR_PAGE.getMessage();
@@ -42,7 +38,7 @@ public class BoardEditController {
 	}
 
 	@PostMapping
-	public String edit(Map<String, String> paramMap, Model model, HttpSession session,
+	public String edit(Map<String, String> paramMap, Model model, Principal principal,
 			@RequestParam("postId") Long postId) {
 
 		PostDTO post = postService.findById(postId);
@@ -51,7 +47,7 @@ public class BoardEditController {
 			return ERROR_PAGE;
 		}
 
-		if (!authUtils.isUserAuthorized(session, post)) {
+		if (!authUtils.isUserAuthorized(principal, post)) {
 			return ERROR_PAGE;
 		}
 		model.addAttribute("userId", paramMap.get("userId"));
@@ -59,9 +55,12 @@ public class BoardEditController {
 		String postTitle = paramMap.get("postTitle");
 		String postText = paramMap.get("postText");
 		String postBoard = paramMap.get("bn");
-		Long postCategory = Long.parseLong(paramMap.get("postCategory"));
-		new PostService().update(postId, postTitle, postText, postCategory);
+		String postCategoryOrigin = paramMap.get("postCategory");
+		if (postCategoryOrigin == null) {
+			postCategoryOrigin = "1";
+		}
+		Long postCategoryId = Long.parseLong(postCategoryOrigin);
+		postService.update(postId, postTitle, postText, postCategoryId);
 		return String.format("redirect:/Acorn/board/content?postId=%d&bn=%s", postId, postBoard);
 	}
-
 }

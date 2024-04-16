@@ -1,7 +1,8 @@
+
 <%@page import="java.util.List"%>
 <%@page import="com.moonBam.dto.MemberDTO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	MemberDTO dto = (MemberDTO)session.getAttribute("loginUser");
 
@@ -27,11 +28,12 @@
 </style>
 
 <nav class=""
-	style="background-color: transparent; position: fixed; top: 0; left: 0; height: 40px; width: 100%">
+	 style="background-color: transparent; position: fixed; top: 0; left: 0; height: 40px; width: 100%">
 	<div class="d-flex container-fluid justify-content-center px-0">
 		<div class="position-fixed top-0 start-0">
 			<a href="/acorn" class="top">문밤</a>
 		</div>
+
 		<div style="width: 500px">
 			<form class="d-flex " role="search" action="<%=searchFormAction%>" method="post">
 				<%if(null!=category){ %>
@@ -49,17 +51,19 @@
 		<div class="position-fixed top-0 end-0">
 
 				<!-- 비로그인 -->
-			<%if (null == dto) {%>
+			<sec:authorize access="isAnonymous()">
 				<a href="Login" class="top">로그인</a>
-			<%} else {%>
+			</sec:authorize>
 				<!-- 로그인 -->
+      			<!-- 로그인 -->
+			<sec:authorize access="isAuthenticated()">
 				<a href="Logout"  class="top">로그아웃/</a>
 				<a href="MypageServlet"  class="top">마이페이지</a>
-			<%}%>
-
+			</sec:authorize>
 			<!-- 관리자인 경우 -->
-			<!-- <a href="Logout">로그아웃</a>
-			<a href="AdminServlet">관리자페이지</a> -->
+			<sec:authorize access="hasRole('ADMIN')">
+                <a href="/acorn/AdminPage">관리자페이지</a>
+            </sec:authorize>
 		</div>
 	</div>
 </nav>
