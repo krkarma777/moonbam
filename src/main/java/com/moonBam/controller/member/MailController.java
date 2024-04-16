@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +17,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.MailService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 public class MailController {
 
@@ -30,15 +31,17 @@ public class MailController {
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
 
 	//단순 메일 전송
-    public void RegisterCompleteEmail(String userEmail, String nickname) throws Exception {
+    public void RegisterCompleteEmail(String userEmail, String nickname, String secretCode) throws Exception {
     		Map<String, String> changeData = new HashMap<>();
+    		System.out.println(secretCode);
     		
     		//******************복사 후 수정하는 부분******************
     		String emailPath = "static/emailFiles/RegisterCompleteEmail.html";	//HTML 경로
 
-    		String EMAIL_SUBJECT = "[회원가입안내] 문화인의 밤에 오신 것을 환영합니다!";			//이메일 제목
+    		String EMAIL_SUBJECT = "[회원가입안내] 문화인의 밤에 오신 것을 환영합니다!";		//이메일 제목
     		
     		changeData.put("##유저_닉네임##", nickname);
+    		changeData.put("##유저_보안코드##", secretCode);
     		
     		String innerImageName = "Register_Main";							//내부 이미지 파일 명
     		String innerImagePath = "/static/images/email/Register_Main.png";	//내부 이미지 파일 경로
@@ -79,8 +82,6 @@ public class MailController {
     public String joinEmail(String userEmail) throws Exception {
     		String authNumber = makeRandomNumber();
     		Map<String, String> changeData = new HashMap<>();
-    		
-    		System.out.println(userEmail);
     		
     		//******************복사 후 수정하는 부분******************
     		String emailPath = "static/emailFiles/JoinEmail.html";

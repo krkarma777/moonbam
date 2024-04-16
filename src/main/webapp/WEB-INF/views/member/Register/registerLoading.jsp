@@ -27,8 +27,6 @@
 		<input type="hidden" name="userId" value="${dto.getUserId()}">
 		<input type="hidden" name="userPw" value="${dto.getUserPw()}">
 		<input type="hidden" name="nickname" value="${dto.getNickname()}">
-		<input type="hidden" name="restoreUserEmailId" value="${dto.getRestoreUserEmailId()}">
-		<input type="hidden" name="restoreUserEmailDomain" value="${dto.getRestoreUserEmailDomain()}">
 		<input type="hidden" name="userPwConfirm" value="${userPwConfirm}">
 	</form>
 

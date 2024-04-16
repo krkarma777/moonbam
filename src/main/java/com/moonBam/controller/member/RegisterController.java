@@ -1,16 +1,21 @@
 package com.moonBam.controller.member;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.RegisterService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -23,13 +28,13 @@ public class RegisterController {
 	RegisterService serv;
 	
 	@Autowired
-	SecurityController sc;
+	PasswordEncoder encoder;
 	
 	@Autowired
 	MailController mc;
-
+	
 	@Autowired
-	BCryptPasswordEncoder bCryptPasswordEncoder;
+	SecurityController sc;
 
 	//회원가입
 	@PostMapping("/RegisterData")
@@ -38,7 +43,7 @@ public class RegisterController {
 		System.out.println("RegisterData: "+ dto);
 		
 		String result = "member/Register/registerFailure";
-		System.out.println("dto = " + dto);
+		
 		
 		// 입력한 정보가 타당하지 않으면 false로 전환
 		boolean failMesg = true;
@@ -60,19 +65,18 @@ public class RegisterController {
 		}
 
 		// 비밀번호 검증
-		String userPw2 = dto.getUserPw();
-		String userPw = bCryptPasswordEncoder.encode(userPw2);
+		String userPw = dto.getUserPw();	
 		String userPwConfirm = request.getParameter("userPwConfirm");
 
-		if (!(userPw2.equals(userPwConfirm))) { // 비밀번호와 비밀번호 재확인 번호 일치 확인
-			System.out.println("비밀번호 일치 오류 " + userPw2 + " " + userPwConfirm);
+		if (!(userPw.equals(userPwConfirm))) { // 비밀번호와 비밀번호 재확인 번호 일치 확인
+			System.out.println("비밀번호 일치 오류 " + userPw + " " + userPwConfirm);
 			System.out.println("회원 가입 실패");
 			failMesg = false;
 			request.setAttribute("mesg", "비밀번호가 일치하지 않습니다. 확인해주세요");
 			return result;
 
-		} else if (userPw2.length() < 6) { // 비밀번호 길이 규격확인
-			System.out.println("비밀번호 길이 오류 " + userPw2 + " " + userPw.length());
+		} else if (userPw.length() < 6) { // 비밀번호 길이 규격확인
+			System.out.println("비밀번호 길이 오류 " + userPw + " " + userPw.length());
 			System.out.println("회원 가입 실패");
 			request.setAttribute("mesg", "비밀번호 길이가 규정에 맞지 않습니다. 확인해주세요");
 			return result;
@@ -103,21 +107,24 @@ public class RegisterController {
 		Date currentDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		String userSignDate = dateFormat.format(currentDate);
+		
+		//보안코드
+		String secretCode = sc.encrypt(AnonymousBoardController.getNum(8));
 
 		// 모든 규격을 통과한 경우, insert 진행
-		// userType(회원 등급)은 1(일반 멤버)로 고정
 		if (failMesg) {
 
-			dto.setUserPw(userPw);
+			dto.setUserPw(encoder.encode(userPw));
+			dto.setSecretCode(secretCode);
 			dto.setUserSignDate(userSignDate);
-			dto.setUserType("1");
+			
 			int num = serv.insertNewMember(dto);
 
 			// 성공적으로 insert된 경우, 회원가입 성공 페이지로 이동
 			if (num == 1 && failMesg == true) {
 				System.out.println("회원가입 성공");
 				result = "member/Register/registerSuccess";
-				mc.RegisterCompleteEmail(dto.getUserId(), dto.getNickname());
+				mc.RegisterCompleteEmail(dto.getUserId(), dto.getNickname(), dto.getSecretCode());
 				
 			// 모든 데이터가 규격을 통과했음에도 insert되지 않았을 경우, 회원가입 실패 페이지로 이동
 			} else {

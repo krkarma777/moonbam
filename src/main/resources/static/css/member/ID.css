@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/* ID 찾기 페이지 스타일 */
+/* searchMemberData */
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: #f6f5f7;
@@ -42,7 +42,7 @@ form {
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    height: 150px;
+    height: 200px;
     box-sizing: border-box;
 }
 
