@@ -34,15 +34,15 @@
 			<th colspan="3">[대화상대]</th>
 		</tr>
 		
-		<c:forEach items="${memberDtoList }" var="memberDto"><!-- 현재 채팅방 안에 있는 member들만 모였음 -->
+		<c:forEach items="${memberDtoList }" var="memberDtolist"><!-- 현재 채팅방 안에 있는 member들만 모였음 -->
 		
-			<c:if test="${memberDto.userId != sessionScope.loginUser.userId }"> <!-- 근데 본인은 제외하고 출력 -->
+			<c:if test="${memberDtolist.userId != memberDTO.userId }"> <!-- 근데 본인은 제외하고 출력 -->
 				<tr>
 					<td>
 					<ul>
-					<span style="font-size: 13px; color: gray;">가입한 날짜 ${memberDto.userSignDate }</span><br>
+					<span style="font-size: 13px; color: gray;">가입한 날짜 ${memberDtolist.userSignDate }</span><br>
 						<li>
-							${memberDto.nickname } ( ${memberDto.userId } ) <button onClick="fnReport('${memberDto.userId }')">신고하기</button>
+							${memberDtolist.nickname } ( ${memberDtolist.userId } ) <button onClick="fnReport('${memberDtolist.userId }')">신고하기</button>
 						</li>
 					</ul>
 					</td>
@@ -58,7 +58,7 @@
 				<td>
 					<ul>
 						<li>
-							${sessionScope.loginUser.nickname} ( ${sessionScope.loginUser.userId} ) <button>정보 수정하기</button>
+							${memberDTO.nickname} ( ${memberDTO.userId} ) <button>정보 수정하기</button>
 						</li>	 
 					</ul>
 				</td>
@@ -68,11 +68,11 @@
 		
 			<td>
 				<form id="helloForm" method="post" action="#">
-				<input type="hidden" name="userId" value="${sessionScope.loginUser.userId}">
+				<input type="hidden" name="userId" value="${memberDTO.userId}">
 				<input type="hidden" name="chatNum" value="${chatNum}">
 				</form>	
 				<button onclick="fnGoOut()">방 나가기</button>
-				<c:if test="${leadermemberDto.userId == sessionScope.loginUser.userId}">
+				<c:if test="${leadermemberDto.userId == memberDTO.userId}">
 				<!-- 방 삭제하기는 방장만 보이게 처리했음  -->
 				<button>방 삭제하기</button>
 				</c:if>
