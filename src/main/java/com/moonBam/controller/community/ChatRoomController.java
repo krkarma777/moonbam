@@ -175,37 +175,56 @@ public class ChatRoomController {
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
-	public String chatRoomOut(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum ) {
+	public String chatRoomOut(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum, HttpSession session ) {
 	//form data로 받아온 값 2개로 chatMember table에서 delete 진행
 	
 	Map<String, Object> chatMemberDeleteMap = new HashMap<>();
 	chatMemberDeleteMap.put("userId", userId);
 	chatMemberDeleteMap.put("chatNum", chatNum);
-	
-	//정상진행 시 커뮤니티 홈으로 진입 -> 그런데 잘 delete처리 돼서 목록에 없는지 확인하기 위해 /chatRoom/enter로 리다이렉트
-	//만약 잘 지워졌다면 검수 기능으로 인해 커뮤니티 홈으로 가게 될 것임
-	String returnWhere = "redirect:/chatRoom/enter"; 
-	
-	try {
-	
-	int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap);
+	//System.out.println("chatMemberDeleteMap   "+chatMemberDeleteMap);
 	
 	
-	//delete를 했는데 0이다? 그러면 문제 있는 것임. 그때는 그 자리에 그대로 있어야함
-	if(deletNum==0) {
-	returnWhere = "redirect:/Chatmore";
+	String returnWhere = "";
+	
+	ChatRoomDTO cdto = chatRoomSelectBychatNum(chatNum);
+	if(cdto.getLeaderId() == userId ) { //나가려는 사람의 id와 방의 리더id가 동일할경우 나가기 금지
+		 
+		session.setAttribute("mesg", "방장은 방을 나갈 수 없습니다. 방장 위임 후 다시 시도해주세요.");
+		returnWhere = "redirect:/Chatmore?chatNum="+chatNum;		
+		
+	}else { //리더가 아닌 사람이 나갈 경우
+		
+		//정상진행 시 커뮤니티 홈으로 진입 -> 그런데 잘 delete처리 돼서 목록에 없는지 확인하기 위해 /chatRoom/enter로 리다이렉트
+		//만약 잘 지워졌다면 검수 기능으로 인해 커뮤니티 홈으로 가게 될 것임
+		returnWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; 
+		session.setAttribute("mesg", "방을 나갔습니다.");
+		
+		try {
+		
+			int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap);
+		
+		
+		//delete를 했는데 0이다? 그러면 문제 있는 것임. 그때는 그 자리에 그대로 있어야함
+		if(deletNum==0) {
+			
+			returnWhere = "redirect:/Chatmore?chatNum="+chatNum;
+			session.setAttribute("mesg", "방을 나갈 수 없습니다. 본인의 방이 맞는지 확인해주세요.");
+		
+		}
+		
+		}catch(Exception e) {
+		
+			//에러 발생 시
+			System.out.println("chatRoomOut delete 실패");
+			returnWhere = "redirect:/Chatmore?chatNum="+chatNum;
+			session.setAttribute("mesg", "문제가 발생하였습니다.");
+			
+		}
 	
 	}
-	
-	}catch(Exception e) {
-	
-	//에러 발생 시
-	System.out.println("chatRoomOut delete 실패");
-	returnWhere = "redirect:/Chatmore";
-	}
-	
 	
 	return returnWhere;
+	
 	}
 	
 	

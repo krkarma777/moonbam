@@ -34,7 +34,7 @@ public class ChatmoreController {
 	@RequestMapping(value = "/Chatmore", method=RequestMethod.GET)
 	public String Chatmore(int chatNum, Model m, Principal principal) {
 		System.out.println("/Chatmore 호출");
-		System.out.println("Chatmore에서의 "+chatNum);
+		//System.out.println("Chatmore에서의 "+chatNum);
 		
 		
 		//1. chatNum을 이용하여 ChatMember DB에서 방에 들어가있는 user들의 Id를 얻을 수 있음
@@ -52,7 +52,10 @@ public class ChatmoreController {
 		
 		//3. leaderId DB에서 뽑아와서 그 회원의 정보를  dto째로 JSP로 넘겨주기 (chatNum이용)
 		String leaderId =  chatmoreService.ChatLeaderIdByChatNum(chatNum);
+		//System.out.println("leaderId::::"+leaderId);
+		
 		MemberDTO leadermemberDto =  chatmoreService.memberByChatMemberId(leaderId);
+		System.out.println("leadermemberDto 확인하기   "+leadermemberDto);
 		
 		
 		//4. session에 저장되었던 login정보를 principal로 바꾸면서 추가한 코드
@@ -68,12 +71,15 @@ public class ChatmoreController {
 	
 	
 	@RequestMapping(value = "/Chatmore/ChatmoreReport", method=RequestMethod.GET)
-	public String ChatmoreReportGet(@Param(value = "userId") String userId, @Param(value = "chatNum") int chatNum, Model m) {
+	public String ChatmoreReportGet(@Param(value = "userId") String userId, @Param(value = "chatNum") int chatNum, Model m, Principal principal) {
 		//회원 신고하기 눌렀을 때 띄워지는 자식 팝업창 리턴.
 		//링크에 신고할 회원의 id와 나의 채팅방 num을 쿼리스트링 방식으로 붙여보냈음
 		
+		String reporterId = principal.getName();
+		
 		m.addAttribute("userId", userId);
 		m.addAttribute("chatNum", chatNum);
+		m.addAttribute("reporterId", reporterId);
 		//System.out.println(userId+"4444444444444444444444444  "+chatNum);
 		
 		

@@ -15,6 +15,21 @@
 <meta charset="UTF-8">
 <title>문밤</title>
 <link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
+<!-- chatRoomController 에서 작동되는 기능에 결과에 따라서 session에 저장된 mesg값을 다르게 하여 alert를 띄우고 있음   -->
+	<% String mesg = (String) session.getAttribute("mesg");
+	if(mesg != null ){	
+		
+		%>	
+		
+		<script>
+		alert("<%= mesg %>");
+		</script>
+	
+	<%} 
+	
+	session.removeAttribute("mesg");
+	
+	%>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="resources/js/fullpage/jquery.fullPage.js"></script>
 <script type="text/javascript">
