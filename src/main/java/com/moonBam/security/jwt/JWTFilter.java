@@ -44,7 +44,7 @@ public class JWTFilter extends OncePerRequestFilter {
             MemberDTO memberDTO = new MemberDTO();
             memberDTO.setUserId(username);
             memberDTO.setUserPw("temppassword"); // 비밀번호는 사용되지 않으므로 임시 값 설정
-            memberDTO.setUserType(role);
+            memberDTO.setRole(role);
 
             CustomUserDetails customUserDetails = new CustomUserDetails(memberDTO);
             Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

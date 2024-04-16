@@ -110,7 +110,7 @@ public class RegisterController {
 
 			dto.setUserPw(userPw);
 			dto.setUserSignDate(userSignDate);
-			dto.setUserType("1");
+			dto.setRole("ROLE_USER");
 			int num = serv.insertNewMember(dto);
 
 			// 성공적으로 insert된 경우, 회원가입 성공 페이지로 이동

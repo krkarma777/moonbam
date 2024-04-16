@@ -11,8 +11,8 @@
 	</select>
 
 	<insert id="insert" parameterType="MemberCreateRequestDTO">
-		INSERT INTO memberDB (USERID, USERPW, NICKNAME, RESTOREUSEREMAILID, RESTOREUSEREMAILDOMAIN, USERTYPE)
-		VALUES (#{userId}, #{userPw}, #{nickname}, #{restoreUserEmailId}, #{restoreUserEmailDomain}, #{userType})
+		INSERT INTO memberDB (USERID, USERPW, NICKNAME,SECRETCODE, ROLE)
+		VALUES (#{userId}, #{userPw}, #{nickname}, #{secretCode}, #{role})
 	</insert>
 
 	<!-- **************************************************************** -->

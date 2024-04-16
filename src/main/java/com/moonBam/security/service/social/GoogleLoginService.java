@@ -32,16 +32,14 @@ public class GoogleLoginService implements SocialOauth2Service {
         String role = "ROLE_USER";
         if (kakaoUserOpt.isEmpty()) {
             memberDTO.setUserId(username);
-            memberDTO.setRestoreUserEmailId(UUID.randomUUID().toString());
-            memberDTO.setRestoreUserEmailDomain(UUID.randomUUID().toString());
             UUID randomUUID = UUID.randomUUID();
             String shortUUID = randomUUID.toString().split("-")[0] + randomUUID.toString().split("-")[1];
             memberDTO.setNickname("Google_" + shortUUID);
-            memberDTO.setUserType("ROLE_USER");
+            memberDTO.setRole("ROLE_USER");
             memberDTO.setUserPw(UUID.randomUUID().toString());
             memberService.insert(memberDTO);
         } else {
-            role = kakaoUserOpt.get().getUserType();
+            role = kakaoUserOpt.get().getRole();
         }
 
         // 필요한 정보를 바탕으로 JWT 생성 및 로그 출력
