@@ -1,7 +1,9 @@
 package com.moonBam.controller;
 
+import com.moonBam.dto.CommunityPageDTO;
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.board.PostPageDTO;
+import com.moonBam.service.CommunityHomeService;
 import com.moonBam.service.MainService;
 import com.moonBam.service.PostService;
 import com.moonBam.service.adminpage.announcement.AnnouncementService;
@@ -11,17 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-import com.moonBam.dto.ChatRoomDTO;
-import com.moonBam.dto.CommunityPageDTO;
-import com.moonBam.dto.ContentDTO;
-import com.moonBam.dto.board.PostPageDTO;
-import com.moonBam.service.CommunityHomeService;
-import com.moonBam.service.MainService;
-import com.moonBam.service.PostService;
-import com.moonBam.service.adminpage.announcement.AnnouncementService;
-
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
