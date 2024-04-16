@@ -8,8 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      <select id="SearchPost" resultType="AdminReportDTO" parameterType="HashMap">
 select * from adminreported
 <choose>
-	<when test = "criteria == 'POSTID'" >
-		where POSTID like '%'||#{SearchValue}||'%'
+	<when test = "criteria == 'TARGETID'" >
+		where targetid like '%'||#{SearchValue}||'%'
 	</when>
 	
 	<when test = "criteria == 'REPORTER'" >
