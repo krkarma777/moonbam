@@ -5,6 +5,12 @@
 <mapper namespace="com.config.MemberMapper">
 
 
+	<select id="findByUserId" resultType="MemberDTO" parameterType="String">
+		SELECT *
+		FROM memberDB
+		WHERE userId = #{userId}
+	</select>
+
 	<!-- Spring Security용 -->
 	<select id="userDetail" resultType="MemberDTO" parameterType="String">
 	  select * from  memberDB
