@@ -17,6 +17,7 @@
 
 <div id="header">
     <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
+     <%@ include file="MypageMenu.jsp" %>
 </div>
 
 <div class="container">
