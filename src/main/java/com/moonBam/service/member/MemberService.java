@@ -65,7 +65,7 @@ public class MemberService {
 
 	public MyCommentDTO selectmyComm(String curPage, String name) {
 		MyCommentDTO cDTO = dao.selectMyComm(name, curPage);
-		return null;
+		return cDTO;
 	}
 
 

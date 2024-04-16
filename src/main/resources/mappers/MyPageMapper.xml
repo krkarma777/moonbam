@@ -28,13 +28,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 내가 작성한 게시물 총 개수 조회 -->
 <select id="countMyPosts" resultType="int" parameterType="String">
-    SELECT COUNT() FROM postDB
+    SELECT COUNT(*) FROM postDB
     WHERE userId = #{userId}
 </select>
 
         <!-- 내가 작성한 댓글 조회 -->
-    <select id="selectmyComm" parameterType="string" resultType="CommentDTO">
-    SELECT  FROM commentDB
+    <select id="selectMyComm" parameterType="string" resultType="CommentDTO">
+    SELECT * FROM commentDB
      where userId = #{userId}
     ORDER BY comDate DESC
 </select>

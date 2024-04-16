@@ -22,15 +22,15 @@ public class MemberDAO {
 
 
 	public MemberDTO findByUserId(String userId) {
-		return session.selectOne("com.config.MemberMapper.findByUserId", userId);
+		return session.selectOne("com.config.MemberMapper.userDetail", userId);
 	}
 
 	public int insert(MemberDTO memberDTO) {
-		return session.insert("com.config.MemberMapper.insert", memberDTO);
+		return session.insert("com.config.MemberMapper.insertNewMember", memberDTO);
 	}
 
     public int insert(MemberCreateRequestDTO requestDTO) {
-        return session.insert("com.config.MemberMapper.insert", requestDTO);
+        return session.insert("com.config.MemberMapper.insertNewMember", requestDTO);
     }
 
 	// ========================
