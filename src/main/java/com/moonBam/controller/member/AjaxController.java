@@ -1,19 +1,5 @@
 package com.moonBam.controller.member;
 
-import com.moonBam.dto.AnonymousBoardDTO;
-import com.moonBam.dto.AnonymousCommentDTO;
-import com.moonBam.dto.AnonymousReplyDTO;
-import com.moonBam.dto.MemberDTO;
-import com.moonBam.service.member.*;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +9,33 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.moonBam.dao.member.LoginDAO;
+import com.moonBam.dto.AnonymousBoardDTO;
+import com.moonBam.dto.AnonymousCommentDTO;
+import com.moonBam.dto.AnonymousReplyDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.service.member.AnonymousBoardService;
+import com.moonBam.service.member.AnonymousCommentService;
+import com.moonBam.service.member.AnonymousReplyService;
+import com.moonBam.service.member.LoginService;
+import com.moonBam.service.member.RegisterService;
+import com.moonBam.springSecurity.SpringSecurityUser;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -35,9 +48,6 @@ public class AjaxController {
 	RegisterService rServ;
 	
 	@Autowired
-	SecurityController sc;
-
-	@Autowired
 	AnonymousBoardService dServ;
 	
 	@Autowired
@@ -45,96 +55,104 @@ public class AjaxController {
 	
 	@Autowired
 	AnonymousReplyService anonymousReplyService;
-
+	
 	@Autowired
-	BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	PasswordEncoder encoder;
+	
 	@Autowired
-	MemberService memberService;
+	LoginDAO dao;
+	
+	
+	//스프링시큐리티
+	@GetMapping("/userinfomation")
+    public MemberDTO getUserJWTData() {
+        // 현재 사용자의 인증 객체를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // 인증 객체로부터 현재 사용자의 이름을 가져옴
+        String username = authentication.getName();
+        MemberDTO memberData = dao.userDetail(username);
+        MemberDTO dto = new MemberDTO();
+        	dto.setUserId(username);
+        	dto.setNickname(memberData.getNickname());
+        	dto.setRole(memberData.getRole());
+        	dto.setEnabled(memberData.isEnabled());
+
+        // 사용자의 이름을 반환
+        return dto;
+    }
 	
 	//***************************************************************************************************************
 	//***************************************************로 그 인*******************************************************
 	//***************************************************************************************************************
-
+	
 	//메인에서 로그인 여부 확인 에이젝스
 	@PostMapping("AjaxCheckIDPW")
-	public String AjaxCheckIDPW(String userId, String userPw) {
-		MemberDTO memberDTO = memberService.findByUserId(userId);
-		System.out.println("memberDTO = " + memberDTO);
-		if (memberDTO == null) {
-			return "loginFail";
-		}
-		String userPwOrigin = memberService.findByUserId(userId).getUserPw();
+	public String AjaxCheckIDPW(String userId, String userPw) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		String mesg = "loginSuccess";
+		
+		//	로그인 에이젝스 실행 시 입력한 아이디와 비밀번호 출력
+		//	System.out.println(userId);
+		//	System.out.println(userPw);
+			
+		//	아이디로만 확인해봤을 때 데이터가 있는지 확인(비밀번호는 매번 바뀌기 때문에 사용 불가)
+			MemberDTO dto= dao.userDetail(userId);
 
-		System.out.println("userPwOrigin = " + userPwOrigin);
-		if (!bCryptPasswordEncoder.matches(userPw, userPwOrigin)) {
-			return "loginFail";
-		}
-		return "loginSuccess";
+		//	아이디가 없을 경우에는 바로 Ajax 종료
+			if(dto==null) {  
+				return "loginFail";
+			}
+		
+		//	아이디가 있을 경우	
+		//	DB에 입력된 비밀번호 출력
+		//	System.out.println("dto에 저장된 암호: "+dto.getUserPw());
+		
+		//	False면 활동 정지 상태
+			if (!dto.isEnabled()) {
+			    return "suspendedId";
+			}	
+			
+		//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)
+			boolean canLogin = false;
+			try {
+				canLogin = encoder.matches(userPw, dto.getUserPw());
+			} catch (Exception e) {
+				return "socialLogin";
+			}
+
+		//	False면 Ajax로 인한 메세지 출력	
+			if (!canLogin) {
+				mesg = "loginFail";                
+			}
+
+		//	True면 Submit 정상 진행
+		return mesg;
 	}
 	
 	//메인에서 이메일 중복 확인 에이젝스
 	@PostMapping("AjaxCheckEmail")
 	public String AjaxCheckEmail(String userId) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		boolean cantRegister = rServ.RegisterPossible(userId);
-		String mesg = "RegisterSuccess";
-		if (cantRegister) {
-			mesg = "RegisterFail";                
-        }
-		return mesg;
-	}
-	
-	//전체 비밀번호 찾기에서 질문에 따른 대답 확인 에이젝스
-	@PostMapping("AjaxMatchQnA")
-	public String AjaxMatchQnA(String userInfo, String answer, String userId) {
 		
-		boolean can_All_PW = false;
-		String mesg = "correct_Answer";
-																        //디버그 코드*****************************
-																        System.out.println(userInfo);
-																        System.out.println(answer);
-																        System.out.println(userId);
-																        //*************************************
-        
-		// 선택된 질문에 따라 사용되는 Method 변경**************************
-		if (userInfo.equals("nickname")) {
-		can_All_PW = lServ.findPWbyNickname(answer, userId);
-		} 
-		if (userInfo.equals("restoreUserEmail")) {
-		can_All_PW = lServ.findPWbyEmail(answer, userId);
-		}
-		// 선택된 질문에 따라 사용되는 Method 변경**************************
-		
-																		//디버그 코드*****************************                 
-																		System.out.println(can_All_PW);    
-																		//*************************************
-																		
-	    //사용자 ID와 질문과 답변이 일치하지 않을 경우, ajax출력																			
-		if (can_All_PW == false){
-	        mesg = "wrong_Answer";
-	    }						
+		MemberDTO dto = rServ.findDTOByUserId(userId);
+		//System.out.println("AjaxCheckEmail: "+dto);
 
-		//사용자 ID와 질문과 답변이 일치할 경우, ajax출력
+		String mesg = "RegisterSuccess";
+		
+		if (dto != null) {
+			mesg = "RegisterFail";                
+
+			if (dto.getGoogleConnected() == 1 || dto.getKakaoConnected() == 1 || dto.getNaverConnected() == 1) {
+				mesg = "socialRegister";
+			}
+		
+		}
+		
 		return mesg;
-			
 	}
-	
-	
 	
 	//***************************************************************************************************************
 	//***************************************************회원 가입*******************************************************
 	//***************************************************************************************************************
-	
-	//회원가입 자식창에서 아이디 중복 에이젝스
-	@PostMapping("/AjaxIDDuplicate")
-	public String AjaxIDDuplicate(String userId) {
-		boolean isDuplicate = rServ.isUserIdDuplicate(userId);
-		String mesg = "notDuplicate";
-		if (isDuplicate) {
-			mesg = "duplicate"; 
-        } 
-		return mesg;
-	}
 	
 	//회원가입 자식창에서 닉네임 중복 에이젝스
 	@PostMapping("/AjaxNicknameDuplicate")

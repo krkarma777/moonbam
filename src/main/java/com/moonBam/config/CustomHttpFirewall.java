@@ -11,4 +11,3 @@ public class CustomHttpFirewall extends StrictHttpFirewall {
         this.setAllowUrlEncodedDoubleSlash(true);
     }
 }
-

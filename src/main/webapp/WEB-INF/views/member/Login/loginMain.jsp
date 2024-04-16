@@ -25,9 +25,9 @@
 	    <form id="registerForm" action="<c:url value='/RegisterTerms'/>" method="post">
 	      <h1>회원가입</h1>
 	      <div class="social-container">
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
 	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" maxlength="40"/>
@@ -38,12 +38,12 @@
 	  
 	<!-- 로그인 컨테이너 -->
 	  <div class="form-container sign-in-container">
-	  <form id="loginForm" action="<c:url value='/login'/>" method="post">
+	  	<form id="loginForm" action="<c:url value='login'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
 	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" maxlength="40"/>
@@ -112,8 +112,8 @@
 	    var cookiePW = getCookie("userPw");
 	   
 													  //  쿠키 디버그 코드
-													  console.log("아이디 쿠키: "+ cookieID);
-													  console.log("비밀번호 쿠키: "+ cookiePW);
+													  //console.log("아이디 쿠키: "+ cookieID);
+													  //console.log("비밀번호 쿠키: "+ cookiePW);
 													  
 	    //아이디 쿠키가 있으면 아이디 창에 입력 + 아이디 저장 체크
 	    if(cookieID){
@@ -172,12 +172,22 @@
 	               
 	                success: function(response) {
 	                    
-	                    // 입력한 아이디와 비밀번호가 DB 정보와 일치하지 않을 경우, ajax 출력
+	                    // 활동 정지된 유저일 경우
+	                    if (response === "suspendedId") {
+	                        errorSpan.html("활동이 정지된 유저입니다.<br>관리자에게 문의해주세요.");
+	                    } else 
+	                   	
+	                    // 소셜 회원가입자일 경우	
+	                    if (response === "socialLogin") {
+		                        errorSpan.html("소셜 회원가입 유저입니다.");
+	                    } else
+		                        
+		                // 입력한 아이디와 비밀번호가 DB 정보와 일치하지 않을 경우, ajax 출력
 	                    if (response === "loginFail") {
 	                        errorSpan.text("아이디나 비밀번호를 확인해주세요.");
-	                        
-	                    // 입력한 아이디와 비밀번호가 DB 정보와 일치할 경우, submit 정상 작동
-	                    } else {
+
+		                // 입력한 아이디와 비밀번호가 DB 정보와 일치할 경우, submit 정상 작동
+	                   	} else {
 	                        errorSpan.text("");
 	                        $("#loginForm")[0].submit();
 	                    }
@@ -240,7 +250,7 @@
 	        var errorSpan = $("#confirmUserEmailError");
 
 	        //이메일을 입력
-	        if (userId && userPw) {
+	        if (userId) {
 	            $.ajax({
 	                type: "POST",
 	                url: "<c:url value='/AjaxCheckEmail'/>", 
@@ -253,8 +263,12 @@
 	                    // 입력한 아이디 이메일이 DB에 있을 경우, ajax 출력
 	                    if (response === "RegisterFail") {
 	                        errorSpan.text("이미 사용 중인 이메일입니다.");
-	                        
-	                    // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
+	                    } else
+	                    // 입력한 아이디 이메일이 소셜네트워크 회원가입자일 경우, ajax 출력
+		                if (response === "socialRegister") {
+		                        errorSpan.text("소셜네트워크 회원가입자입니다.");     
+	                    
+		                // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
 	                    } else {
 	                        errorSpan.text("");
 	                        $("#registerForm")[0].submit();

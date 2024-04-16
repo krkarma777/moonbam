@@ -1,7 +1,8 @@
-<%@page import="com.moonBam.dto.MemberDTO"%>
+<%@ page import="com.moonBam.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <style>
     nav {
@@ -19,11 +20,20 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-		
+
+<%-- 	<sec:authorize access="isAuthenticated()"> --%>
+	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
+		<!-- 로그아웃 -->
+        <li class="nav-item">
+          <a class="nav-link" href="<c:url value='/Logout'/>">로그아웃</a>
+        </li>
+	</sec:authorize>
+	<sec:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
 		<!-- 로그인메인 -->
         <li class="nav-item">
-          <a class="nav-link" href="<c:url value='/Login'/>">로그인창</a>
+          <a class="nav-link" href="<c:url value='/mainLogin'/>">로그인창</a>
         </li>
+	</sec:authorize>
 
 		<!-- 익명게시판 -->        
         <li class="nav-item dropdown">
@@ -46,12 +56,15 @@
         </li>
       </ul>
 
-      <ul class="navbar-nav">
+	<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+		<ul class="navbar-nav">
       	<!-- 회원리스트 -->
         <li class="nav-item">
           <a class="nav-link" href="<c:url value='/memberList'/>">회원리스트</a>
         </li>
       </ul>
+	</sec:authorize>
+      
     </div>
   </div>
 </nav>

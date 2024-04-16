@@ -48,7 +48,7 @@ public class RegisterService {
 		return dao.isUserEmailDuplicate(dataForFindExistEmail);
 	}
 
-	public boolean RegisterPossible(String userId) {
-		return dao.RegisterPossible(userId);
+	public MemberDTO findDTOByUserId(String userId) {
+		return dao.findDTOByUserId(userId);
 	}
 }

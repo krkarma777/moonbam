@@ -18,7 +18,7 @@
         <h1>회원 가입 이력 없음</h1>
         <p class="mesg">회원 정보가 없습니다. 입력하신 정보를 다시 한번 확인해주세요.</p>
         <div id="sitesShortCut">
-	        <a href="<%=request.getContextPath()%>/Login" class="links">로그인</a>
+	        <a href="<%=request.getContextPath()%>/mainLogin" class="links">로그인</a>
             <a href="${pageContext.request.contextPath}/FindInfo" class="links">회원정보 찾기</a>
         </div>
     </div>
