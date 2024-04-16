@@ -247,6 +247,127 @@
 						console.error(error);
 					});
 
+			//임시저장 모달창
+			function saveModal(){
+				$('#myModal').modal('show');
+				$.ajax({
+					type: 'post',
+					url: '/acorn/post/saveList',
+					dataType : 'json',
+					success: function(response) {
+						console.log(response);
+						var postSaveList = response;
+						console.log("postSaveList => "+postSaveList);
+						//innerhtml함수
+					},
+					error: function(xhr, status, error) {
+						console.log(error);
+					}
+				});//end ajax
+			}//
+
+			// 임시저장글 불러오기
+			function loadPostSave(postSaveId) {
+				$.ajax({
+					type: 'post',
+					url: '/acorn/post/saveSelect',
+					dataType : 'json',
+					data: {
+						postSaveId: postSaveId
+					},
+					success: function(response) {
+						alert('임시저장글 선택');
+						// 모달 창을 숨김
+
+						// 성공 시 제목과 내용 입력란에 데이터를 채움
+						$('#postTitle').val(response.postSaveTitle);
+						$('#postText').val(response.postSaveText);
+					},
+					error: function(xhr, status, error) {
+						console.log(error);
+					}
+				});//end ajax
+			}//end loadSavePost
+
+			// 임시저장 삭제 함수
+			function deleteSave(postSaveId){
+				// 삭제 전에 사용자에게 확인을 받는다.
+				if (confirm('정말로 삭제하시겠습니까?')) {
+					// 확인 시 AJAX 요청
+					$.ajax({
+						type: 'POST',
+						url: '/acorn/post/saveDelete',
+						data: {
+							postSaveId: postSaveId
+						},
+						success: function(response) {
+							// 성공 시 페이지 새로고침
+							location.reload();
+							alert('임시저장글이 삭제되었습니다.');
+						},
+						error: function(xhr, status, error) {
+							console.error(xhr.responseText);
+						}
+					}); //end ajax
+				}
+
+			};//end 임시저장 삭제 함수
+
+			//임시저장 버튼 클릭 시 호출되는 함수
+			function save() {
+				console.log("asdasd")
+				// 제목과 내용을 가져옴
+				var title = $('#postTitle').val();
+				var content = editorInstance.getData();
+				var userId = "<%=userId%>";
+
+				// 바이트 길이 계산 함수
+				function getByteLength(str) {
+					var byteLength = 0;
+					for (var i = 0; i < str.length; i++) {
+						var charCode = str.charCodeAt(i);
+						if (charCode <= 0x7f) {
+							byteLength += 1;
+						} else {
+							byteLength += 2; // 한글이나 다른 멀티바이트 문자
+						}
+					}
+					return byteLength;
+				}
+
+				// 제목의 바이트 길이를 확인
+				if (getByteLength(title) > 50) {
+					alert('제목은 50바이트를 초과할 수 없습니다.');
+					event.preventDefault();
+					return;
+				}
+
+				// 제목과 내용이 비어있는지 확인
+				if (title.trim() === '' || content.trim() === '') {
+					alert('제목과 내용을 모두 입력하세요.');
+					event.preventDefault();
+					return;
+				}
+
+				// AJAX 요청
+				$.ajax({
+					type: 'POST',
+					url: '/acorn/post/save',
+					data: {
+						postSaveTitle: title,
+						postSaveText: content,
+						userId: userId
+					},
+					success: function(response) {
+						// 성공 시 알림
+						alert('게시글이 임시저장되었습니다.');
+					},
+					error: function(xhr, status, error) {
+						// 실패 시 오류 메시지 출력
+						console.error(xhr.responseText);
+					}
+				}); //end ajax
+			}//end 임시저장
 
 			var uploadedImages = []; // 업로드한 이미지를 저장할 배열
 
@@ -277,126 +398,7 @@
 
 		});//end doc
 		
-		//임시저장 모달창
-		function saveModal(){
-			$('#myModal').modal('show');
-			$.ajax({
-				type: 'post',
-				url: '/acorn/post/saveList',
-				dataType : 'json',
-				success: function(response) {
-					console.log(response);
-					var postSaveList = response;
-					console.log("postSaveList => "+postSaveList);
-					//innerhtml함수
-				},
-				error: function(xhr, status, error) {
-					console.log(error);
-				}
-			});//end ajax
-		}//
 
-		// 임시저장글 불러오기
-		function loadPostSave(postSaveId) {
-			$.ajax({
-				type: 'post',
-				url: '/acorn/post/saveSelect',
-				dataType : 'json',
-				data: {
-					postSaveId: postSaveId
-				},
-				success: function(response) {
-					alert('임시저장글 선택');
-					// 모달 창을 숨김
-
-					// 성공 시 제목과 내용 입력란에 데이터를 채움
-					$('#postTitle').val(response.postSaveTitle);
-					$('#postText').val(response.postSaveText);
-				},
-				error: function(xhr, status, error) {
-					console.log(error);
-				}
-			});//end ajax
-		}//end loadSavePost
-
-		// 임시저장 삭제 함수
-		function deleteSave(postSaveId){
-			// 삭제 전에 사용자에게 확인을 받는다.
-			if (confirm('정말로 삭제하시겠습니까?')) {
-				// 확인 시 AJAX 요청
-				$.ajax({
-					type: 'POST',
-					url: '/acorn/post/saveDelete',
-					data: {
-						postSaveId: postSaveId
-					},
-					success: function(response) {
-						// 성공 시 페이지 새로고침
-						location.reload();
-						alert('임시저장글이 삭제되었습니다.');
-					},
-					error: function(xhr, status, error) {
-						console.error(xhr.responseText);
-					}
-				}); //end ajax
-			}
-
-		};//end 임시저장 삭제 함수
-
-		//임시저장 버튼 클릭 시 호출되는 함수
-		function save() {
-			// 제목과 내용을 가져옴
-			var title = $('#postTitle').val();
-			var content = tinymce.activeEditor.getContent();
-			var userId = "<%=userId%>";
-
-			// 바이트 길이 계산 함수
-			function getByteLength(str) {
-				var byteLength = 0;
-				for (var i = 0; i < str.length; i++) {
-					var charCode = str.charCodeAt(i);
-					if (charCode <= 0x7f) {
-						byteLength += 1;
-					} else {
-						byteLength += 2; // 한글이나 다른 멀티바이트 문자
-					}
-				}
-				return byteLength;
-			}
-
-			// 제목의 바이트 길이를 확인
-			if (getByteLength(title) > 50) {
-				alert('제목은 50바이트를 초과할 수 없습니다.');
-				event.preventDefault();
-				return;
-			}
-
-			// 제목과 내용이 비어있는지 확인
-			if (title.trim() === '' || content.trim() === '') {
-				alert('제목과 내용을 모두 입력하세요.');
-				event.preventDefault();
-				return;
-			}
-
-			// AJAX 요청
-			$.ajax({
-				type: 'POST',
-				url: '/acorn/post/save',
-				data: {
-					postTitle: title,
-					postText: content,
-					userId: userId
-				},
-				success: function(response) {
-					// 성공 시 알림
-					alert('게시글이 임시저장되었습니다.');
-				},
-				error: function(xhr, status, error) {
-					// 실패 시 오류 메시지 출력
-					console.error(xhr.responseText);
-				}
-			}); //end ajax
-		}//end 임시저장
 
 
 		// form 요소에서 submit 이벤트가 발생할 때 호출되는 함수

@@ -431,7 +431,7 @@ body{
 					
    					<!-- 오른쪽에 위치할 기타 버튼들 -->
 					<sec:authorize access="isAuthenticated()">
-						<a href="'${pageContext.request.contextPath}/board/write?bn='${requestScope.}" class="btn btn-action btn-spacing">글쓰기</a>
+						<a href="/acorn/board/write?bn=${requestScope.bn}" class="btn btn-action btn-spacing">글쓰기</a>
 					</sec:authorize>
 						<!-- 수정, 삭제 버튼-->					
    						<span id="updatadel"></span>
