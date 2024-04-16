@@ -33,7 +33,6 @@ public class CommunityHomeDAO {
 		return session.selectOne("chatRoomTotalCount", map);
 	}
 	
-//	조인으로 바꾸기
 	public CommunityPageDTO myChatList(SqlSessionTemplate session, HashMap<String, Object> map, String curPage,
 			String userid) {
 		CommunityPageDTO cpDTO = new CommunityPageDTO();
@@ -42,9 +41,10 @@ public class CommunityHomeDAO {
 		
 		List<String> list = session.selectList("myChatRoomList", userid);
 		
-		if(null==list) {
-			return null;
+		if(0==list.size()) {
+			return chatRoomList(session, map, curPage);
 		}else {
+			//like in을 위해서 문자 배열 만들기
 			String aaa = "(";
 			for (int i=0; i<list.size(); i++) {
 				if((i+1)==list.size()) {
