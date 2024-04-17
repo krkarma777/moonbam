@@ -18,5 +18,11 @@
     <jsp:include page="common/AdminMenu.jsp" flush="true"/>
 
     <div class="shadow">
-        <jsp:include page = "content/member/AdminPgContMemGrade.jsp"  flush ="true"></jsp:include>
-v
+        <jsp:include page = "content/member/AdminPgContMemGrade.jsp"  flush ="true"/>
+    </div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

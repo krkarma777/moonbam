@@ -56,7 +56,7 @@
       		<!-- 로그인 -->
 			<sec:authorize access="isAuthenticated()">
 				<a href="/acorn/logout"  class="top">로그아웃/</a>
-				<a href="MypageServlet"  class="top">마이페이지</a>
+				<a href="/acorn/my-page"  class="top">마이페이지</a>
 			</sec:authorize>
 			
 			<!-- 관리자인 경우 -->

@@ -18,7 +18,7 @@
     <jsp:include page="common/AdminMenu.jsp" flush="true"/>
 
     <div class="shadow">
-        <jsp:include page = "content/post/AdminPagePostRule.jsp"  flush ="true"></jsp:include>
+        <jsp:include page = "content/post/AdminPagePostRule.jsp"  flush ="true"/>
     </div>
 </div>
 <!-- Bootstrap JS -->
