@@ -1,6 +1,7 @@
 package com.moonBam.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,10 @@ public class ChatRoomService {
 	public String checkMaster(String chatNum) {
 		String master = dao.checkMaster(chatNum);
 		return master;
+	}
+
+	public List<ChatRoomDTO> getAllChatRooms() {
+		
+		return dao.getAllChatRooms();
 	}
 }

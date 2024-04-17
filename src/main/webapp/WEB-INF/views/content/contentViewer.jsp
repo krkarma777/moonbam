@@ -197,10 +197,10 @@
 		description= "해당 컨텐츠에 대한 설명이 존재하지 않습니다.";
 	}
 	String releaseDate = content.getReleaseDate();
-	releaseDate = releaseDate.substring(0, releaseDate.indexOf("00:"));	
+	/* releaseDate = releaseDate.substring(0, releaseDate.indexOf("00:"));	
 	if(releaseDate==null){
 		releaseDate= "";
-	}
+	} */
 	/* String nation = content.getNation();
 	if(nation==null){
 		nation= "";

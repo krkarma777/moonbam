@@ -96,4 +96,9 @@ public ReviewDTO writeReview(ReviewDTO review) {
 		int num = session.update("reportReview", report);
 	}
 
+	public List<ReviewDTO> allReview(HashMap<String, String> map) {
+		List<ReviewDTO> reviewList = session.selectList("allReview", map);
+		return null;
+	}
+
 }

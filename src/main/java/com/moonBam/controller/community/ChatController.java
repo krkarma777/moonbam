@@ -1,5 +1,6 @@
 package com.moonBam.controller.community;
 
+import java.security.Principal;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.ChatRoomService;
+import com.moonBam.service.member.MemberLoginService;
 
 
 @Controller
@@ -20,9 +23,12 @@ public class ChatController {
 	@Autowired
 	ChatRoomService crService;
 	
+	@Autowired
+	MemberLoginService memberLoginService;
+	
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
 	public String createChat() {
-		return "/community/createChat";
+		return "community/createChat";
 	}
 	
 	@RequestMapping(value = "/saveChat", method=RequestMethod.POST)
@@ -45,17 +51,20 @@ public class ChatController {
 	@ResponseBody
 	public String delegateMaster(
 			@RequestParam String chatNum, 
-			@RequestParam String oldMaster, 
-			@RequestParam String newMaster) {
+			@RequestParam String newMaster,
+			Principal principal
+			) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("chatNum", chatNum);
-		map.put("from", oldMaster);
 		map.put("to", newMaster);
 		int n = crService.delegateMaster(map);
 		
 		//////////////////권한위임 기존 방장이 하는지 검사
 		
-		Boolean checkMaster = (oldMaster == crService.checkMaster(chatNum));
+		String formerMaster = principal.getName();
+//		MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+		
+		Boolean checkMaster = (formerMaster == crService.checkMaster(chatNum));
 		
 		if(!checkMaster) {
 			System.out.println("너 방장 아니지");
