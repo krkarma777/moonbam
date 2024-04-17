@@ -40,7 +40,7 @@ public class ChatRoomDAO {
 	}
 
 	public List<ChatRoomDTO> getAllChatRooms() {
-		List<ChatRoomDTO> chatRoomList = session.selectList("getAllChatRooms");
-		return chatRoomList;
+		List<ChatRoomDTO> chatRoomMapList = session.selectList("getAllChatRooms");
+		return chatRoomMapList;
 	}
 }
