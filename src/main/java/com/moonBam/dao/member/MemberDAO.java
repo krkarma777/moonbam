@@ -36,17 +36,6 @@ public class MemberDAO {
 	// ========================
 	
 
-   
-
-    public int updateNickname(String newNickname) {
-        // TODO Auto-generated method stub
-        int num = session.update("MyPageMapper.updateNickname", newNickname);
-        System.out.println("dao" + num);
-        return num;
-    }
-
- 
-
     public int postDel(Long postId) {
         int n = session.delete("MyPageMapper.postDel", postId);
         return n;
@@ -79,6 +68,11 @@ public class MemberDAO {
 	}
 private int totalCommCount(String name) {
 	return session.selectOne("countMyComments", name);
+}
+
+public void updateMember(MemberDTO loginUser) {
+	session.update("updateNickname",loginUser);
+	
 }
 
 
