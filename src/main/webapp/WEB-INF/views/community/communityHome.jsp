@@ -185,38 +185,40 @@ button {
     });
 
     <%
-        // 위의 @GetMapping("/mapAPI") 메서드에서 가져온 주소 정보
-        List<ChatRoomDTO> chatRoomMapList = (List<ChatRoomDTO>)request.getAttribute("chatRoomMapList");
+ // 위의 @GetMapping("/mapAPI") 메서드에서 가져온 주소 정보
+ List<ChatRoomDTO> chatRoomMapList = (List<ChatRoomDTO>)request.getAttribute("chatRoomMapList");
 
-        // DB에서 가져온 주소 정보를 이용하여 마커를 지도에 표시
-        for (ChatRoomDTO chatRoom : chatRoomMapList) {
-    %>
-    naver.maps.Service.geocode({
-        query: '<%= chatRoom.getAddr1() + " " + chatRoom.getAddr2() %>'
-    }, function(status, response) {
-        if (status === naver.maps.Service.Status.ERROR) {
-            return alert('검색에 실패했습니다.');
-        }
+ if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
+     // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 실행
+     for (ChatRoomDTO chatRoom : chatRoomMapList) {
+ %>
+ naver.maps.Service.geocode({
+     query: '<%= chatRoom.getAddr1() + " " + chatRoom.getAddr2() %>'
+ }, function(status, response) {
+     if (status === naver.maps.Service.Status.ERROR) {
+         return alert('검색에 실패했습니다.');
+     }
 
-        if (response.v2.meta.totalCount === 0) {
-            return alert('검색 결과가 없습니다.');
-        }
+     if (response.v2.meta.totalCount === 0) {
+         return alert('검색 결과가 없습니다.');
+     }
 
-        var item = response.v2.addresses[0],
-            point = new naver.maps.Point(item.x, item.y),
-            marker = new naver.maps.Marker({
-                position: new naver.maps.LatLng(point.y, point.x),
-                map: map
-            });
+     var item = response.v2.addresses[0],
+         point = new naver.maps.Point(item.x, item.y),
+         marker = new naver.maps.Marker({
+             position: new naver.maps.LatLng(point.y, point.x),
+             map: map
+         });
 
-        // 마커 클릭 시 정보 표시
-        naver.maps.Event.addListener(marker, 'click', function() {
-            alert('<%= chatRoom.getPost() %>');
-        });
-    });
-    <%
-        }
-    %>
+     // 마커 클릭 시 정보 표시
+     naver.maps.Event.addListener(marker, 'click', function() {
+         alert('<%= chatRoom.getPost() %>');
+     });
+ });
+ <%
+     }
+ }
+ %>
 </script>
 
 	
