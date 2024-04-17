@@ -70,6 +70,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 				</div>
 				<%}	%>
 			</div>
+			
 			<div class="inner">
 				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
 				<div style="width: 201px; height:auto;">
@@ -81,6 +82,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 				</div>
 				<%}	%>
 			</div>
+			
 			<div class="inner" id="firstClone">
 				<%
 				for (int i = 1; i <= movieTopList.size() - 6; i++) {
@@ -305,11 +307,11 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 	// Jump to First/Last Slide
 	carouselSlide2.addEventListener('transitionend', () => {
 		console.log(carouselImages2[counter]);
-		if (carouselImages2[counter2].id === 'lastClone') {
+		if (carouselImages2[counter2].id === 'lastClone2') {
 			carouselSlide2.style.transition = 'none'; // 트랜지션 효과 없애기
 			counter2 = carouselImages2.length - 2; // couter 초기화
 			carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)'; // 실제 마지막 이미지로 이동.
-		} else if (carouselImages2[counter2].id === 'firstClone') {
+		} else if (carouselImages2[counter2].id === 'firstClone2') {
 			carouselSlide2.style.transition = 'none';
 			counter2 = carouselImages2.length - counter; // couter 초기화
 			carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';

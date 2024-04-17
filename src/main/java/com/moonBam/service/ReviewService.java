@@ -69,4 +69,9 @@ public class ReviewService {
 		dao.reportReview(report);
 	}
 
+	public List<ReviewDTO> allReview(HashMap<String, String> map) {
+		List<ReviewDTO> reviewList = dao.allReview(map);
+		return reviewList;
+	}
+
 }
