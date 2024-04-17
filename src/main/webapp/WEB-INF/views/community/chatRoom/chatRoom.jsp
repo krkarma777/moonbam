@@ -5,6 +5,21 @@
 <head>
 <meta charset="EUC-KR">
 <title>Chat Room</title>
+<!-- 방 삭제 시 실패했을 때 띄울 알림창  -->
+<% String mesg = (String) session.getAttribute("mesg");
+	if(mesg != null ){	
+		
+		%>	
+		
+		<script>
+		alert("<%= mesg %>");
+		</script>
+	
+	<%} 
+	
+	session.removeAttribute("mesg");
+	
+	%>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script

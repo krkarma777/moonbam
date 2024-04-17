@@ -23,15 +23,34 @@
 	<!-- chatNum 으로 방정보 가져오기 (방 입장시) -->
 	<select id="chatRoomSelectById" parameterType="int" resultType="ChatRoomDTO">
 	
-	select * from chatroom where chatNum = #{chatNum}
+		select * from chatroom where chatNum = #{chatNum}
 	
 	</select>
 	
+	
+	<!-- 방 나가기  -->
 	<delete id="chatMemberDeleteBychatNumAndUserId" parameterType="hashmap">
 	
-	delete from chatmember where userId =#{userId} and chatNum = #{chatNum}
+		delete from chatmember where userId =#{userId} and chatNum = #{chatNum}
 	
 	</delete>
+	
+	<!-- 방 입장 시 chatRoom 에서 인원 수 +1 하기 -->
+	<update id="chatRoomCurrntNowAdd" parameterType="hashmap">
+		update chatroom set currentNow = #{currntNow} where chatNum = #{chatNum}
+	</update>
+	
+	
+	<!-- 방장이 방 삭제시 chatmember delete  -->
+	<delete id="chatMemberDeleteByChatNum" parameterType="int">
+		delete from chatmember where chatNum = #{chatNum}
+	</delete>
+	
+	<!-- 방장이 방 삭제 시 chatroom delete -->
+	<delete id="chatRoomDeleteByChatNum" parameterType="int">
+		delete from chatroom where chatNum = #{chatNum}
+	</delete>
+	
 	
 	
 </mapper>
