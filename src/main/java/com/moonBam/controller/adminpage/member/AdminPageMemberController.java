@@ -1,5 +1,6 @@
 package com.moonBam.controller.adminpage.member;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AdminReportDTO;
@@ -38,11 +40,37 @@ public class AdminPageMemberController {
 		mav.setViewName("/AdminPage/AdminPageMemRprtedMem");
 		return mav;
 	}
-
-	//신고글 삭제기능
-	@RequestMapping(value = "")
-	public String deleteReportedPost() {
-		return "";
+	
+	//신고회원 정지
+	@RequestMapping("/AdminPage/SuspendUser")
+	public ModelAndView SuspendUser(@RequestParam String[] userArr, ModelAndView mav) {
+		System.out.println("in adminpage.post.DeletePost");
+		List<String> deletelist = Arrays.asList(userArr);
+		int n = rservice.delReportedPost(deletelist);
+		System.out.println(n+"개의 사용자 정지");
+		
+		List<AdminReportDTO> list = rservice.SearchReport(null);
+		
+		mav.addObject("list",list);
+		mav.setViewName("/AdminPage/AdminPageReportedPost");
+		
+		return mav;
+	}
+	
+	//신고회원 강퇴기능
+	@RequestMapping("/AdminPage/KickUser")
+	public ModelAndView KickUser(@RequestParam String[] userArr, ModelAndView mav) {
+		System.out.println("in adminpage.post.DeletePost");
+		List<String> deletelist = Arrays.asList(userArr);
+		int n = rservice.delReportedPost(deletelist);
+		System.out.println(n+"개의 사용자 정지");
+		
+		List<AdminReportDTO> list = rservice.SearchReport(null);
+		
+		mav.addObject("list",list);
+		mav.setViewName("/AdminPage/AdminPageReportedPost");
+		
+		return mav;
 	}
 
 	//이용제한 사용자 리스트 조회
@@ -63,10 +91,17 @@ public class AdminPageMemberController {
 		mav.setViewName("/AdminPage/AdminPageMemRestricted");
 		return mav;
 	}
+	
+	//이용제한 사용자 이용제한 해제, 연장
+	
+	
 
-	//삭제된 회원 데이터 관리
+	//삭제된 회원 데이터 조회
 	@GetMapping("/AdminPage/toAdminPageDeletedMember")
 	public String toAdminPageMonitoring() {
 		return "/AdminPage/AdminPageDeletedMember";
 	}
+	
+	//삭제된 회원 데이터 완전삭제
+	
 }

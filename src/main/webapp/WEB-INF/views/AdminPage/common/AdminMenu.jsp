@@ -17,15 +17,11 @@
 <a href="#">회원 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemRprtedMem">----신고회원관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemGrade">----회원등급관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemRule">----등급관리규칙설정</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemRestricted">----이용제한 회원 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageDeletedMember">----삭제된 회원 데이터 관리</a><br>
 
 <a href="#">공지 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageAnnounce">----공지글</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageEvent">----이벤트</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageAPI">API</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMonitoring">모니터링</a>
 
 </form>
 

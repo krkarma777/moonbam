@@ -1,6 +1,7 @@
 package com.moonBam.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,15 @@ public class ChatRoomDAO {
 	public String checkMaster(String chatNum) {
 		String master = session.selectOne("ChatMapper", chatNum);
 		return master;
+	}
+
+	public List<ChatRoomDTO> getAllChatRooms() {
+		List<ChatRoomDTO> chatRoomMapList = session.selectList("getAllChatRooms");
+		return chatRoomMapList;
+	}
+
+	public int ChatKickUser(String user) {
+		int n = session.delete("ChatMapper.ChatKickUser", user);
+		return n;
 	}
 }

@@ -44,21 +44,27 @@ public class AdminPostController {
 		return mav;
 	}
 	
-	//신고글 삭제
+	//신고글 Report 테이블에서 삭제 및 삭제된 글 테이블로 이동 
 	@RequestMapping(value = "/AdminPage/DeletePost")
 	public ModelAndView DeletePost(@RequestParam String[] postArr, ModelAndView mav) {
 		
 		System.out.println("in adminpage.post.DeletePost");
+		System.out.println("어드민 페이지 신고글 삭제 기능");
+		System.out.println("1. 삭제할 글의 id list로 출력");
 		List<String> deletelist = Arrays.asList(postArr);
-		rservice.delReportedPost(deletelist);
+		System.out.println(deletelist);
+		int n = rservice.delReportedPost(deletelist);
+		System.out.println(n+"개의 신고글 삭제처리");
 		
 		List<AdminReportDTO> list = rservice.SearchReport(null);
 		
 		mav.addObject("list",list);
-		mav.setViewName("/AdminPage/AdminPagePostRprtedPost");
+		mav.setViewName("/AdminPage/AdminPageReportedPost");
 		
 		return mav;
 	}
+	
+	
 	
 	//삭제된 게시글 조회
 	@RequestMapping(value = "/AdminPage/AdminPageDeletedPost")
@@ -76,10 +82,13 @@ public class AdminPostController {
 		return mav;
 	}
 	
+	//삭제된 게시글 완전삭제
+	
 	//삭제된 댓글 조회
 	@RequestMapping(value = "/AdminPage/AdminPageDeletedComment")
 	public String getDeletedCommentList() {
 		return "/AdminPage/AdminPageDeletedComment";
 	}
 	
+	//삭제된 댓글 완전삭제
 }

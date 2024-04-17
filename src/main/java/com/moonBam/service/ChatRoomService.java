@@ -32,4 +32,9 @@ public class ChatRoomService {
 		String master = dao.checkMaster(chatNum);
 		return master;
 	}
+
+	public int ChatKickUser(String user) {
+		int n = dao.ChatKickUser(user);
+		return n;
+	}
 }

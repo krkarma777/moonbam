@@ -117,7 +117,7 @@
 			<span id="guide" style="color:#999"></span>
 			<!-- 다음주소 끝 -->
 			<br>
-			<span>모임 날짜</span> <input class="form-control form-control-sm item" type="text" id="datepicker" placeholder="날짜를 선택하세요" name="cDate">
+			<span>모임 날짜</span> <input class="form-control form-control-sm item" type="text" id="datepicker" placeholder="날짜를 선택하세요" name="mDate">
 			<span>모임 소개글</span>
 				<div style="float: right;">
 					<span id="charCount">0</span><span> / 150</span>
