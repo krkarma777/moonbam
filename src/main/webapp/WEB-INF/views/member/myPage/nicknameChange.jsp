@@ -19,11 +19,11 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/navBar.jsp"/>
-<div class="container mt-4">
+<div class="container moonBam-container">
     <div class="row">
         <jsp:include page="sideBar.jsp" flush="true"/>
 
-        <div class="col-md-9 shadow form-section center-align">
+        <div class="shadow form-section">
             <!-- 닉네임 수정 폼 -->
             <form id="nicknameForm" action="<c:url value='/updateNickname'/>" method="post">
                 <div class="mb-3">
