@@ -126,9 +126,9 @@ button {
 		<!-- 상단 버튼 -->
 		<div style="">
 			<!-- 내 채팅방 목록 보기 버튼 -->
-			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8; " id="myChatList"><b>나의</b></button>
+			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;" id="myChatList"><b>나의</b></button>
 			<!-- 개설 버튼 -->
-			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8;" id="createCommunity"><b>개설</b></button>
+			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" id="createCommunity"><b>개설</b></button>
 		</div>
 		
 		<!-- community목록 -->
@@ -176,8 +176,7 @@ button {
 	
 	<!-- 2section -->
 <section class="section">
-    <div style="height: 600px; width: 100%; margin: auto;">
-        <h1>지도</h1>
+	<div style="height: 910px; width: 1200px; margin: auto;">
         <div id="map" style="width:100%;height:100%;"></div>
     </div>
 </section>

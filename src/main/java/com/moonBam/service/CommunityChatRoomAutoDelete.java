@@ -2,7 +2,7 @@ package com.moonBam.service;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -31,7 +31,7 @@ public class CommunityChatRoomAutoDelete {
 		//System.out.println("1분 실행 테스트 chatRoomAutoDelete함수 작동");
     	
     	///////현재 날짜,시간 뽑기/////////
-    	LocalDateTime now = LocalDateTime.now();
+		LocalDate now = LocalDate.now();
     	
 		
 		//현재 chatRoom Table에 있는 레코드들 다 가져오기
@@ -40,7 +40,7 @@ public class CommunityChatRoomAutoDelete {
 		
 		
 		//가져온 cdto들의 모임 날짜 다 뽑아보기
-		LocalDateTime mdate = null;
+		LocalDate mdate = null;
 		//날짜 차이 저장할 변수 days
 		long days = 0;
 		//days가 3일 이상 차이는 게 있을 때 false로 바뀔 변수
