@@ -53,6 +53,19 @@ body {
     color: white;
 }
 
+/* 사이드바 내부 링크 스타일 */
+.sidebar a:hover {
+    transition: background-color 0.3s ease;
+    color: black; /* 텍스트 색상 수정 */
+    background-color: #f0f4f3;
+}
+
+/* 호버 시 링크 스타일 변경 */
+.sidebar a {
+    background-color: #ff416c; /* 호버 시 밝은 핑크색으로 변경 */
+    color: white;
+}
+
 .moonBam-container {
     height: 910px;
     width: 1200px;
@@ -128,5 +141,9 @@ body {
 }
 
 .btn-container {
+    margin-bottom: 30px;
+}
+
+.admin-menu {
     margin-bottom: 30px;
 }
