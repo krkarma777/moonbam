@@ -1,6 +1,4 @@
-package com.moonBam.controller.community.oh;
-
-import java.util.List;
+package com.moonBam.controller.community.chat;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,7 +13,7 @@ public class ChatMessagesDAO {
 
     private final SqlSessionTemplate session;
 
-    public int create(ChatTableDTO requestDTO) {
+    public int insert(ChatTableDTO requestDTO) {
     	int done= session.insert("ChatMessagesMapper.create", requestDTO);
          return done;
     }

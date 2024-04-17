@@ -1,4 +1,4 @@
-package com.moonBam.controller.community.oh;
+package com.moonBam.controller.community.chat;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,13 +12,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-    	System.out.println("registerStompEndpoints");
         registry.addEndpoint("/chat-socket").setAllowedOrigins("http://localhost:9092").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-      System.out.println("configureMessageBroker");
     	registry.enableSimpleBroker("/topic/");
         registry.setApplicationDestinationPrefixes("/acorn");
     }
