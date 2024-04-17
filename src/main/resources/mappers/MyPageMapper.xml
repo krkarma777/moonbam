@@ -5,10 +5,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="MyPageMapper">
 
   
-<update id="updateNickname" parameterType="MemberDTO">
+<update id="updateNickname" parameterType="string">
      update memberDB
      set 
-     nickname = #{newNickname}
+     nickname = #{nickname}
     where userId = #{userId}
    </update>
 

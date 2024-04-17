@@ -39,18 +39,7 @@ public class MemberService {
 
 
 
-	public MemberDTO select(String userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public void updateNickname(String newNickname) {
-		
-            dao.updateNickname(newNickname);
-            System.out.println("service: "+newNickname);
-		
-	}
+	
 
 
 	public int postDel(Long postId) {
@@ -66,6 +55,11 @@ public class MemberService {
 	public MyCommentDTO selectmyComm(String curPage, String name) {
 		MyCommentDTO cDTO = dao.selectMyComm(name, curPage);
 		return cDTO;
+	}
+
+	public void updateMember(MemberDTO loginUser) {
+		dao.updateMember(loginUser);
+		
 	}
 
 
