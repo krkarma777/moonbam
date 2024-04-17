@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" type="text/css" href="/acorn/resources/css/myPage.css"/>
 </head>
 <body>
@@ -18,7 +17,7 @@
     <jsp:include page="common/AdminMenu.jsp" flush="true"/>
 
     <div class="shadow">
-        <jsp:include page = "content/post/AdminpgContPstRprtedPst.jsp"  flush ="true"></jsp:include>
+        <jsp:include page="content/post/AdminpgContPstRprtedPst.jsp" flush="true"/>
     </div>
 </div>
 <!-- Bootstrap JS -->
