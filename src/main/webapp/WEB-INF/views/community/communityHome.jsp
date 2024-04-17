@@ -14,7 +14,12 @@
 <head>
 <meta charset="UTF-8">
 <title>문밤</title>
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script>
+<!-- 정상 지도 뿌리기 (이거 열어두면 송하 돈 나감)  작동 테스트 완료-->
+<!-- <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script> -->
+<!-- 임시 지도 뿌리기 (오류 나는 게 맞음)  -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ClientId&submodules=geocoder"></script>
+
+
 <link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
 <!-- chatRoomController 에서 작동되는 기능에 결과에 따라서 session에 저장된 mesg값을 다르게 하여 alert를 띄우고 있음   -->
 	<% String mesg = (String) session.getAttribute("mesg");
