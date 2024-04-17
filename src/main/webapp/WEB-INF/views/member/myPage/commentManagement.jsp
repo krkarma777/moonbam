@@ -15,12 +15,12 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/navBar.jsp"/>
-<div class="container mt-4">
+<div class="container moonBam-container">
     <div class="row">
         <jsp:include page="sideBar.jsp" flush="true"/>
 
         <!-- 메인 컨텐츠 시작 -->
-        <div class="col-md-9 shadow">
+        <div class="shadow">
             <div style="text-align: center;">
                 <h1>내 댓글</h1>
                 <table class="table table-striped">
