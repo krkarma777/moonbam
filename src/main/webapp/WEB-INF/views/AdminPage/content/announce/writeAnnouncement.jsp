@@ -64,11 +64,11 @@
 		<table border='1'>
 			<tr>
 				<td>제목</td>
-				<td colspan="3"> <input type="text" style="width: 100%" value="" name="annoTitle"></td>
+				<td colspan="3"> <input type="text" style="width: 100%" value="" name="annoTitle" maxlength="30"></td>
 			</tr>
 			<tr>
 			<td>내용</td>
-				<td colspan="3"><textarea style="width: 100%" rows="10" name="annoText" > </textarea></td>
+				<td colspan="3"><textarea style="width: 100%" rows="10" name="annoText" maxlength="500"> </textarea></td>
 			</tr>
 			<tr>
 				<td>시작일 - 종료일</td>

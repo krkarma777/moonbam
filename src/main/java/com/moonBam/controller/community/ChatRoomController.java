@@ -4,25 +4,22 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.ChatRoomDTO;
-import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.CommunityEnterOutService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ChatRoomController {
@@ -125,8 +122,8 @@ public class ChatRoomController {
 	
 	//DB check 입장 승인할지 말지 결정 (chatNum, UserId 일치여부 확인)
 	@RequestMapping("/chatRoom/enter")
-	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum) {
-	
+	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum, HttpSession session, Model model ) {
+		String str = (String) session.getAttribute("userIdInSession");
 		//chatNum과 userIdInSession을 조건으로 가진 select 결과가 있는지 없는지 ChatMemberDTO가져와서 null이 아닐 때만 링크 접속하게 하기
 		//나중에 여기에 "강퇴"칼럼의 Y,N 값을 확인해야함 (N만 입장 가능)
 		
