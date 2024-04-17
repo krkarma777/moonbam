@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.service.CommunityChatRoomAutoDelete;
 import com.moonBam.service.CommunityChatmoreService;
 import com.moonBam.service.CommunityEnterOutService;
 
@@ -27,6 +29,14 @@ public class ChatDeleteController {
 	
 	@Autowired
 	CommunityChatmoreService comChatMoreService;
+	
+	
+	////////////////////////작동테스트용/////////////
+	@Autowired 
+	CommunityChatRoomAutoDelete comChatRoomAutoDelService;
+	 
+	
+	
 		
 	////////////[재사용할 함수fn]
 	
@@ -45,6 +55,7 @@ public class ChatDeleteController {
 	}
 	
 	
+	//////////방장이 방삭제하기 했을 때/////////////
 	@RequestMapping(value="/chatRoom/remove", method=RequestMethod.POST)
 	public String requestMethodName(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum,HttpSession session) {
 		
@@ -98,6 +109,8 @@ public class ChatDeleteController {
 		
 	}
 	
+
+
 
 	
 	
