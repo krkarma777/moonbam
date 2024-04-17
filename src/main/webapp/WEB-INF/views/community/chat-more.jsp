@@ -58,7 +58,10 @@
 				<td>
 					<ul>
 						<li>
-							${memberDTO.nickname} ( ${memberDTO.userId} ) <button>정보 수정하기</button>
+							${memberDTO.nickname} ( ${memberDTO.userId} ) 
+							<form action="/acorn/userinfo">
+							<button>정보 수정하기</button>
+							</form>
 						</li>	 
 					</ul>
 				</td>
@@ -67,14 +70,14 @@
 		<tr align="center">
 		
 			<td>
-				<form id="helloForm" method="post" action="#">
+				<form id="goOutForm" method="post" action="#">
 				<input type="hidden" name="userId" value="${memberDTO.userId}">
 				<input type="hidden" name="chatNum" value="${chatNum}">
 				</form>	
 				<button onclick="fnGoOut()">방 나가기</button>
 				<c:if test="${leadermemberDto.userId == memberDTO.userId}">
 				<!-- 방 삭제하기는 방장만 보이게 처리했음  -->
-				<button>방 삭제하기</button>
+				<button onclick="fnRemove()">방 삭제하기</button>
 				</c:if>
 					
 			</td>
@@ -118,10 +121,17 @@
 		
 		//방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
-			console.log("helloForm");
+			console.log("goOutForm");
 			
-			$("#helloForm").attr("action","/acorn/chatRoom/out").submit();
+			$("#goOutForm").attr("action","/acorn/chatRoom/out").submit();
 			
+		}
+		
+		
+		//방장이 방 삭제하기 눌렀을 때 작동되는 fn
+		function fnRemove() {
+			console.log("fnRemove");
+			$("#goOutForm").attr("action","/acorn/chatRoom/remove").submit();
 		}
 		
 

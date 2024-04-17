@@ -48,41 +48,10 @@ public class ChatRoomController {
 	}
 	
 	
-	
-//	@RequestMapping(value="/chatRoom",  method = RequestMethod.POST)
-//	public ModelAndView chatRoomPost(@RequestParam String chatNum, @RequestParam String text  ) {
-//		System.out.println("chatRoomPost");
-//		ChatRoomDTO crDto = new ChatRoomDTO();
-//		crDto.setRoomTitle("방 제목");
-//		crDto.setRoomText("방 설명");
-//		ModelAndView mav = new ModelAndView("community/chatRoom/chatRoom");
-//		// 방 제목
-//		mav.addObject("title", crDto.getRoomTitle());
-//		// 방 설명
-//		mav.addObject("text", crDto.getRoomText());
-//		return mav;
-//	}
-//	
-	
-	
-	
 	/////방 입장을 위해 방 클릭하면 이렇게 먼저 중복제외하고 insert 진행
 	@RequestMapping(value="/chatRoom",  method = RequestMethod.GET)
-	public String chatRoomGet(@Param("chatNum") int chatNum, HttpSession session, Principal principal, RedirectAttributes redirectAttributes) {
-		//방제목이랑 방설명이 필요함 -> 형
-//		// session에서 id 가져오기
-//		// 현재 시간 
-//		System.out.println("chatRoomGet");
-//		ChatRoomDTO crDto = new ChatRoomDTO();
-//		crDto.setRoomTitle("방 제목");
-//		crDto.setRoomText("방 설명");
-//		ModelAndView mav = new ModelAndView("community/chatRoom/chatRoom");
-//		// 방 제목
-//		mav.addObject("title", crDto.getRoomTitle());
-//		// 방 설명
-//		mav.addObject("text", crDto.getRoomText());
-//		return mav;
-		
+	public String chatRoomGet(@Param("chatNum") int chatNum, HttpSession session, Principal principal) {
+
 		String userIdInSession = principal.getName();//현재 나의 Id
 		
 		//enter를 위한 2개의 data가 들어갈 것임
@@ -96,31 +65,60 @@ public class ChatRoomController {
 		
 		//일단 중복된 데이터가 없는지 확인 후 insert 진행하기 (중복 저장 방지를 위해~)
 		ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberInsertMap);
-		int recordNum = 0;
-		if(chatMemberDto == null) {//null일 때만 insert
 		
-			//Insert
-			try {	
-				recordNum = comEnterOutService.chatMemberEnterInsert(chatMemberInsertMap);
-				
-				if(recordNum==0) { //인서트를 했는데! 값이 0일경우는 error임
-					nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
-				}
+		///////////////////////////////////////////////
+		if(chatMemberDto != null) {
+			//만약 중복 data가 있으면 인원 수 뭐 어쩌고 상관없이 그냥 입장하면 됨.
+			//이미 여기 안에 있는 멤버이라는 뜻임!!!!!!!!!!!!!!
+			return nextWhere;
 			
-			}catch(Exception e){
-				//모종의 이유로 Insert 실패 시 error임
-				System.out.println("chatMember insert 실패");
+		}else {//중복 data가 없으면 서버 작업 진행해주기 
+			
+			//이 채팅방의 현재, 최대 인원 수 체크하기. 현재인원 수 currentNow , 최대인원 수 amount
+			ChatRoomDTO cdto = chatRoomSelectBychatNum(chatNum);
+			int currntNow = cdto.getCurrentNow();
+			int amount = cdto.getAmount();
+			
+			if(currntNow < amount ) { //제한 인원수에 초과되지 않았을 경우 (입장 가능)
+			
+				int chatMemberANDroomRecordNum = 0;
+				
+					//Insert
+					try {	
+						
+						Map<String, Integer> chatRoomRecordNumMap = new HashMap<>();
+						chatRoomRecordNumMap.put("currntNow", (currntNow+1));
+						chatRoomRecordNumMap.put("chatNum", chatNum);
+						
+						//chatMember에 insert 하고 chatRoom의 currntNow(현재 인원 수)에 +1 업데이트 tx묶여있음
+					
+						chatMemberANDroomRecordNum = comEnterOutService.chatMemberEnterInsert(chatMemberInsertMap, chatRoomRecordNumMap);
+						
+						
+						if(chatMemberANDroomRecordNum == 0 ) { //tx 에서 무언가 꼬인 것임
+							session.setAttribute("mesg", "문제가 발생하였습니다.");
+							nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+						}
+						
+					}catch(Exception e){
+						//모종의 이유로 Insert 실패 시 error임
+						session.setAttribute("mesg", "문제가 발생하였습니다.");
+						System.out.println("chatMember insert 실패");
+						nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+					}
+					
+			
+			}else { //제한 인원수에 초과 됨. (입장 불가, 커뮤니티 홈으로 이동)
+				
+				session.setAttribute("mesg", "입장 가능한 인원이 초과하였습니다.");
 				nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
 			}
 			
-		}//if(chatMemberDto ==  null) end
-		
-	
-//		//chatRoomSelect 컨트롤러로 data를 넘기기 위해 저장
-//		redirectAttributes.addFlashAttribute("chatMemberInsertMap",chatMemberInsertMap);
-		
-		
-		return nextWhere;
+			
+			
+			return nextWhere; //chatMemberDto가 null일경우의 retrun 
+			 
+		}
 		
 		
 	}
@@ -133,6 +131,7 @@ public class ChatRoomController {
 		//나중에 여기에 "강퇴"칼럼의 Y,N 값을 확인해야함 (N만 입장 가능)
 		
 		String userIdInSession = principal.getName();//현재 나의 Id
+		request.setAttribute("userIdInSession", userIdInSession); //////////////형이 필요해서 저장해둔거
 		
 		Map<String, Object> chatMemberselectMap = new HashMap<>();
 		chatMemberselectMap.put("userId", userIdInSession);
@@ -175,53 +174,66 @@ public class ChatRoomController {
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
-	public String chatRoomOut(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum, HttpSession session ) {
+	public String chatRoomOut(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum, HttpSession session) {
 	//form data로 받아온 값 2개로 chatMember table에서 delete 진행
 	
 	Map<String, Object> chatMemberDeleteMap = new HashMap<>();
 	chatMemberDeleteMap.put("userId", userId);
 	chatMemberDeleteMap.put("chatNum", chatNum);
-	//System.out.println("chatMemberDeleteMap   "+chatMemberDeleteMap);
+	System.out.println("chatMemberDeleteMap   "+chatMemberDeleteMap);
 	
 	
 	String returnWhere = "";
 	
 	ChatRoomDTO cdto = chatRoomSelectBychatNum(chatNum);
-	if(cdto.getLeaderId() == userId ) { //나가려는 사람의 id와 방의 리더id가 동일할경우 나가기 금지
+	System.out.println("리더id = "+cdto.getLeaderId());
+	
+	if(cdto.getLeaderId().equals(userId)) { //나가려는 사람의 id와 방의 리더id가 동일할경우 나가기 금지
 		 
 		session.setAttribute("mesg", "방장은 방을 나갈 수 없습니다. 방장 위임 후 다시 시도해주세요.");
 		returnWhere = "redirect:/Chatmore?chatNum="+chatNum;		
 		
 	}else { //리더가 아닌 사람이 나갈 경우
 		
-		//정상진행 시 커뮤니티 홈으로 진입 -> 그런데 잘 delete처리 돼서 목록에 없는지 확인하기 위해 /chatRoom/enter로 리다이렉트
-		//만약 잘 지워졌다면 검수 기능으로 인해 커뮤니티 홈으로 가게 될 것임
-		returnWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; 
-		session.setAttribute("mesg", "방을 나갔습니다.");
+		
 		
 		try {
+			
+			int currntNow = cdto.getCurrentNow(); //현재 인원수 table에서 가져옴 
+			
+			Map<String, Integer> chatRoomRecordNumMap = new HashMap<>();
+			chatRoomRecordNumMap.put("currntNow", (currntNow-1)); //현재 인원 수에서 -1 한 것을 map에 저장
+			chatRoomRecordNumMap.put("chatNum", chatNum);
 		
-			int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap);
+			//chatMember에 delete 하고 chatRoom의 currntNow(현재 인원 수)에 -1 업데이트 tx묶여있음
+			int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap,chatRoomRecordNumMap);
+			
+			
+			//정상진행 시 커뮤니티 홈으로 진입 -> 그런데 잘 delete처리 돼서 목록에 없는지 확인하기 위해 /chatRoom/enter로 리다이렉트
+			//만약 잘 지워졌다면 검수 기능으로 인해 커뮤니티 홈으로 가게 될 것임	
+			session.setAttribute("mesg", "방을 나갔습니다.");
+			returnWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; 
+			
 		
-		
-		//delete를 했는데 0이다? 그러면 문제 있는 것임. 그때는 그 자리에 그대로 있어야함
+		//delete를 했는데 0이다? 그러면 chatmember table에 일치하는 정보가 없는거라, 커뮤니티 홈으로 이동시켜야함 
+		//혹시 모르니 이것도 enter를 먼저 거쳐서 검수 후 커뮤니티 홈으로 이동하게끔 함
 		if(deletNum==0) {
 			
-			returnWhere = "redirect:/Chatmore?chatNum="+chatNum;
+			returnWhere = "redirect:/chatRoom/enter?chatNum="+chatNum;
 			session.setAttribute("mesg", "방을 나갈 수 없습니다. 본인의 방이 맞는지 확인해주세요.");
 		
 		}
 		
 		}catch(Exception e) {
 		
-			//에러 발생 시
+			//뭔가 알 수 없는 에러 발생 시
 			System.out.println("chatRoomOut delete 실패");
 			returnWhere = "redirect:/Chatmore?chatNum="+chatNum;
 			session.setAttribute("mesg", "문제가 발생하였습니다.");
 			
 		}
 	
-	}
+	}//else종료
 	
 	return returnWhere;
 	

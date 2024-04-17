@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.dto.board.PostPageDTO;
 
 @Repository
 public class ChatRoomDAO {
@@ -42,9 +43,10 @@ public class ChatRoomDAO {
 		List<ChatRoomDTO> chatRoomMapList = session.selectList("getAllChatRooms");
 		return chatRoomMapList;
 	}
-
+	
 	public int ChatKickUser(String user) {
 		int n = session.delete("ChatMapper.ChatKickUser", user);
 		return n;
 	}
+
 }

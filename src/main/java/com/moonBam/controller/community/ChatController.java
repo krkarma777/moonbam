@@ -35,7 +35,7 @@ public class ChatController {
 	@ResponseBody
 	public String saveChatRoom(@ModelAttribute ChatRoomDTO chatRoom) {
 		
-		chatRoom.setcDate("2024-4-7");
+		
 		chatRoom.setLeaderId("asd");
 		int n = 0;
 		n = crService.saveChatRoom(chatRoom);

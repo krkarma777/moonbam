@@ -67,4 +67,15 @@
   		
 	</select>
 	
+	
+	<!-- map list select sql -->
+	<select id="getAllChatRooms" resultType="ChatRoomDTO">
+        SELECT post, addr1, addr2
+        FROM chatroom
+    </select>
+
+	
+	
+	
+	
 </mapper>
