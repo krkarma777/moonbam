@@ -27,5 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id = "checkMaster" parameterType="String">
 		select leaderid from chatRoom where chatNum=#{chatNum}
 	</select>
+	
+	
+	<!-- 방 자동 삭제 관련 sql 1개 추가 -miji-->
+	<!-- 현재 방목록 가져오기  -->
+	<select id="chatRoomSelectAll" resultType="ChatRoomDTO">
+		select * from chatRoom
+	</select>
 
 </mapper>
