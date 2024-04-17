@@ -14,6 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <title>문밤</title>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script>
 <link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
 <!-- chatRoomController 에서 작동되는 기능에 결과에 따라서 session에 저장된 mesg값을 다르게 하여 alert를 띄우고 있음   -->
 	<% String mesg = (String) session.getAttribute("mesg");
@@ -169,11 +170,57 @@ button {
 	</section>
 	
 	<!-- 2section -->
-	<section class="section">
-	<div style="height: 910px; width: 1200px; margin: auto;">
-		<h1>지도</h1>
-	</div>
-	</section>
+<section class="section">
+    <div style="height: 600px; width: 100%; margin: auto;">
+        <h1>지도</h1>
+        <div id="map" style="width:100%;height:100%;"></div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var map = new naver.maps.Map("map", {
+        center: new naver.maps.LatLng(37.5, 127.0), // 지도 초기 위치 설정
+        zoom: 10, // 초기 확대 수준 설정
+        mapTypeControl: true
+    });
+
+    <%
+ // 위의 @GetMapping("/mapAPI") 메서드에서 가져온 주소 정보
+ List<ChatRoomDTO> chatRoomMapList = (List<ChatRoomDTO>)request.getAttribute("chatRoomMapList");
+
+ if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
+     // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 실행
+     for (ChatRoomDTO chatRoom : chatRoomMapList) {
+ %>
+ naver.maps.Service.geocode({
+     query: '<%= chatRoom.getAddr1() + " " + chatRoom.getAddr2() %>'
+ }, function(status, response) {
+     if (status === naver.maps.Service.Status.ERROR) {
+         return alert('검색에 실패했습니다.');
+     }
+
+     if (response.v2.meta.totalCount === 0) {
+         return alert('검색 결과가 없습니다.');
+     }
+
+     var item = response.v2.addresses[0],
+         point = new naver.maps.Point(item.x, item.y),
+         marker = new naver.maps.Marker({
+             position: new naver.maps.LatLng(point.y, point.x),
+             map: map
+         });
+
+     // 마커 클릭 시 정보 표시
+     naver.maps.Event.addListener(marker, 'click', function() {
+         alert('<%= chatRoom.getPost() %>');
+     });
+ });
+ <%
+     }
+ }
+ %>
+</script>
+
 	
 	</b></main>
 	
