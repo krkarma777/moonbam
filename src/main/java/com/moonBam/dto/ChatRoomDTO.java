@@ -1,7 +1,7 @@
 package com.moonBam.dto;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 import org.apache.ibatis.type.Alias;
 
@@ -13,8 +13,8 @@ public class ChatRoomDTO {
 	private String roomText; //채팅방 소개글
 	private int currentNow; //현재 인원수
 	private int amount; //최대 인원수
-	private LocalDateTime cDate; //방 생성 날짜
-	private LocalDateTime mDate; //만남 날짜
+	private LocalDate cDate; //방 생성 날짜
+	private LocalDate mDate; //만남 날짜
 	private String category; //방 카테고리
 	private String leaderId; //방장 id
 	private String post; //모임지역 우편번호
@@ -78,22 +78,22 @@ public class ChatRoomDTO {
 	}
 
 
-	public LocalDateTime getcDate() {
+	public LocalDate getcDate() {
 		return cDate;
 	}
 
 
-	public void setcDate(LocalDateTime cDate) {
+	public void setcDate(LocalDate cDate) {
 		this.cDate = cDate;
 	}
 
 
-	public LocalDateTime getmDate() {
+	public LocalDate getmDate() {
 		return mDate;
 	}
 
 
-	public void setmDate(LocalDateTime mDate) {
+	public void setmDate(LocalDate mDate) {
 		this.mDate = mDate;
 	}
 
@@ -148,8 +148,8 @@ public class ChatRoomDTO {
 	}
 
 
-	public ChatRoomDTO(int chatNum, String roomTitle, String roomText, int currentNow, int amount, LocalDateTime cDate,
-			LocalDateTime mDate, String category, String leaderId, String post, String addr1, String addr2) {
+	public ChatRoomDTO(int chatNum, String roomTitle, String roomText, int currentNow, int amount, LocalDate cDate,
+			LocalDate mDate, String category, String leaderId, String post, String addr1, String addr2) {
 		super();
 		this.chatNum = chatNum;
 		this.roomTitle = roomTitle;
