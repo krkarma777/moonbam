@@ -48,11 +48,11 @@
 		<table border='1'>
 			<tr>
 				<td>제목</td>
-				<td colspan="3"> <input type="text" value="${dto.annoTitle}" name="annoTitle" style="width: 100%"></td>
+				<td colspan="3"> <input type="text" value="${dto.annoTitle}" name="annoTitle" style="width: 100%" maxlength="30"></td>
 			</tr>
 			<tr>
 			<td>내용</td>
-				<td colspan="3"><textarea style="width: 100%" rows="10" name="annoText" >${dto.annoText}</textarea></td>
+				<td colspan="3"><textarea style="width: 100%" rows="10" name="annoText" maxlength="500" >${dto.annoText}</textarea></td>
 			</tr>
 			
 			 <tr>
