@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.Date" %>
+
 <!DOCTYPE html>
 <head>
 <meta charset="EUC-KR">
@@ -13,26 +15,29 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
+	${ChatRoomDTO.chatNum} - ${userIdInSession}
 	<h1>chatRoom - ${ChatRoomDTO.roomText}</h1>
 	<form id="chatForm">
-	 <button id="connect">접속</button>
+		<button id="connect">접속</button>
 		<table border="1" style="background: white; width: 500px">
 			<thead>
 				<tr>
 					<td>
 						<!-- 제목, 토글 버튼 --> <input type="checkbox" id="toggle" hidden>
 						<label for="toggle" class="toggleSwitch"> <span
-							id="toggleIcon" class="toggleButton">▶ ${ChatRoomDTO.roomTitle}</span>
+							id="toggleIcon" class="toggleButton">▶
+								${ChatRoomDTO.roomTitle}</span>
 					</label>
 					</td>
-					
-					
-						<td style="width: 20px;">
-							<!-- 설정이 더보기, 더보기로 가는 주소 실행 -->
-							<button onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button>
-						</td>
-					
-					
+
+
+					<td style="width: 20px;">
+						<!-- 설정이 더보기, 더보기로 가는 주소 실행 -->
+						<button
+							onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button>
+					</td>
+
+
 				</tr>
 				<tr>
 					<!-- 첫 화면부터 공간 차지함 -->
@@ -42,12 +47,14 @@
 						</c:if></td>
 				</tr>
 			</thead>
-			<tbody>
-				<tr>
+			<tbody id="message">
+			
+			
+			<tr>
 					<td colspan="3" style="float: left; width: 50%;">
 						<table>
 							<tr>
-								<td><span id="user" style="cursor: pointer;"
+								<td ><span id="user" style="cursor: pointer;"
 									onclick="openMemberWindow()">user</span></td>
 								<td>yy/mm/dd/hh:mm</td>
 							</tr>
@@ -70,12 +77,14 @@
 						</table>
 					</td>
 				</tr>
+				
+				
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="2"><input type="text" name="text"
-						style="width: 85%"> <input type="button" id="btnSubmit"
-						value="전송"></td>
+					<td colspan="2"><input type="text" id="messageContent"
+						name="messageContent" style="width: 85%"> <input
+						type="button" id="send" value="전송"></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -84,21 +93,24 @@
 
 
 	<script>
+	
 		/* 토글 처리 */
-		$('input[id="toggle"]').change(function() {
-			var value = $(this).val();
-			var checked = $(this).prop('checked');
-			var toggle_state;
-			if (checked) {
-				document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
-				document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
-				toggle_state = "on";
-			} else {
-				document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
-				document.getElementById('toggle_state').innerHTML = "&nbsp;";
-				toggle_state = "off";
-			}
-		});
+		$('input[id="toggle"]')
+				.change(
+						function() {
+							var value = $(this).val();
+							var checked = $(this).prop('checked');
+							var toggle_state;
+							if (checked) {
+								document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
+								document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
+								toggle_state = "on";
+							} else {
+								document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
+								document.getElementById('toggle_state').innerHTML = "&nbsp;";
+								toggle_state = "off";
+							}
+						});
 
 		/* 신고하기 */
 		function openReportWindow() {
@@ -122,54 +134,88 @@
 
 		// 소켓 연결
 		function connect() {
-// 여기가 문제다
 			var socket = new SockJS('/acorn/chat-socket');
 			stompClient = Stomp.over(socket);
-			stompClient.connect({}, function() {
+			stompClient.connect({}, function(frame) {
 				console.log('Connected: ' + frame);
+				// 메세지 받는 주소
 				stompClient.subscribe('/topic/messages',
 						function(messageOutput) {
-							showMessageOutput(JSON.parse(messageOutput.body));
+				showMessageOutput(JSON.parse(messageOutput.body));
 						});
 			});
 		}
-		
+
 		// 소켓 연결 해제
 		function disconnect() {
 			console.log("disconnect");
-            if (stompClient !== null) {
-                stompClient.disconnect();
-            }
-            console.log("Disconnected");
-        }
-		
-		
+			if (stompClient !== null) {
+				stompClient.disconnect();
+			}
+			console.log("Disconnected");
+		}
+
 		/* 메시지 전송 */
 		function sendMessage() {
-            var chatRoomId = $('#chatRoomId').val();
-            var messageContent = $('#messageContent').val();
-            var senderId = $('#senderId').val();
-            stompClient.send("/app/chat/send", {}, JSON.stringify({
-                'chatRoomId': chatRoomId,
-                'senderId': senderId,
-                'message': messageContent,
-            }));
-            
-        }
-		
+			var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호    
+			var userId = `${userIdInSession}`; // 사용자 id
+			var message = $("#messageContent").val(); // 메세지 */
+			var serverTime = '<%= new Date().toLocaleString() %>';
+			stompClient.send("/acorn/chat/send", {}, JSON.stringify({
+				'userId' : userId,
+				'message' : message,
+				'serverTime' : serverTime}));
+		}
+
 		// 메세지 출력
-		 function showMessageOutput(messageOutput) {
-            $("#messages").append("<tr><td>" + messageOutput.chatRoomId + "</td><td>" + messageOutput.message + "</td></tr>");
-        }
+		// 최신 메세지 추가(위치는 맨 뒤)
+		// 이전 메세지 추가(위치는 맨위)
+		function showMessageOutput(body) {
+			let content = JSON.parse(body.chatContent);
+			console.log(`${userIdInSession}`)
+			console.log(content.userId)
+
+			let align;
+			let userTag;
+			let timeTag = `<span>` + content.serverTime + `</span>`;
+			let msgTag;
+			
+			if (`${userIdInSession}` == content.userId) {
+				console.log("my")
+				align = "right"
+				className = "my"
+				userTag = `<span>나<span>`;
+				msgTag = `<span>` + content.message + `</span>`;
+			}
+			// other's message
+			else {
+				className="other"
+				align = "left"
+				userTag = `<span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + content.userId + `</span>`
+				msgTag = `<span id="msg" style="cursor: pointer;" onclick="openReportWindow()">` + content.message + `</span>`;
+			}
+			console.log("add")
+			$("#message").append(
+					 `<tr><td class=`+ className +` colspan='3' style='float: '`+ align + `'; width: 50%;'><table><tr><td>` 
+					 + userTag + `</td><td>` + timeTag + `</td></tr>`+ 
+					 `<tr><td>` + msgTag + `</td></tr></table></td></tr>`);
+		}
+
+		$(function() {
+			$("form").on('submit', function(e) {
+				e.preventDefault();
+			});
+			$("#connect").click(function() {
+				connect();
+			});
+			$("#disconnect").click(function() {
+				disconnect();
+			});
+			$("#send").click(function() {
+				sendMessage();
+			});
+		});
 		
-		 $(function () {
-	            $("form").on('submit', function (e) {
-	                e.preventDefault();
-	            });
-	            $( "#connect" ).click(function() { connect(); });
-	            $( "#disconnect" ).click(function() { disconnect(); });
-	            $( "#send" ).click(function() { sendMessage(); });
-	        });
 	</script>
 </body>
 </html>

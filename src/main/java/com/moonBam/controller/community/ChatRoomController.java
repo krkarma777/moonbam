@@ -1,0 +1,248 @@
+package com.moonBam.controller.community;
+
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.moonBam.dto.ChatMemberDTO;
+import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.service.CommunityEnterOutService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class ChatRoomController {
+	
+	
+	@Autowired
+	CommunityEnterOutService comEnterOutService;
+		
+	////////////[재사용할 함수fn]
+	
+	//1.(chatNum 으로 채팅방 정보 가져오기)
+	public ChatRoomDTO chatRoomSelectBychatNum(int chatNum) {
+	
+	return comEnterOutService.chatRoomSelectById(chatNum);
+	
+	}
+	
+	//2. chatNum과 userId를 map에 넣어서 chatmember select하기
+	public ChatMemberDTO chatmemberSelectFn(Map<String, Object> chatMemberselectMap ) {
+		
+		return comEnterOutService.chatMemberEnterSelect(chatMemberselectMap);
+		
+	}
+	
+	
+	
+//	@RequestMapping(value="/chatRoom",  method = RequestMethod.POST)
+//	public ModelAndView chatRoomPost(@RequestParam String chatNum, @RequestParam String text  ) {
+//		System.out.println("chatRoomPost");
+//		ChatRoomDTO crDto = new ChatRoomDTO();
+//		crDto.setRoomTitle("방 제목");
+//		crDto.setRoomText("방 설명");
+//		ModelAndView mav = new ModelAndView("community/chatRoom/chatRoom");
+//		// 방 제목
+//		mav.addObject("title", crDto.getRoomTitle());
+//		// 방 설명
+//		mav.addObject("text", crDto.getRoomText());
+//		return mav;
+//	}
+//	
+	
+	
+	
+	/////방 입장을 위해 방 클릭하면 이렇게 먼저 중복제외하고 insert 진행
+	@RequestMapping(value="/chatRoom",  method = RequestMethod.GET)
+	public String chatRoomGet(@Param("chatNum") int chatNum, HttpSession session, Principal principal) {
+		//방제목이랑 방설명이 필요함 -> 형
+//		// session에서 id 가져오기
+//		// 현재 시간 
+//		System.out.println("chatRoomGet");
+//		ChatRoomDTO crDto = new ChatRoomDTO();
+//		crDto.setRoomTitle("방 제목");
+//		crDto.setRoomText("방 설명");
+//		ModelAndView mav = new ModelAndView("community/chatRoom/chatRoom");
+//		// 방 제목
+//		mav.addObject("title", crDto.getRoomTitle());
+//		// 방 설명
+//		mav.addObject("text", crDto.getRoomText());
+//		return mav;
+		
+		String userIdInSession = principal.getName();//현재 나의 Id
+		
+		//enter를 위한 2개의 data가 들어갈 것임
+		Map<String, Object> chatMemberInsertMap = new HashMap<>();
+		//select조건 2개 map에 저장
+		chatMemberInsertMap.put("userId", userIdInSession);
+		chatMemberInsertMap.put("chatNum", chatNum);
+		System.out.println("chatMemberInsertMap 확인 chatRoomInsert "+chatMemberInsertMap);
+		
+		String nextWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; //정상 진행jsp
+		
+		//일단 중복된 데이터가 없는지 확인 후 insert 진행하기 (중복 저장 방지를 위해~)
+		ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberInsertMap);
+		int recordNum = 0;
+		if(chatMemberDto == null) {//null일 때만 insert
+		
+			//Insert
+			try {	
+				recordNum = comEnterOutService.chatMemberEnterInsert(chatMemberInsertMap);
+				
+				if(recordNum==0) { //인서트를 했는데! 값이 0일경우는 error임
+					nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+				}
+			
+			}catch(Exception e){
+				//모종의 이유로 Insert 실패 시 error임
+				System.out.println("chatMember insert 실패");
+				nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+			}
+			
+		}//if(chatMemberDto ==  null) end
+		
+	
+//		//chatRoomSelect 컨트롤러로 data를 넘기기 위해 저장
+//		redirectAttributes.addFlashAttribute("chatMemberInsertMap",chatMemberInsertMap);
+		
+		return nextWhere;
+		
+		
+	}
+	
+	//DB check 입장 승인할지 말지 결정 (chatNum, UserId 일치여부 확인)
+	@RequestMapping("/chatRoom/enter")
+	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum, HttpSession session, Model model ) {
+		String str = (String) session.getAttribute("userIdInSession");
+		//chatNum과 userIdInSession을 조건으로 가진 select 결과가 있는지 없는지 ChatMemberDTO가져와서 null이 아닐 때만 링크 접속하게 하기
+		//나중에 여기에 "강퇴"칼럼의 Y,N 값을 확인해야함 (N만 입장 가능)
+		
+		String userIdInSession = principal.getName();//현재 나의 Id
+		model.addAttribute("userIdInSession", userIdInSession);
+		
+		Map<String, Object> chatMemberselectMap = new HashMap<>();
+		chatMemberselectMap.put("userId", userIdInSession);
+		chatMemberselectMap.put("chatNum", chatNum);
+		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
+		
+		
+		//정상진행 시 chatRoom.jsp로 진입
+		String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp
+	
+		try {
+			
+			ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberselectMap);
+			System.out.println("chatRoomSelect  "+chatMemberDto);
+			
+			
+			if(chatMemberDto == null ) {
+				returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
+			}
+			
+			
+			
+		}catch(Exception e){
+			
+			System.out.println("chatMember select 실패");
+			returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
+		}
+		
+		
+		/////////request에 저장하여 jsp로 chatNum 전달함 (더보기에서 사용할 예정)
+		request.setAttribute("ChatRoomDTO", this.chatRoomSelectBychatNum( (int) chatMemberselectMap.get("chatNum")));
+		
+		return returnWhere;
+	}
+	
+	
+	
+	
+	////////////////////방 나가기 눌렀을 때///////////////////////////////
+	@RequestMapping("/chatRoom/out")
+	public String chatRoomOut(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum ) {
+	//form data로 받아온 값 2개로 chatMember table에서 delete 진행
+	
+	Map<String, Object> chatMemberDeleteMap = new HashMap<>();
+	chatMemberDeleteMap.put("userId", userId);
+	chatMemberDeleteMap.put("chatNum", chatNum);
+	
+	//정상진행 시 커뮤니티 홈으로 진입 -> 그런데 잘 delete처리 돼서 목록에 없는지 확인하기 위해 /chatRoom/enter로 리다이렉트
+	//만약 잘 지워졌다면 검수 기능으로 인해 커뮤니티 홈으로 가게 될 것임
+	String returnWhere = "redirect:/chatRoom/enter"; 
+	
+	try {
+	
+	int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap);
+	
+	
+	//delete를 했는데 0이다? 그러면 문제 있는 것임. 그때는 그 자리에 그대로 있어야함
+	if(deletNum==0) {
+	returnWhere = "redirect:/Chatmore";
+	
+	}
+	
+	}catch(Exception e) {
+	
+	//에러 발생 시
+	System.out.println("chatRoomOut delete 실패");
+	returnWhere = "redirect:/Chatmore";
+	}
+	
+	
+	return returnWhere;
+	}
+	
+	
+	
+	@RequestMapping("/reportWindow")
+	public String reportWindow() {
+		System.out.println("reportWindow");
+		return "community/chatRoom/report";
+	}
+	
+	// 전달 받을 데이터 수정 필요, 신고 처리 필요함
+	@RequestMapping(value="/chatReport", method = RequestMethod.POST)
+	@ResponseBody
+	public void chatReport() {
+		System.out.println("chatReport");
+	}
+	
+	@RequestMapping("/memberWindow")
+	public String memberWindow() {
+		System.out.println("memberWindow");
+		return "community/chatRoom/member";
+	}
+	
+	// 전달 받을 데이터 수정 필요, 신고 처리 필요함
+		@RequestMapping(value="/chatMember", method = RequestMethod.POST)
+		@ResponseBody
+		public void chatMember() {
+			System.out.println("chatMember");
+		}
+		
+		// 전달 받을 데이터 수정 필요, 신고 처리 필요함
+		@RequestMapping(value="/newLeader", method = RequestMethod.POST)
+		@ResponseBody
+		public void newLeader() {
+			System.out.println("newLeader");
+		}
+		
+		// 전달 받을 데이터 수정 필요, 신고 처리 필요함
+		@RequestMapping(value="/memberRemove", method = RequestMethod.POST)
+		@ResponseBody
+		public void memberRemove() {
+			System.out.println("memberRemove");
+		}
+		
+}

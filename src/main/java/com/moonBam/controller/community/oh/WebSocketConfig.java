@@ -20,6 +20,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
       System.out.println("configureMessageBroker");
     	registry.enableSimpleBroker("/topic/");
-        registry.setApplicationDestinationPrefixes("/app");
+        registry.setApplicationDestinationPrefixes("/acorn");
     }
 }
