@@ -29,7 +29,10 @@ public class ShowReviewController {
 		
 		// 세션에서 로그인 정보 파싱
 		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-		String likeUserId = loginUser.getUserId();
+		String likeUserId=null;
+		if(loginUser!=null) {
+			likeUserId = loginUser.getUserId();
+		}
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("postId", postId);
@@ -44,6 +47,7 @@ public class ShowReviewController {
 			ContentDTO content = service.selectContent(contId);
 			request.setAttribute("content", content);
 			request.setAttribute("review", review);
+			request.setAttribute("likeUserId", likeUserId);
 			request.setAttribute("mesg", (String)request.getAttribute("mesg"));
 			nextPage = "review/reviewViewer";
 		}

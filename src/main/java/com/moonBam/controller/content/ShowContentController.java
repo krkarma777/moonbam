@@ -35,14 +35,17 @@ public class ShowContentController {
 
 
 		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-		
-		// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
-		String likeUserId = loginUser.getUserId();
-
-		//임시 컨텐츠 데이터 생성 (나중에 삭제)
-		if(contId==null) {
-			contId = "1";
+		String likeUserId = null;
+		if(loginUser!=null) {
+			// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
+			likeUserId= loginUser.getUserId();
+			request.setAttribute("member", loginUser);
 		}
+
+//		//임시 컨텐츠 데이터 생성 (나중에 삭제)
+//		if(contId==null) {
+//			contId = "1";
+//		}
 		
 		String nextPage = "";
 		// 예외처리 : contId 부재시
