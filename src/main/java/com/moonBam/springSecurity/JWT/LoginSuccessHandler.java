@@ -52,7 +52,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         //아이디와 역할을 통해 JWT토큰 생성(10시간 유지)
         String token = jwtUtil.createJwt(username, role, 60*60*12000L);
-        System.out.println("LoginSuccessHandler token: "+ token);
+        //System.out.println("LoginSuccessHandler token: "+ token);
         
         //JWT 쿠키 설정
         if (token != null) {

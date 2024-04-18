@@ -51,7 +51,7 @@ public class OAuthService extends DefaultOAuth2UserService {
     	OAuth2User oAuth2User = super.loadUser(userRequest);
     	
     	//소셜에서 받아오는 JSON데이터 확인
-    	System.out.println("oAuth2User: " + oAuth2User.getAttributes());
+    	//System.out.println("oAuth2User: " + oAuth2User.getAttributes());
 
     	//등록을 대비하여 미리 선언
     	MemberDTO register = new MemberDTO();
@@ -60,7 +60,7 @@ public class OAuthService extends DefaultOAuth2UserService {
     	String registrationId = userRequest.getClientRegistration().getRegistrationId();
     	
     	//어디 소셜인지 확인
-    	System.out.println("registrationId: " + registrationId);
+    	//System.out.println("registrationId: " + registrationId);
     	
     	OAuth2Response oAuth2Response = null;
     	

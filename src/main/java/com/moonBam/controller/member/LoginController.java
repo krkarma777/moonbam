@@ -53,45 +53,7 @@ public class LoginController {
 	
 	@RequestMapping("/mainLogin")   
 	public String Login() {
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-		Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-		GrantedAuthority auth = iter.next();
-		String role = auth.getAuthority();
-		
-		System.out.println("name: "+name);
-		System.out.println("role: "+role);
-		
 		return "member/Login/loginMain";
-	}
-	
-	@GetMapping("/logining")   
-	public String logining(Principal principal, HttpSession session) {
-		
-		System.out.println("principal: "+principal);
-		
-		// principal이 null인지 확인
-	    if (principal == null) {
-	        // 로그인하지 않은 사용자가 접근한 경우에 대한 처리
-	        return "redirect:/";
-	    }
-		
-		String userId = principal.getName();
-		System.out.println("userId: "+userId);
-		
-		//닉네임 찾기		
-		MemberDTO memberData = dao.userDetail(userId);
-	    MemberDTO dto = new MemberDTO();
-	      	dto.setUserId(userId);
-	      	dto.setNickname(memberData.getNickname());
-	      	dto.setRole(memberData.getRole());
-	      	dto.setEnabled(memberData.isEnabled());
-		System.out.println("dto: "+dto);
-		session.setAttribute("loginUser", dto);
-		return "redirect:/";
 	}
 	
 	@RequestMapping("/FindInfo")   
