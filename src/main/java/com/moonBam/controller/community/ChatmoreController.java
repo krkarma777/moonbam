@@ -3,6 +3,7 @@ package com.moonBam.controller.community;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.AdminReportDTO;
+import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReportDTO;
 import com.moonBam.service.CommunityChatmoreService;
+import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
 
 
@@ -31,6 +34,19 @@ public class ChatmoreController {
 	@Autowired
 	MemberLoginService memberLoginService;
 	
+	@Autowired
+	CommunityEnterOutService comEnterOutService;
+	
+	//////////////재사용 함수/////////////////
+	//1.(chatNum 으로 채팅방 정보 가져오기)
+	public ChatRoomDTO chatRoomSelectBychatNum(int chatNum) {
+		
+		return comEnterOutService.chatRoomSelectById(chatNum);
+		
+		}
+	////////////////////////////////////////
+	
+	
 	@RequestMapping(value = "/Chatmore", method=RequestMethod.GET)
 	public String Chatmore(int chatNum, Model m, Principal principal) {
 		System.out.println("/Chatmore 호출");
@@ -39,7 +55,7 @@ public class ChatmoreController {
 		
 		//1. chatNum을 이용하여 ChatMember DB에서 방에 들어가있는 user들의 Id를 얻을 수 있음
 		List<String> ChatMemberIdByChatNum =  chatmoreService.ChatMemberIdByChatNum(chatNum);
-		//System.out.println("ChatMemberIdByChatNum의 결과인 userId들"+ChatMemberIdByChatNum);
+		//System.out.println("ChatMemberIdByChatNum의 결과인 userId들"+ChatMemberIdByChatNum);  
 		
 		//2. 얻어온 user들의 Id를 memberDB에서 조회하면서 LIST에 담은 정보 JSP에 보내주기
 		List<MemberDTO> memberDtoList = new ArrayList<>();
@@ -61,9 +77,13 @@ public class ChatmoreController {
 		//4. session에 저장되었던 login정보를 principal로 바꾸면서 추가한 코드
 		MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
 		
+		
+		//5. chatNum을 이용해서 가져온 chatRoomDto 가져오기
+		ChatRoomDTO chatroomDTO = chatRoomSelectBychatNum(chatNum);
+		
 		m.addAttribute("leadermemberDto", leadermemberDto); ////////////리더의 dto정보
 		m.addAttribute("memberDtoList", memberDtoList); ////////////대화방 참여하고 있는 멤버들
-		m.addAttribute("chatNum",chatNum); //////////chatNum
+		m.addAttribute("chatroomDTO",chatroomDTO); //////////chatRoomDTO
 		m.addAttribute("memberDTO", memberDTO); ////////////내 로그인 정보
 	
 		return "/community/chat-more"; //jsp

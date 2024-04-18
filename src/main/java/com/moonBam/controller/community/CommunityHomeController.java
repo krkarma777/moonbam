@@ -28,7 +28,14 @@ public class CommunityHomeController {
 		if(curPage==null) {
 			curPage="1";
 		}
-		
+		System.out.println("채팅방 검색조건을 service 레이어에 전달==========");
+		System.out.println("searchCategory");
+		System.out.println(searchCategory);
+		System.out.println("searchValue");
+		System.out.println(searchValue);
+		System.out.println("curPage");
+		System.out.println(curPage);
+		System.out.println("======================================");
 		CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
 		
     	model.addAttribute("cpDTO", cpDTO);

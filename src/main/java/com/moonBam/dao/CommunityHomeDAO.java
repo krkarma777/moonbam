@@ -20,6 +20,9 @@ public class CommunityHomeDAO {
 		int perPage = cpDTO.getPerPage();
 		int offset = (Integer.parseInt(curPage)-1)*perPage;
 		
+		System.out.println("검색 조건이 있는 map을 mapper로 전달=============");
+		System.out.println(map);
+		System.out.println("========================================");
 		List<ChatRoomDTO> chatRoomList = session.selectList("chatRoomList", map, new RowBounds(offset, perPage));
 		
 		cpDTO.setCurPage(Integer.parseInt(curPage));
