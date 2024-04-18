@@ -72,10 +72,11 @@
 			<td>
 				<form id="goOutForm" method="post" action="#">
 				<input type="hidden" name="userId" value="${memberDTO.userId}">
-				<input type="hidden" name="chatNum" value="${chatNum}">
+				<input type="hidden" name="chatNum" value="${chatroomDTO.chatNum}">
 				</form>	
 				<button onclick="fnGoOut()">방 나가기</button>
 				<c:if test="${leadermemberDto.userId == memberDTO.userId}">
+				  <button onclick="history.back()">뒤로가기</button>
 				<!-- 방 삭제하기는 방장만 보이게 처리했음  -->
 				<button onclick="fnRemove()">방 삭제하기</button>
 				</c:if>
@@ -112,7 +113,7 @@
 		//회원 신고하기 눌렀을 때 작동되는 fn
 		function fnReport(userId) {
 			
-			var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatNum}
+			var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
 			
 			childOpen(openUrl);
 			
