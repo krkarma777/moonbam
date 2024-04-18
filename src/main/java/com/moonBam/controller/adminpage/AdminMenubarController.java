@@ -39,10 +39,10 @@ public class AdminMenubarController {
 		return "/AdminPage/AdminPagePostRule";
 	}
 	
-	@RequestMapping(value = "/AdminPage/toAdminPagePostRestricted")
+	@RequestMapping(value = "/AdminPage/toAdminPageDeletedPost")
 	public String AdmintoAdminPagePostExp() {
-		System.out.println("in adminpage.MainController : AdmintoAdminPagePostExp()");
-		return "/AdminPage/AdminPagePostRestricted";
+		System.out.println("in adminpage.MainController : AdminPageDeletedPost");
+		return "/AdminPage/AdminPageDeletedPost";
 	}
 	
 	@RequestMapping(value = "/AdminPage/toAdminPageMemRprtedMem")
@@ -79,18 +79,6 @@ public class AdminMenubarController {
 	public String AdmintoAdminPageEvent() {
 		System.out.println("in adminpage.MainController : AdmintoAdminPageEvent()");
 		return "/AdminPage/AdminPageEvent";
-	}
-	
-	@RequestMapping(value = "/AdminPage/toAdminPageAPI")
-	public String AdmintoAdminPageAPI() {
-		System.out.println("in adminpage.MainController : AdmintoAdminPageAPI");
-		return "/AdminPage/AdminPageAPI";
-	}
-	
-	@RequestMapping(value = "/AdminPage/toAdminPageMonitoring")
-	public String AdmintoAdminPageMonitoring() {
-		System.out.println("in adminpage.MainController : AdmintoAdminPageMonitoring()");
-		return "/AdminPage/AdminPageMonitoring";
 	}
 	
 	

@@ -1,5 +1,7 @@
 package com.moonBam.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,9 @@ public class QnADAO {
         session.insert("QnAmapper.submitQnA");
         return num;
     }
+
+	public List<QnADTO> getQnaList() {
+		List<QnADTO> list = session.selectList("QnAMapper.getQnaList");
+		return list;
+	}
 }

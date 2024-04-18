@@ -34,8 +34,16 @@ public class ChatRoomService {
 		return master;
 	}
 
+
+	public int ChatKickUser(String user) {
+		int n = dao.ChatKickUser(user);
+		
+		return n;
+	}
+
 	public List<ChatRoomDTO> getAllChatRooms() {
 		
 		return dao.getAllChatRooms();
+
 	}
 }

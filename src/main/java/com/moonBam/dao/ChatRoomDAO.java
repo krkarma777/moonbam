@@ -43,4 +43,10 @@ public class ChatRoomDAO {
 		List<ChatRoomDTO> chatRoomMapList = session.selectList("getAllChatRooms");
 		return chatRoomMapList;
 	}
+	
+	public int ChatKickUser(String user) {
+		int n = session.delete("ChatMapper.ChatKickUser", user);
+		return n;
+	}
+
 }

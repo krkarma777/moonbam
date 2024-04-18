@@ -35,8 +35,8 @@ public class ChatController {
 	@ResponseBody
 	public String saveChatRoom(@ModelAttribute ChatRoomDTO chatRoom) {
 		
-		chatRoom.setmDate("2024-4-7");
-		chatRoom.setLeaderId("");
+		
+		chatRoom.setLeaderId("asd");
 		int n = 0;
 		n = crService.saveChatRoom(chatRoom);
 		if(n==1) {
@@ -72,6 +72,13 @@ public class ChatController {
 			if(n==1) {System.out.println("권한 위임 정상 처리");}else {System.out.println("권한 위임 실패");}
 		}
 		//////////////////
+		
+		return "";
+	}
+	
+	@RequestMapping(value = "/ChatKickUser", method = RequestMethod.GET)
+	public String ChatKickUser (String user) {
+		int n = crService.ChatKickUser(user);
 		
 		return "";
 	}
