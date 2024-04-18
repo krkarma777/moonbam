@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+body {
+	font-family: 'Arial', sans-serif;
+	margin: 20px;
+	text-align: center;
+}
+
+.notFound {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.mesg {
+	font-size: 18px;
+	margin-bottom: 20px;
+	color: red;
+}
+
+#sitesShortCut {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
+.links {
+	padding: 10px;
+	background-color: #FF416C;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 16px;
+}
+
+.links:hover {
+  background-color: #ff2858;
+}
+
+.links:active {
+  transform: scale(0.95);
+}

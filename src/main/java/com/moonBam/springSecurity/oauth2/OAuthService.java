@@ -1,6 +1,10 @@
 package com.moonBam.springSecurity.oauth2;
 
+import java.net.http.HttpClient.Redirect;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -15,6 +19,9 @@ import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dao.member.OpenApiDAO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
+import com.nimbusds.oauth2.sdk.Response;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class OAuthService extends DefaultOAuth2UserService {
@@ -112,7 +119,11 @@ public class OAuthService extends DefaultOAuth2UserService {
         //이미 가입한 유저일 경우
         if(dto != null) {
         	
-        	System.out.println("기존유저1: "+dto);
+//        	System.out.println("OAuthService: 기존유저의 경우: "+dto);
+//        	System.out.println("OAuthService: 기존유저 등급: "+dto.getRole());
+        	if(dto.getRole().equals("ROLE_ADMIN")) {
+        		 throw new OAuth2AuthenticationException("관리자 아이디로 소셜 로그인 시도");
+        	}
         	
         	// 소셜에 따라 추가 연동 체크
     		if(registrationId.equals("naver")){
@@ -126,8 +137,6 @@ public class OAuthService extends DefaultOAuth2UserService {
             if(registrationId.equals("kakao")){
             	oad.updateAPIMemberKakaoConnected(dto.getUserId());
             }
-    		
-    		System.out.println("기존유저2: "+dto);
     		
     		//기존 유저의 Role 전송
     		role = dto.getRole();

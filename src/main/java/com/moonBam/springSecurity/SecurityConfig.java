@@ -22,6 +22,7 @@ import com.moonBam.springSecurity.JWT.JWTFilter;
 import com.moonBam.springSecurity.JWT.JWTUtil;
 import com.moonBam.springSecurity.JWT.LoginFilter;
 import com.moonBam.springSecurity.JWT.LoginSuccessHandler;
+import com.moonBam.springSecurity.JWT.LoginfailureHandler;
 import com.moonBam.springSecurity.oauth2.OAuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtil jwtUtil;
 	private final LoginSuccessHandler loginSuccessHandler;
+	private final LoginfailureHandler loginfailureHandler;
 	private final HttpFirewall customHttpFirewall;
 	
 	@Value("${jwt.expiredMs}") String expiredMs;
@@ -80,6 +82,7 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
                  .userInfoEndpoint(endpoint -> endpoint.userService(oAuthService))
 	//			.loginPage("/mainLogin")
 				.successHandler(loginSuccessHandler)
+				.failureHandler(loginfailureHandler)
 				);
 
 		//권한따라 허용되는 url 설정
@@ -87,7 +90,7 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
                 (authorize) -> authorize
                 .requestMatchers("/memberList", "/AdminPage/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
-);
+				);
 		
 		//세션관리
 		security.sessionManagement()

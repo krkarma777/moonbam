@@ -228,7 +228,7 @@
 	    
 	    
 	    
-	  //로그인 전송을 시도할 경우, 발동
+	  //회원가입 진행을 시도할 경우, 발동
 	    $("#registerForm").on("submit", function(event) {
 	    	event.preventDefault(); // 폼이 서버로 전송되지 않도록 기본 동작을 막음
 	        

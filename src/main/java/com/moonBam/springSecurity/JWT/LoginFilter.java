@@ -16,6 +16,7 @@ import com.moonBam.springSecurity.SpringSecurityUser;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +27,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     private final Long expiredMs;
-
+    private String userIdSave;
+    
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-    	String userIdSave = request.getParameter("userIdSave");
-    	String autoLogin = request.getParameter("autoLogin");
+    	userIdSave = request.getParameter("userIdSave");
     	
-    	System.out.println("아이디 저장: " + userIdSave);				//체크되면 on
+    	System.out.println("LoginFilter: 아이디 저장: " + userIdSave);				//체크되면 on
     	
 		//클라이언트 요청에서 username, password 추출
     	// String username = obtainUsername(request);
     	// String password = obtainPassword(request);
     	String username = request.getParameter("userId");
     	String password = request.getParameter("userPw");
-        System.out.printf("Username: "+ username+" Password: "+ password);
+        System.out.printf("LoginFilter: Username: "+ username+" Password: "+ password);
 
 		//스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
@@ -78,6 +79,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             cookieValue += "; Secure";
         }
         response.addHeader("Set-Cookie", cookieValue);
+        
+        System.out.println("LoginFilter: 아이디 저장 확인_쿠키 생성: " + userIdSave);			//체크되면 on
+        System.out.println("LoginFilter: role 확인: " + role);
+        
+        if(userIdSave != null) {
+        	Cookie cookie = new Cookie("userId", username);
+        	cookie.setMaxAge(60*60*24*1);									//1일 간 아이디 저장 유지
+        	response.addCookie(cookie);
+        }
+        if(userIdSave == null || role.equals("ROLE_ADMIN")) {				//저장되지 않으면 쿠키 삭제
+        	Cookie cookie = new Cookie("userId", null);						//등급이 관리자면 쿠키 삭제
+        	cookie.setMaxAge(0);											
+        	response.addCookie(cookie);
+        }
         	
         // 루트 주소로 리다이렉트
         response.sendRedirect("/acorn");

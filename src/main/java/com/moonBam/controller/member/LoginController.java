@@ -29,6 +29,8 @@ import com.moonBam.service.member.OpenApiService;
 import com.nimbusds.oauth2.sdk.Response;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -112,6 +114,12 @@ public class LoginController {
 	@RequestMapping("/NotAuthentic")   
 	public String notAuthentic() {
 		return "member/Find_Info/notAuthentic";
+	}
+	
+	//OAuth2 로그인 에러 처리페이지
+	@GetMapping("/OAuth2Error")
+	public String OAuth2Error() {
+		return "member/Find_Info/doNotSocialLoginByAdminID";
 	}
 	
 	//로그인
