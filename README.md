@@ -10,6 +10,7 @@
 
 ### 프로그래밍 언어 및 개발 환경
 - **Java**: JDK 17을 사용하여 백엔드 로직을 구현.
+- **Spring Boot**: 모던 웹 애플리케이션 개발을 위한 프레임워크, 빠른 개발과 간편한 배포 제공.
 - **JSP/Servlet**: 동적 웹 페이지 생성과 서버 사이드 로직 처리.
 - **JavaScript/CSS/HTML**: 프론트엔드 인터페이스 구현.
 
@@ -58,11 +59,6 @@
    ```
 
  ## 구성
-문화인들의 밤은 다음과 같은 기술 스택으로 구성되어 있습니다:
-
-- Backend: Spring Boot, Java
-- Frontend: HTML, CSS, JavaScript
-- Database: Oracle DB 11g
 
  ### 주요 설정 파일
 application.properties 설정 예시:
