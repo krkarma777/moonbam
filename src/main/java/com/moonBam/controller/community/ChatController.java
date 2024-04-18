@@ -126,7 +126,19 @@ public class ChatController {
 	
 	@RequestMapping(value = "/ChatKickUser", method = RequestMethod.GET)
 	public String ChatKickUser (String user) {
-		int n = crService.ChatKickUser(user);
+		
+		int n = 0;
+		
+		System.out.println("ChatKickUser===================");
+		System.out.println("강퇴할 유저의 이름 확ㅇ인 후 서비스레이어 전달");
+		System.out.println(user);
+		System.out.println("=================================");
+		
+		n = crService.ChatKickUser(user);
+		
+		System.out.println("1이면 정상처리됨==========");
+		System.out.println(n);
+		System.out.println("====================");
 		
 		return "";
 	}

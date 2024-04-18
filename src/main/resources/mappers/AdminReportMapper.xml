@@ -25,8 +25,15 @@ order by REPORTID asc
     </select>
     
 <select id = "ReportedMemberList" resultType = "AdminReportDTO" parameterType = "HashMap">
-    	select userid, sum(lang) lang, sum(sexual) sexual, sum(abusing) abusing,
-    	 sum(ruleviolation) ruleviolation, sum(etc) etc from adminreported  
+    	SELECT 
+		    userid,
+		    SUM(CASE WHEN lang = 't' THEN 1 ELSE 0 END) AS lang,
+		    SUM(CASE WHEN sexual = 't' THEN 1 ELSE 0 END) AS sexual,
+		    SUM(CASE WHEN abusing = 't' THEN 1 ELSE 0 END) AS abusing,
+		    SUM(CASE WHEN ruleviolation = 't' THEN 1 ELSE 0 END) AS ruleviolation,
+		    SUM(CASE WHEN etc = 't' THEN 1 ELSE 0 END) AS etc
+		FROM 
+		    adminreported
 	<choose>
 	<when test = "criteria == 'userid'" >
 		where userid like '%'||#{SearchValue}||'%'
