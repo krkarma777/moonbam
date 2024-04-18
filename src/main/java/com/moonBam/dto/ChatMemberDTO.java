@@ -1,5 +1,8 @@
 package com.moonBam.dto;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.apache.ibatis.type.Alias;
 
 @Alias("ChatMemberDTO")
@@ -37,6 +40,9 @@ public class ChatMemberDTO {
 	public ChatMemberDTO() {
 		super();
 		// TODO Auto-generated constructor stub
+//		LocalDateTime now = LocalDateTime.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        this.enterTime = now.format(formatter);
 	}
 	public ChatMemberDTO(int chatNum, String userId, String enterTime) {
 		super();

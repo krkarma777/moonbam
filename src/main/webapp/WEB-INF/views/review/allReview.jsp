@@ -1,75 +1,83 @@
+<%@page import="com.moonBam.dto.ReviewDTO"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+	List<ReviewDTO> reviewList = (List<ReviewDTO>)request.getAttribute("reviewList");
+	
+%>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="resources/js/fullpage/jquery.fullPage.js"></script>
-<script>
-$(document).ready(function() {
-	$('#fullpage').fullpage({
-		//options here
-		autoScrolling:true,
-		scrollHorizontally: true,
-        navigation:true,
-	});
-});
-</script>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
 	crossorigin="anonymous">
-
 </head>
 
 <body class="bg-light" style="height: 100vh;">
+	<!-- 네비게이션바 -->
+	<jsp:include page="../common/navBar.jsp"></jsp:include>
+
+	<div style="height: 50px"></div>
 	
 	<!-- 바디 -->
-	<main id="fullpage" class="">
-	<!-- <table>
-		<tr> -->
-			<!-- for문 시작 -->
-			<% int count = 0;
-			int totalReview = 27;
-			int totalPage = 27/12;
-			if(27%12>0)totalPage++;
-			for(int i=1; i<=totalPage; i++){ %>
-        	<section class="section">
-            	<table align="center">
-            		<%for(int j=1; j<=3; j++){ %><!-- 3줄 -->
-					<tr>
-						<%for(int k=1; k<=4; k++){ //한 줄에 4개
-							if(totalReview==count)break;
-							count++;%>
-						<td>
-							<div class="border rounded-2">
-								<div class="border-bottom" style="height: 25px; width: 250px;">글쓴이 정보</div>
-								<div style="height: 180px; width: 250px;">내용</div>
-								<div class="border-top " style="height: 30px; width: 250px;">좋아요</div>
+	<div style="height: 910px; width: 1200px; margin: auto;"><b>
+		<!-- 상단 버튼 -->
+		<div style="">
+			<!-- 리뷰 쓰기 -->
+			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" id=""><b>리뷰 쓰기</b></button>
+		</div>
+		
+		<!-- community목록 -->
+		<table style="margin-top: 5px; width:1200px; height:795px">
+			<%int count = 0;
+			for(int j=1; j<=3;j++){	%>
+				<tr style="width: 1200px; height: 265px;">
+					<%for(int k=1; k<=4; k++) { 
+						if(count==reviewList.size()) break;
+						ReviewDTO review = reviewList.get(count);
+						Long postId = review.getPostId();
+						String postTitle = review.getPostTitle();
+						String postdate = review.getPostDate();
+						String postText = review.getPostText();
+						String nickname = review.getNickname();
+					%>
+					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
+						<div class="border" style="width: 300px; height: 265px;">
+							<div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
+								<a href="chatRoom?chatNum=<%=postId%>" style="color:black; font-size: 19px;"><%=postTitle %></a>
 							</div>
-						</td>
-						<%} %>
-					</tr> 
-					<%} %>
-				</table>
-        	</section>
-        	<%} %>
-        <!-- </tr>
-	</table> -->
-	</main>
-	
-	<!-- 네비게이션 바 -->
-	<jsp:include page="../common/navBar.jsp"></jsp:include>
+							<div class="border-top" style="height: 225px; width: 300px;">
+								<div style=" font-size: 18px; height: 195px;">
+									<%=postText %>
+								</div>
+								<div style="width: 100%; height:20px; font-size: 18px; padding-left: 2px; padding-right: 5px;">
+									<div style="float: left;"></div>
+									<div style="float: right;"><%=postdate %></div>
+								</div>
+							</div>
+						</div>
+					</td>
+					<%count++; } %>
+				</tr>
+			<%} %>
+		</table>
+		
+	</b></div>
 	<!-- 푸터 -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 	
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+	})
+</script>
 </body>
 </html>

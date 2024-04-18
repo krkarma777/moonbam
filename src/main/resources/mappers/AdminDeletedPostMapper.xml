@@ -8,5 +8,21 @@
 		select * from admindeletedpost
 	</select>
 
+	<!-- 운영자 삭제 -->
+	<insert id="insertDeletedPostsfromReport" parameterType = "AdminDeletedPostDTO">
+		insert into admindeletedpost values(
+			#{deletedate}, #{postid}, #{postboard},
+			#{userid}, #{contid}, #{posttitle},
+			#{postdate}, #{posteditdate}, #{posttext},
+			#{categoryid}, #{cause}, #{expiredate}
+		)
+	</insert>
+	
+	<!-- 자진삭제 -->
+	<insert id="insertDeletedPostsfromPost" parameterType = "AdminDeletedPostDTO">
+		insert into admindeletedpost values(
+		
+		)
+	</insert>
 
 </mapper>

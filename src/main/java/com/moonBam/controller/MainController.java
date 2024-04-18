@@ -41,7 +41,7 @@ public class MainController {
         List<PostPageDTO> moviePostList = service.selectAll(new HashMap<String, String>() {
             {
                 put("board", "movie");
-                put("postCount", "5");
+                put("postCount", "16");
             }
         });
 

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.ChatRoomDTO;
@@ -17,13 +18,8 @@ public class CommunityEnterOutDAO {
 	SqlSessionTemplate session;
 
 	public int chatMemberEnterInsert(Map<String, Object> chatMemberInsertMap) {
-		
 		// TODO Auto-generated method stub
-		int num = session.insert("CommunityChatEnterOutMapper.chatMemberInsertMap", chatMemberInsertMap);
-//		if(num >= 2) { //중복 저장시 롤백
-//			session.rollback();
-//		}
-		return num;
+		return session.insert("CommunityChatEnterOutMapper.chatMemberInsertMap", chatMemberInsertMap);
 	}
 
 	public ChatMemberDTO chatMemberEnterSelect(Map<String, Object> chatMemberselectMap) {
@@ -39,6 +35,22 @@ public class CommunityEnterOutDAO {
 	public int chatMemberDeleteBychatNumAndUserId(Map<String, Object> chatMemberDeleteMap) {
 		// TODO Auto-generated method stub
 		return session.delete("CommunityChatEnterOutMapper.chatMemberDeleteBychatNumAndUserId",chatMemberDeleteMap);
+	}
+
+	
+	public int chatRoomCurrntNowAdd(Map<String, Integer> chatRoomRecordNumMap) {
+		// TODO Auto-generated method stub
+		return session.update("CommunityChatEnterOutMapper.chatRoomCurrntNowAdd", chatRoomRecordNumMap);
+	}
+
+	public int chatMemberDeleteByChatNum(int chatNum) {
+		// TODO Auto-generated method stub
+		return session.delete("CommunityChatEnterOutMapper.chatMemberDeleteByChatNum",chatNum);
+	}
+
+	public int chatRoomDeleteByChatNum(int chatNum) {
+		// TODO Auto-generated method stub
+		return session.delete("CommunityChatEnterOutMapper.chatRoomDeleteByChatNum",chatNum);
 	}
 	
 	

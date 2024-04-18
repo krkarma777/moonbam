@@ -97,7 +97,7 @@
     </select>
     
     <select id="selectContent" parameterType="string" resultType="ContentDTO">
-    	select * from contentDB where contId = #{contId}
+    	select contid, conttitle, description, nation, to_char(releasedate, 'yyyy-mm-dd') releasedate, avgrate, conttype, contimg, popularity from contentDB where contId = #{contId}
     </select>
     
     <update id="UpdateLike" parameterType="hashmap">
@@ -167,5 +167,29 @@
 
     </update>
     
-    
+    <select id="allReview" parameterType="hashmap" resultType="ReviewDTO">
+    	SELECT *
+		FROM (
+		    select *
+		    from 
+		    postdb left join ratedb using(userId, contId)
+		    
+		    <!--각 리뷰 좋아요수 조인  -->
+		    left join  
+		    (
+		        select postId, count(*) As likeNum from likedb group by postId
+		    ) using (postId)
+		    
+		    <!--각 리뷰 본인이 좋아요 누른지 여부 조인  -->
+		    <if test="likeUserId!=null">
+			    left join 
+			    (
+			        select postId, isLike from likedb where userId = #{likeUserId}
+			    ) using (postId)
+		    </if>
+		    
+		    where (postBoard, contId) in (('review', #{contId}))
+		    ORDER BY postDate desc
+		)
+    </select>
 </mapper>

@@ -13,13 +13,13 @@
 			 	ROOMTITLE like '%'||#{searchValue}||'%'
 			</if>
 			<if test = "searchCategory == '영화'">
-			 	category = '영화' and ROOMTITLE like '%'||#{searchValue}||'%'
+			 	category = 'movie' and ROOMTITLE like '%'||#{searchValue}||'%'
 			</if>
 			<if test = "searchCategory == '독서'">
-			 	category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+			 	category = 'book' and ROOMTITLE like '%'||#{searchValue}||'%'
 			</if>
 			<if test = "searchCategory == '음악'">
-			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+			 	category = 'music' and ROOMTITLE like '%'||#{searchValue}||'%'
 			</if>
 		</where>
 		order by chatnum desc
@@ -27,20 +27,35 @@
 	
 	<select id="chatRoomList" resultType="ChatRoomDTO" parameterType="HashMap">
 		select * from chatroom
-		<where>
-			<if test = "searchCategory == '전체'">
-			 	ROOMTITLE like '%'||#{searchValue}||'%'
-			</if>
-			<if test = "searchCategory == '영화'">
-			 	category = '영화' and ROOMTITLE like '%'||#{searchValue}||'%'
-			</if>
-			<if test = "searchCategory == '독서'">
-			 	category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
-			</if>
-			<if test = "searchCategory == '음악'">
-			 	category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
-			</if>
-		</where>
+			<choose>
+  			<when test="searchCategory == '전체'">
+  				where ROOMTITLE like '%'||#{searchValue}||'%' or
+  				ROOMText like '%'||#{searchValue}||'%' or
+  				addr1 like '%'||#{searchValue}||'%' or
+  				addr2 like '%'||#{searchValue}||'%'
+  			</when>
+  			<when test="searchCategory == '영화'">
+  				where (ROOMTITLE like '%'||#{searchValue}||'%' or
+  				ROOMText like '%'||#{searchValue}||'%' or
+  				addr1 like '%'||#{searchValue}||'%' or
+  				addr2 like '%'||#{searchValue}||'%') and
+  				category = 'movie'
+  			</when>
+  			<when test="searchCategory == '독서'">
+  				where (ROOMTITLE like '%'||#{searchValue}||'%' or
+  				ROOMText like '%'||#{searchValue}||'%' or
+  				addr1 like '%'||#{searchValue}||'%' or
+  				addr2 like '%'||#{searchValue}||'%') and
+  				category = 'book'
+  			</when>
+  			<when test="searchCategory == '음악'">
+  				where (ROOMTITLE like '%'||#{searchValue}||'%' or
+  				ROOMText like '%'||#{searchValue}||'%' or
+  				addr1 like '%'||#{searchValue}||'%' or
+  				addr2 like '%'||#{searchValue}||'%') and
+  				category = 'music'
+  			</when>
+  		</choose>
 		order by chatnum desc
 	</select>
   	
@@ -55,16 +70,27 @@
   				and ROOMTITLE like '%'||#{searchValue}||'%'
   			</when>
   			<when test="searchCategory == '영화'">
-  				and category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+  				and category = 'movie' and ROOMTITLE like '%'||#{searchValue}||'%'
   			</when>
   			<when test="searchCategory == '독서'">
-  				and category = '독서' and ROOMTITLE like '%'||#{searchValue}||'%'
+  				and category = 'book' and ROOMTITLE like '%'||#{searchValue}||'%'
   			</when>
   			<when test="searchCategory == '음악'">
-  				and category = '음악' and ROOMTITLE like '%'||#{searchValue}||'%'
+  				and category = 'music' and ROOMTITLE like '%'||#{searchValue}||'%'
   			</when>
   		</choose>
   		
 	</select>
+	
+	
+	<!-- map list select sql -->
+	<select id="getAllChatRooms" resultType="ChatRoomDTO">
+        SELECT post, addr1, addr2
+        FROM chatroom
+    </select>
+
+	
+	
+	
 	
 </mapper>

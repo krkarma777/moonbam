@@ -14,6 +14,12 @@
 <head>
 <meta charset="UTF-8">
 <title>문밤</title>
+<!-- 정상 지도 뿌리기 (이거 열어두면 송하 돈 나감)  작동 테스트 완료-->
+<!-- <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script> -->
+<!-- 임시 지도 뿌리기 (오류 나는 게 맞음)  -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ClientId&submodules=geocoder"></script>
+
+
 <link rel="stylesheet" href="resources/js/fullpage/jquery.fullPage.css">
 <!-- chatRoomController 에서 작동되는 기능에 결과에 따라서 session에 저장된 mesg값을 다르게 하여 alert를 띄우고 있음   -->
 	<% String mesg = (String) session.getAttribute("mesg");
@@ -50,9 +56,21 @@
 		})
 		
 		//community개설로 이동
-		$("#createCommunity").click(function(){
-			console.log("createCommunity");
-			window.location.href = "/acorn/createChat";
+		$("#createCommunity").click(function(){			
+			// 새 창에서 소모임 개설 페이지 열기
+		    var newWindow = window.open('about:blank', '_blank', 'width=470px,height=705px');
+			
+		    // 새 창의 위치를 브라우저의 정중앙으로 설정
+		    var screenWidth = window.screen.width;
+		    var screenHeight = window.screen.height;
+		    var windowWidth = 470;
+		    var windowHeight = 705;		
+		    var left = (screenWidth - windowWidth) / 2;
+		    var top = (screenHeight - windowHeight) / 2;
+		    
+		    newWindow.moveTo(left, top);
+		    
+		    newWindow.location.href = 'http://localhost:8090/acorn/createChat';
 		})
 		
 	})
@@ -108,9 +126,9 @@ button {
 		<!-- 상단 버튼 -->
 		<div style="">
 			<!-- 내 채팅방 목록 보기 버튼 -->
-			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8; " id="myChatList"><b>나의</b></button>
+			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;" id="myChatList"><b>나의</b></button>
 			<!-- 개설 버튼 -->
-			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto; opacity : 0.8;" id="createCommunity"><b>개설</b></button>
+			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" id="createCommunity"><b>개설</b></button>
 		</div>
 		
 		<!-- community목록 -->
@@ -157,11 +175,56 @@ button {
 	</section>
 	
 	<!-- 2section -->
-	<section class="section">
+<section class="section">
 	<div style="height: 910px; width: 1200px; margin: auto;">
-		<h1>지도</h1>
-	</div>
-	</section>
+        <div id="map" style="width:100%;height:100%;"></div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var map = new naver.maps.Map("map", {
+        center: new naver.maps.LatLng(37.5, 127.0), // 지도 초기 위치 설정
+        zoom: 10, // 초기 확대 수준 설정
+        mapTypeControl: true
+    });
+
+    <%
+ // 위의 @GetMapping("/mapAPI") 메서드에서 가져온 주소 정보
+ List<ChatRoomDTO> chatRoomMapList = (List<ChatRoomDTO>)request.getAttribute("chatRoomMapList");
+
+ if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
+     // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 실행
+     for (ChatRoomDTO chatRoom : chatRoomMapList) {
+ %>
+ naver.maps.Service.geocode({
+     query: '<%= chatRoom.getAddr1() + " " + chatRoom.getAddr2() %>'
+ }, function(status, response) {
+     if (status === naver.maps.Service.Status.ERROR) {
+         return alert('검색에 실패했습니다.');
+     }
+
+     if (response.v2.meta.totalCount === 0) {
+         return alert('검색 결과가 없습니다.');
+     }
+
+     var item = response.v2.addresses[0],
+         point = new naver.maps.Point(item.x, item.y),
+         marker = new naver.maps.Marker({
+             position: new naver.maps.LatLng(point.y, point.x),
+             map: map
+         });
+
+     // 마커 클릭 시 정보 표시
+     naver.maps.Event.addListener(marker, 'click', function() {
+         alert('<%= chatRoom.getPost() %>');
+     });
+ });
+ <%
+     }
+ }
+ %>
+</script>
+
 	
 	</b></main>
 	

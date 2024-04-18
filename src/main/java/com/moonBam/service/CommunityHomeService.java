@@ -23,6 +23,9 @@ public class CommunityHomeService {
 		map.put("searchCategory", searchCategory);
 		map.put("searchValue", searchValue);
 		
+		System.out.println("map에 저장된 값을 dao레이어로 전달================");
+		System.out.println(map);
+		System.out.println("========================================");
 		CommunityPageDTO cpDTO = dao.chatRoomList(session, map, curPage);
 		
 		return cpDTO;
