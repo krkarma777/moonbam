@@ -26,6 +26,10 @@ public class MailController {
 
 	@Autowired
 	MailService serv;
+	
+	@Autowired
+	SecurityController sc;
+	
 	private String expireDate;
 	
 	private static final String FROM_EMAIL = "cjstkrhdfk666@gmail.com";
@@ -145,10 +149,11 @@ public class MailController {
  		for (int i = 0; i < 6; i++) {
  			randomNumber += Integer.toString(r.nextInt(10));
  		}
+ 		
  		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
  		HttpServletResponse response = attributes.getResponse();
 
- 		Cookie c= new Cookie("confirmNum", randomNumber);	// 인증번호 값을 쿠키로 생성
+ 		Cookie c= new Cookie("confirmNum", sc.encrypt(randomNumber));	// 인증번호 값을 암호화하여 쿠키로 생성
  		
  		c.setMaxAge(60*3);	// 인증번호 유호시간 3분
  		
@@ -189,7 +194,7 @@ public class MailController {
 		if (cookies != null) {
 	        for (Cookie cookie : cookies) {
 	            if ("confirmNum".equals(cookie.getName())) {
-	                confirmNumValue = cookie.getValue();
+	                confirmNumValue = sc.decrypt(cookie.getValue());
 	                break; 
 	            }
 	        }

@@ -52,11 +52,11 @@
 	      <button class="loginButtons">로그인</button>
 		  <div id="confirmUserIdPwError" style="font-size: 14px; color: red;"></div>	    
 	      
-	      <div class="row" id="rowBar">
-              <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
-              <div class="col-4 save-label cookieT">이메일 저장</div>
-              <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
-              <div class="col-4 auto-login-label cookieT">자동 로그인</div>
+	      <div class="row" id="userIdSaveSection">
+	      	  <div class="col-1"></div>
+              <div class="col-3"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
+              <div class="col-5 save-label cookieT">이메일 저장</div>
+              <div class="col-3"></div>
 		  </div>	 
 	      <div class="row">
               <div class="col"><a href="<c:url value='/FindInfo'/>">회원정보 찾기</a></div>
@@ -109,12 +109,7 @@
 
 		//쿠키 불러오기
 	    var cookieID = getCookie("userId");
-	    var cookiePW = getCookie("userPw");
 	   
-													  //  쿠키 디버그 코드
-													  //console.log("아이디 쿠키: "+ cookieID);
-													  //console.log("비밀번호 쿠키: "+ cookiePW);
-													  
 	    //아이디 쿠키가 있으면 아이디 창에 입력 + 아이디 저장 체크
 	    if(cookieID){
 	    	$("#userId").val(cookieID)
@@ -122,15 +117,6 @@
 	    } else {
 	    	$("#userId").val("")
 	    	$("#userIdSave").prop("checked",false);
-	    }
-	    
-	    //비밀번호 쿠키가 있으면 비밀번호 창에 입력 + 자동로그인 체크
-	    if(cookiePW){
-	    	$("#userPw").val(cookiePW)
-	    	$("#autoLogin").prop("checked",true);
-	    } else {
-	    	$("#userPw").val("")
-	    	$("#autoLogin").prop("checked",false);
 	    }
 	    
 		//쿠키 불러오기 함수	    

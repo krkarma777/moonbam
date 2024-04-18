@@ -70,7 +70,6 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 		security.formLogin(AbstractHttpConfigurer::disable);
 		security.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 		security.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, Long.parseLong(expiredMs)), UsernamePasswordAuthenticationFilter.class);
-
 			//.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 		//소셜 로그인 설정

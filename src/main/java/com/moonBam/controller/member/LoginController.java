@@ -146,6 +146,10 @@ public class LoginController {
 		
 		MemberDTO dto = serv.mailingPW(map);
 		
+		if(dto == null) {
+			return "member/Find_Info/cantFindUserdata"; 
+		}
+		
 		model.addAttribute("userId", dto.getUserId());
 		model.addAttribute("nickname", dto.getNickname());
 		

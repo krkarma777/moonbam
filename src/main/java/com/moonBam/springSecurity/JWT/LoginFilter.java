@@ -30,6 +30,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
+    	String userIdSave = request.getParameter("userIdSave");
+    	String autoLogin = request.getParameter("autoLogin");
+    	
+    	System.out.println("아이디 저장: " + userIdSave);				//체크되면 on
+    	
 		//클라이언트 요청에서 username, password 추출
     	// String username = obtainUsername(request);
     	// String password = obtainPassword(request);
