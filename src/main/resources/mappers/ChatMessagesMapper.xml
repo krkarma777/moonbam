@@ -13,9 +13,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <select id="chatMessagesByChatNum" resultType="ChatTableDTO">
-        select * from chattable;
+        select * from chattable
     </select>
   <select id="select" resultType="ChatTableDTO">
         select * from chattable where id= '1'
+    </select>
+    
+    
+    <!-- 금칙어 목록 가져오는 쿼리 -->
+    <select id="badWordsSelectAll" resultType="String">
+    	select * from badwordsDB
     </select>
 </mapper>
