@@ -61,6 +61,8 @@ ${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
 				</tr>
 			</thead>
 			<tbody id="message">
+			
+			
 				<tr>
 					<td colspan="3" style="float: left; width: 50%;">
 						<table>
@@ -165,13 +167,6 @@ ${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
 			var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
 			var userId = `${userIdInSession}`; // 사용자 닉네임
 			var message = $("#messageContent").val(); // 메세지 */
-			
-			// 메시지가 비어 있는지 확인
-		    if (message.trim() === "") {
-		        // 메시지가 비어 있으면 전송 중지
-		        return;
-		    }
-			
 			var serverTime = new Date().toLocaleString();
 			console.log(userId)
 			stompClient.send("/acorn/chat/send", {}, JSON.stringify({
@@ -203,7 +198,7 @@ ${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
 			else {
 				className="other"
 				align = "left"
-				userTag = `<tr><td class=`+ className+`><span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + content.nickName + `</span>`
+				userTag = `<tr><td class=`+ className+`><span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + `${nickNameInSession }` + `</span>`
 				msgTag = `<span id="msg" style="cursor: pointer;" onclick="openReportWindow()">` + content.message + `</span>`;
 			}
 			console.log("add")
