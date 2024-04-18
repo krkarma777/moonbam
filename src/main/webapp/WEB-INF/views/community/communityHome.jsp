@@ -126,7 +126,7 @@ button {
 		<!-- 상단 버튼 -->
 		<div style="">
 			<!-- 내 채팅방 목록 보기 버튼 -->
-			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;" id="myChatList"><b>나의</b></button>
+			<button type="button" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;" id="myChatList"><b>내방</b></button>
 			<!-- 개설 버튼 -->
 			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" id="createCommunity"><b>개설</b></button>
 		</div>
@@ -149,17 +149,15 @@ button {
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">
 							<div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
-								
 								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;"><%=roomTitle %></a>
-								
 							</div>
-							<div class="border-top" style="height: 225px; width: 300px;">
-								<div style=" font-size: 18px; height: 195px;">
+							<div class="border-top" style="height: 225px; width: 299px;">
+								<div style=" font-size: 18px; height: 175px;">
 									<%=roomText %>
 								</div>
-								<div style="width: 100%; height:20px; font-size: 18px; padding-left: 2px; padding-right: 5px;">
+								<div style="width: 100%; height:49px; font-size: 18px; padding-left: 2px; padding-right: 5px; position:relative;">
 									<div style="float: left;"><%=addr1 %></div>
-									<div style="float: right;"><%=currentNow %>/<%=amount %></div>
+									<div style="position: absolute; right: 0; bottom: 0; margin-right: 2px;"><%=currentNow %>/<%=amount %></div>
 								</div>
 							</div>
 						</div>

@@ -182,6 +182,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 						<a href="/acorn?cg=movie" style="color:white">&nbsp국내영화</a>
 						<span style="color:white">/</span>
 						<a href="/acorn/board/movie" style="color:white">해외영화</a>
+						<!-- 국내 영화 해외영화 나눠야함 -->
 						<span style="float: right;"><a href="/acorn/board/movie" style="color:white;">더보기&nbsp</a></span>
 					</th>
 				</tr>
