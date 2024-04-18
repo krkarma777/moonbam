@@ -53,5 +53,15 @@ public class AdminReportDAO {
 		return rlist;
 	}
 
+	public int reportDone(List<String> list) {
+		int count = 1;
+		for (String reportId : list) {
+			session.update("AdminReportMapper.reportDone", reportId);
+			count+=1;
+		}
+		
+		return count;
+	}
+
 	
 }

@@ -92,7 +92,7 @@ public class AdminPageMemberController {
 		return mav;
 	}
 	
-	//이용제한 사용자 이용제한 해제, 연장
+	//이용제한 사용자 이용제한 해제
 	
 	
 

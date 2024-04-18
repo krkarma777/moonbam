@@ -15,7 +15,7 @@ public class AdminDeletedPostDTO {
     @NotBlank
     String postboard;
     String userid;
-    Long contid;
+    Long contid = 0L;
     @NotBlank
 	@Size(max = 40)
     String posttitle;

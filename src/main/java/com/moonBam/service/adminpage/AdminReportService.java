@@ -50,12 +50,15 @@ public class AdminReportService {
 		
 		System.out.println("3. 해당 List를 삭제된 게시물 DB로 저장");
 		int n1 = ddao.insertDeletedPostsfromReport(rList);
-		System.out.println(n1 + "개의 레코드 정상저장");
 		
-		//저장이 정상적으로 이루어졌으면 게시물DB에서 해당되는 게시물 삭제
-		int n2=0;
+		System.out.println("4. 신고처리됨 update");
+		int n2 = rdao.reportDone(list);
 		
+		
+		System.out.println("5. PostDB에서 삭제됨");
 		n2 = rdao.delReportedPost(list);
+		System.out.println(n2 + "개 레코드 삭제됨");
+		
 		return n2;
 	}
 

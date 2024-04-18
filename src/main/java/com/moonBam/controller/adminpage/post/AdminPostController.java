@@ -70,13 +70,15 @@ public class AdminPostController {
 	@RequestMapping(value = "/AdminPage/AdminPageDeletedPost")
 	public ModelAndView getDeletedPostList(String SearchValue, String Criteria, ModelAndView mav) {
 		
-		HashMap<String, String> map = new HashMap<>();
-		map.put("searchValue", SearchValue);
-		map.put("criteria", Criteria);
-		List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
-		System.out.println("in controller");
-		System.out.println(list);
-		mav.addObject("list", list);
+			System.out.println("1. 검색조건 입력");
+			HashMap<String, String> map = new HashMap<>();
+			map.put("searchValue", SearchValue);
+			map.put("criteria", Criteria);
+			System.out.println("2. 서비스 레이어에 검색조건 전달");
+			List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
+			System.out.println("in controller");
+			System.out.println(list);
+			mav.addObject("list", list);
 		mav.setViewName("/AdminPage/AdminPageDeletedPost");
 		
 		return mav;
