@@ -21,7 +21,6 @@
 	
 %>
 <%	String mesg = (String)session.getAttribute("mesg");
-	System.out.println(mesg);
 	if(null!=mesg){%>
 		<script type="text/javascript">
 			alert("<%=mesg %>");
