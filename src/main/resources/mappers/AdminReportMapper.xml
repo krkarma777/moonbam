@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 select * from adminreported
 <choose>
 	<when test = "criteria == 'POSTID'" >
-		where POSTID like '%'||#{SearchValue}||'%'
+		where targetId like '%'||#{SearchValue}||'%'
 	</when>
 	
 	<when test = "criteria == 'REPORTER'" >
@@ -39,13 +39,40 @@ order by REPORTID asc
 <delete id = "delReportedPost" parameterType = "list">
  delete 
  from adminreported
- where postid in
+ where targetId in
  <foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
  #{item}
  </foreach>
 
 </delete>
-	
+
+<!-- 신고번호에 해당하는 PostDTO 리스트 반환 -->
+<select id = "getPostList" parameterType = "list" resultType="PostDTO">
+	select *from POSTDB 
+	where postid in 
+	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
+		#{item}
+	</foreach>
+</select>
+
+<!-- 신고글 리스트 반환 -->
+<select id = "getReportList" parameterType = "list" resultType = "AdminReportDTO">
+	select
+	from adminreported
+	where targetid in 
+	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
+ 	#{item}
+ 	</foreach>
+</select>
+
+<!-- 신고 처리 후 신고처리됨 처리 -->
+<update id="reportDone">
+	update adminreported set action = "yes" where reportid in 
+	where reportid in 
+	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
+ 	#{item}
+ 	</foreach>
+</update>
 	
 	
 </mapper>

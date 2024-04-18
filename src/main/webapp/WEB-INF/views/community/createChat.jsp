@@ -148,6 +148,7 @@
   </script>
 </head>
 <body class="bg-light" style="height:700px; width:100%; position: relative; border: 0px solid black;">
+
   <div style="height: 100%; width: 100%">
     <div style="height: 30px; background-color: #ffb2c4; font-size: 19px; margin-bottom: 5px; color: white;">
       <b>모임 만들기</b>
@@ -202,6 +203,7 @@
 <!-- 다음 주소 -->
   <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
   <script>
+
     function sample4_execDaumPostcode() {
       new daum.Postcode({
         oncomplete: function(data) {

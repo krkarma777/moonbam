@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<!-- 모임방 chatRoom 개설 -->
      <insert id="saveChatRoom" parameterType="ChatRoomDTO">
          insert into ChatRoom values (
+
          	chatNum_seq.NEXTVAL, #{roomTitle}, #{roomText},
          	#{currentNow}, #{amount}, #{post}, #{addr1}, #{addr2},
          	#{cDate}, #{mDate}, #{category}, #{leaderId})
@@ -31,9 +32,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<!-- 방장 일치 여부 확인용 select -->
-	<select id = "checkMaster" parameterType="String">
+	<select id = "CheckMaster" parameterType="String">
 		select leaderid from chatRoom where chatNum=#{chatNum}
 	</select>
+
+	<!-- 채팅방 강퇴 -->
+	<delete id = "ChatKickUser" parameterType="String">
+		delete from chatMember where userid=#{user}
+	</delete>
+
 	
 	
 	<!-- 방 자동 삭제 관련 sql 1개 추가 -miji-->
@@ -41,5 +48,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="chatRoomSelectAll" resultType="ChatRoomDTO">
 		select * from chatRoom
 	</select>
+
 
 </mapper>

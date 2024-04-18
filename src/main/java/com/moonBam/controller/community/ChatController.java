@@ -41,6 +41,7 @@ public class ChatController {
 		return "community/createChat";
 	}
 	
+
 	@RequestMapping(value = "/saveChat", method=RequestMethod.POST)	
 	//@ResponseBody//////////////////////////////////
 	public String saveChatRoom(@Valid @ModelAttribute ChatRoomDTO chatRoom, BindingResult bindingResult, Principal principal) {
@@ -90,6 +91,7 @@ public class ChatController {
 		System.out.println("chatMember에"+n2+"개가 추가되고 현재 채팅방 인원수가 "+(currntNow+1)+"로 변경되었습니다.");		
 		
 		return "redirect:/chatRoom?chatNum="+chatNum;
+
 		
 	}
 
@@ -118,6 +120,13 @@ public class ChatController {
 			if(n==1) {System.out.println("권한 위임 정상 처리");}else {System.out.println("권한 위임 실패");}
 		}
 		//////////////////
+		
+		return "";
+	}
+	
+	@RequestMapping(value = "/ChatKickUser", method = RequestMethod.GET)
+	public String ChatKickUser (String user) {
+		int n = crService.ChatKickUser(user);
 		
 		return "";
 	}

@@ -16,6 +16,8 @@ public class AdminDeletedPostService {
     AdminDeletedPostDAO dao;
 
     public List<AdminDeletedPostDTO> getDeletedPostList(HashMap<String, String> map){
+    	System.out.println("3. 서비스 레이어에서 검색 조건 담긴 map 수신");
+    	System.out.println("4. DAO로 전달");
         List<AdminDeletedPostDTO> list = dao.getDeletedPostList(map);
         return list;
     }
