@@ -31,7 +31,7 @@
 	   window.history.pushState(null, null, window.location.href);
 	   window.onpopstate = function(event) {
 	   	window.history.pushState(null, null, window.location.href);
-	    window.location.href= "<c:url value='/Login'/>"; 
+	    window.location.href= "<c:url value='/mainLogin'/>"; 
 	    };
 	    
 	    $("#goLogin").on("click", function(){

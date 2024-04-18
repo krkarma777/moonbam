@@ -48,7 +48,7 @@
 				<input type="button" id="autoNickname" name="clickType" value="자동 닉네임 생성" class="btn btn-success me-md-2">
 				<!-- DB에 저장된 닉네임이 있을 경우, 문구 출력 --> 
 				<span id="confirmNicknameError" style="color: red;"></span>
-				<span id="loadingSpinner_for_nickname" class="loadingSpinner"></span>
+				<span id="loadingSpinner_for_nickname" class="loadingSpinner"></span><br>
 			
 			<button id="register_button" type="submit">가입</button>
 		</form>
@@ -76,7 +76,7 @@
 		   //뒤로가기 / 앞으로가기 동작 감시
 		   window.onpopstate = function(event) {
 		   	window.history.pushState(null, null, window.location.href);
-		    window.location.href= "<c:url value='/Login'/>"; 
+		    window.location.href= "<c:url value='/mainLogin'/>"; 
 		    };
 		    
 		 	//자동 닉네임 생성기
@@ -229,8 +229,10 @@
 			                	errorSpan.text("");
 			                } else if (response === "confirm") {
 			                	errorSpan.text("확인되었습니다."); 
+			                	errorSpan.css("color", "black"); 
 			                } else {
 			                	errorSpan.text("인증번호가 다릅니다. 확인해주세요.");
+			                	errorSpan.css("color", "red"); 
 			                }
 			            },
 			            error: function(error) {

@@ -13,9 +13,9 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 	<script type="text/javascript">
 		<!-- 5초 뒤, 로그인 메인화면으로 이동 -->
-/* 	   setTimeout(function () {
+ 	   setTimeout(function () {
             window.location.href = "<c:url value='/mainLogin'/>";
-        }, 5000); */
+        }, 5000);
     </script>
 </head>
 

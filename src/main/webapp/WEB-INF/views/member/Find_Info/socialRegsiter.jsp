@@ -23,7 +23,7 @@
 	<c:if test="${kakaoRegister == true}">
 	&nbsp;&nbsp;- 카카오 로그인 연결됨<br>
 	</c:if>
-		혹시 비밀번호를 입력해서도 로그인하고 싶으신가요?<br>
+		그래도 로그인을 위한 비밀번호 설정을 하시겠습니까?<br>
 		<form method="POST" action="SocialMailingPW">
 			<input type="hidden" name="userId" value="${userId}">
 			<input type="submit" value="비밀번호 등록하기">
