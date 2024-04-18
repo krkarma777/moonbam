@@ -29,11 +29,9 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
-<body>
-	${ChatRoomDTO.chatNum} - ${userIdInSession}
-	<h1>chatRoom - ${ChatRoomDTO.roomText}</h1>
+<body onload="connect()">
+${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
 	<form id="chatForm">
-		<button id="connect">접속</button>
 		<table border="1" style="background: white; width: 500px">
 			<thead>
 				<tr>
@@ -63,9 +61,7 @@
 				</tr>
 			</thead>
 			<tbody id="message">
-			
-			
-			<tr>
+				<tr>
 					<td colspan="3" style="float: left; width: 50%;">
 						<table>
 							<tr>
@@ -98,8 +94,8 @@
 			<tfoot>
 				<tr>
 					<td colspan="2"><input type="text" id="messageContent"
-						name="messageContent" style="width: 85%"> <input
-						type="button" id="send" value="전송"></td>
+						name="messageContent" style="width: 85%" onkeydown="if (event.keyCode === 13) { event.preventDefault(); sendMessage()}"> 
+						<input type="button" id="send" value="전송"></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -139,12 +135,6 @@
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
-		$(document).ready(function() {
-			$("#btnSubmit").click(function() {
-				submitMessage();
-			});
-		});
-
 		var stompClient = null;
 
 		// 소켓 연결
@@ -172,14 +162,23 @@
 
 		/* 메시지 전송 */
 		function sendMessage() {
-			var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호    
-			var userId = `${userIdInSession}`; // 사용자 id
+			var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
+			var userId = `${userIdInSession}`; // 사용자 닉네임
 			var message = $("#messageContent").val(); // 메세지 */
-			var serverTime = '<%= new Date().toLocaleString() %>';
+			
+			// 메시지가 비어 있는지 확인
+		    if (message.trim() === "") {
+		        // 메시지가 비어 있으면 전송 중지
+		        return;
+		    }
+			
+			var serverTime = new Date().toLocaleString();
+			console.log(userId)
 			stompClient.send("/acorn/chat/send", {}, JSON.stringify({
 				'userId' : userId,
 				'message' : message,
 				'serverTime' : serverTime}));
+			document.getElementById('messageContent').value = '';
 		}
 
 		// 메세지 출력
@@ -187,14 +186,12 @@
 		// 이전 메세지 추가(위치는 맨위)
 		function showMessageOutput(body) {
 			let content = JSON.parse(body.chatContent);
-			console.log(`${userIdInSession}`)
-			console.log(content.userId)
-
 			let align;
 			let userTag;
 			let timeTag = `<span>` + content.serverTime + `</span>`;
 			let msgTag;
 			
+			// my message
 			if (`${userIdInSession}` == content.userId) {
 				console.log("my")
 				align = "right"
@@ -206,7 +203,7 @@
 			else {
 				className="other"
 				align = "left"
-				userTag = `<span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + content.userId + `</span>`
+				userTag = `<tr><td class=`+ className+`><span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + content.nickName + `</span>`
 				msgTag = `<span id="msg" style="cursor: pointer;" onclick="openReportWindow()">` + content.message + `</span>`;
 			}
 			console.log("add")

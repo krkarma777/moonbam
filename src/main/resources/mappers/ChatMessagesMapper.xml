@@ -9,12 +9,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="create" parameterType="ChatTableDTO">
        INSERT INTO chattable (id, chatNum, chatContent)
         VALUES (chat_message_id_seq.nextval, #{chatNum}, #{chatContent})
-        
     </insert>
 
     <select id="chatMessagesByChatNum" resultType="ChatTableDTO">
-        select * from chattable;
+        select * from chattable
     </select>
+    
   <select id="select" resultType="ChatTableDTO">
         select * from chattable where id= '1'
     </select>

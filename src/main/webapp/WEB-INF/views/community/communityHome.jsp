@@ -149,7 +149,9 @@ button {
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">
 							<div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
-								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;"><%=roomTitle %></a>
+								
+								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;"><%=roomTitle %></a>
+								
 							</div>
 							<div class="border-top" style="height: 225px; width: 300px;">
 								<div style=" font-size: 18px; height: 195px;">
@@ -223,6 +225,8 @@ button {
      }
  }
  %>
+ 
+ 
 </script>
 
 	
