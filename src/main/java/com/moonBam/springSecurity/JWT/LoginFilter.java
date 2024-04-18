@@ -93,6 +93,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         	cookie.setMaxAge(0);											
         	response.addCookie(cookie);
         }
+        
+        //사이트 로그인 통계를 확인하기 위한 함수
+        //setCount(); 
         	
         // 루트 주소로 리다이렉트
         response.sendRedirect("/acorn");
