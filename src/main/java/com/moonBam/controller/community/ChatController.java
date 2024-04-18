@@ -54,7 +54,7 @@ public class ChatController {
 		String addr1 = chatRoom.getAddr1();
 		LocalDate mmDate = chatRoom.getmDate();//모임방 이름에 사용할  모임날짜		
 		//String loc = addr1.substring(0, 2);//모임방 이름에 사용할 지역 뽑아오기(eg. 서울, 대전 두글자만)
-		
+		///////
 		String[] addr_arr = addr1.split(" ");
 		String loc = addr_arr[0];
 		roomTitle = roomTitle+"/"+loc+"/"+mmDate;
