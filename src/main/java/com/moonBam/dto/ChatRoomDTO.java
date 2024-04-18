@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 
 import org.apache.ibatis.type.Alias;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Alias("ChatRoomDTO")
 public class ChatRoomDTO {

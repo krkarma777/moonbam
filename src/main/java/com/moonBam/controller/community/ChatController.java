@@ -1,10 +1,13 @@
 package com.moonBam.controller.community;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatRoomDTO;
-import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.ChatRoomService;
+import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
+
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -26,26 +31,69 @@ public class ChatController {
 	@Autowired
 	MemberLoginService memberLoginService;
 	
+	
+	@Autowired
+	CommunityEnterOutService comEnterOutService;
+	
+	//소모임 대문에서 개설버튼 누르면 소모임 만드는 폼으로 이동
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
 	public String createChat() {
 		return "community/createChat";
 	}
 	
-	@RequestMapping(value = "/saveChat", method=RequestMethod.POST)
-	@ResponseBody
-	public String saveChatRoom(@ModelAttribute ChatRoomDTO chatRoom) {
-		
-		chatRoom.setmDate("2024-4-7");
-		chatRoom.setLeaderId("");
-		int n = 0;
-		n = crService.saveChatRoom(chatRoom);
-		if(n==1) {
-			System.out.println("채팅방 정상 저장");
-		}
-		
-		return ""   ;//TODO해당 채팅방 주소로 가도록 나중에 세팅
-	}
 
+	@RequestMapping(value = "/saveChat", method=RequestMethod.POST)	
+	//@ResponseBody//////////////////////////////////
+	public String saveChatRoom(@Valid @ModelAttribute ChatRoomDTO chatRoom, BindingResult bindingResult, Principal principal) {
+		
+		String userId = principal.getName();
+		
+		/////////////////////////////////소모임방(chatRoom) 개설 insert
+		//roomTitle 설정
+		String roomTitle = chatRoom.getRoomTitle();
+		String addr1 = chatRoom.getAddr1();
+		LocalDate mmDate = chatRoom.getmDate();//모임방 이름에 사용할  모임날짜		
+		String loc = addr1.substring(0, 2);//모임방 이름에 사용할 지역 뽑아오기(eg. 서울, 대전 두글자만)
+		roomTitle = roomTitle+"/"+loc+"/"+mmDate;
+		chatRoom.setRoomTitle(roomTitle);
+		//cDate 설정
+		chatRoom.setcDate(LocalDate.now());
+		//leaderId 설정
+		chatRoom.setLeaderId(userId);
+		
+		int n = crService.saveChatRoom(chatRoom);
+		System.out.println("채팅방이"+n+"개 생성되었습니다.");
+		
+		/////////////////////////////////chatMember에 정보 insert
+		
+		//leaderId와 roomtitle로 dto select해서 가져오기
+		Map<String, String> chatRoomSelect = new HashMap<>();
+		chatRoomSelect.put("userId", userId);
+		chatRoomSelect.put("roomTitle", roomTitle);
+		ChatRoomDTO chatRoomNow = crService.chatRoomNowSelect(chatRoomSelect);
+		System.out.println("chatRoomNow dto => "+chatRoomNow);
+		
+		int chatNum = chatRoomNow.getChatNum();
+		int currntNow = chatRoomNow.getCurrentNow();
+		 
+		/////chatmember에 insert  MAP
+		Map<String, Object> chatMemberInsertMap = new HashMap<>();
+		chatMemberInsertMap.put("chatNum", chatNum);
+		chatMemberInsertMap.put("userId", userId);
+		
+		Map<String, Integer> chatRoomUpdateMap = new HashMap<>();
+		chatRoomUpdateMap.put("chatNum", chatNum);
+		chatRoomUpdateMap.put("currntNow", (currntNow+1));
+		
+		
+		//chatroom에 currentNow를 +1 update  MAP
+		int n2 = comEnterOutService.chatMemberEnterInsert(chatMemberInsertMap,chatRoomUpdateMap);
+		System.out.println("chatMember에"+n2+"개가 추가되고 현재 채팅방 인원수가 "+(currntNow+1)+"로 변경되었습니다.");		
+		
+		return "redirect:/chatRoom?chatNum="+chatNum;
+
+		
+	}
 
 	@RequestMapping(value = "/delegateMaster")
 	@ResponseBody
@@ -72,6 +120,13 @@ public class ChatController {
 			if(n==1) {System.out.println("권한 위임 정상 처리");}else {System.out.println("권한 위임 실패");}
 		}
 		//////////////////
+		
+		return "";
+	}
+	
+	@RequestMapping(value = "/ChatKickUser", method = RequestMethod.GET)
+	public String ChatKickUser (String user) {
+		int n = crService.ChatKickUser(user);
 		
 		return "";
 	}

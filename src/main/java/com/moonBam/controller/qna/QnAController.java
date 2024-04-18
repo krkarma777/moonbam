@@ -25,12 +25,15 @@ public class QnAController {
     //QnA
     @RequestMapping("/qna")
     public ModelAndView getMyQnaList() {
+    	System.out.println("qna리스트 가져오기");
         ModelAndView mav = new ModelAndView();
         List<QnADTO> list = new ArrayList<>();
-        //list = service.getQnaList();
+        list = service.getQnaList();
         
+        System.out.println("가져온 qna list");
+        System.out.println(list);
         mav.addObject("list", list);
-        mav.setViewName("");
+        mav.setViewName("qna/qna");
         return mav;
     }
     
@@ -45,7 +48,7 @@ public class QnAController {
     @ResponseBody
     public String submitQNA(String qna_title, String qna_text){
         
-        //작성한 문의 데이터 받아오기
+        //작성한 문의 리스트 받아오기
         QnADTO qna = new QnADTO();
         qna.setTitle(qna_title);
         qna.setText(qna_text);

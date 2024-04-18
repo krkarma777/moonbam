@@ -7,5 +7,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into adminqna values(userid=${userid}, title=${title}, text=${text}, postdate=${postdate});
 	</insert>
 	
+	<select id = "getQnaList" resultType="QnADTO">
+		select  * from adminqna
+	</select>
+	
 	
 </mapper>

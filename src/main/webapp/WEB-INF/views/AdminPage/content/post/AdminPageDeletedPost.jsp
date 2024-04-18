@@ -33,8 +33,8 @@
 			<th >글 제목</th>
 			<th >작성자</th>
 			<th>삭제사유</th>
-			<th>처분여부</th>
 			<th>완전삭제예정일</th>
+			<th>복원</th>
 		</tr>
 	</table>
 </form>
