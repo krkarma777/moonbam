@@ -46,8 +46,8 @@ order by REPORTID asc
 	
 <delete id = "delReportedPost" parameterType = "list">
  delete 
- from adminreported
- where targetId in
+ from postdb
+ where postid in
  <foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
  #{item}
  </foreach>
@@ -59,7 +59,7 @@ order by REPORTID asc
 	select *from POSTDB 
 	where postid in 
 	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
-		#{item}
+		'${item}'
 	</foreach>
 </select>
 
@@ -74,9 +74,9 @@ order by REPORTID asc
 </select>
 
 <!-- 신고 처리 후 신고처리됨 처리 -->
-<update id="reportDone">
-	update adminreported set action = "yes" where reportid in 
-	where reportid in 
+<update id="reportDone" parameterType = "list">
+	update adminreported set action = 'yes' 
+	where targetid in 
 	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
  	#{item}
  	</foreach>

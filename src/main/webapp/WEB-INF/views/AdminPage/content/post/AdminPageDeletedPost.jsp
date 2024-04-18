@@ -3,15 +3,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>MoonBam</title>
 </head>
 <body>
-<%List<AdminDeletedPostDTO> list = (List<AdminDeletedPostDTO>)request.getAttribute("list"); %>
-<%System.out.println("in jsp"); %>
-<%System.out.println(list); %>
+<%
+System.out.println("in jsp"); 
+%>
 <h1>삭제된 게시글 관리</h1>
 <hr>
 <form action = "<%=request.getContextPath() %>/AdminPage/AdminPageDeletedPost">
@@ -35,6 +35,14 @@
 			<th>삭제사유</th>
 			<th>완전삭제예정일</th>
 			<th>복원</th>
+		</tr>
+		<tr th:each="dPost : ${list }">
+			<td th:text="${dPost.postid}"></td>
+			<td th:text="${dPost.posttitle}"></td>
+			<td th:text="${dPost.userid}"></td>
+			<td th:text="${dPost.cause}"></td>
+			<td th:text="${dPost.expiredate}"></td>
+			<td><input type="button" value="복원"></td>
 		</tr>
 	</table>
 </form>

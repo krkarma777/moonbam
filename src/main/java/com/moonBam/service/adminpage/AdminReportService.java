@@ -41,9 +41,12 @@ public class AdminReportService {
 	public int delReportedPost(List<String> list) {
 		System.out.println("in admin.ReportService.delReportedPost");
 		
-		System.out.println("2. 게시물DB에서 해당되는 신고번호의 게시물을 List로 저장");
+		System.out.println("게시물DB에서 해당되는 신고번호 리스트 수신 확인 후 리스트로 저장 ========");
 //		Boolean isPostListRetrieved = false;
+		System.out.println("list");
+		System.out.println(list);
 		
+		System.out.println("리스트를 dao로 전달 후 해당되는 리스트 받아오기");
 		List<PostDTO> rList = new ArrayList<PostDTO>();
 		rList = rdao.getPostList(list);
 		System.out.println(rList);
