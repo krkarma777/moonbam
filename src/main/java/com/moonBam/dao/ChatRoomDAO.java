@@ -64,6 +64,7 @@ public class ChatRoomDAO {
 		System.out.println("n이 1이면 정상 처리===============================");
 		System.out.println(n);
 		System.out.println("=============================================");
+		
 		return n;
 	}
 
