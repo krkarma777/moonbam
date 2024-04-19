@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.service.BadWordsService;
 import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
@@ -34,6 +35,9 @@ public class ChatController {
 	
 	@Autowired
 	CommunityEnterOutService comEnterOutService;
+	
+	@Autowired
+	BadWordsService bwService;
 	
 	//소모임 대문에서 개설버튼 누르면 소모임 만드는 폼으로 이동
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
@@ -146,4 +150,48 @@ public class ChatController {
 		return "";
 	}
 	
+
+	
+	//쪽지를 통한 초대기능
+	@RequestMapping(value = "/inviteUser", method = RequestMethod.GET)
+	public String inviteUser(String from, String to, String chatLink) {
+		
+		System.out.println("in ChatController======================");
+		System.out.println("컨트롤러에서 초대하는 사람, 받는 사람, 초대하는 방 링크 수신");
+		System.out.println(from + to + chatLink);
+		
+		System.out.println("Map에 데이터 저장 ");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("from", from);
+		map.put("to", to);
+		map.put("chatLink", chatLink);
+		System.out.println(map);
+		
+		System.out.println("ㅅ서비스 레이어 전달");
+		
+		
+		return "";
+	}
+	
+	//금칙어 설정 기능
+	@RequestMapping(value = "/setBadWords", method = RequestMethod.GET)
+	public String setBadWords(String badWords, Boolean isIn) {
+		
+		System.out.println("in ChatController.setBadWords");
+		System.out.println("금칙어 설정 단어와 입출력 여부 수신");
+		System.out.println(badWords + "    " + isIn);
+		
+		System.out.println("isIn true면 DB에 저장하는 서비스 레이어 함수 호출");
+		System.out.println("isIn false면 DB에서 삭제하는 서비스 레이어 함수 호출");
+
+		if(isIn==true) {
+			bwService.insertBadWords(badWords);
+		}else {
+			bwService.deleteBadWords(badWords);
+		}
+		
+		
+		
+		return "";
+	}
 }//end class
