@@ -96,14 +96,12 @@
 
     <div class="mb-3">
         <label for="title" class="form-label">제목:</label>
-        <input type="text" id="title" name="title" class="form-control" required="required" maxlength="35">
+        <input type="text" id="title" name="title" class="form-control" required="required">
     </div>
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="nickname" class="form-label">닉네임:</label>
-            <input type="text" id="nickname" name="nickname" class="form-control" required="required" 
-                pattern="^[가-힣]{1,20}$|^[a-zA-Z0-9]{1,40}$" 
-                title="한글 20글자 또는 영어+숫자 40글자 이내로 입력해주세요.">
+            <input type="text" id="nickname" name="nickname" class="form-control" required="required" minlength="2">
         </div>
         
         <div class="col-md-6 mb-3">
