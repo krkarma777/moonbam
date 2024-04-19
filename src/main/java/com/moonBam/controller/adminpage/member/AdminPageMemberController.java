@@ -94,8 +94,6 @@ public class AdminPageMemberController {
 	
 	//이용제한 사용자 이용제한 해제
 	
-	
-
 	//삭제된 회원 데이터 조회
 	@GetMapping("/AdminPage/toAdminPageDeletedMember")
 	public String toAdminPageMonitoring() {

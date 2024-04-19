@@ -4,7 +4,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="QnAMapper">
 	<insert id="submitQnA" parameterType="QnADTO">
-		insert into adminqna values(userid=${userid}, title=${title}, text=${text}, postdate=${postdate});
+		insert into adminqna values(
+			qnaid=#{qnaid}, userid=${userid}, cat=#{cat}, 
+			title=${title}, text=${text}, postdate=${postdate}, 
+			answer=#{answer}, answerdate=#{answerdate});
 	</insert>
 	
 	<select id = "getQnaList" resultType="QnADTO">

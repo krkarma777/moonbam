@@ -40,6 +40,10 @@ public class ChatRoomService {
 
 
 	public int ChatKickUser(String user) {
+		System.out.println("서비스 레이어에서 강퇴 대상 이름 수신 후 dao 전달=========");
+		System.out.println(user);
+		System.out.println("===========================================");
+		
 		int n = dao.ChatKickUser(user);
 		
 		return n;

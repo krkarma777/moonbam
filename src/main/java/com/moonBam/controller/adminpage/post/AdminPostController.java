@@ -51,6 +51,7 @@ public class AdminPostController {
 		System.out.println("in adminpage.post.DeletePost");
 		System.out.println("어드민 페이지 신고글 삭제 기능");
 		System.out.println("1. 삭제할 글의 id list로 출력");
+		
 		List<String> deletelist = Arrays.asList(postArr);
 		System.out.println(deletelist);
 		int n = rservice.delReportedPost(deletelist);
@@ -76,7 +77,7 @@ public class AdminPostController {
 			map.put("criteria", Criteria);
 			System.out.println("2. 서비스 레이어에 검색조건 전달");
 			List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
-			System.out.println("in controller");
+			System.out.println("jsp 페이지로 전달할 list");
 			System.out.println(list);
 			mav.addObject("list", list);
 		mav.setViewName("/AdminPage/AdminPageDeletedPost");

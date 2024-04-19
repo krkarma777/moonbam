@@ -55,10 +55,10 @@ window.onload = init;
                 url: "/acorn/Acorn/CommetInsert",
                 data: {
                     postId: $("#postidComment").val(),
-                    userId: '<sec:authentication property="name"/>',
+                    //userId: '<sec:authentication property="name"/>',
                     comDate: $("#comdate").text(),
                     comText: $("#comtext").val(),
-                    nickname: '<sec:authentication property="name"/>',
+                    //nickname: '<sec:authentication property="name"/>',
                     aboveComId: $("#abovecomidComment").val()
                 },
                 success: function (data, status, xhr) {
@@ -408,9 +408,9 @@ window.onload = init;
             data: {
                 aboveComId: aboveComId, //부모댓글id
                 postId: postId, //게시글
-                userId: userId2, //내 아이디, 부모댓글의 id가 아님
+                //userId: userId2, //내 아이디, 부모댓글의 id가 아님
                 comText: $("#replyCommentComtext" + comId).val(),
-                nickname: nickname2
+                //nickname: nickname2
                 //comdate는 어차피 날짜스탬프로 sql날릴 거라 안 넘어감
             },
             success: function (data, status, xhr) {
