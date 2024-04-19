@@ -62,9 +62,9 @@
 //		
 //		//로그인 설정
 //		security.formLogin().loginPage("/mainLogin")
-//				.loginProcessingUrl("/loginProc")			//	/loginProc으로 Mapping
+//				.loginProcessingUrl("/loginProcess")		//	/loginProc으로 Mapping
 //															//	자동으로 @Service가 붙은 Service 중에 loadUserByUsername가 있는 곳을 찾아가서 실행
-//															//	jsp에서 Method="POST", Action="/loginProc"으로 처리
+//															//	jsp에서 Method="POST", Action="/loginProcess"으로 처리
 //				.usernameParameter("userId")				//	username Param을 userId로 사용 가능
 //				.passwordParameter("userPw")				//	password Param을 userPw로 사용 가능
 //				.successHandler(new LoginSuccessHandler())	//	로그인 성공 시, 작동(세션이랑 쿠키 작동 예정)

@@ -21,20 +21,6 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-<%-- 	<sec:authorize access="isAuthenticated()"> --%>
-	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
-		<!-- 로그아웃 -->
-        <li class="nav-item">
-          <a class="nav-link" href="<c:url value='/Logout'/>">로그아웃</a>
-        </li>
-	</sec:authorize>
-	<sec:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
-		<!-- 로그인메인 -->
-        <li class="nav-item">
-          <a class="nav-link" href="<c:url value='/mainLogin'/>">로그인창</a>
-        </li>
-	</sec:authorize>
-
 		<!-- 익명게시판 -->        
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">익명 게시판</a>
@@ -55,6 +41,22 @@
           </ul>
         </li>
       </ul>
+      
+     <!-- 비로그인 -->
+	<sec:authorize access="isAnonymous()">
+		<a href="mainLogin" class="top">로그인</a>
+	</sec:authorize>
+    		
+	<!-- 로그인 -->
+	<sec:authorize access="isAuthenticated()">
+		<a href="/acorn/logout"  class="top">로그아웃/</a>
+		<a href="MypageServlet"  class="top">마이페이지</a>
+	</sec:authorize>
+	
+	<!-- 관리자인 경우 -->
+	<sec:authorize access="hasRole('ADMIN')">
+         <a href="/acorn/AdminPage">관리자페이지</a>
+     </sec:authorize>
 
 	<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
 		<ul class="navbar-nav">

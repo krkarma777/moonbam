@@ -285,7 +285,7 @@ public class AnonymousBoardController {
 	    dto.setEdittedDate(now);
 	    
 	    serv.updateDBoard(dto);
-	    return "redirect:/viewDBoardContent/?boardNum="+dto.getBoardNum();
+	    return "redirect:/viewDBoardContent?boardNum="+dto.getBoardNum();
 	}
 	
 	
@@ -303,7 +303,7 @@ public class AnonymousBoardController {
 	@PostMapping("/deletePost")
 	public String  deletePost(String nickname, int boardNum) {
 		serv.deleteDBoard(boardNum);
-		return "redirect:/viewDBoardList/";
+		return "redirect:/viewDBoardList";
 	}
 	
 	

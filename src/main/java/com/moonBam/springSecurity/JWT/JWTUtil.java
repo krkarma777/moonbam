@@ -41,7 +41,7 @@ public class JWTUtil {
     }
 
     public String createJwt(String username, String role, Long expiredMs) {
-    	System.out.println(username + " : " + role + " : " + expiredMs);
+   // 	System.out.println("JWTUtil:" + username + " : " + role + " : " + expiredMs);
     	return Jwts.builder()
                 .claim("username", username)
                 .claim("role", role)
@@ -50,17 +50,6 @@ public class JWTUtil {
                 .signWith(key)
                 .compact();
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     // 토큰의 유효성을 검증하는 메서드
     public Boolean validateToken(String token) {
@@ -71,17 +60,5 @@ public class JWTUtil {
             return false; // 유효하지 않은 토큰으로 간주
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }

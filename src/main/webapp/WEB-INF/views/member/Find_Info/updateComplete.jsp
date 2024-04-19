@@ -11,6 +11,7 @@
     <meta charset="UTF-8">
     <title>비밀번호 변경 완료 페이지</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script type="text/javascript">
 		<!-- 5초 뒤, 로그인 메인화면으로 이동 -->
 	   setTimeout(function () {
@@ -33,7 +34,7 @@
 		   window.history.pushState(null, null, window.location.href);
 		   window.onpopstate = function(event) {
 		   	window.history.pushState(null, null, window.location.href);
-		    window.location.href= "<c:url value='/Login'/>"; 
+		    window.location.href= "<c:url value='/mainLogin'/>"; 
 		    };
 		    
 		    $("#goLogin").on("click", function(){

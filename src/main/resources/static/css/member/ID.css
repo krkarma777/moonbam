@@ -20,7 +20,7 @@ h2 {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
-    width: 50%
+    width: 60%
 }
 
 .col {
@@ -64,8 +64,8 @@ input[type="email"] {
 
 input[type="submit"] {
     border-radius: 20px;
-    border: 1px solid #FF4B2B;
-    background-color: #FF4B2B;
+    border: 1px solid #ff416c  ;
+    background-color: #ff416c  ;
     color: #FFFFFF;
     font-size: 12px;
     font-weight: bold;
@@ -74,6 +74,10 @@ input[type="submit"] {
     transition: transform 80ms ease-in;
     cursor: pointer;
     margin-bottom: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color: #ff2858;
 }
 
 input[type="submit"]:active {
