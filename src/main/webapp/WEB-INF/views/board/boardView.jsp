@@ -42,7 +42,7 @@
     %>
 
 
-    <title>문화인들의 밤</title>
+    <title>문밤</title>
     <!-- Bootstrap CSS -->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -55,6 +55,11 @@
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <style>
+    	*{
+    		margin: 0;
+    		padding: 0;
+    		box-sizing: border-box;
+    	}
         .list-group {
             max-width: 1000px;
             margin: auto;
@@ -161,16 +166,16 @@
 
         /* 글쓰기 버튼 색상 조절 */
         .write-button {
-            background-color: #ffffff; /* 배경색 흰색 */
-            color: #000000; /* 글자색 검은색 */
-            border: 1px solid #000000; /* 검은색 테두리 */
+            background-color: #ff416c; /* 배경색 흰색 */
+            color: #ffffff; /* 글자색 검은색 */
+            border: 1px solid #ff416c; /* 검은색 테두리 */
         }
 
         /* 검색 버튼 색상 조절 */
         .search-button {
-            background-color: #ffffff; /* 배경색 흰색 */
-            color: #28a745; /* 글자색 초록색 */
-            border: 1px solid #28a745; /* 초록색 테두리 */
+            background-color: #ff416c; /* 배경색 흰색 */
+            color: #ffffff; /* 글자색 초록색 */
+            border: 1px solid #ff416c; /* 초록색 테두리 */
         }
 
         /* 인라인 배치 조정 */
@@ -192,14 +197,14 @@
         /* 페이지네이션 버튼 스타일 변경 */
         .pagination .page-link {
             border: none; /* 테두리 제거 */
-            background-color: #28a745; /* 기본 배경색을 초록색으로 변경 */
+            background-color: #ff416c; /* 기본 배경색을 초록색으로 변경 */
             color: white; /* 글자색 변경 */
         }
 
         /* 활성화된 페이지 번호 스타일 */
         .pagination .page-item.active .page-link {
-            background-color: #218838; /* 좀 더 진한 초록색으로 변경 */
-            background-image: linear-gradient(180deg, #218838, #28a745);
+            background-color: #FF285A; /* 좀 더 진한 초록색으로 변경 */
+            background-image: linear-gradient(180deg, #FF285A, #FF174D);
             /* 그라디언트 효과 */
             border: none; /* 테두리 제거 */
         }
@@ -226,7 +231,7 @@
 
         .slider-container {
             overflow: hidden;
-            height: 820px; /* 각 이미지 높이(225px) * 5 */
+            height: 884px; /* 각 이미지 높이(225px) * 5 */
             cursor: grab; /* 클릭 가능함을 나타내는 커서 스타일 */
         }
 
@@ -319,7 +324,7 @@
             display: inline-block;
             width: 50px;
             color: #ffffff; /* 키 배경색 */
-            background-color: #fd7e14; /* 부트스트랩의 기본 파란색 */
+            background-color: #ffb2c4; /* 부트스트랩의 기본 파란색 */
             border-radius: 4px; /* 키 모서리 둥글게 */
             font-weight: bold;
             padding: 2px 5px;
@@ -332,7 +337,7 @@
             display: inline-block;
             width: 20px;
             color: #ffffff; /* 키 배경색 */
-            background-color: #fd7e14; /* 부트스트랩의 기본 파란색 */
+            background-color: #ffb2c4; /* 부트스트랩의 기본 파란색 */
             border-radius: 4px; /* 키 모서리 둥글게 */
             font-weight: bold;
             padding: 2px 5px;
@@ -626,10 +631,10 @@
     }
 
 </script>
-<body>
+<body class="bg-light" style="height: 100vh;">
 
 <!-- 네비게이션바 -->
-<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+<jsp:include page="../common/navBar.jsp"></jsp:include>
 <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container-fluid">
         로고
@@ -663,7 +668,9 @@
     </div>
 </nav>-->
 
+<div style="height: 50px"></div>
 
+<%-- 
 <div class="container mt-4">
     <div class="popular-boards-container">
         <div class="popular-board">
@@ -742,8 +749,490 @@
             </div>
         </div>
     </div>
+</div> 
+--%>
+
+<!-- 바디 -->
+<div style="height: 910px; width: 1400px; margin: auto;">
+	<div style="display: flex; width: 100%; height:100%;">
+		<!-- 신작 영화 순위 -->
+		<div style="width: 200px; height: 100%; text-align: center;">
+			<span style="color:#ff416c;"><b>🌄신작 <%= category %> 랭킹🌄</b></span>
+			<div class="list-group slider-container slide1" style="border-radius: 0px;">
+				<%
+            	MoviePoster poster = new MoviePoster(postBoard);
+                List<String> newMovieList = poster.getNewList();
+                for (int i = 0; i < newMovieList.size(); i++) { %>
+                	<div class="movie-slide">
+                    	<img src="<%= newMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                    	<span class="index-label">
+				      		<%= i + 1 %>
+			      		</span>
+                	</div>
+				<%} %>
+			</div>
+		</div>
+		
+		<!-- 게시판 -->
+		<div style="width: 1000px; height: 910px; padding-left: 10px; padding-right: 10px;">
+		
+			<!-- 상단 메뉴 -->
+			<!-- 국내 영화/해외 영화로 나눠야함 나오는 값은 해당 게시판 -->
+			<div style="width: 100%; height:40px;">
+				<div class="dropdown" style="float: left;">
+					<span class="dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
+							style="color: #ff416c; font-size: 25px;">
+						<b><%=boardName%></b>
+					</span>
+            		<!-- 드롭다운 메뉴 항목 -->
+ 	        	   	<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    	        		<li><a class="dropdown-item" href="<%=request.getContextPath()%>/board/<%=boardType%>">
+							🗣️자유 게시판
+						</a></li>
+                		<li><a class="dropdown-item" href="<%=request.getContextPath()%>/board/<%=boardType%>Meet">
+                			🤝모임 게시판</a></li>
+                		<li><a class="dropdown-item" href="<%=request.getContextPath()%>/board/<%=boardType%>Info">
+                			📚정보 게시판</a></li>
+            		</ul>
+            	</div>
+            
+            	<div style="float: right; display: flex;">
+            		<!-- 정보 넣어야함. 추천, 해외 없애야함. -->
+            		<div class="dropdown" style="margin-right: 3px;">
+            			<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                        	aria-expanded="false" style="background-color: #ff416c; color:white;">
+                        	카테고리
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        	<li><a href="/acorn/board/<%=postBoard%>?pc=1<%
+								if(request.getParameter("selectSearchPositionText") != null && request.getParameter("inputSearchFreeText") != null) {
+									String sp = request.getParameter("selectSearchPositionText");
+									String it = request.getParameter("inputSearchFreeText");
+								%>
+									&inputSearchFreeText=<%= it %>&selectSearchPositionText=<%= sp %>
+							    <%}; %>
+					   			 	" class="btn">일반</a></li>
+                        	<li><a href="/acorn/board/<%=postBoard%>?pc=2" class="btn">신작</a></li>
+                        	<li><a href="/acorn/board/<%=postBoard%>?pc=3" class="btn">후기</a></li>
+                        	<li><a href="/acorn/board/<%=postBoard%>?pc=4" class="btn">추천</a></li>
+                        	<li><a href="/acorn/board/<%=postBoard%>?pc=5" class="btn">토론</a></li>
+                        	<li><a href="/acorn/board/<%=postBoard%>?pc=6" class="btn">해외</a></li>
+                        </ul>
+            		</div>
+            		
+            		<div class="dropdown">
+                    	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                        	aria-expanded="false" style="background-color: #ff416c; color:white;">
+                        	정렬 옵션
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        	<li><a class="dropdown-item" href="javascript:void(0)" onclick="changeSort('likeNum')">
+                        		추천순</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="changeSort('viewNum')">
+                            	조회순</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="changeSort('regDate')">
+                                등록일순</a></li>
+                        </ul>
+                	</div>
+            	</div>
+            </div>
+            
+			<!-- 테이블 헤더 -->
+			<div class="list-group" style="height: 825px; width:100%; position: relative;">
+                <div class="list-group-item table-header margin-top">
+                    <div class="row">
+                        <div class="col-md-1 text-center-align">탭</div>
+                        <div class="col-md-6 text-center-align">제목</div>
+                        <div class="col-md-5 row">
+                            <div class="col-md-4 text-center-align">글쓴이</div>
+                            <div class="col-md-4 text-center-align">날짜</div>
+
+                            <div class="col-md-2 text-center-align">
+                                <a href="javascript:void(0)" onclick="toggleSort('viewNum')"
+                                   class="font-black no-underline">조회</a>
+                            </div>
+                            <div class="col-md-2 text-center-align">
+                                <a href="javascript:void(0)" onclick="toggleSort('likeNum')"
+                                   class="font-black no-underline">추천</a>
+                            </div>
+                        </div>
+                        <%-- <a href="/acorn/board/<%= postBoard %>?sortIndex=likeNum"> --%>
+                    </div>
+                </div>
+                <!-- 인기글 출력부분 -->
+                <div id="popularPostsSection" class="collapse show">
+                    <%
+                        if (hotList != null) {
+                            for (PostPageDTO post : hotList) {
+                                String displayDate = cdf.minuteHourDay(post);
+                                String categoryName = post.getCategoryName();
+
+
+                                String poscCategoryId = null;
+
+                                switch (categoryName) {
+                                    case "일반":
+                                        poscCategoryId = "1";
+                                        break;
+                                    case "신작":
+                                        poscCategoryId = "2";
+                                        break;
+                                    case "후기":
+                                        poscCategoryId = "3";
+                                        break;
+                                    case "추천":
+                                        poscCategoryId = "4";
+                                        break;
+                                    case "토론":
+                                        poscCategoryId = "5";
+                                        break;
+                                    case "해외":
+                                        poscCategoryId = "6";
+                                        break;
+
+                                }
+                    %>
+                    <div
+                            class="list-group-item list-group-item-action"
+                            style="background-color: #dff0d8;">
+                        <div class="row">
+                            <div class="col-md-1 text-center-align"><a
+                                    href="/acorn/board/<%=postBoard%>?pc=<%=poscCategoryId %>"
+                                    class="font-black no-underline"><%= categoryName %>
+                            </a></div>
+                            <div class="col-md-6">
+                                <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>"
+                                   class="post-title">
+
+                                    <%
+
+                                        String postText = post.getPostText();
+                                        Boolean videoExist = postText.contains("<video");
+                                        Boolean imgExist = postText.contains("<img");
+
+
+                                        if (imgExist && !videoExist) {
+                                    %>
+                                    <img src="/acorn/resources/images/picture.png" alt="description"
+                                         class="post-thumbnail-picture">
+                                    <%
+                                            // 이미지 태그가 포함된 경우의 처리
+                                        }
+                                        if (videoExist) {%>
+                                    <img src="/acorn/resources/images/video.png" alt="description"
+                                         class="post-thumbnail-video">
+                                    <%
+                                        }
+                                    %>
+
+                                    <%=post.getPostTitle()%>
+                                </a>
+                                <% if (post.getCommentCount() != 0L) {%>
+                                &nbsp;
+                                <span class="comment-count"><%=post.getCommentCount()%></span>
+                                &nbsp;
+                                <% } %>
+                                <span style="color: red">hot🔥</span>
+                            </div>
+                            <div class="col-md-5 row">
+                                <div class="col-md-4 text-center-align">
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle no-underline font-black"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            <%=post.getNickname()%>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item"
+                                                   href="<%= request.getContextPath() %>/board/<%= postBoard %>?selectSearchPositionText=userId&inputSearchFreeText=<%=post.getUserId()%>">📑작성글
+                                                보기</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                   onclick="openMemberInfoPopup('<%=post.getUserId()%>'); return false;">🔎회원정보
+                                                보기</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <%
+                                    String strPostDate = sdfDate.format(post.getPostDate());
+                                    String formattedDate;
+                                    if (strToday.equals(strPostDate)) {
+                                        formattedDate = new SimpleDateFormat("HH:mm").format(post.getPostDate());
+                                    } else {
+                                        formattedDate = new SimpleDateFormat("yyyy.MM.dd").format(post.getPostDate());
+                                    }
+                                %>
+                                <div class="col-md-4 text-center-align"><%=formattedDate%>
+                                </div>
+                                <div class="col-md-2 text-center-align"><%=post.getViewNum()%>
+                                </div>
+                                <% if (post.getLikeNum() != 0L) { %>
+                                <div class="col-md-2 text-center-align like-num"><%=post.getLikeNum()%>
+                                </div>
+                                <%} %>
+                            </div>
+                        </div>
+                    </div>
+                    <%
+                        }
+                    } else {
+                    %>
+                    인기글이 존재하지 않습니다.
+                    <%
+                        }
+                    %>
+                </div>
+                <!-- 섹션 접기 버튼 -->
+                <div class="text-center">
+                    <button class="btn btn-link btn-sm" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#popularPostsSection"
+                            aria-expanded="true" aria-controls="popularPostsSection">
+                        <span class='no-underline font-black'>▲</span>
+                    </button>
+                </div>
+
+
+                <%
+                    for (PostPageDTO post : list) {
+                        String categoryName = post.getCategoryName();
+                        String poscCategoryId = null;
+
+                        switch (categoryName) {
+                            case "일반":
+                                poscCategoryId = "1";
+                                break;
+                            case "신작":
+                                poscCategoryId = "2";
+                                break;
+                            case "후기":
+                                poscCategoryId = "3";
+                                break;
+                            case "추천":
+                                poscCategoryId = "4";
+                                break;
+                            case "토론":
+                                poscCategoryId = "5";
+                                break;
+                            case "해외":
+                                poscCategoryId = "6";
+                                break;
+
+                        }
+
+                %>
+                <div class="list-group-item list-group-item-action">
+                    <div class="row">
+                        <div class="col-md-1 text-center-align"><a
+                                href="/acorn/board/<%=postBoard%>?pc=<%=poscCategoryId %>"
+                                class="font-black no-underline"><%= categoryName %>
+                        </a></div>
+                        <div class="col-md-6">
+                            <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>"
+                               class="post-title">
+                                <%
+
+                                    String postText = post.getPostText();
+                                    Boolean videoExist = postText.contains("<video");
+                                    Boolean imgExist = postText.contains("<img");
+
+
+                                    if (imgExist && !videoExist) {
+                                %>
+                                <img src="/acorn/resources/images/picture.png" alt="description"
+                                     class="post-thumbnail-picture">
+                                <%
+                                        // 이미지 태그가 포함된 경우의 처리
+                                    }
+                                    if (videoExist) {%>
+                                <img src="/acorn/resources/images/video.png" alt="description" class="post-thumbnail-video">
+                                <%
+                                    }
+                                %>
+
+                                <%=post.getPostTitle()%>
+                            </a>
+                            <% if (post.getCommentCount() != 0L) {%>
+                            &nbsp;
+                            <span class="comment-count"><%=post.getCommentCount()%></span>
+                            <% } %>
+                        </div>
+                        <div class="col-md-5 row">
+                            <div class="col-md-4 text-center-align">
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle no-underline font-black"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        <%=post.getNickname()%>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item"
+                                               href="<%= request.getContextPath() %>/board/<%= postBoard %>?selectSearchPositionText=userId&inputSearchFreeText=<%=post.getUserId()%>">📑작성글
+                                            보기</a></li>
+                                        <li><a class="dropdown-item" href="#"
+                                               onclick="openMemberInfoPopup('<%=post.getUserId()%>'); return false;">🔎회원정보
+                                            보기</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <%
+                                String strPostDate = sdfDate.format(post.getPostDate());
+                                String formattedDate;
+                                if (strToday.equals(strPostDate)) {
+                                    formattedDate = new SimpleDateFormat("HH:mm").format(post.getPostDate());
+                                } else {
+                                    formattedDate = new SimpleDateFormat("yyyy.MM.dd").format(post.getPostDate());
+                                }
+                            %>
+                            <div class="col-md-4 text-center-align"><%=formattedDate%>
+                            </div>
+                            <div class="col-md-2 text-center-align"><%=post.getViewNum()%>
+                            </div>
+                            <% if (post.getLikeNum() != 0L) { %>
+                            <div class="col-md-2 text-center-align like-num"><%=post.getLikeNum()%>
+                            </div>
+                            <%} %>
+                        </div>
+                    </div>
+                </div>
+                <%
+                    }
+                %>
+				<div style="position: absolute; bottom: 0; width: 100%;">
+                	<div class="mb-3 search-write-group margin-top">
+                    	<!-- 검색창 -->
+                    	<div class="search-input-group">
+                        	<form id="formSearchFree" action="/acorn/board/<%=postBoard%>" class="d-flex">
+                            <div class="col-md-4 pe-1">
+                                <select class="form-select search-form-control"
+                                        name="selectSearchPositionText">
+                                    <option value="titleText">제목 + 내용</option>
+                                    <option value="postTitle">제목</option>
+                                    <option value="postText">내용</option>
+                                    <option value="userId">작성자</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 pe-1">
+                                <input type="text" class="form-control search-form-control"
+                                       id="inputSearchFreeText" name="inputSearchFreeText">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn search-button" type="submit"><b>검색</b></button>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <!-- 글쓰기 버튼 -->
+                    <div>
+                        <a href="/acorn/board/write?bn=<%=postBoard%>">
+                            <button type="button" class="btn write-button custom-btn"><b>글쓰기</b></button>
+                        </a>
+                    </div>
+                </div>
+
+
+                <!-- 페이징 로직 -->
+                <%
+                    int curPage = pDTO.getCurPage();
+                    int perPage = pDTO.getPerPage();
+                    int totalCount = pDTO.getTotalCount();
+                    int totalPage = (int) Math.ceil((double) totalCount / perPage);
+                    int startPage = ((curPage - 1) / 10) * 10 + 1; // 시작 페이지 번호 계산
+                    int endPage = Math.min(startPage + 9, totalPage); // 끝 페이지 번호 계산
+
+                    // Calculate previous and next page numbers
+                    int prevPage = Math.max(startPage - 1, 1); // Ensure prevPage is never less than 1
+                    int nextPage = endPage + 1;
+                %>
+
+                <div class="page-numbers text-center">
+                    <ul class="pagination">
+
+                        <%-- "이전" 버튼 --%>
+                        <%
+                            if (curPage > 1) {
+                        %>
+                        <li class="page-item"><a class="page-link"
+                                                 href="/acorn/board/<%=postBoard%>?curPage=<%=prevPage%><%if (sortIndex != null) {%>&sortIndex=<%=sortIndex%><%}%><%if (inputSearchFreeText != null && selectSearchPositionText != null) {%>&selectSearchPositionText=<%=selectSearchPositionText%>&inputSearchFreeText=<%=inputSearchFreeText%><%}%>">
+                            &laquo; 이전 </a></li>
+                        <%
+                        } else {
+                        %>
+                        <li class="page-item disabled"><span class="page-link">&laquo;
+									이전</span></li>
+                        <%
+                            }
+                        %>
+
+                        <%-- 페이지 번호 출력 --%>
+                        <%
+                            for (int i = startPage; i <= endPage; i++) {
+                        %>
+                        <li class="page-item <%=i == curPage ? "active" : ""%>"><a
+                                class="page-link"
+                                href="/acorn/board/<%=postBoard%>?curPage=<%=i%><%if (sortIndex != null) {%>&sortIndex=<%=sortIndex%><%}%><%if (inputSearchFreeText != null && selectSearchPositionText != null) {%>&selectSearchPositionText=<%=selectSearchPositionText%>&inputSearchFreeText=<%=inputSearchFreeText%><%}%>">
+                            <%=i%>
+                        </a></li>
+                        <%
+                            }
+                        %>
+
+                        <%-- "다음" 버튼 --%>
+                        <%
+                            if (nextPage <= totalPage) {
+                        %>
+                        <li class="page-item"><a class="page-link"
+                                                 href="/acorn/board/<%=postBoard%>?curPage=<%=nextPage%><%if (sortIndex != null) {%>&sortIndex=<%=sortIndex%><%}%><%if (inputSearchFreeText != null && selectSearchPositionText != null) {%>&selectSearchPositionText=<%=selectSearchPositionText%>&inputSearchFreeText=<%=inputSearchFreeText%><%}%>">
+                            다음 &raquo; </a></li>
+                        <%
+                        } else {
+                        %>
+                        <li class="page-item disabled"><span class="page-link">다음
+									&raquo;</span></li>
+                        <%
+                            }
+                        %>
+                    </ul>
+				</div>
+				<!-- 페이지 숫자 검색창 -->
+            	<form action="" method="get" onsubmit="submitForm(event)">
+            		<input type="number" name="curPage" style="width: 50px">
+            	</form>
+			</div>
+			</div>
+			
+			<!-- 리모컨 -->
+			<div class="shortcut-container" style="margin: 0 auto; height:45px;">
+            	<div class="shortcut-list">
+                	<span class="shortcut-key">alt+c</span><span class="shortcut-description">글 쓰기</span>
+                	<span class="shortcut-key">alt+w</span><span class="shortcut-description">새 글</span>
+                	<span class="shortcut-key2">e</span><span class="shortcut-description">상단으로</span>
+                	<span class="shortcut-key2">d</span><span class="shortcut-description">하단으로</span>
+                	<span class="shortcut-key2">s</span><span class="shortcut-description">이전</span>
+                	<span class="shortcut-key">1</span><span class="shortcut-description">영화</span>
+            	</div>
+        	</div>
+        </div>
+		
+		<!-- 전체 영화 순위 -->
+		<div style="width: 200px; height: 100%; text-align: center;">
+			<span style="color:#ff416c;"><b>💥전체 <%= category %> 랭킹💥</b></span>
+			<div class="list-group slider-container slide2" style="border-radius: 0px;">
+                <!-- 영화 포스터 반복 구간 -->
+                <%-- 서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복 --%>
+                <%
+                List<String> hotMovieList = poster.getHotList();
+                for (int i = 0; i < hotMovieList.size(); i++) {
+                %>
+                	<div class="movie-slide">
+                   		<img src="<%= hotMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                    	<span class="index-label"><%= i + 1 %></span>
+                	</div>
+                <%} %>
+            </div>
+		</div>
+		
+	</div>
 </div>
-<div class="container mt-4">
+
+<%-- <div class="container mt-4">
     <div class="row">
         <!-- 최신 개봉 영화 섹션 -->
         <div class="col-md-2">
@@ -759,7 +1248,7 @@
                     <img src="<%= newMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image">
                     <span class="index-label">
 				      <%= i + 1 %>
-			      </span>
+			      	</span>
                 </div>
                 <% } %>
             </div>
@@ -862,7 +1351,7 @@
                                    class="font-black no-underline">추천</a>
                             </div>
                         </div>
-                        <%-- <a href="/acorn/board/<%= postBoard %>?sortIndex=likeNum"> --%>
+                        <a href="/acorn/board/<%= postBoard %>?sortIndex=likeNum">
                     </div>
                 </div>
                 <!-- 인기글 출력부분 -->
@@ -1153,7 +1642,7 @@
                 <div class="page-numbers text-center">
                     <ul class="pagination">
 
-                        <%-- "이전" 버튼 --%>
+                        "이전" 버튼
                         <%
                             if (curPage > 1) {
                         %>
@@ -1169,7 +1658,7 @@
                             }
                         %>
 
-                        <%-- 페이지 번호 출력 --%>
+                        페이지 번호 출력
                         <%
                             for (int i = startPage; i <= endPage; i++) {
                         %>
@@ -1182,7 +1671,7 @@
                             }
                         %>
 
-                        <%-- "다음" 버튼 --%>
+                        "다음" 버튼
                         <%
                             if (nextPage <= totalPage) {
                         %>
@@ -1211,7 +1700,7 @@
             <!-- 인기 영화 목록을 여기에 -->
             <div class="list-group slider-container slide2">
                 <!-- 영화 포스터 반복 구간 -->
-                <%-- 서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복 --%>
+                서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복
                 <%
                     List<String> hotMovieList = poster.getHotList();
 
@@ -1228,7 +1717,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="">
         <div class="shortcut-container">
             <div class="shortcut-list">
                 <span class="shortcut-key">alt+c</span><span class="shortcut-description">글 쓰기</span>
@@ -1241,9 +1730,10 @@
         </div>
     </div>
 
-</div>
+</div> --%>
 
-
+<jsp:include page="../common/footer.jsp"></jsp:include>
+<!-- 
 <footer class="site-footer">
     <div class="footer-content">
         <ul class="footer-links">
@@ -1258,7 +1748,7 @@
         <p class="copyright">©moonbam All rights reserved.</p>
     </div>
 </footer>
-
+ -->
 
 <!-- Bootstrap Bundle with Popper -->
 <script

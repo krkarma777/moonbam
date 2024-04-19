@@ -1,3 +1,4 @@
+<%@page import="org.json.JSONObject"%>
 <%@page import="com.moonBam.dto.ContentDTO"%>
 <%@page import="com.moonBam.controller.board.util.ContentDataFormating"%>
 <%@page import="java.util.Date"%>
@@ -17,6 +18,8 @@ List<PostPageDTO> movieMeetList = (List<PostPageDTO>) request.getAttribute("movi
 List<PostPageDTO> movieInfoList = (List<PostPageDTO>) request.getAttribute("movieInfoList");
 ContentDataFormating cdf = new ContentDataFormating();
 List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTopList");
+
+List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList");
 %>
 <html>
 <head>
@@ -31,7 +34,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 </head>
 <body class="bg-light" style="height: 100vh;">
 	<!-- 네비게이션 바 -->
-	<jsp:include page="common/navBar.jsp"></jsp:include>
+	<jsp:include page="../common/navBar.jsp"></jsp:include>
 
 	<div style="height: 50px"></div>
 	
@@ -225,7 +228,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 </div>
 
 	<!-- 푸터 -->
-	<jsp:include page="common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 
 <script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -288,21 +291,21 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 
 	let counter2 = 1;
 	const size2 = carouselImages2[0].clientWidth;
-	carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+	carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 
 	// Buttons
 	nextBtn2.addEventListener('click', () => {
 		if (counter >= carouselImages2.length - 1) return;
 		carouselSlide2.style.transition = "transform 0.4s ease-in-out";
 		counter2++;
-		carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+		carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 	});
 		
 	prevBtn2.addEventListener('click', () => {
 		if (counter <= 0) return;
 		carouselSlide2.style.transition = "transform 0.4s ease-in-out";
 		counter2--;
-		carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+		carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 	});
 
 	// Jump to First/Last Slide
@@ -311,11 +314,11 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 		if (carouselImages2[counter2].id === 'lastClone2') {
 			carouselSlide2.style.transition = 'none'; // 트랜지션 효과 없애기
 			counter2 = carouselImages2.length - 2; // couter 초기화
-			carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)'; // 실제 마지막 이미지로 이동.
+			carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)'; // 실제 마지막 이미지로 이동.
 		} else if (carouselImages2[counter2].id === 'firstClone2') {
 			carouselSlide2.style.transition = 'none';
-			counter2 = carouselImages2.length - counter; // couter 초기화
-			carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+			counter2 = carouselImages2.length - counter2; // couter 초기화
+			carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 		}
 	});
 
