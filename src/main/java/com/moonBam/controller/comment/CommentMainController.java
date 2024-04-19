@@ -1,13 +1,16 @@
 package com.moonBam.controller.comment;
 
 import com.moonBam.dto.CommentDTO;
+import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.CommentService;
+import com.moonBam.service.member.MemberLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +20,9 @@ public class CommentMainController {
 	
 	@Autowired
 	CommentService service;
+
+	@Autowired
+	MemberLoginService memberLoginService;
 	
           
 	public CommentMainController() {
@@ -59,7 +65,9 @@ public class CommentMainController {
 	//댓글 작성-> DB INSERT 되는 거
 	@RequestMapping(value="/Acorn/CommetInsert",  method = RequestMethod.POST)
 	@ResponseBody //AJAX 응답
-	public void CommetInsert(CommentDTO commentDB) {
+	public void CommetInsert(CommentDTO commentDB, Principal principal) {
+		MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+		commentDB.setMember(memberDTO);
 		System.out.println("하이 CommetInsert");
 		int num =  service.AddCommnet(commentDB);
 		

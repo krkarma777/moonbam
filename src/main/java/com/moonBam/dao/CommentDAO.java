@@ -22,10 +22,7 @@ public class CommentDAO {
 	
 	
 	public int  AddCommnet(CommentDTO commentDB) {
-		
-		int recordCount = session.insert("CommentMapper", commentDB);
-		return recordCount;
-		
+        return session.insert("CommentMapper", commentDB);
 	}
 
 	public List<CommentDTO> selectAll(){
