@@ -51,17 +51,6 @@ public class JWTUtil {
                 .compact();
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // 토큰의 유효성을 검증하는 메서드
     public Boolean validateToken(String token) {
         try {
@@ -71,17 +60,5 @@ public class JWTUtil {
             return false; // 유효하지 않은 토큰으로 간주
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }
