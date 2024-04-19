@@ -18,7 +18,7 @@
 		font-size: 70%;
 		color: gray;
 	}
-	#contImg{
+ 	#contImg{
 		text-align: right;
 	}
 	.like_btn{
@@ -32,8 +32,12 @@
 		margin-top: 10px;
 		margin-bottom: 5px;
 	}
-	#like_wrapper2{
-
+	#content_btn{
+		width: 100px;
+		/* border: 1px solid gray; */
+		padding-left: 0px;
+		padding-right: 0px;
+		/* background-color: white */
 	}
 	#like_wrapper{
 		width: 100px;
@@ -70,39 +74,72 @@
 	#postText{
 		padding-bottom: 50px;
 		overflow: hidden;
+		min-height: 300px;
 	}
 	
 	#top{
-		margin-top: 30px;
+		/* margin-top: 30px; */
+		width: 100%;
+	}
+/* 	.no_side_margin{
+		margin-left: 0px;
+		margin-right: 0px;
+		padding-left: 0px;
+		padding-right: 0px;
+	} */
+	
+	#blank{
+		margin-top: 50px;
+	}
+	
+	#header{
+		padding-top: 50px;
+		background: orange;
+	}
+	
+	.no_side_padding{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	
+/* 	#titleText{
+		margin-top: 20px; 
+	} */
+	#reviewTitle{
+		margin-top: 20px;
+		padding-left: 10px;
 	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 	<%
-	ReviewDTO review = (ReviewDTO)request.getAttribute("review");
-	Long postId = review.getPostId(); 
-	String userId = review.getUserId();
-	String postDate = review.getPostDate();
-	String postText = review.getPostText();
-	String nickname = review.getNickname();
-	String score = review.getScore();
-	String isLike = review.getIsLike();
-	String likeNum = review.getLikeNum();
-	Long contId = review.getContId();
+		ReviewDTO review = (ReviewDTO)request.getAttribute("review");
+		Long postId = review.getPostId(); 
+		String userId = review.getUserId();
+		String postDate = review.getPostDate();
+		String postText = review.getPostText();
+		String nickname = review.getNickname();
+		String score = review.getScore();
+		String isLike = review.getIsLike();
+		String likeNum = review.getLikeNum();
+		Long contId = review.getContId();
+		
+		/* String likeUserId = (String)request.getAttribute("likeUserId"); */
+		
+		ContentDTO content = (ContentDTO)request.getAttribute("content");
+		String contTitle = content.getContTitle();
+		String contImg = content.getContImg();
+		contImg = "http://image.tmdb.org/t/p/"+"w185/"+contImg;
+		//http://image.tmdb.org/t/p/w342/awmVj0xmD8CP4g0uD7dUrM8nqi.jpg
 	
-	ContentDTO content = (ContentDTO)request.getAttribute("content");
-	String contTitle = content.getContTitle();
-	String contImg = content.getContImg();
-	contImg = "http://image.tmdb.org/t/p/"+"w154/"+contImg;
-	//http://image.tmdb.org/t/p/w342/awmVj0xmD8CP4g0uD7dUrM8nqi.jpg
-
-	String mesg = (String)request.getAttribute("mesg");
-	
-	
+		String mesg = (String)request.getAttribute("mesg");
 	%>
+	
+	// 신고 결과 알람
 	if("<%=mesg%>"!="null"){
 		alert("<%=mesg%>");
 	}
+	
 	$(document).ready(function(){
 		$("#like_wrapper").on("click", likeToggle);
 		$("#share_twitter").on("click", shareTwitter);
@@ -125,7 +162,7 @@
 	function shareFacebook(){
 		var url = window.location.href;
 		var type = 'article'; // website, article 등등
-		var title = '<%=contTitle%> - <%=userId%>님의 리뷰';
+		var title = '<%=contTitle%> - <%=nickname%>님의 리뷰';
 		var description = '<%=postText%>';
 		var imgUrl = '<%=contImg%>';
 
@@ -143,9 +180,13 @@
 		}
 		if( ! $('meta[property="og:image"').attr('content') ) {
 			$('head').append('<meta property="og:image" content="{' + imgUrl + '}" />');
-			
+		}
 		var linkUrl = window.location.href;
-		window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(linkUrl), "_blank", "width=600,height=400");
+		//console.log(linkUrl);
+		if(linkUrl.indexOf("localhost") == -1){
+			window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(linkUrl), "_blank", "width=600,height=400");
+		} else{
+			alert("localhost는 공유할 수 없습니다.");
 		}
 	}
 	// 공감버튼 토글
@@ -166,8 +207,8 @@
 		
 		//로그인정보가 있을 때
 		//DB에 비동기 반영
-		<%if(userId!=null){%>
-		
+		<%-- <%if(likeUserId!=null){%> --%>
+		if("${likeUserId}"!=""){
 			$.ajax(
 				{
 					type: "post",
@@ -189,20 +230,53 @@
 					}
 				}//json	
 			);//ajax
-		<%}%>//if
+		}
 	}
 </script>
 </head>
 <body>
 	<%-- <jsp:include page="//common/navbar.jsp"></jsp:include> --%>
+	<jsp:include page="../common/navBar.jsp"></jsp:include>
+	<div class="row" id="blank"></div>
 	<div class="row" id="body">
+		<div class="row" id="header"></div>
 		<div class="row" id="top">
-			<div class="col-9">
-				<div class="row"><%=userId %> <span id="postDate"><%=postDate %></span></div>
-				<div class="row"><a href="content-page?contId=<%=contId%>" class="noEffect"><%=contTitle %></a><span id="score">☆ <%=Double.parseDouble(score)/2 %></span></div>
+			<div id="titleText">
+				
+				<div class="row">
+					
+				</div>
+				<div class="row">
+					<div class="col" id="reviewTitle">
+						<div>
+							<%=nickname %>님의 리뷰	 
+							<div id="postDate"><%=postDate %></div>
+						</div>
+						<div>
+							<button id="like_wrapper">
+								<span class="like_btn" style="color:red">
+								<%if("1".equals(isLike)){%>♥ 
+								<%}else{ %>♡<%} %>
+								</span>
+								
+								<span id="likeNum"><%=(likeNum!=null)?(likeNum):("") %></span>
+							</button>
+						</div>
+					</div>
+					<div class="col" id="contImg">
+						<a href="content-page?contId=<%=contId%>" class="noEffect">
+							<img src="<%=contImg %>" width="150" height="150" style="margin-top:10px; margin-bottom:10px;">
+						</a>
+<%-- 					<div class="col-5">
+							<%=contTitle %>
+							☆ <%=Double.parseDouble(score)/2 %>
+						</div>	 --%>
+					</div>
+					
+				</div>
 			</div>
 
-			<div class="col-3" id="contImg"><a href="content-page?contId=<%=contId%>"><img src="<%=contImg %>" width="100" height="100"></a></div>
+			
 			<hr>
 		</div>
 		<div class="row" id="middle">
@@ -211,16 +285,12 @@
 			
 			<!-- 버튼 그룹 -->
 			<div id="btns" class="row">
+				
 				<!-- 좋아요 버튼 -->
 				<div class="col" id="like_wrapper2">
-					<button id="like_wrapper">
-						<span class="like_btn" style="color:red">
-						<%if("1".equals(isLike)){%>♥ 
-						<%}else{ %>♡<%} %>
-						</span>
-						
-						<span id="likeNum"><%=(likeNum!=null)?(likeNum):("") %></span>
-					</button>
+					<a type="button" class="btn btn-outline-warning" href="content-page?contId=<%=contId%>">영화정보</a>
+					
+					
 				</div>
 				<!-- 더보기 버튼  -->
 				<div class="col" id="show_more_wrapper">
@@ -244,10 +314,12 @@
 			
 			<hr>
 		</div>
-		<div class="row" id="bottom"></div>
+		<div class="row" id="bottom">
+			<jsp:include page="../board/commentMain.jsp"></jsp:include>
+		</div>
 		
 		
-		<jsp:include page="../board/commentMain.jsp"></jsp:include>
+		
 	</div>
 	
 	<!-- 공유기능 모달창 -->
@@ -262,8 +334,8 @@
 	      <div class=" modal-body d-flex justify-content-center" role="group" aria-label="Basic outlined example">
 	      		<a id="btnCopy" class="link-icon copy" href="javascript:shareCopy();" />링크복사
 				<a id="btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();" />트위터
-				<a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();" />페이스북    
-				<a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();" >카카오톡</a>
+				<a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();" />페이스북</a>   
+				<!-- <a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();" >카카오톡</a> -->
 				
 	      </div>
 	    </div>
