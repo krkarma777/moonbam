@@ -12,9 +12,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-    window.onload = init;
+
+window.onload = init;
+
 
     function init() {
+
+    	
         function clock() { //작성시간을 실시간으로 보여주기 위한 함수
             var time = new Date();
 
@@ -58,7 +62,7 @@
                     aboveComId: $("#abovecomidComment").val()
                 },
                 success: function (data, status, xhr) {
-
+					
                     CommentSelectAllServlet();
 
                 },
@@ -274,9 +278,14 @@
                             if (comText != "삭제된 댓글입니다.") { //삭제된 댓글이라 뜨는 댓글엔 답글 못 달게 했음
                                 mesg += "<br><a href='#'  onclick='replyComment(" + comId + ");return false;'>답글</a>";
                             }//if(comText!="삭제된 댓글입니다.") end
+                            
+                            
+                          	//지금 로그인하고 있는 사용자 id에 @ . 이 html 인코딩 처리되어 유니코드로 나와서
+                        	//이 부분을 디코드 해서 저장시킨 [현재 사용자의 id]임
+                        	var enCodeUserId = '<sec:authentication property="name"/>'
+                        	var deCodeUserId = enCodeUserId.replace("&#64;","@").replace("&#46;",".")
 
-
-                            if (userId == "<sec:authentication property="name"/>") {
+                            if (userId == deCodeUserId) {
 
                                 if (comText != "삭제된 댓글입니다.") {
                                     mesg += "<div class='comment-actions'>";
@@ -325,7 +334,7 @@
                                 comDate = replyJson[j].comDate;
                                 comText = replyJson[j].comText;
                                 nickname = replyJson[j].nickname;
-                                console.log("닉네임",nickname)
+                                //console.log("닉네임",nickname)
                                 aboveComId = replyJson[j].aboveComId; //부모댓글번호
 
                                 mesg += "<li class='comment-item'>";
