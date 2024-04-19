@@ -629,7 +629,7 @@
 <body>
 
 <!-- 네비게이션바 -->
-<jsp:include page="//common/navbar.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
 <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container-fluid">
         로고

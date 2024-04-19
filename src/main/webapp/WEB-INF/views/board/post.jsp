@@ -464,7 +464,7 @@
 </head>
 <body>
 <!-- 네비게이션바 -->
-<%-- 	<jsp:include page="//common/navbar.jsp"></jsp:include> --%>
+<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
 
 
 <div class="container mt-5 editor-wrapper">
