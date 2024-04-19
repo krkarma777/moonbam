@@ -65,7 +65,13 @@ List<CreditDTO> creditList = (List<CreditDTO>) request.getAttribute("creditList"
 			<div style="width: 950px;">
 				<!-- 영화 제목, 개봉일 -->
 				<div style="font-size: 35px; background-color: #ffb2c4; color: white; height: 52px; width: 949px; position: relative;">
-					<b><span style="margin-left: 4px;">${content.getContTitle() }</span></b>
+					<b><span style="margin-left: 4px;">
+					<%if(content.getContTitle().length()>40){%>
+						<%=content.getContTitle().substring(0, 40) %> ...
+					<%}else {%>
+						${content.getContTitle()}
+					<%} %>
+					</span></b>
 					<span
 						style="font-size: 20px; position: absolute; bottom: 0; right: 5px;">개봉일:
 						<%=releaseDate%></span>
