@@ -16,7 +16,7 @@
 		String savecount = request.getParameter("savecount");
 	%>
 	<meta charset="UTF-8">
-	<title>Insert title here</title>
+	<title>문화인들의 밤</title>
 
 	<!-- Bootstrap JS (optional) -->
 	<link

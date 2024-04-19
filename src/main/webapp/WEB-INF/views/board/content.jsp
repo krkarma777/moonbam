@@ -11,7 +11,7 @@
 	String postId = request.getParameter("postId");
 %>
 <meta charset="UTF-8">
-<title>Display Content</title>
+<title>문화인들의 밤</title>
 
 
 

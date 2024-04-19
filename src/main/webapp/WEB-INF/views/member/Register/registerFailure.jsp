@@ -9,7 +9,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 실패 페이지</title>
+    <title>문화인들의 밤</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 </head>
 

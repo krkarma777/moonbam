@@ -8,7 +8,7 @@
 <!-- 회원가입에 성공할 경우, 나타나는 페이지의 jsp -->
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 완료 페이지</title>
+    <title>문화인들의 밤</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 	<script type="text/javascript">
 		<!-- 5초 뒤, 메인 화면으로 이동 -->
