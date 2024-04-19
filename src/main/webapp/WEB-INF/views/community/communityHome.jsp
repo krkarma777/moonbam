@@ -145,11 +145,28 @@ button {
 						int currentNow = chatRoom.getCurrentNow();
 						int amount = chatRoom.getAmount();
 						String addr1 = chatRoom.getAddr1();
+						String category = chatRoom.getCategory();
+						
+							
+						switch(category) {
+						    case "music" : category = "음악";
+						         break;
+						    case "movie": category = "영화";
+						         break;
+						    case "book": category = "독서";
+					         	 break;
+						    case "etc": category = "기타";
+						    	 break;
+						    	 
+						    	 
+					}
+						
+						
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">
 							<div class="border-bottom" style="height: 40px; width: 299px; background-color: #ffb2c4; align-content: center;">
-								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;"><%=roomTitle %></a>
+								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;">[<%=category %>] <%=roomTitle %></a>
 							</div>
 							<div class="border-top" style="height: 225px; width: 299px;">
 								<div style=" font-size: 18px; height: 175px;">
