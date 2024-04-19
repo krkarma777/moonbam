@@ -18,7 +18,7 @@
         <h1>잘못된 접근입니다.</h1>
         <p class="mesg">비정상적인 접근입니다. 회원정보를 다시 입력해주시기 바랍니다.</p>
         <div id="sitesShortCut">
-	        <a href="<%=request.getContextPath()%>/Login" class="links">로그인</a>
+	        <a href="<%=request.getContextPath()%>/mainLogin" class="links">로그인</a>
             <a href="${pageContext.request.contextPath}/FindInfo" class="links">회원정보 찾기</a>
         </div>
     </div>

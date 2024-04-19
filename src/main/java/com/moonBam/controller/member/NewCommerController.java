@@ -3,8 +3,6 @@ package com.moonBam.controller.member;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,9 @@ import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.OpenApiService;
 import com.moonBam.service.member.RegisterService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -58,29 +59,30 @@ public class NewCommerController {
 	public String CheckExistUser(HttpServletRequest request, String userId, 
 			String checked_Agreement, String checked_Info, String checked_Withdraw, HttpSession session) {
 		
-																			//디버그 코드***************************************************
-																			System.out.println("userId "+userId);
-																			System.out.println(
-																				"checked_Agreement : " + checked_Agreement+"\n"+ 
-																				"checked_Info : " + checked_Info+"\n"+
-																				"checked_Withdraw : " + checked_Withdraw);
-																			//디버그 코드***************************************************		
+			System.out.println("userId "+userId);
+			System.out.println(
+				"checked_Agreement : " + checked_Agreement+"\n"+ 
+				"checked_Info : " + checked_Info+"\n"+
+				"checked_Withdraw : " + checked_Withdraw
+			);
+																			
 			request.setAttribute("userId", userId);
 		return "member/Register/registerMember";
 	}
 	
+	//회원가입 페이지에서 새로고침 시 처리
 	@GetMapping("/CheckExistUser")
 	public String registerErrorPage() {
 		return "member/Register/registerErrorPage";
 	}
 	
+	//회원가입 처리 전 로딩창 구현
 	@PostMapping("/InsertData")
 	public ModelAndView register(MemberDTO dto, HttpServletRequest request) {
-		System.out.println(dto);
 		String userPwConfirm = request.getParameter("userPwConfirm");
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("dto", dto);
-		mav.addObject("userPwConfirm", userPwConfirm);
+			mav.addObject("dto", dto);
+			mav.addObject("userPwConfirm", userPwConfirm);
 		mav.setViewName("member/Register/registerLoading");
 		return mav;
 	}

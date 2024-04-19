@@ -497,9 +497,6 @@
          var anonymousReplyNum = $(this).data('reply-num');
          var replyPassword = $('#replyPasswordToDelete').val();
          
- //출력됨        console.log(anonymousReplyNum);
- //출력됨        console.log(replyPassword);
-
          $.ajax({
              url: "<c:url value='/deleteReply'/>",
              type: "DELETE",

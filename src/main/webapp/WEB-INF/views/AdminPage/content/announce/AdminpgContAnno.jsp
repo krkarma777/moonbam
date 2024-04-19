@@ -2,15 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-관리자페이지 공지사항
-
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -56,60 +47,67 @@
 
 	});
 </script>
+<style>
+	.table {
+		margin-top: 20px;
+	}
+	.header-row {
+		background-color: #f8f9fa;
+	}
+	.page-link {
+		margin: 0 5px;
+		text-decoration: none;
+		color: #007bff;
+	}
+	.page-link:hover {
+		text-decoration: underline;
+	}
+	.input-group-text {
+		width: 100%;
+	}
+</style>
 ${word }
-<form action="" id="formAnnoList">
-	<table border='1'>
+<div class="container">
+	<h1 class="mt-5">관리자페이지 공지사항</h1>
+	<hr>
+	<form action="<%=request.getContextPath()%>/AdminPage/RestrictedMemberList" method="post" class="mb-3">
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" placeholder="검색조건 입력" id="SearchValue" name="SearchValue" value="${word}">
+			<button type="submit" class="btn btn-primary" id="buttonAnnoWord">검색</button>
+			<button type="button" class="btn btn-secondary" id="buttonAnnoWrite">글쓰기</button>
+		</div>
+	</form>
+	<table class="table table-hover">
+		<thead class="header-row">
 		<tr>
-			<!-- 글쓰기 -->
-			<!-- <td><button id="buttonAnnoWrite" >글쓰기</button></td> -->
-			<!-- 이 코드는 검색의 type="submit"보다 우선 순위가 높은 거 같다. -->
-			<td><input type="button" id="buttonAnnoWrite" value="글쓰기"></input></td>
-			<!-- 글 검색 -->
-			<td colspan="2"><input type="text" width="100%"
-				id="inputAnnoWord" name="word" value="${word}"></td>
-			<td><input type="submit" value="검색" id="buttonAnnoWord" 	name="buttonAnnoWord"></td>
+			<th>글번호</th>
+			<th>제목</th>
+			<th>작성일</th>
+			<th>작성자</th>
 		</tr>
-		<tr>
-			<td>글번호</td>
-			<td style="width: 500px">제목</td>
-			<td>작성일</td>
-			<td>작성자</td>
-		</tr>
-		<c:forEach var="dto" items="${list}" varStatus="status">
+		</thead>
+		<tbody>
+		<c:forEach var="dto" items="${list}">
 			<tr>
 				<td>${dto.annoNum}</td>
-				<td style="width: 500px">
-				<a href="ViewAnnouncementController?annoNum=${dto.annoNum}">${dto.annoTitle} </a>
-				</td>
+				<td><a href="ViewAnnouncementController?annoNum=${dto.annoNum}">${dto.annoTitle}</a></td>
 				<td>${dto.writeDate}</td>
 				<td>${dto.annoWriter}</td>
 			</tr>
-			<!-- for list -->
 		</c:forEach>
-		<tr>
-	
-			<td colspan="4" style="text-align: center;">
-				
-				<c:if test="${current !=1 }">
-				<a href="AdminPageAnnounce?currentPage=1&inputAnnoWord=${word}" style="text-decoration: none;">&lt;</a>
-				</c:if>
-		
-			<c:forEach
-					var="pages" items="${pageArray }" varStatus="status">
-					<a id="listPage"
-						href="AdminPageAnnounce?currentPage=${pages}&inputAnnoWord=${word}"
-				<c:if test="${current !=1 }">
-						 style="text-decoration: none;"
-						 </c:if>
-						 >${pages}</a>
-				&nbsp; </c:forEach>
-			
-				<c:if test="${current !=last }">
-				<a href="AdminPageAnnounce?currentPage=${last }&inputAnnoWord=${word}" style="text-decoration: none;">&gt;</a>
-				</c:if>
-				</td>
-		</tr>
+		</tbody>
 	</table>
-</form>
-</body>
-</html>
+	<nav aria-label="Page navigation">
+		<ul class="pagination justify-content-center">
+			<c:if test="${current != 1}">
+				<li class="page-item"><a class="page-link" href="AdminPageAnnounce?currentPage=1&inputAnnoWord=${word}">First</a></li>
+			</c:if>
+			<c:forEach var="pages" items="${pageArray}">
+				<li class="page-item"><a class="page-link" href="AdminPageAnnounce?currentPage=${pages}&inputAnnoWord=${word}">${pages}</a></li>
+			</c:forEach>
+			<c:if test="${current != last}">
+				<li class="page-item"><a class="page-link" href="AdminPageAnnounce?currentPage=${last}&inputAnnoWord=${word}">Last</a></li>
+			</c:if>
+		</ul>
+	</nav>
+</div>
