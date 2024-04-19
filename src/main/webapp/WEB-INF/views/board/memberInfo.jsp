@@ -47,7 +47,7 @@
         </tr>
         <tr>
             <th scope="row">회원 ROLE</th>
-            <td>${member.userType}</td>
+            <td>${member.role}</td>
         </tr>
         <tr>
             <th scope="row">닉네임</th>

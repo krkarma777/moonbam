@@ -44,7 +44,6 @@
                 </textarea>
                 <label><input type="checkbox" class="terms" name="checked_Withdraw">회원 탈퇴 및 서비스 이용 중지에 동의합니다.</label>
             </div>
-            <br>
 
             <div>
                 <label><input type="checkbox" id="allCheckbox" onclick="clickAllChk(this.checked)">모두 동의합니다.</label>

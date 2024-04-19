@@ -56,6 +56,10 @@ button {
   transition: transform 80ms ease-in;
 }
 
+button:hover {
+  background-color: #ff3512;
+}
+
 button:active {
   transform: scale(0.95);
 }
@@ -268,8 +272,7 @@ footer a {
 .col-4.save-label, .col-4.auto-login-label {
   font-size: 15px;
 }
-.cookieT{
-  font-size: 15px;
+
+#userIdSaveSection{
   white-space: nowrap;
 }
-

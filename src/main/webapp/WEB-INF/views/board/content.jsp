@@ -157,8 +157,8 @@ $("document").ready(function() {
 			var updatedel = '';
 			if (isAuthorized) {
 				updatedel = `
-				            <a href="/acorn/board/edit?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
-				            <a href="/acorn/board/delete?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">삭제</button></a>
+				            <a href="/acorn/board/edit?postId=<%= request.getParameter("postId") %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
+				            <a href="/acorn/board/delete?postId=<%= request.getParameter("postId") %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">삭제</button></a>
 				    `;
 			}//
 
@@ -380,7 +380,7 @@ body{
 <body>
 
 	<!-- 네비게이션바 -->
-	<jsp:include page="//common/navbar.jsp"/>
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
 	
 	<div class="container mt-4">
 		<div class="post-section">
@@ -431,9 +431,9 @@ body{
 					
    					<!-- 오른쪽에 위치할 기타 버튼들 -->
 					<sec:authorize access="isAuthenticated()">
-						<a href="/acorn/board/write?bn=${requestScope.bn}" class="btn btn-action btn-spacing">글쓰기</a>
+						<a href="/acorn/board/write?bn=<%=request.getParameter("bn")%>" class="btn btn-action btn-spacing">글쓰기</a>
 					</sec:authorize>
-						<!-- 수정, 삭제 버튼-->					
+						<!-- 수정, 삭제 버튼-->
    						<span id="updatadel"></span>
    					</div><!-- end 오른쪽 버튼 -->  				
    				</div><!-- end <div class="d-flex justify-content-between"> -->  				

@@ -153,7 +153,7 @@
     </style>
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
 <div class="container mt-5 editor-wrapper">
     <form method="post" action="/acorn/board/edit" onsubmit="return validateForm();">
         <!-- 말머리 선택 버튼 그룹 -->

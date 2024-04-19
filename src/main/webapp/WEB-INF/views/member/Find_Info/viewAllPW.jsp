@@ -31,7 +31,7 @@
 	   window.history.pushState(null, null, window.location.href);
 	   window.onpopstate = function(event) {
 	   	window.history.pushState(null, null, window.location.href);
-	    window.location.href= "<c:url value='/Login'/>"; 
+	    window.location.href= "<c:url value='/mainLogin'/>"; 
 	    };
 	    
 	    $("#goLogin").on("click", function(){
@@ -45,12 +45,12 @@
 
 <h1>이메일 발송 성공!</h1>
 
-    <p>${dto.getNickname()}님!<br> 
-    <a href="http://www.${emailDomain}" target="_blank">${dto.getUserId()}로 비밀번호 변경 메일이 전송되었습니다.</a>
+    <p>${nickname}님!<br> 
+    <a href="http://www.${emailDomain}" target="_blank">${userId}로 비밀번호 변경 메일이 전송되었습니다.</a>
     <p>확인 후 로그인 부탁드립니다.</p>
 
 <div id="sitesShortCut">
-    <a href="<c:url value='/Login'/>" id="goLogin">로그인</a> 
+    <a href="<c:url value='/mainLogin'/>" id="goLogin">로그인</a> 
 </div>
 
 </body>

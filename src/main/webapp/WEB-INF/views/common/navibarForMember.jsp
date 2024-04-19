@@ -1,7 +1,8 @@
-<%@page import="com.moonBam.dto.MemberDTO"%>
+<%@ page import="com.moonBam.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <style>
     nav {
@@ -19,11 +20,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-		
-		<!-- 로그인메인 -->
-        <li class="nav-item">
-          <a class="nav-link" href="<c:url value='/Login'/>">로그인창</a>
-        </li>
 
 		<!-- 익명게시판 -->        
         <li class="nav-item dropdown">
@@ -45,13 +41,32 @@
           </ul>
         </li>
       </ul>
+      
+     <!-- 비로그인 -->
+	<sec:authorize access="isAnonymous()">
+		<a href="mainLogin" class="top">로그인</a>
+	</sec:authorize>
+    		
+	<!-- 로그인 -->
+	<sec:authorize access="isAuthenticated()">
+		<a href="/acorn/logout"  class="top">로그아웃/</a>
+		<a href="MypageServlet"  class="top">마이페이지</a>
+	</sec:authorize>
+	
+	<!-- 관리자인 경우 -->
+	<sec:authorize access="hasRole('ADMIN')">
+         <a href="/acorn/AdminPage">관리자페이지</a>
+     </sec:authorize>
 
-      <ul class="navbar-nav">
+	<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+		<ul class="navbar-nav">
       	<!-- 회원리스트 -->
         <li class="nav-item">
           <a class="nav-link" href="<c:url value='/memberList'/>">회원리스트</a>
         </li>
       </ul>
+	</sec:authorize>
+      
     </div>
   </div>
 </nav>

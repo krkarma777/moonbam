@@ -143,9 +143,8 @@ public class CommentDTO {
 	}
 
 
-
-	
-
-
-	
+	public void setMember(MemberDTO memberDTO) {
+		this.userId = memberDTO.getUserId();
+		this.nickname = memberDTO.getNickname();
+	}
 }

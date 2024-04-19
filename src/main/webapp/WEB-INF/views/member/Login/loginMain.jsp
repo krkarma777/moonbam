@@ -25,9 +25,9 @@
 	    <form id="registerForm" action="<c:url value='/RegisterTerms'/>" method="post">
 	      <h1>회원가입</h1>
 	      <div class="social-container">
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트 이용하실껀가요?</span>
 	      <input type="email" id="register_userId" name="userId" required placeholder="가입할 이메일을 입력하세요" maxlength="40"/>
@@ -38,12 +38,12 @@
 	  
 	<!-- 로그인 컨테이너 -->
 	  <div class="form-container sign-in-container">
-	  <form id="loginForm" action="<c:url value='/login'/>" method="post">
+	  	<form id="loginForm" action="<c:url value='login'/>" method="post">
 	      <h1>로그인</h1>
 	      <div class="social-container">
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
-	        <a href="<%=request.getContextPath()%>/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/kakao" class="social"><img src="<c:url value='/resources/images/member/kakao.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/google" class="social"><img src="<c:url value='/resources/images/member/google.png'/>" width="30" height="30"></a>
+	        <a href="/acorn/oauth2/authorization/naver" class="social"><img src="<c:url value='/resources/images/member/naver.png'/>" width="30" height="30"></a>
 	      </div>
 	      <span>외부 사이트를 이용하실껀가요?</span>
 	      <input type="email" id="userId" name="userId" class="loginSet" autofocus placeholder="이메일" maxlength="40"/>
@@ -52,11 +52,11 @@
 	      <button class="loginButtons">로그인</button>
 		  <div id="confirmUserIdPwError" style="font-size: 14px; color: red;"></div>	    
 	      
-	      <div class="row" id="rowBar">
-              <div class="col-2"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
-              <div class="col-4 save-label cookieT">이메일 저장</div>
-              <div class="col-2"><input type="checkbox" id="autoLogin" name="autoLogin"></div>
-              <div class="col-4 auto-login-label cookieT">자동 로그인</div>
+	      <div class="row" id="userIdSaveSection">
+	      	  <div class="col-1"></div>
+              <div class="col-3"><input type="checkbox" id="userIdSave" name="userIdSave" class="loginSet"></div>
+              <div class="col-5 save-label cookieT">이메일 저장</div>
+              <div class="col-3"></div>
 		  </div>	 
 	      <div class="row">
               <div class="col"><a href="<c:url value='/FindInfo'/>">회원정보 찾기</a></div>
@@ -109,12 +109,7 @@
 
 		//쿠키 불러오기
 	    var cookieID = getCookie("userId");
-	    var cookiePW = getCookie("userPw");
 	   
-													  //  쿠키 디버그 코드
-													  console.log("아이디 쿠키: "+ cookieID);
-													  console.log("비밀번호 쿠키: "+ cookiePW);
-													  
 	    //아이디 쿠키가 있으면 아이디 창에 입력 + 아이디 저장 체크
 	    if(cookieID){
 	    	$("#userId").val(cookieID)
@@ -122,15 +117,6 @@
 	    } else {
 	    	$("#userId").val("")
 	    	$("#userIdSave").prop("checked",false);
-	    }
-	    
-	    //비밀번호 쿠키가 있으면 비밀번호 창에 입력 + 자동로그인 체크
-	    if(cookiePW){
-	    	$("#userPw").val(cookiePW)
-	    	$("#autoLogin").prop("checked",true);
-	    } else {
-	    	$("#userPw").val("")
-	    	$("#autoLogin").prop("checked",false);
 	    }
 	    
 		//쿠키 불러오기 함수	    
@@ -172,12 +158,22 @@
 	               
 	                success: function(response) {
 	                    
-	                    // 입력한 아이디와 비밀번호가 DB 정보와 일치하지 않을 경우, ajax 출력
+	                    // 활동 정지된 유저일 경우
+	                    if (response === "suspendedId") {
+	                        errorSpan.html("활동이 정지된 유저입니다.<br>관리자에게 문의해주세요.");
+	                    } else 
+	                   	
+	                    // 소셜 회원가입자일 경우	
+	                    if (response === "socialLogin") {
+		                        errorSpan.html("소셜 회원가입 유저입니다.");
+	                    } else
+		                        
+		                // 입력한 아이디와 비밀번호가 DB 정보와 일치하지 않을 경우, ajax 출력
 	                    if (response === "loginFail") {
 	                        errorSpan.text("아이디나 비밀번호를 확인해주세요.");
-	                        
-	                    // 입력한 아이디와 비밀번호가 DB 정보와 일치할 경우, submit 정상 작동
-	                    } else {
+
+		                // 입력한 아이디와 비밀번호가 DB 정보와 일치할 경우, submit 정상 작동
+	                   	} else {
 	                        errorSpan.text("");
 	                        $("#loginForm")[0].submit();
 	                    }
@@ -232,7 +228,7 @@
 	    
 	    
 	    
-	  //로그인 전송을 시도할 경우, 발동
+	  //회원가입 진행을 시도할 경우, 발동
 	    $("#registerForm").on("submit", function(event) {
 	    	event.preventDefault(); // 폼이 서버로 전송되지 않도록 기본 동작을 막음
 	        
@@ -240,7 +236,7 @@
 	        var errorSpan = $("#confirmUserEmailError");
 
 	        //이메일을 입력
-	        if (userId && userPw) {
+	        if (userId) {
 	            $.ajax({
 	                type: "POST",
 	                url: "<c:url value='/AjaxCheckEmail'/>", 
@@ -253,8 +249,12 @@
 	                    // 입력한 아이디 이메일이 DB에 있을 경우, ajax 출력
 	                    if (response === "RegisterFail") {
 	                        errorSpan.text("이미 사용 중인 이메일입니다.");
-	                        
-	                    // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
+	                    } else
+	                    // 입력한 아이디 이메일이 소셜네트워크 회원가입자일 경우, ajax 출력
+		                if (response === "socialRegister") {
+		                        errorSpan.text("소셜네트워크 회원가입자입니다.");     
+	                    
+		                // 입력한 아이디 이메일이 DB에 없을 경우, submit 정상 작동
 	                    } else {
 	                        errorSpan.text("");
 	                        $("#registerForm")[0].submit();

@@ -19,12 +19,10 @@
 
 	<div class="container">
 		<h1>회원가입</h1>
-		*는 필수 입력
-		
 		<form id="registerForm" action="<c:url value='/InsertData'/>" method="post">
 			
 			<!-- 아이디 입력칸(회원가입 1단계 이메일 입력칸 값) -->
-			<label for="userEmailDomain">*이메일 인증</label>
+			<label for="userEmailDomain">이메일 인증</label>
 				<input type="email" id="email" name="userId" class ="userEmail" maxlength="30" value="${userId}" required readonly maxlength="40">
 			
 			<!-- 이메일 인증 버튼 -->
@@ -35,42 +33,23 @@
 			<span id = "certificationAnswer"></span>
 			
 			<!-- 비밀번호 입력칸(6글자 이상)(반드시 입력되어야 함) -->
-			<label for="userPw">*비밀번호 (최소 6글자)</label> 
+			<label for="userPw">비밀번호 (최소 6글자)</label> 
 				<input type="password" id="userPw" name="userPw" class="pw" minlength="6" required maxlength="30"> 
 
 			<!-- 비밀번호 재입력칸(6글자 이상)(반드시 입력되어야 함) -->
-			<label for="userPwConfirm">*비밀번호 재입력</label> 
+			<label for="userPwConfirm">비밀번호 재입력</label> 
 				<input type="password" id="userPwConfirm" name="userPwConfirm" class="pw" required maxlength="30">
 				<!-- 비밀번호와 비밀번호 재입력이 상이할 경우, 문구 출력 -->
 				<span id="pwMismatch" style="color: red;"></span> 
 			
 			<!-- 유저 닉네임 입력칸(최소 2글자 이상)(반드시 입력) -->
-			<label for="nickname">*유저 닉네임 (최소 2글자)</label> 
+			<label for="nickname">유저 닉네임 (최소 2글자)</label> 
 				<input type="text" id="nickname" name="nickname" maxlength="10" minlength="2" required>
 				<input type="button" id="autoNickname" name="clickType" value="자동 닉네임 생성" class="btn btn-success me-md-2">
 				<!-- DB에 저장된 닉네임이 있을 경우, 문구 출력 --> 
 				<span id="confirmNicknameError" style="color: red;"></span>
-				<span id="loadingSpinner_for_nickname" class="loadingSpinner"></span>
+				<span id="loadingSpinner_for_nickname" class="loadingSpinner"></span><br>
 			
-			<!-- 유저 이메일(반드시 입력)(select를 통해 도메인 입력 가능) -->
-			<label for="restoreUserEmail">추가 이메일 기입<br>(비밀번호 찾기 등에서 사용됩니다)</label>
-				<div style="display: flex; gap: 5px;">
-					<input type="text" id="restoreUserEmailId" name="restoreUserEmailId" class ="userEmail" maxlength="30" autocomplete="off" >
-						@ 
-					<input type="text" id="restoreUserEmailDomain" name="restoreUserEmailDomain" class ="userEmail"> 
-					<select id="domainSelect" name="domainSelect" class ="userEmail" onchange="domainSelectMethod(this.value)">
-						<option id="domainDefault" value="" selected>직접 입력</option>
-						<option value="naver.com">naver.com</option>
-						<option value="gmail.com">gmail.com</option>
-						<option value="hanmail.net">hanmail.net</option>
-					</select>
-				</div>
-				<!-- 이메일 아이디에 영어나 숫자 외 다른 것이 입력될 경우, 문구 출력 -->
-				<span id="confirmRestoreUserEmailIdError" style="color: red;"></span>
-				<!-- DB에 저장된 이메인 아이디 + 이메일 도메인이 있을 경우, 문구 출력 -->
-				<span id="confirmUserEmailError" style="color: red;"></span>
-				<span id="loadingSpinner_for_Email" class="loadingSpinner"></span>
-
 			<button id="register_button" type="submit">가입</button>
 		</form>
 	</div>
@@ -97,7 +76,7 @@
 		   //뒤로가기 / 앞으로가기 동작 감시
 		   window.onpopstate = function(event) {
 		   	window.history.pushState(null, null, window.location.href);
-		    window.location.href= "<c:url value='/Login'/>"; 
+		    window.location.href= "<c:url value='/mainLogin'/>"; 
 		    };
 		    
 		 	//자동 닉네임 생성기
@@ -195,32 +174,6 @@
 		});
 		
 		
-		//도메인 readonly
-		function domainSelectMethod(tv) {
-			//직접 입력 토글이 아닐 때는 도메인을 select로만 입력할 수 있도록 지정
-			var restoreUserEmailDomain = $("#restoreUserEmailDomain");
-			if (tv == "") {
-				restoreUserEmailDomain.val("").prop("readonly", false);
-			} else {
-				restoreUserEmailDomain.val(tv).prop("readonly", true);
-			}
-		}
-		
-		
-	    // 이메일 아이디에 영어와 숫자만 입력되도록 제한
-	    $("#restoreUserEmailId").on("input", function() {
-	        var restoreUserEmailId = $(this).val();
-	        var errorSpan = $("#confirmRestoreUserEmailIdError");
-
-	        var pattern = /^[a-zA-Z0-9]+$/;				// 영어와 숫자만 허용
-
-	        if (!pattern.test(restoreUserEmailId)) {	// 영어나 숫자 외 다른 것이 입력될 경우
-	            errorSpan.text("영어와 숫자만 입력 가능합니다.");
-	        } else {
-	            errorSpan.text("");
-	        }
-	    });
-		
 		//이메일 인증 번호 발송 에이젝스
 		$("#certificationBTN").on("click", function() {
 		    var userEmail = $("#email").val();
@@ -276,8 +229,10 @@
 			                	errorSpan.text("");
 			                } else if (response === "confirm") {
 			                	errorSpan.text("확인되었습니다."); 
+			                	errorSpan.css("color", "black"); 
 			                } else {
 			                	errorSpan.text("인증번호가 다릅니다. 확인해주세요.");
+			                	errorSpan.css("color", "red"); 
 			                }
 			            },
 			            error: function(error) {

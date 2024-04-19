@@ -13,19 +13,20 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_result.css'/>">
 	<script type="text/javascript">
 		<!-- 5초 뒤, 로그인 메인화면으로 이동 -->
-	   setTimeout(function () {
-            window.location.href = "<c:url value='/Login'/>";
+ 	   setTimeout(function () {
+            window.location.href = "<c:url value='/mainLogin'/>";
         }, 5000);
     </script>
 </head>
 
 <body>
     <div id="successMesg">
-        회원가입 성공
+        회원가입 성공!<br>
+        또한 메일로 보안코드가 발송되었습니다. 확인해보세요!
     </div>
 
     <div id="sitesShortCut">
-        <a href="<c:url value='/Login'/>">로그인</a>
+        <a href="<c:url value='/mainLogin'/>">로그인하러 가기!</a>
     </div>
 </body>
 </html>
