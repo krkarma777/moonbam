@@ -145,8 +145,9 @@ public class CommentMainController {
 	//대댓글 INSERT
 	@RequestMapping(value="/Acorn/ReplyCommentInsert",  method = RequestMethod.POST)
 	@ResponseBody //ajax처리
-	public void ReplyCommentInsert(CommentDTO commentDB) {
-		
+	public void ReplyCommentInsert(CommentDTO commentDB, Principal principal) {
+		MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+		commentDB.setMember(memberDTO);
 		int recordCount = service.AddCommnet(commentDB);
 	
 		

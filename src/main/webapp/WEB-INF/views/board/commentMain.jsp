@@ -291,7 +291,7 @@
                             //답글 적는 란 start *평소엔 숨겨져있다가 [답글]버튼 누르면 활성화 되고, [답글 작성] 버튼 누르면 다시 사라짐
                             mesg += "<div style='display:none' id='replyCommentDIV" + comId + "'>";
                             mesg += "&nbsp;&nbsp;&nbsp;<input type='hidden' id='replyCommentId" + comId + "' name='replyuserId' value=" + userId2 + ">"
-                            mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong" + comId + "'>" + nickname2 + "</strong>";
+                           // mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong" + comId + "'>" + nickname2 + "</strong>";
                             mesg += "<br>"
                             mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' name='replyCommentComtext'></textarea>"; //답글 다는 창
                             mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'>"
@@ -325,6 +325,7 @@
                                 comDate = replyJson[j].comDate;
                                 comText = replyJson[j].comText;
                                 nickname = replyJson[j].nickname;
+                                console.log("닉네임",nickname)
                                 aboveComId = replyJson[j].aboveComId; //부모댓글번호
 
                                 mesg += "<li class='comment-item'>";
