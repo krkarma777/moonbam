@@ -10,7 +10,7 @@
 </head>
 <body>
 <%
-System.out.println("in jsp"); 
+System.out.println("삭제된 게시글 관리 jsp페이지"); 
 %>
 <h1>삭제된 게시글 관리</h1>
 <hr>
@@ -37,11 +37,11 @@ System.out.println("in jsp");
 			<th>복원</th>
 		</tr>
 		<tr th:each="dPost : ${list }">
-			<td th:text="${dPost.postid}"></td>
-			<td th:text="${dPost.posttitle}"></td>
-			<td th:text="${dPost.userid}"></td>
-			<td th:text="${dPost.cause}"></td>
-			<td th:text="${dPost.expiredate}"></td>
+			<td th:text="${dPost.getPostid()}"></td>
+			<td th:text="${dPost.getPosttitle()}"></td>
+			<td th:text="${dPost.getUserid()}"></td>
+			<td th:text="${dPost.getCause()}"></td>
+			<td th:text="${dPost.getExpiredate()}"></td>
 			<td><input type="button" value="복원"></td>
 		</tr>
 	</table>

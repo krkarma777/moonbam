@@ -10,7 +10,7 @@
 
 <a href="#">게시물 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/AdminPostReported">----신고글 관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/AdminPagePostRule">----글 작성 규칙 관리</a><br>
+<a href="#">----채팅방 금칙어 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/AdminPageDeletedPost">----삭제된 게시글 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/AdminPageDeletedComment">----삭제된 댓글 관리</a><br>
 
@@ -18,7 +18,7 @@
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemRprtedMem">----신고회원관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemGrade">----회원등급관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageMemRestricted">----이용제한 회원 관리</a><br>
-<a href="<%=request.getContextPath() %>/AdminPage/toAdminPageDeletedMember">----삭제된 회원 데이터 관리</a><br>
+<a href="#">----삭제된 회원 데이터 관리</a><br>
 
 <a href="#">공지 관리</a><br>
 <a href="<%=request.getContextPath() %>/AdminPage/toAdminPageAnnounce">----공지글</a><br>

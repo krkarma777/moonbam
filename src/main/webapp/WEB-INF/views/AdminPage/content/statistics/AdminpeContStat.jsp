@@ -47,8 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- 그래프 -->
 <canvas id="myChart" style="width:40%;max-width:700px"></canvas>
 <br>
-현재 접속자 수<br>
-XX명
+
 <hr>
 미처리신고<br>
 신고된 게시글/댓글<br>
