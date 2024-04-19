@@ -21,7 +21,7 @@ public class MapAPIController {
 	@GetMapping("/mapAPI")
 	public String mapList(Model model) {
 	    List<ChatRoomDTO> chatRoomMapList = crService.getAllChatRooms();
-
+	    System.out.println(chatRoomMapList);
 	    if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
 	        // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 모델에 추가
 	        model.addAttribute("chatRoomMapList", chatRoomMapList);
