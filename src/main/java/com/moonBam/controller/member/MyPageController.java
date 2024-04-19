@@ -105,7 +105,7 @@ public class MyPageController {
             // 업데이트된 정보를 DB에 저장
             mserv.updateMember(loginUser);
 
-            return "redirect:/info"; // 닉네임 업데이트가 성공했으므로 MyPage로 리다이렉트
+            return "redirect:/my-page/info"; // 닉네임 업데이트가 성공했으므로 MyPage로 리다이렉트
         }
     }
     
