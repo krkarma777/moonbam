@@ -1,6 +1,8 @@
 <%@ page import="com.moonBam.dto.board.PostDTO" %>
 <%@ page import="com.moonBam.dto.MyPageDTO" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
   Created by IntelliJ IDEA.
   User: krkarma777
   Date: 2024-04-17
@@ -51,22 +53,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${mDTO.list}" var="post">
-                    <tr>
-                        <td>${post.postId}</td>
-                        <td>${post.postBoard}</td>
-                        <td>${post.postTitle}</td>
-                        <td><fmt:formatDate value="${post.postDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-                        <td>${post.postText}</td>
-                        <td>${post.categoryId}</td>
-                        <td>
-                            <form action="/acorn/postDel" method="post">
-                                <input type="hidden" name="postId" value="${post.postId}">
-                                <button type="submit" class="btn btn-danger delBtn">삭제</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
+               <c:forEach items="${mDTO.list}" var="post">
+    <tr>
+        <td>${post.postId}</td>
+        <td>${post.postBoard}</td>
+        <td><a href="/acorn/board/content?postId=${post.postId}&bn=${post.postBoard}">${post.postTitle}</a></td>
+        <td><fmt:formatDate value="${post.postDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+        <td>${post.postText}</td>
+        <td>${post.categoryId}</td>
+        <td>
+            <form action="/acorn/postDel" method="post">
+                <input type="hidden" name="postId" value="${post.postId}">
+                <button type="submit" class="btn btn-danger delBtn">삭제</button>
+            </form>
+        </td>
+    </tr>
+</c:forEach>
                 </tbody>
             </table>
             <!-- 페이지네이션-->
