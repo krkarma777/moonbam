@@ -28,7 +28,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, java.io.IOException {
 
-    	//System.out.println("doFilterInternal호출");    	
+    	System.out.println("doFilterInternal호출");    	
     	
     	//재로그인 무한 루프 오류 방지
     	//JWT가 만료된 상태에서 재로그인되면 OAuth2 로그인 실패 --> 재요청 --> 무한루프 발생
