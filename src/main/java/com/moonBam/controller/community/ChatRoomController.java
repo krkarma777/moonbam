@@ -143,9 +143,7 @@ public class ChatRoomController {
 		chatMemberselectMap.put("userId", userIdInSession);
 		chatMemberselectMap.put("chatNum", chatNum);
 		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
-		
-		
-		
+				
 		//정상진행 시 chatRoom.jsp로 진입
 		String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp
 	
@@ -167,16 +165,12 @@ public class ChatRoomController {
 			returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
 		}
 		
-		
 		/////////request에 저장하여 jsp로 chatNum 전달함 (더보기에서 사용할 예정)
 		request.setAttribute("ChatRoomDTO", this.chatRoomSelectBychatNum( (int) chatMemberselectMap.get("chatNum")));
 		
 		
 		return returnWhere;
 	}
-	
-	
-	
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
