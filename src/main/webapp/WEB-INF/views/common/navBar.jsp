@@ -16,7 +16,15 @@
 	}else if("myChatList".equals(category)){
 		searchFormAction="myChatList";
 	}
+	
 %>
+<%	String mesg = (String)session.getAttribute("mesg");
+	if(null!=mesg){%>
+		<script type="text/javascript">
+			alert("<%=mesg %>");
+		</script>
+	<%}	
+	session.removeAttribute("mesg");%>
 <style>
 .top {
 	color: #ff416c;

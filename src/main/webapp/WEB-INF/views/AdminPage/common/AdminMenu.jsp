@@ -33,7 +33,6 @@
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageDeletedMember">삭제된 회원 데이터 관리</option>
             </select>
         </div>
-
         <!-- Notices and Other Management Dropdown -->
         <div class="col-auto">
             <select class="form-select" onchange="location = this.value;">

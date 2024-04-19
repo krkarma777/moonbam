@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,19 +13,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.moonBam.dto.ContentDTO;
+import com.moonBam.dto.CreditDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.RateDTO;
 import com.moonBam.dto.ReviewDTO;
 import com.moonBam.service.ReviewService;
+import com.moonBam.service.TmdbApiService;
 
 @Controller
 public class ShowContentController {
 	
 	@Autowired
 	ReviewService service;
-
 	@Autowired
 	MemberLoginService memberLoginService;
+	@Autowired
+	TmdbApiService tmdbApiService;
 	
 	// 컨텐츠아이디 받음
 	// 컨텐츠 데이터, 컨텐츠에 해당하는 리뷰들 얻어서 응답
@@ -89,9 +91,19 @@ public class ShowContentController {
 		map.put("likeUserId", likeUserId);
 
 		List<ReviewDTO> reviewList = service.selectReviews(map);
-
 		model.addAttribute("reviewList", reviewList);
 
+		List<CreditDTO> creditList = tmdbApiService.getCredits(contId);
+		int creditListSize = creditList.size();
+		if(!((creditListSize%6)==0)) {
+			int num = 6-(creditListSize%6);
+			for(int i=0; i<num; i++) {
+				creditList.add(creditListSize, null);
+				creditListSize++;
+			}
+		}
+		model.addAttribute("creditList", creditList);
+		
 		return "content/showContent";
 	}
 }

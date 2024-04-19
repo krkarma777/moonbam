@@ -7,30 +7,37 @@ public class AdminReportDTO {
 
 	//String reportId;
 	String targetId;
-	String reporter;
+	String reporterId;
 	String userId;
-	int sexual = 0;
-	int lang = 0;
-	int abusing = 0;
-	int ruleviolation = 0;
-	int etc = 0;
+	String sexual = "F";
+	String lang = "F";
+	String abusing = "F";
+	String ruleviolation = "F";
+	String etc = "F";
 	String cont;
 	String action;
 	
-	
-	
-	
-	public AdminReportDTO() {
-		super();
+	@Override
+	public String toString() {
+		return "AdminReportDTO [targetId=" + targetId + ", reporterId=" + reporterId + ", userId=" + userId + ", sexual="
+				+ sexual + ", lang=" + lang + ", abusing=" + abusing + ", ruleviolation=" + ruleviolation + ", etc="
+				+ etc + ", cont=" + cont + ", action=" + action + "]";
 	}
 
-//	public String getReportId() {
-//		return reportId;
-//	}
-//
-//	public void setReportId(String reportId) {
-//		this.reportId = reportId;
-//	}
+	public AdminReportDTO(String targetId, String reporterId, String userId, String sexual, String lang, String abusing,
+			String ruleviolation, String etc, String cont, String action) {
+		super();
+		this.targetId = targetId;
+		this.reporterId = reporterId;
+		this.userId = userId;
+		this.sexual = sexual;
+		this.lang = lang;
+		this.abusing = abusing;
+		this.ruleviolation = ruleviolation;
+		this.etc = etc;
+		this.cont = cont;
+		this.action = action;
+	}
 
 	public String getTargetId() {
 		return targetId;
@@ -40,12 +47,12 @@ public class AdminReportDTO {
 		this.targetId = targetId;
 	}
 
-	public String getReporter() {
-		return reporter;
+	public String getReporterId() {
+		return reporterId;
 	}
 
-	public void setReporter(String reporter) {
-		this.reporter = reporter;
+	public void setReporterId(String reporterId) {
+		this.reporterId = reporterId;
 	}
 
 	public String getUserId() {
@@ -56,43 +63,43 @@ public class AdminReportDTO {
 		this.userId = userId;
 	}
 
-	public int getSexual() {
+	public String getSexual() {
 		return sexual;
 	}
 
-	public void setSexual(int sexual) {
+	public void setSexual(String sexual) {
 		this.sexual = sexual;
 	}
 
-	public int getLang() {
+	public String getLang() {
 		return lang;
 	}
 
-	public void setLang(int lang) {
+	public void setLang(String lang) {
 		this.lang = lang;
 	}
 
-	public int getAbusing() {
+	public String getAbusing() {
 		return abusing;
 	}
 
-	public void setAbusing(int abusing) {
+	public void setAbusing(String abusing) {
 		this.abusing = abusing;
 	}
 
-	public int getRuleviolation() {
+	public String getRuleviolation() {
 		return ruleviolation;
 	}
 
-	public void setRuleviolation(int ruleviolation) {
+	public void setRuleviolation(String ruleviolation) {
 		this.ruleviolation = ruleviolation;
 	}
 
-	public int getEtc() {
+	public String getEtc() {
 		return etc;
 	}
 
-	public void setEtc(int etc) {
+	public void setEtc(String etc) {
 		this.etc = etc;
 	}
 
@@ -112,27 +119,11 @@ public class AdminReportDTO {
 		this.action = action;
 	}
 
-	public AdminReportDTO(//String reportId, 
-			String targetId, String reporter, String userId, int sexual, int lang,
-			int abusing, int ruleviolation, int etc, String cont, String action) {
+	public AdminReportDTO() {
 		super();
-		//this.reportId = reportId;
-		this.targetId = targetId;
-		this.reporter = reporter;
-		this.userId = userId;
-		this.sexual = sexual;
-		this.lang = lang;
-		this.abusing = abusing;
-		this.ruleviolation = ruleviolation;
-		this.etc = etc;
-		this.cont = cont;
-		this.action = action;
+		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public String toString() {
-		return "AdminReportDTO [reportId="  + ", targetId=" + targetId + ", reporter=" + reporter
-				+ ", userId=" + userId + ", sexual=" + sexual + ", lang=" + lang + ", abusing=" + abusing
-				+ ", ruleviolation=" + ruleviolation + ", etc=" + etc + ", cont=" + cont + ", action=" + action + "]";
-	}
+	
+	
+	
 }

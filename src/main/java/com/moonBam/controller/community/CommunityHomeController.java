@@ -1,5 +1,6 @@
 package com.moonBam.controller.community;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,14 @@ public class CommunityHomeController {
 		if(curPage==null) {
 			curPage="1";
 		}
-		
+		System.out.println("채팅방 검색조건을 service 레이어에 전달==========");
+		System.out.println("searchCategory");
+		System.out.println(searchCategory);
+		System.out.println("searchValue");
+		System.out.println(searchValue);
+		System.out.println("curPage");
+		System.out.println(curPage);
+		System.out.println("======================================");
 		CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
 		
     	model.addAttribute("cpDTO", cpDTO);
@@ -49,18 +57,16 @@ public class CommunityHomeController {
 	}
 	
 	@RequestMapping("/myChatList")
-	public String myChatList(HttpSession session, Model model, String searchCategory, String searchValue, String curPage) {
+	public String myChatList(Principal principal, Model model, String searchCategory, String searchValue, String curPage) {
 		System.out.println("in CommunityHomeController myChatList()");
-		MemberDTO dto = (MemberDTO)session.getAttribute("loginUser");
+		String userid = principal.getName();
 		
-		if(null==dto) {
+		if(null==userid) {
 			return "/Login";
 		}else {
 			if(curPage==null) {
 				curPage="1";
 			}
-			
-			String userid = dto.getUserId();
 			
 			CommunityPageDTO cpDTO= cService.myChatList(searchCategory, searchValue, curPage, userid);
 			

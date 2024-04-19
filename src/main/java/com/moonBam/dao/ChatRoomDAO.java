@@ -1,12 +1,15 @@
 package com.moonBam.dao;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.dto.board.PostPageDTO;
 
 @Repository
 public class ChatRoomDAO {
@@ -36,4 +39,23 @@ public class ChatRoomDAO {
 		String master = session.selectOne("ChatMapper", chatNum);
 		return master;
 	}
+
+	public List<ChatRoomDTO> getAllChatRooms() {
+		List<ChatRoomDTO> chatRoomMapList = session.selectList("getAllChatRooms");
+		return chatRoomMapList;
+	}
+	
+
+	//leaderId와 roomtitle로 chatRoom select
+	public ChatRoomDTO chatRoomNowSelect(Map<String, String> chatRoomSelect) {
+		return session.selectOne("chatRoomNow", chatRoomSelect);
+	}
+
+	
+
+	public int ChatKickUser(String user) {
+		int n = session.delete("ChatMapper.ChatKickUser", user);
+		return n;
+	}
+
 }

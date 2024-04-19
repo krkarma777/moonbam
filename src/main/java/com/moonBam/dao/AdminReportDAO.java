@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.moonBam.dto.AdminReportDTO;
+import com.moonBam.dto.board.PostDTO;
 
 
 
@@ -40,6 +41,26 @@ public class AdminReportDAO {
 		
 		int n = session.delete("AdminReportMapper.delReportedPost", list);
 		return n;
+	}
+
+	public List<AdminReportDTO> getReportList(List<String> list) {
+		List<AdminReportDTO> rList = session.selectList("AdminReportMapper.getReportList", list);
+		return rList;
+	}
+
+	public List<PostDTO> getPostList(List<String> list) {
+		List<PostDTO>rlist = session.selectList("AdminReportMapper.getPostList", list);
+		return rlist;
+	}
+
+	public int reportDone(List<String> list) {
+		int count = 1;
+		for (String reportId : list) {
+			session.update("AdminReportMapper.reportDone", reportId);
+			count+=1;
+		}
+		
+		return count;
 	}
 
 	
