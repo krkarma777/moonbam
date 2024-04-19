@@ -61,6 +61,6 @@ public class BoardEditController {
 		}
 		Long postCategoryId = Long.parseLong(postCategoryOrigin);
 		postService.update(postId, postTitle, postText, postCategoryId);
-		return String.format("redirect:/Acorn/board/content?postId=%d&bn=%s", postId, postBoard);
+		return String.format("redirect:/acorn/board/content?postId=%d&bn=%s", postId, postBoard);
 	}
 }
