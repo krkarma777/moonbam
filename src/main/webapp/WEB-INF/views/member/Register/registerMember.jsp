@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>회원가입 페이지</title>
+	<title>문화인들의 밤</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/register_input.css'/>">
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>MoonBam</title>
+	<title>문화인들의 밤</title>
 </head>
 <body>
 <%List<AdminDeletedPostDTO> list = (List<AdminDeletedPostDTO>)request.getAttribute("list"); %>

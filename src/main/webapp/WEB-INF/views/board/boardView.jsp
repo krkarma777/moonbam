@@ -42,7 +42,7 @@
     %>
 
 
-    <title><%=postBoard%> Board</title>
+    <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
