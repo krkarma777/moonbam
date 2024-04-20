@@ -21,13 +21,13 @@
 			<span style="color: gray; font-size: 13px">무분별한 신고행위는 사이트 이용에 제재를 받을 수 있습니다.</span></td>
 		</tr>
 		
-			<tr align="center">
+			<tr>
 				<td>
-					<span><b>신고 대상 ID</b></span><br>
+					<span><b>신고 대상 ID</b></span>
 					<input type="text" name="userId" value="${userId }" style="text-align: center" readonly>
 				</td>
 			</tr>	
-			<tr align="center">
+			<tr>
 				<td>
 				<span><b>신고 사유 선택</b></span><br>
 						<input type="checkbox" name="lang" value="T">욕설/인신공격 채팅<br>	
