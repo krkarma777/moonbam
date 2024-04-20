@@ -102,7 +102,12 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 		security.authorizeHttpRequests(
                 (authorize) -> authorize
                 //"/memberList", "/AdminPage/**" 주소는 DB role 컬럼의 데이터값이 ROLE_ADMIN인 사람만 사용 가능
-                .requestMatchers("/memberList", "/AdminPage/**").hasRole("ADMIN")
+				.requestMatchers(
+						"/memberList",
+						"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
+						"/Chatmore", "/Chatmore/ChatmoreReport"
+				).hasRole("MEMBER")
+				.requestMatchers("/AdminPage/**").hasRole("ADMIN")
                 //그외 모든 요청은 모든 유저가 사용 가능
                 .anyRequest().permitAll()
 				);

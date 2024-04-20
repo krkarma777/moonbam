@@ -115,15 +115,15 @@ public class RegisterController {
 		if (failMesg) {
 
 			dto.setUserPw(encoder.encode(userPw));
-			dto.setSecretCode(secretCode);
+			dto.setSecretCode(encoder.encode(secretCode));
 			dto.setUserSignDate(userSignDate);
 			int num = serv.insertNewMember(dto);
 
 			// 성공적으로 insert된 경우, 회원가입 성공 페이지로 이동
-			if (num == 1 && failMesg == true) {
+			if (num == 1) {
 				System.out.println("회원가입 성공");
 				result = "member/Register/registerSuccess";
-				mc.RegisterCompleteEmail(dto.getUserId(), dto.getNickname(), dto.getSecretCode());
+				mc.RegisterCompleteEmail(dto.getUserId(), dto.getNickname(), secretCode);
 				
 			// 모든 데이터가 규격을 통과했음에도 insert되지 않았을 경우, 회원가입 실패 페이지로 이동
 			} else {

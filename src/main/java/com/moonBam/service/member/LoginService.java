@@ -69,4 +69,9 @@ public class LoginService {
 		return nickname;
 	}
 
+	//아이디 찾기를 위한 전체 SecretCode 추출
+    public List<String> allSecretCode() {
+    	List<String> list = dao.allSecretCode();
+		return list;
+	}
 }

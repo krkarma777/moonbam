@@ -4,10 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,12 @@ public class LoginController {
 	
 	@Autowired
 	PasswordEncoder encoder;
+
+	@Autowired
+	SecurityController sc;
+
+	@Autowired
+	AnonymousBoardController abc;
 	
 	@RequestMapping("/mainLogin")   
 	public String Login() {
@@ -95,7 +98,18 @@ public class LoginController {
 	@PostMapping("/SearchID")
 	public String SearchID(Model model, String secretCode) {
 
-		MemberDTO dto = serv.findDTOBySecretCode(secretCode);
+		List<String> list = serv.allSecretCode();
+		String realSecretCode = "";
+		for (int i = 0; i < list.size(); i++) {
+			boolean matchingCode = encoder.matches(secretCode, list.get(i));
+			System.out.println(list.get(i));
+			if (matchingCode) {
+				realSecretCode = list.get(i);
+				break;
+			}
+        }
+
+		MemberDTO dto = serv.findDTOBySecretCode(realSecretCode);
 		System.out.println(dto);
 		if (dto != null) {
 			model.addAttribute("dto", dto);
@@ -109,44 +123,57 @@ public class LoginController {
 	//비밀번호 변경을 위한 메일 송신
 	@PostMapping("/MailingPW")
 	public String MailingPW(Model model, String secretCode, String userId) throws Exception {
-		
-		Map<String, String> map = new HashMap<>();
-			map.put("secretCode", secretCode);
-			map.put("userId", userId);
-		
-		MemberDTO dto = serv.mailingPW(map);
-		
-		if(dto == null) {
-			return "member/Find_Info/cantFindUserdata"; 
+
+		//아이디를 통해 dto가 DB에 있는지 확인
+		MemberDTO dto= dao.userDetail(userId);
+		if(dto==null) {
+		//	System.out.println("회원 정보 없음");
+			return "member/Find_Info/cantFindUserdata";
 		}
 		
+		//matches를 통해 올바른 secretCode를 입력했는지 확인
+		boolean booleanSecretCode = encoder.matches(secretCode, dto.getSecretCode());
+		if(!booleanSecretCode){
+		//	System.out.println("잘못된 SecretCode입력");
+			return "member/Find_Info/cantFindUserdata";
+		}
+
 		model.addAttribute("userId", dto.getUserId());
 		model.addAttribute("nickname", dto.getNickname());
-		
+
 		//소셜네트워크 회원가입자의 경우
 		if(dto.getKakaoConnected()==1) {
 			System.out.println("카카오 회원가입자");
 			model.addAttribute("kakaoRegister", true);
-		} 
+		}
 		if(dto.getGoogleConnected()==1) {
 			System.out.println("구글 회원가입자");
 			model.addAttribute("googleRegister", true);
-		} 
+		}
 		if(dto.getNaverConnected()==1) {
 			model.addAttribute("naverRegister", true);
-		} 
+		}
 		if(dto.getKakaoConnected()==1 || dto.getGoogleConnected()==1 || dto.getNaverConnected()==1) {
 			return "member/Find_Info/socialRegsiter";
 		}
-		
+
+		//ID와 SecretCode를 제대로 입력했고, 소셜 회원가입자가 아닌 경우
 		if (dto != null) {
+			String encodedPW = sc.encrypt(getNum(6));
+			dto.setUserPw(encodedPW);
+
+			String realPassword = encoder.encode(encodedPW);
+			Map<String, String> map2 = new HashMap<>();
+				map2.put("userId", userId);
+				map2.put("userPw", realPassword);
+				serv.updatePassword(map2);
 
 			String[] emailparts = dto.getUserId().split("@");
 			model.addAttribute("emailDomain", emailparts[1]);
 			mc.sendEmail(dto.getUserId(), dto);
-
 			return "member/Find_Info/viewAllPW";
-		} 
+		}
+		
 		return "member/Find_Info/emailErrorPage";
 	}
 	
@@ -167,39 +194,37 @@ public class LoginController {
 		return "member/Find_Info/emailErrorPage";
 	}
 	
-	
 	//메일 전송 완료 화면에서 새로고침 시, 이동
 	@GetMapping("/MailingPW")
 	public String registerErrorPage(){
 		return "member/Register/registerErrorPage";
 	}
-		
-	//이메일 하이퍼링크를 통해 들어오는 비밀번호 변경 페이지
-	@GetMapping("/UpdatePasswordPage")
-	public ModelAndView UpdatePasswordPage(String userId) {
-		ModelAndView mav = new ModelAndView();
-			mav.addObject("userId", userId);
-			mav.setViewName("member/Find_Info/updatePassword");
-		return mav;
+
+	public String getNum(int num) {
+		Random r = new Random();
+		StringBuilder randomNumber = new StringBuilder();
+		for (int i = 0; i < num; i++) {
+			randomNumber.append(r.nextInt(10));
+		}
+		return randomNumber.toString();
 	}
 	
-	//비밀번호 변경
-	@PostMapping("/UpdatePassword")
-	public String UpdatePassword(String userId, String userPw) {
-		
-		String realPassword = encoder.encode(userPw);
-		
-		Map<String, String> map = new HashMap<>();
-			map.put("userId", userId);
-			map.put("userPw", realPassword);
-			serv.updatePassword(map);
-		return "redirect:/UpdateComplete";
-	}
-	
-	//비밀번호 변경 완료
-	@GetMapping("UpdateComplete")
-	public String UpdateComplete() {
-		return "member/Find_Info/updateComplete";
-	}
-	
+//	//비밀번호 변경
+//	@PostMapping("/UpdatePassword")
+//	public String UpdatePassword(String userId, String userPw) {
+//
+//		String realPassword = encoder.encode(userPw);
+//		Map<String, String> map = new HashMap<>();
+//			map.put("userId", userId);
+//			map.put("userPw", realPassword);
+//			serv.updatePassword(map);
+//		return "redirect:/UpdateComplete";
+//	}
+//
+//	//비밀번호 변경 완료
+//	@GetMapping("UpdateComplete")
+//	public String UpdateComplete() {
+//		return "member/Find_Info/updateComplete";
+//	}
+
 }

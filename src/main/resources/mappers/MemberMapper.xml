@@ -326,7 +326,12 @@
 			userId = #{userId}
 	</select>
 	
-	
+	<!-- 아이디 찾기를 위한 전체 SecretCode 추출 -->
+	<select id="allSecretCode" resultType="string">
+		SELECT secretCode
+		FROM memberDB
+	</select>
+
 	<!-- 아이디 찾기 -->
 	<select id="findDTOBySecretCode" resultType="MemberDTO" parameterType="String">
 		SELECT
