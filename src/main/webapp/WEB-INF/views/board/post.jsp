@@ -274,8 +274,8 @@
 				} else {
 					postSaveList.forEach(function(postSave) {
 						var row = $('<tr></tr>');
-						row.append(`<td><span style="font-size: 20px;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + postSave.postSaveTitle + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
-						row.append('<td style="text-align: center; vertical-align: middle;"><button class="delete-btn" data-id="' + postSave.postSaveId + '" style="background: none; border: none;"><i class="fa-regular fa-trash-can"></i></button></td>');
+						row.append(`<td><span style="font-size: 20px; cursor: pointer;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + postSave.postSaveTitle + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
+						row.append('<td style="text-align: center; vertical-align: middle;"><button class="delete-btn" data-id="' + postSave.postSaveId + '" style="background: none; border: none;"><i class="fa-regular fa-trash-can" style="font-size: medium;"></i></button></td>');
 						modalBody.append(row);
 					});
 				}
