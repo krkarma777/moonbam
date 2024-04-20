@@ -4,7 +4,9 @@ import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.dto.board.PostUpdateRequestDTO;
+import com.moonBam.dto.board.ScrapDTO;
 import com.moonBam.service.PostService;
+import com.moonBam.service.ScrapService;
 import com.moonBam.service.member.MemberLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,8 @@ public class BoardAPIController {
     private final PostService postService;
 
     private final MemberLoginService memberLoginService;
+
+    private final ScrapService scrapService;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Validated PostDTO postDTO,
@@ -97,6 +102,8 @@ public class BoardAPIController {
         if (!loginUser.getUserId().equals(postDTO.getUserId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "글을 삭제할 권한이 없습니다."));
         }
+
+        scrapService.findAllByPostId(postId).forEach((scrapDTO -> scrapService.delete(scrapDTO.getScrapId())));
 
         postService.delete(postId);
 

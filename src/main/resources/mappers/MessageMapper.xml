@@ -7,6 +7,12 @@
 	    VALUES (MessageId_seq.nextval,#{senderId}, #{receiverId}, #{messageContent}, CURRENT_TIMESTAMP, 'N')
 	</insert>
 
+	<update id="updateReadStatus" parameterType="map">
+		UPDATE Messages
+		SET ReadStatus = 'Y'
+		WHERE MessageID = #{messageId}
+	</update>
+
 	<select id="selectSendedMessage" parameterType="string" resultType="MessageDTO">
 	select * from messages where senderId = #{senderId}
 	</select>
