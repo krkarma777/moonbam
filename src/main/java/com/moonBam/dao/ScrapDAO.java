@@ -35,4 +35,8 @@ public class ScrapDAO {
 	public ScrapDTO findById(Long scrapId) {
 		return session.selectOne("ScrapMapper.findById",scrapId);
 	}
+
+	public List<ScrapDTO> findAllByPostId(Long postId) {
+		return session.selectList("ScrapMapper.findAllByPostId",postId);
+	}
 }

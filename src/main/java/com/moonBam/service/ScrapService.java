@@ -33,4 +33,8 @@ public class ScrapService {
 	public ScrapDTO findById(Long scrapId) {
 		return dao.findById(scrapId);
 	}
+
+	public List<ScrapDTO> findAllByPostId(Long postId) {
+		return dao.findAllByPostId(postId);
+	}
 }

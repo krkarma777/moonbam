@@ -19,6 +19,10 @@
 		select * from scrap where SCRAPID = #{scrapId}
 	</select>
 
+	<select id="findAllByPostId" resultType="ScrapDTO" parameterType="Long">
+		select * from scrap where POSTID = #{postId}
+	</select>
+
 	<delete id="delete" parameterType="Long">
 		delete from scrap where scrapId = #{scrapId}
 	</delete>
