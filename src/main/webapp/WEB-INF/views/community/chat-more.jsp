@@ -84,7 +84,7 @@
 	
 	<div style="width:100%; height:112px; position: relative;">
 		<form id="goOutForm" method="post" action="#">
-			<input type="hidden" name="userId" value="${memberDTO.userId}">
+			<%-- <input type="hidden" name="userId" value="${memberDTO.userId}"> --%>
 			<input type="hidden" name="chatNum" value="${chatroomDTO.chatNum}">
 		</form>	
 		<button type="button" class="btn" onclick="fnGoOut()" style="position: absolute; bottom:2px; right:0;"><b>방 나가기</b></button>

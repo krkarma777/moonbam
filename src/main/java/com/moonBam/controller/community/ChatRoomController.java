@@ -171,8 +171,11 @@ public class ChatRoomController {
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
-	public String chatRoomOut(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum, HttpSession session) {
+	public String chatRoomOut(@RequestParam("chatNum") int chatNum, HttpSession session, Principal principal) {
 	//form data로 받아온 값 2개로 chatMember table에서 delete 진행
+	
+		
+	String userId = principal.getName();//현재 나의 Id
 	
 	Map<String, Object> chatMemberDeleteMap = new HashMap<>();
 	chatMemberDeleteMap.put("userId", userId);
