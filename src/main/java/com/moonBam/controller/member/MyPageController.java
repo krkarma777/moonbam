@@ -1,15 +1,15 @@
 package com.moonBam.controller.member;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Objects;
 
+import com.moonBam.dto.board.ScrapDTO;
+import com.moonBam.service.ScrapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -39,8 +39,29 @@ public class MyPageController {
     MemberLoginService memberLoginService;
 
     @Autowired
+    ScrapService scrapService;
+
+    @Autowired
     RegisterService rserv;
-    
+
+    @GetMapping("/scrap")
+    public String scrap(Model model, Principal principal) {
+        MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+        List<ScrapDTO> scrapDTOS = scrapService.findAll(memberDTO.getUserId());
+        model.addAttribute("scrapDTOs", scrapDTOS);
+        return "member/myPage/scrapManagement";
+    }
+
+    @GetMapping("/scrap/{scrapId}")
+    public String scrapDelete(Principal principal, @PathVariable Long scrapId) {
+        MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+        ScrapDTO scrapDTO = scrapService.findById(scrapId);
+        if (Objects.equals(memberDTO.getUserId(), scrapDTO.getUserId())){
+            scrapService.delete(scrapId);
+        }
+        return "redirect:/my-page/scrap";
+    }
+
     @GetMapping
     public String myPage(Model model, Principal principal) {
         return "member/myPage/MyPageTemplate";

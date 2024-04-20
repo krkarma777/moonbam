@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="EUC-KR">
-<title>Chat Room</title>
+<title>문화인들의 밤</title>
 <!-- 방 삭제 시 실패했을 때 띄울 알림창  -->
 <% String mesg = (String) session.getAttribute("mesg");
 	if(mesg != null ){	

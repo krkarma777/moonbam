@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>권한 없음 페이지</title>
+	<title>문화인들의 밤</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/unfound.css'/>">
 </head>
 

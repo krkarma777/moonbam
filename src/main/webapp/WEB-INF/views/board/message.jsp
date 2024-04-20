@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
-<title>쪽지 기능</title>
+<title>문화인들의 밤</title>
 
 <style>
 /* 탭 버튼의 기본 스타일 */
