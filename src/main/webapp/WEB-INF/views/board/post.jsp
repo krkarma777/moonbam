@@ -240,10 +240,20 @@
 
 			ClassicEditor
 					.create(document.querySelector('#editor'), {
-						extraPlugins: [MyCustomUploadAdapterPlugin], // 필요한 추가 플러그인 설정
+						extraPlugins: [MyCustomUploadAdapterPlugin], // Include your existing custom upload adapter
+						mediaEmbed: {
+							// Configuration options for the MediaEmbed plugin
+							previewsInData: true
+						},
+						toolbar: {
+							items: [
+								'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+								'outdent', 'indent', '|', 'imageUpload', 'mediaEmbed', 'blockQuote', 'undo', 'redo'
+							]
+						}
 					})
 					.then(editor => {
-						editorInstance = editor; // 에디터 인스턴스 저장
+						editorInstance = editor; // Store editor instance for use in other functions
 					})
 					.catch(error => {
 						console.error(error);

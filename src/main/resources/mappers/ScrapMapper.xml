@@ -10,4 +10,17 @@
 	<select id="checkScrap" resultType="ScrapDTO" parameterType="map">
 		select * from scrap where userId =#{userId} and postId=#{postId}
 	</select>
+
+	<select id="findAll" resultType="ScrapDTO" parameterType="String">
+		select * from scrap where USERID = #{userId}
+	</select>
+
+	<select id="findById" resultType="ScrapDTO" parameterType="Long">
+		select * from scrap where SCRAPID = #{scrapId}
+	</select>
+
+	<delete id="delete" parameterType="Long">
+		delete from scrap where scrapId = #{scrapId}
+	</delete>
+
 </mapper>
