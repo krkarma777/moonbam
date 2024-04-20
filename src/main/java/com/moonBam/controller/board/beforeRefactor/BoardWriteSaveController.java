@@ -33,6 +33,10 @@ public class BoardWriteSaveController {
 		String userId = loginUser.getUserId();
 		dto.setUserId(userId);
 
+		// XSS 방지를 위해 입력값에서 스크립트 태그를 제거하는 로직 추가
+		String sanitizedPostText = sanitizeHtml(dto.getPostSaveText());
+		dto.setPostSaveText(sanitizedPostText);
+
 		System.out.println("임시저장 dto => "+dto);
 		service.insertPostSave(dto);
 		
@@ -64,4 +68,9 @@ public class BoardWriteSaveController {
 		return ResponseEntity.ok(postSaveList);
 	}
 
+	private String sanitizeHtml(String input) {
+		return input.replaceAll("(?i)<script.*?>.*?</script>", "") // 스크립트 태그 제거
+				.replaceAll("(?i)<.*?javascript:.*?>.*?</.*?>", "") // "javascript:" URI 사용 제거
+				.replaceAll("(?i)<.*?\\bon.*?>.*?</.*?>", ""); // 이벤트 핸들러 제거 (예: onclick)
+	}
 }//end class
