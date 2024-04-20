@@ -7,7 +7,9 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -635,122 +637,9 @@
 
 <!-- 네비게이션바 -->
 <jsp:include page="../common/navBar.jsp"></jsp:include>
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <div class="container-fluid">
-        로고
-        <a class="navbar-brand" href="#">로고</a>
 
-        토글 버튼
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        네비게이션 항목
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto">
-                검색 바
-                <form class="d-flex w-100">
-                    <input class="form-control me-2 searchInput" type="search"
-                        placeholder="검색" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">검색</button>
-                </form>
-            </ul>
-            <ul class="navbar-nav">
-                로그인, 마이페이지, 회원가입 버튼
-                <li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>-->
 
 <div style="height: 50px"></div>
-
-<%-- 
-<div class="container mt-4">
-    <div class="popular-boards-container">
-        <div class="popular-board">
-            <div class="popular-board-header">
-                <h1>전체 인기글</h1>
-            </div>
-            <%
-                List<PostPageDTO> plaList = (List<PostPageDTO>) request.getAttribute("popularListAll");
-                for (int i = 0; i < plaList.size(); i++) {
-                    PostPageDTO post = plaList.get(i);
-            %>
-            <div class="row">
-                <div class="col-md-1"><%= i + 1 %>
-                </div><!-- 순위  -->
-                <div class="col-md-2"><%= post.getCategoryName() %>
-                </div>
-                <div class="col-md-7">
-                    <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>" class="post-title">
-                        <%=post.getPostTitle()%>
-                    </a>
-                    <%
-                        if (post.getCommentCount() != 0L) {
-                    %>
-                    &nbsp; <span class="comment-count"><%=post.getCommentCount()%></span>
-                    <%
-                        }
-                    %>
-
-                </div>
-                <div class="col-md-2 text-center-align like-num"><%=post.getLikeNum()%>
-                </div>
-                <!-- 여기에 서버로부터 가져온 전체 인기글 목록을 반복하여 출력 -->
-            </div>
-            <% } %>
-            <div class="popular-board-footer">
-                <p>페이지 네비게이션</p>
-            </div>
-        </div>
-
-        <div class="popular-board">
-            <div class="popular-board-header">
-                <h1><%= category %> 인기글</h1>
-            </div>
-            <%
-                List<PostPageDTO> plcList = (List<PostPageDTO>) request.getAttribute("popularListCategory");
-                for (int i = 0; i < plcList.size(); i++) {
-                    PostPageDTO post = plcList.get(i);
-                    String postCategory = post.getCategoryName();
-            %>
-            <div class="row">
-                <div class="col-md-1"><%= i + 1 %>
-                </div><!-- 순위  -->
-                <div class="col-md-2"><%= postCategory %>
-                </div>
-                <div class="col-md-7">
-                    <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>" class="post-title">
-
-                        <%=post.getPostTitle()%>
-                    </a>
-                    <%
-                        if (post.getCommentCount() != 0L) {
-                    %>
-                    &nbsp; <span class="comment-count"><%=post.getCommentCount()%></span>
-                    <%
-                        }
-                    %>
-
-                </div>
-                <div class="col-md-2 text-center-align like-num"><%=post.getLikeNum()%>
-                </div>
-                <!-- 여기에 서버로부터 가져온 전체 인기글 목록을 반복하여 출력 -->
-            </div>
-            <% } %>
-            <div class="popular-board-footer">
-                <p>페이지 네비게이션</p>
-            </div>
-        </div>
-    </div>
-</div> 
---%>
 
 <!-- 바디 -->
 <div style="height: 910px; width: 1400px; margin: auto;">
@@ -924,8 +813,8 @@
                                     <%
                                         }
                                     %>
+                                    <c:out value="<%=post.getPostTitle()%>" />
 
-                                    <%=post.getPostTitle()%>
                                 </a>
                                 <% if (post.getCommentCount() != 0L) {%>
                                 &nbsp;
@@ -939,7 +828,7 @@
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle no-underline font-black"
                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <%=post.getNickname()%>
+                                            <c:out value="<%=post.getNickname()%>"/>
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
@@ -1047,7 +936,7 @@
                                     }
                                 %>
 
-                                <%=post.getPostTitle()%>
+                                <c:out value="<%=post.getPostTitle()%>"/>
                             </a>
                             <% if (post.getCommentCount() != 0L) {%>
                             &nbsp;
@@ -1059,7 +948,7 @@
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle no-underline font-black"
                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <%=post.getNickname()%>
+                                        <c:out value="<%=post.getNickname()%>"/>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item"
@@ -1137,8 +1026,7 @@
                     int startPage = ((curPage - 1) / 10) * 10 + 1; // 시작 페이지 번호 계산
                     int endPage = Math.min(startPage + 9, totalPage); // 끝 페이지 번호 계산
 
-                    // Calculate previous and next page numbers
-                    int prevPage = Math.max(startPage - 1, 1); // Ensure prevPage is never less than 1
+                    int prevPage = Math.max(startPage - 1, 1);
                     int nextPage = endPage + 1;
                 %>
 
@@ -1231,524 +1119,7 @@
 		
 	</div>
 </div>
-
-<%-- <div class="container mt-4">
-    <div class="row">
-        <!-- 최신 개봉 영화 섹션 -->
-        <div class="col-md-2">
-            <h2 class="text-center new-hot-label">🌄신작 <%= category %> 랭킹🌄</h2>
-            <div class="list-group slider-container slide1">
-                <!-- 영화 포스터 반복 구간, 서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복 -->
-                <%
-                    MoviePoster poster = new MoviePoster(postBoard);
-                    List<String> newMovieList = poster.getNewList();
-
-                    for (int i = 0; i < newMovieList.size(); i++) { %>
-                <div class="movie-slide">
-                    <img src="<%= newMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image">
-                    <span class="index-label">
-				      <%= i + 1 %>
-			      	</span>
-                </div>
-                <% } %>
-            </div>
-        </div>
-
-
-        <div class="col-md-8">
-
-            <!-- 게시글 목록 -->
-            <div class="list-group">
-                <div class="list-group-header d-flex justify-content-between align-items-center">
-
-
-                    <h2 class="category-and-board-name">
-
-                        <!-- 인라인 방식으로 요소 배치 -->
-
-                        <div class="d-inline-flex align-items-center">
-                            <i class="bg_color"></i>
-                            <a class="font-black no-underline"
-                               href="<%=request.getContextPath()%>/<%=link%>"><%=category%>
-                            </a> <span>&nbsp;&gt;&nbsp;</span>
-                            <!-- 드롭다운 메뉴로 변경 -->
-                            <div class="dropdown">
-							<span class="font-black no-underline dropdown-toggle"
-                                  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-                                  aria-expanded="false"> <%=boardName%>
-							</span>
-                                <!-- 드롭다운 메뉴 항목 -->
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a class="dropdown-item"
-                                           href="<%=request.getContextPath()%>/board/<%=boardType%>">
-                                        🗣️자유 게시판</a></li>
-                                    <li><a class="dropdown-item"
-                                           href="<%=request.getContextPath()%>/board/<%=boardType%>Meet">
-                                        🤝모임 게시판</a></li>
-                                    <li><a class="dropdown-item"
-                                           href="<%=request.getContextPath()%>/board/<%=boardType%>Info">
-                                        📚정보 게시판</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </h2>
-                    <div class="d-flex justify-content-end">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                    aria-expanded="false">정렬 옵션
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="javascript:void(0)"
-                                       onclick="changeSort('likeNum')">추천순</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0)"
-                                       onclick="changeSort('viewNum')">조회순</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0)"
-                                       onclick="changeSort('regDate')">등록일순</a></li>
-                            </ul>
-                        </div>
-                        &nbsp; <a href="/path/to/popular-posts" class="btn btn-success">
-                        인기글 🔥 </a>
-
-                    </div>
-                </div>
-
-
-                <div class="btn-group" role="group" aria-label="Category Tabs">
-                    <a href="/acorn/board/<%=postBoard%>?pc=1<%
-					if(request.getParameter("selectSearchPositionText") != null && request.getParameter("inputSearchFreeText") != null)
-							{
-						String sp = request.getParameter("selectSearchPositionText");
-						String it = request.getParameter("inputSearchFreeText");
-					
-					%>&inputSearchFreeText=<%= it %>&selectSearchPositionText=<%= sp %>
-					     <%
-					     }; %>
-					     " class="btn">일반</a>
-                    <a href="/acorn/board/<%=postBoard%>?pc=2" class="btn">신작</a>
-                    <a href="/acorn/board/<%=postBoard%>?pc=3" class="btn">후기</a>
-                    <a href="/acorn/board/<%=postBoard%>?pc=4" class="btn">추천</a>
-                    <a href="/acorn/board/<%=postBoard%>?pc=5" class="btn">토론</a>
-                    <a href="/acorn/board/<%=postBoard%>?pc=6" class="btn">해외</a>
-                </div>
-
-
-                <!-- 테이블 헤더 -->
-                <div class="list-group-item table-header margin-top">
-                    <div class="row">
-                        <div class="col-md-1 text-center-align">탭</div>
-                        <div class="col-md-6 text-center-align">제목</div>
-                        <div class="col-md-5 row">
-                            <div class="col-md-4 text-center-align">글쓴이</div>
-                            <div class="col-md-4 text-center-align">날짜</div>
-
-                            <div class="col-md-2 text-center-align">
-                                <a href="javascript:void(0)" onclick="toggleSort('viewNum')"
-                                   class="font-black no-underline">조회</a>
-                            </div>
-                            <div class="col-md-2 text-center-align">
-                                <a href="javascript:void(0)" onclick="toggleSort('likeNum')"
-                                   class="font-black no-underline">추천</a>
-                            </div>
-                        </div>
-                        <a href="/acorn/board/<%= postBoard %>?sortIndex=likeNum">
-                    </div>
-                </div>
-                <!-- 인기글 출력부분 -->
-                <div id="popularPostsSection" class="collapse show">
-                    <%
-                        if (hotList != null) {
-                            for (PostPageDTO post : hotList) {
-                                String displayDate = cdf.minuteHourDay(post);
-                                String categoryName = post.getCategoryName();
-
-
-                                String poscCategoryId = null;
-
-                                switch (categoryName) {
-                                    case "일반":
-                                        poscCategoryId = "1";
-                                        break;
-                                    case "신작":
-                                        poscCategoryId = "2";
-                                        break;
-                                    case "후기":
-                                        poscCategoryId = "3";
-                                        break;
-                                    case "추천":
-                                        poscCategoryId = "4";
-                                        break;
-                                    case "토론":
-                                        poscCategoryId = "5";
-                                        break;
-                                    case "해외":
-                                        poscCategoryId = "6";
-                                        break;
-
-                                }
-                    %>
-                    <div
-                            class="list-group-item list-group-item-action"
-                            style="background-color: #dff0d8;">
-                        <div class="row">
-                            <div class="col-md-1 text-center-align"><a
-                                    href="/acorn/board/<%=postBoard%>?pc=<%=poscCategoryId %>"
-                                    class="font-black no-underline"><%= categoryName %>
-                            </a></div>
-                            <div class="col-md-6">
-                                <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>"
-                                   class="post-title">
-
-                                    <%
-
-                                        String postText = post.getPostText();
-                                        Boolean videoExist = postText.contains("<video");
-                                        Boolean imgExist = postText.contains("<img");
-
-
-                                        if (imgExist && !videoExist) {
-                                    %>
-                                    <img src="/acorn/resources/images/picture.png" alt="description"
-                                         class="post-thumbnail-picture">
-                                    <%
-                                            // 이미지 태그가 포함된 경우의 처리
-                                        }
-                                        if (videoExist) {%>
-                                    <img src="/acorn/resources/images/video.png" alt="description"
-                                         class="post-thumbnail-video">
-                                    <%
-                                        }
-                                    %>
-
-                                    <%=post.getPostTitle()%>
-                                </a>
-                                <% if (post.getCommentCount() != 0L) {%>
-                                &nbsp;
-                                <span class="comment-count"><%=post.getCommentCount()%></span>
-                                &nbsp;
-                                <% } %>
-                                <span style="color: red">hot🔥</span>
-                            </div>
-                            <div class="col-md-5 row">
-                                <div class="col-md-4 text-center-align">
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle no-underline font-black"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            <%=post.getNickname()%>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item"
-                                                   href="<%= request.getContextPath() %>/board/<%= postBoard %>?selectSearchPositionText=userId&inputSearchFreeText=<%=post.getUserId()%>">📑작성글
-                                                보기</a></li>
-                                            <li><a class="dropdown-item" href="#"
-                                                   onclick="openMemberInfoPopup('<%=post.getUserId()%>'); return false;">🔎회원정보
-                                                보기</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <%
-                                    String strPostDate = sdfDate.format(post.getPostDate());
-                                    String formattedDate;
-                                    if (strToday.equals(strPostDate)) {
-                                        formattedDate = new SimpleDateFormat("HH:mm").format(post.getPostDate());
-                                    } else {
-                                        formattedDate = new SimpleDateFormat("yyyy.MM.dd").format(post.getPostDate());
-                                    }
-                                %>
-                                <div class="col-md-4 text-center-align"><%=formattedDate%>
-                                </div>
-                                <div class="col-md-2 text-center-align"><%=post.getViewNum()%>
-                                </div>
-                                <% if (post.getLikeNum() != 0L) { %>
-                                <div class="col-md-2 text-center-align like-num"><%=post.getLikeNum()%>
-                                </div>
-                                <%} %>
-                            </div>
-                        </div>
-                    </div>
-                    <%
-                        }
-                    } else {
-                    %>
-                    인기글이 존재하지 않습니다.
-                    <%
-                        }
-                    %>
-                </div>
-                <!-- 섹션 접기 버튼 -->
-                <div class="text-center">
-                    <button class="btn btn-link btn-sm" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#popularPostsSection"
-                            aria-expanded="true" aria-controls="popularPostsSection">
-                        <span class='no-underline font-black'>▲</span>
-                    </button>
-                </div>
-
-
-                <%
-                    for (PostPageDTO post : list) {
-                        String categoryName = post.getCategoryName();
-                        String poscCategoryId = null;
-
-                        switch (categoryName) {
-                            case "일반":
-                                poscCategoryId = "1";
-                                break;
-                            case "신작":
-                                poscCategoryId = "2";
-                                break;
-                            case "후기":
-                                poscCategoryId = "3";
-                                break;
-                            case "추천":
-                                poscCategoryId = "4";
-                                break;
-                            case "토론":
-                                poscCategoryId = "5";
-                                break;
-                            case "해외":
-                                poscCategoryId = "6";
-                                break;
-
-                        }
-
-                %>
-                <div class="list-group-item list-group-item-action">
-                    <div class="row">
-                        <div class="col-md-1 text-center-align"><a
-                                href="/acorn/board/<%=postBoard%>?pc=<%=poscCategoryId %>"
-                                class="font-black no-underline"><%= categoryName %>
-                        </a></div>
-                        <div class="col-md-6">
-                            <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>"
-                               class="post-title">
-                                <%
-
-                                    String postText = post.getPostText();
-                                    Boolean videoExist = postText.contains("<video");
-                                    Boolean imgExist = postText.contains("<img");
-
-
-                                    if (imgExist && !videoExist) {
-                                %>
-                                <img src="/acorn/resources/images/picture.png" alt="description"
-                                     class="post-thumbnail-picture">
-                                <%
-                                        // 이미지 태그가 포함된 경우의 처리
-                                    }
-                                    if (videoExist) {%>
-                                <img src="/acorn/resources/images/video.png" alt="description" class="post-thumbnail-video">
-                                <%
-                                    }
-                                %>
-
-                                <%=post.getPostTitle()%>
-                            </a>
-                            <% if (post.getCommentCount() != 0L) {%>
-                            &nbsp;
-                            <span class="comment-count"><%=post.getCommentCount()%></span>
-                            <% } %>
-                        </div>
-                        <div class="col-md-5 row">
-                            <div class="col-md-4 text-center-align">
-                                <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle no-underline font-black"
-                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                        <%=post.getNickname()%>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item"
-                                               href="<%= request.getContextPath() %>/board/<%= postBoard %>?selectSearchPositionText=userId&inputSearchFreeText=<%=post.getUserId()%>">📑작성글
-                                            보기</a></li>
-                                        <li><a class="dropdown-item" href="#"
-                                               onclick="openMemberInfoPopup('<%=post.getUserId()%>'); return false;">🔎회원정보
-                                            보기</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <%
-                                String strPostDate = sdfDate.format(post.getPostDate());
-                                String formattedDate;
-                                if (strToday.equals(strPostDate)) {
-                                    formattedDate = new SimpleDateFormat("HH:mm").format(post.getPostDate());
-                                } else {
-                                    formattedDate = new SimpleDateFormat("yyyy.MM.dd").format(post.getPostDate());
-                                }
-                            %>
-                            <div class="col-md-4 text-center-align"><%=formattedDate%>
-                            </div>
-                            <div class="col-md-2 text-center-align"><%=post.getViewNum()%>
-                            </div>
-                            <% if (post.getLikeNum() != 0L) { %>
-                            <div class="col-md-2 text-center-align like-num"><%=post.getLikeNum()%>
-                            </div>
-                            <%} %>
-                        </div>
-                    </div>
-                </div>
-                <%
-                    }
-                %>
-
-
-                <div class="mb-3 search-write-group margin-top">
-                    <!-- 검색창 -->
-                    <div class="search-input-group">
-                        <form id="formSearchFree" action="/acorn/board/<%=postBoard%>"
-                              class="d-flex">
-                            <div class="col-md-4 pe-1">
-                                <select class="form-select search-form-control"
-                                        name="selectSearchPositionText">
-                                    <option value="titleText">제목 + 내용</option>
-                                    <option value="postTitle">제목</option>
-                                    <option value="postText">내용</option>
-                                    <option value="userId">작성자</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 pe-1">
-                                <input type="text" class="form-control search-form-control"
-                                       id="inputSearchFreeText" name="inputSearchFreeText">
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn search-button" type="submit">검색</button>
-                            </div>
-                        </form>
-                    </div>
-
-
-                    <!-- 글쓰기 버튼 -->
-                    <div>
-                        <a href="/acorn/board/write?bn=<%=postBoard%>">
-                            <button type="button" class="btn write-button custom-btn">글쓰기</button>
-                        </a>
-                    </div>
-                </div>
-
-
-                <!-- 페이징 로직 -->
-                <%
-                    int curPage = pDTO.getCurPage();
-                    int perPage = pDTO.getPerPage();
-                    int totalCount = pDTO.getTotalCount();
-                    int totalPage = (int) Math.ceil((double) totalCount / perPage);
-                    int startPage = ((curPage - 1) / 10) * 10 + 1; // 시작 페이지 번호 계산
-                    int endPage = Math.min(startPage + 9, totalPage); // 끝 페이지 번호 계산
-
-                    // Calculate previous and next page numbers
-                    int prevPage = Math.max(startPage - 1, 1); // Ensure prevPage is never less than 1
-                    int nextPage = endPage + 1;
-                %>
-
-                <div class="page-numbers text-center">
-                    <ul class="pagination">
-
-                        "이전" 버튼
-                        <%
-                            if (curPage > 1) {
-                        %>
-                        <li class="page-item"><a class="page-link"
-                                                 href="/acorn/board/<%=postBoard%>?curPage=<%=prevPage%><%if (sortIndex != null) {%>&sortIndex=<%=sortIndex%><%}%><%if (inputSearchFreeText != null && selectSearchPositionText != null) {%>&selectSearchPositionText=<%=selectSearchPositionText%>&inputSearchFreeText=<%=inputSearchFreeText%><%}%>">
-                            &laquo; 이전 </a></li>
-                        <%
-                        } else {
-                        %>
-                        <li class="page-item disabled"><span class="page-link">&laquo;
-									이전</span></li>
-                        <%
-                            }
-                        %>
-
-                        페이지 번호 출력
-                        <%
-                            for (int i = startPage; i <= endPage; i++) {
-                        %>
-                        <li class="page-item <%=i == curPage ? "active" : ""%>"><a
-                                class="page-link"
-                                href="/acorn/board/<%=postBoard%>?curPage=<%=i%><%if (sortIndex != null) {%>&sortIndex=<%=sortIndex%><%}%><%if (inputSearchFreeText != null && selectSearchPositionText != null) {%>&selectSearchPositionText=<%=selectSearchPositionText%>&inputSearchFreeText=<%=inputSearchFreeText%><%}%>">
-                            <%=i%>
-                        </a></li>
-                        <%
-                            }
-                        %>
-
-                        "다음" 버튼
-                        <%
-                            if (nextPage <= totalPage) {
-                        %>
-                        <li class="page-item"><a class="page-link"
-                                                 href="/acorn/board/<%=postBoard%>?curPage=<%=nextPage%><%if (sortIndex != null) {%>&sortIndex=<%=sortIndex%><%}%><%if (inputSearchFreeText != null && selectSearchPositionText != null) {%>&selectSearchPositionText=<%=selectSearchPositionText%>&inputSearchFreeText=<%=inputSearchFreeText%><%}%>">
-                            다음 &raquo; </a></li>
-                        <%
-                        } else {
-                        %>
-                        <li class="page-item disabled"><span class="page-link">다음
-									&raquo;</span></li>
-                        <%
-                            }
-                        %>
-                    </ul>
-                    <!-- 페이지 숫자 검색창 -->
-                    <form action="" method="get" onsubmit="submitForm(event)">
-                        <input type="number" name="curPage" style="width: 50px">
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- 인기 영화 섹션 -->
-        <div class="col-md-2">
-            <h2 class="text-center new-hot-label">💥전체 <%= category %> 랭킹💥</h2>
-            <!-- 인기 영화 목록을 여기에 -->
-            <div class="list-group slider-container slide2">
-                <!-- 영화 포스터 반복 구간 -->
-                서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복
-                <%
-                    List<String> hotMovieList = poster.getHotList();
-
-                    for (int i = 0; i < hotMovieList.size(); i++) {
-                %>
-                <div class="movie-slide">
-                    <img src="<%= hotMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image">
-                    <span class="index-label"><%= i + 1 %></span>
-                </div>
-
-                <%
-                    }
-                %>
-            </div>
-        </div>
-    </div>
-    <div class="">
-        <div class="shortcut-container">
-            <div class="shortcut-list">
-                <span class="shortcut-key">alt+c</span><span class="shortcut-description">글 쓰기</span>
-                <span class="shortcut-key">alt+w</span><span class="shortcut-description">새 글</span>
-                <span class="shortcut-key2">e</span><span class="shortcut-description">상단으로</span>
-                <span class="shortcut-key2">d</span><span class="shortcut-description">하단으로</span>
-                <span class="shortcut-key2">s</span><span class="shortcut-description">이전</span>
-                <span class="shortcut-key">1</span><span class="shortcut-description">영화</span>
-            </div>
-        </div>
-    </div>
-
-</div> --%>
-
 <jsp:include page="../common/footer.jsp"></jsp:include>
-<!-- 
-<footer class="site-footer">
-    <div class="footer-content">
-        <ul class="footer-links">
-            <li><a href="#">소개</a></li>
-            <li><a href="#">이용약관</a></li>
-            <li><a href="#">개인정보처리방침</a></li>
-            <li><a href="#">청소년 보호정책</a></li>
-            <li><a href="#">문의/신고</a></li>
-            <li><a href="#">문제보고</a></li>
-        </ul>
-        <p class="footer-contact">문의메일 : <a href="mailto:admin@moonbam.net">admin@moonbam.net</a></p>
-        <p class="copyright">©moonbam All rights reserved.</p>
-    </div>
-</footer>
- -->
 
 <!-- Bootstrap Bundle with Popper -->
 <script
@@ -1786,10 +1157,6 @@
         newUrl.searchParams.set('curPage', 1); // 정렬 기준 변경 시 첫 페이지로 리셋
         window.location.href = newUrl.toString();
     };
-
-
 </script>
-
-
 </body>
 </html>
