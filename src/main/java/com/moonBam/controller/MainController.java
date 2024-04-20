@@ -50,7 +50,7 @@ public class MainController {
         List<PostPageDTO> moviePostList = service.selectAll(new HashMap<String, String>() {
             {
                 put("board", "movie");
-                put("postCount", "5");
+                put("postCount", "14");
             }
         });
 
@@ -82,11 +82,15 @@ public class MainController {
         if (category != null) {
             switch (category) {
             case "movie":
+	    		//박스 오피스 목록 가져오기
+	    		if(session.getAttribute("dailyList")==null) {
+	    			List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
+		    		session.setAttribute("dailyList", dailyList);
+	    		}
+	    		
+	    		//장르 인기순 가져오기
 	    		List<ContentDTO> movieTopList = mService.selectTop();
 	    		model.addAttribute("movieTopList", movieTopList);
-	    		
-	    		List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
-	    		session.setAttribute("dailyList", dailyList);
 	    		
 	    		model.addAttribute("category", category);
 	    		categoryList.add("전체");
@@ -101,6 +105,9 @@ public class MainController {
             	String searchValue = "";
             	CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
             	model.addAttribute("cpDTO", cpDTO);
+            	
+            	String communityCategory = "communitySearch";
+        		model.addAttribute("communityCategory", communityCategory);
             	
             	model.addAttribute("category", category);
             	categoryList.add("전체");

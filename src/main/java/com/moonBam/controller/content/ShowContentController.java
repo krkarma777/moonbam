@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.CreditDTO;
@@ -41,6 +43,21 @@ public class ShowContentController {
 	MemberLoginService memberLoginService;
 	@Autowired
 	TmdbApiService tmdbApiService;
+	
+	@Autowired
+	KoficAPI kofic;
+	//영화 진흥위원회 키
+	@Value("${kofic.key}")
+	private String key;
+	
+	@RequestMapping("/saveMovie")
+	@ResponseBody
+	public String movieSave(int curPage) {
+		
+		kofic.saveMovie(curPage);
+		
+		return "success";
+	}
 	
 	// 컨텐츠아이디 받음
 	// 컨텐츠 데이터, 컨텐츠에 해당하는 리뷰들 얻어서 응답
@@ -82,7 +99,7 @@ public class ShowContentController {
 			// 별점 리스트 가져와서 전달 (평균별점 계산용)
 			List<RateDTO> rateList = service.selectRates(contId);
 			request.setAttribute("rateList", rateList);
-
+			
 			nextPage = "content/contentViewer";
 		}
 
@@ -90,13 +107,17 @@ public class ShowContentController {
 	}
 	
 	@RequestMapping("/showContent")
-	public String showContent(String contId, Model model, Principal principal) {
+	public String showContent(String contId, Model model, Principal principal, HttpServletRequest request) {
 		ContentDTO content = service.selectContent(contId);
 		model.addAttribute("content", content);
 
-		MemberDTO loginMember = memberLoginService.findByPrincipal(principal);
-
-		String likeUserId = loginMember.getUserId();;
+		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+		String likeUserId = null;
+		if(loginUser!=null) {
+			// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
+			likeUserId= loginUser.getUserId();
+			request.setAttribute("member", loginUser);
+		}
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("contId", contId);
@@ -119,11 +140,13 @@ public class ShowContentController {
 		return "content/showContent";
 	}
 	
-	@RequestMapping("/allMovie")
-	public String showContent(Model model) {
+	@RequestMapping("/movieSearch")
+	@ResponseBody
+	public String showContent(Model model, String curPage, String repNationCd) {
 		System.out.println("in ShowContentController allMovie()");
 		
-		
+//		List<JSONObject> allMovieList = kofic.allMovieList(curPage);
+//		model.addAttribute("allmovieList", allMovieList);
 		
 		return "movie/allMovie";
 	}

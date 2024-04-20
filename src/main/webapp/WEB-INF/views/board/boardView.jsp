@@ -42,7 +42,7 @@
     %>
 
 
-    <title>문밤</title>
+    <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -211,8 +211,8 @@
 
         /* 페이지 번호에 마우스를 올렸을 때 스타일 */
         .pagination .page-link:hover {
-            background-color: #1e7e34; /* 마우스 호버 시 초록색 변화 */
-            background-image: linear-gradient(180deg, #1e7e34, #218838);
+            background-color: #FF285A; /* 마우스 호버 시 초록색 변화 */
+            background-image: linear-gradient(180deg, #FF285A, #FF174D);
             /* 그라디언트 효과 */
             color: white; /* 글자색 유지 */
         }
@@ -1142,8 +1142,7 @@
                     int nextPage = endPage + 1;
                 %>
 
-                <div class="page-numbers text-center">
-                    <ul class="pagination">
+                    <ul class="pagination" style="">
 
                         <%-- "이전" 버튼 --%>
                         <%
@@ -1190,11 +1189,7 @@
                             }
                         %>
                     </ul>
-				</div>
-				<!-- 페이지 숫자 검색창 -->
-            	<form action="" method="get" onsubmit="submitForm(event)">
-            		<input type="number" name="curPage" style="width: 50px">
-            	</form>
+				
 			</div>
 			</div>
 			
