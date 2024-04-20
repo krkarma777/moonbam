@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -60,6 +61,16 @@ public class MemberService {
 	public void updateMember(MemberDTO loginUser) {
 		dao.updateMember(loginUser);
 		
+	}
+
+	public int deleteMyComment(String comId) {
+		
+		return dao.deleteMyComment(comId);
+	}
+
+	public int updateMyComment(Map<String, String> map) {
+		
+		return dao.updateMyComment(map);
 	}
 
 

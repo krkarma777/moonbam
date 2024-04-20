@@ -40,7 +40,7 @@
                             <td>${comment.postId}</td>
                             <td>${comment.comDate}</td>
                             <td>${comment.comText}</td>
-                            <td><button class="btn btn-danger delBtn" data-xxx="${comment.comId}">삭제</button></td>
+                            <td><button class="btn btn-danger delBtn" data-comment-id="${comment.comId}" data-above-com-id="${comment.aboveComId}"">삭제</button></td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -55,5 +55,34 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+$(document).ready(function() {
+    // 삭제 버튼 클릭 시
+    $(".delBtn").click(function() {
+        // 해당 댓글의 ID와 aboveComId 가져오기
+        var commentId = $(this).data("comment-id");
+        var aboveComId = $(this).data("above-com-id");
+
+        // 콘솔에 aboveComId 출력 (디버깅용)
+        console.log("aboveComId: " + aboveComId);
+        // AJAX를 통해 댓글 삭제 요청 보내기
+        $.ajax({
+            type: "POST",
+            url: "<c:url value='/my-page/commDel'/>",
+            data: {
+                comId: commentId,
+                aboveComId: aboveComId
+            },
+            success: function(response) {
+                alert(response); // 응답 메시지 출력
+                location.reload(); // 페이지 새로고침
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); // 에러 메시지 출력
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

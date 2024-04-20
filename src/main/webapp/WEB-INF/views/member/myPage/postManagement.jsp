@@ -2,6 +2,7 @@
 <%@ page import="com.moonBam.dto.MyPageDTO" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: krkarma777
@@ -13,7 +14,7 @@
 <%
     MyPageDTO mDTO = (MyPageDTO) request.getAttribute("mDTO");
     List<PostDTO> selectMyPostPaged = mDTO.getList();
-    System.out.println("myPageArticle: ");
+ 
     for (int i = 0; i < selectMyPostPaged.size(); i++) {
         System.out.println(selectMyPostPaged.get(i));
     }
@@ -62,7 +63,7 @@
         <td>${post.postText}</td>
         <td>${post.categoryId}</td>
         <td>
-            <form action="/acorn/postDel" method="post">
+            <form action="<c:url value='/my-page/postDel'/>" method="post">
                 <input type="hidden" name="postId" value="${post.postId}">
                 <button type="submit" class="btn btn-danger delBtn">삭제</button>
             </form>

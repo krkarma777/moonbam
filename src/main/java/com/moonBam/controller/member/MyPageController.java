@@ -1,21 +1,29 @@
 package com.moonBam.controller.member;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-import com.moonBam.dto.board.ScrapDTO;
-import com.moonBam.service.ScrapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
+import com.moonBam.dto.board.ScrapDTO;
+import com.moonBam.service.ScrapService;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.MemberLoginService;
 import com.moonBam.service.member.MemberService;
@@ -174,18 +182,51 @@ public class MyPageController {
     }
 
     @PostMapping("/postDel") // mapping을 postDel로 변경
-    public String postDel(@SessionAttribute("loginUser") MemberDTO loginUser,
+    public String postDel(Principal principal,
                           @RequestParam("postId") Long postId,
                           RedirectAttributes redirectAttributes) {
+    	  MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
         if (loginUser != null) {
             System.out.println("postDel postId: " + postId);
             int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
             System.out.println("postDel result: " + result);
 
-            return "redirect:/myPost";
+            return "redirect:/my-page/post";
         } else {
             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
             return "redirect:/Login";
         }
     }
+    
+//댓글 삭제
+
+    @RequestMapping(value="/commDel", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String commentUpdate(@RequestParam String comId, @RequestParam(required = false) String aboveComId) {
+        String message = "";
+
+        // If aboveComId is provided, delete the comment
+        if (aboveComId != null && !aboveComId.isEmpty()) {
+            // Delete the comment
+            int num = mserv.deleteMyComment(comId);
+            if (num == 1) {
+                message = "댓글이 삭제되었습니다.";
+            } else {
+                message = "댓글을 삭제할 수 없습니다.";
+            }
+        } else {
+            // If aboveComId is not provided, update the comment to indicate it's deleted
+            Map<String, String> map = new HashMap<>();
+            map.put("comId", comId);
+            map.put("comText", "삭제된 댓글입니다.");
+            int num = mserv.updateMyComment(map);
+            if (num == 1) {
+                message = "댓글이 삭제되었습니다.";
+            } else {
+                message = "댓글을 삭제할 수 없습니다.";
+            }
+        }
+
+        return message;
+    }    
 }
