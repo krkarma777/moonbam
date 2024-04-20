@@ -1,19 +1,14 @@
 package com.moonBam.controller.community.chat;
 import java.util.List;
 
-import javax.print.DocFlavor.STRING;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatTableDTO;
-import com.moonBam.dto.CommunityBadWordsDTO;
-import com.moonBam.dto.ChatTableDTO.MessageType;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -31,7 +26,7 @@ public class ChatMessageController {
     
 // 받고 주고
     @MessageMapping("/chat/send/{chatNum}")
-   @SendTo("/topic/messages/2")
+   @SendTo("/topic/messages/{chatNum}")
  //   @ResponseBody
     public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @RequestParam String chatContent) {
     	

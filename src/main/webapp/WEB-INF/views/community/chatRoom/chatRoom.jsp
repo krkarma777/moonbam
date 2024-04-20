@@ -163,7 +163,7 @@ ${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
 		function sendMessage() {
 			var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
 			var userId = `${userIdInSession}`; // 사용자 닉네임
-			var message = $("#messageContent").val(); // 메세지 */
+			var message = escapeHtml($("#messageContent").val()); // 메세지 */
 			var serverTime = new Date().toLocaleString();
 			stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
 				'type' : 'TALK',
@@ -225,6 +225,17 @@ ${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
 				sendMessage();
 			});
 		});
+		
+		
+		// 취야점 보안
+		// 스크립트 정지
+		function escapeHtml(unsafe) {
+    return unsafe.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 		
 	</script>
 </body>

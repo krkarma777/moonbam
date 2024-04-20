@@ -20,11 +20,11 @@ var list = <%= request.getAttribute("list") %>;
     	// 팝업 창 위치 &크기 변수
 		let sLeft=0;
 		let sTop=0;
-		let width ;
-    	let height ;
+		let width;
+    	let height;
     	
         for (var i = 0; i < list.length; i++) {
-        	let flag= true;	/*  false 시 팝업 안나옴 */
+        	let flag= false;	/*  false 시 팝업 안나옴 */
         	if(flag){
         		// 팝업 창의 위치 설정
         		setPostion(i);
