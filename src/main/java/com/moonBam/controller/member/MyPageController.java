@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +52,9 @@ public class MyPageController {
 
     @Autowired
     RegisterService rserv;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/scrap")
     public String scrap(Model model, Principal principal) {
@@ -229,4 +233,43 @@ public class MyPageController {
 
         return message;
     }    
+    
+    //회원탈퇴
+    
+    @RequestMapping("/withdraw")
+    public String withdrawPage(Principal principal, HttpSession session, Model model) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        if (loginUser != null) {
+            model.addAttribute("loginUser", loginUser);
+            return "member/myPage/withdraw";
+        } else {
+            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+    }
+
+    @PostMapping("/confirm")
+    public String confirmWithdraw(@RequestParam("password") String password,
+                                  @RequestParam("confirmPassword") String confirmPassword,
+                                  Principal principal,
+                                  HttpSession session,
+                                  Model model) {
+        // 로그인한 사용자 정보를 가져옴
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        if (loginUser != null) {
+            if (password.equals(confirmPassword)) {
+                mserv.deleteUser(loginUser.getUserId(), password);
+                // 회원 탈퇴 후 세션에서 로그인 사용자 정보 삭제
+                session.removeAttribute("loginUser");
+                return "redirect:/logout"; // 로그아웃 처리
+            } else {
+                model.addAttribute("errorMessage", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+                return "redirect:/withdraw";
+            }
+        } else {
+            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+    }
+
 }

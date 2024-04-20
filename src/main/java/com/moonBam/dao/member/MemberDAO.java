@@ -86,5 +86,10 @@ public int updateMyComment(Map<String, String> map) {
 	return num;
 }
 
+public void deleteUser(String userId, String password) {
+	session.delete("deleteUser", password);
+	
+}
+
 
 }

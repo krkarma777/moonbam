@@ -36,9 +36,9 @@
                                        placeholder="새 비밀번호 입력">
                             </div>
                             <div class="mb-3">
-                                <label for="nickname" class="form-label">닉네임</label>
+                                <label for="nickname" class="form-label">닉네임(읽기 전용)</label>
                                 <input type="text" class="form-control" id="nickname" name="nickname"
-                                       value="${loginUser.nickname}">
+                                       value="${loginUser.nickname}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="secretCode" class="form-label">비밀번호 복구 코드 (수정 불가)</label>
@@ -63,6 +63,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">프로필 업데이트</button>
                         </form>
+                        <button onclick="window.location.href = 'withdraw';">Withdraw</button>
                     </div>
                 </div>
             </div>

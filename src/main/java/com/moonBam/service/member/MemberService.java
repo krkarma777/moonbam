@@ -73,5 +73,10 @@ public class MemberService {
 		return dao.updateMyComment(map);
 	}
 
+	public void deleteUser(String userId, String password) {
+	dao.deleteUser(userId, password);
+		
+	}
+
 
 }
