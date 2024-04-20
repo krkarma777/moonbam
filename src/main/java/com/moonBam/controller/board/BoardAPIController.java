@@ -4,7 +4,6 @@ import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.dto.board.PostUpdateRequestDTO;
-import com.moonBam.dto.board.ScrapDTO;
 import com.moonBam.service.PostService;
 import com.moonBam.service.ScrapService;
 import com.moonBam.service.member.MemberLoginService;
@@ -17,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -45,7 +43,9 @@ public class BoardAPIController {
 
         // XSS 방지를 위해 입력값에서 스크립트 태그를 제거하는 로직 추가
         String sanitizedPostText = sanitizeHtml(postDTO.getPostText());
+        String sanitizedPostTitle = sanitizeHtml(postDTO.getPostTitle());
         postDTO.setPostText(sanitizedPostText);
+        postDTO.setPostTitle(sanitizedPostTitle);
 
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
@@ -73,8 +73,9 @@ public class BoardAPIController {
         }
 
         // XSS 방지를 위해 입력값에서 스크립트 태그를 제거하는 로직 추가
-        String sanitizedPostText = sanitizeHtml(postDTO.getPostText());
-        postDTO.setPostText(sanitizedPostText);
+        String sanitizedPostText = sanitizeHtml(postUpdateRequestDTO.getPostText());
+        postUpdateRequestDTO.setPostText(sanitizedPostText);
+        postUpdateRequestDTO.setPostTitle(sanitizeHtml(postUpdateRequestDTO.getPostTitle()));
 
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
