@@ -149,7 +149,7 @@ $("document").ready(function() {
 			var postOneView = '<div class="container mt-4">' +
 					'<div class="post-section">' +
 					'<div class="post-title">' +
-					'<h3>' + response.pDTO.postTitle + '</h3>' +
+					'<h3>' + escapeHtml(response.pDTO.postTitle) + '</h3>' +
 					'</div>' +
 					'<div class="post-meta d-flex justify-content-between">' +
 					'<div>' +
@@ -190,6 +190,16 @@ $("document").ready(function() {
 			console.log("에러 발생 => ", error);
 		}
 	});//end ajax
+	function escapeHtml(text) {
+		var map = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#039;'
+		};
+		return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+	}
 
 });//end doc
 
