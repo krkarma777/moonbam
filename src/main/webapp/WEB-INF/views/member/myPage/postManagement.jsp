@@ -14,10 +14,6 @@
 <%
     MyPageDTO mDTO = (MyPageDTO) request.getAttribute("mDTO");
     List<PostDTO> selectMyPostPaged = mDTO.getList();
- 
-    for (int i = 0; i < selectMyPostPaged.size(); i++) {
-        System.out.println(selectMyPostPaged.get(i));
-    }
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -44,24 +40,22 @@
             <table class="table table-custom">
                 <thead>
                 <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
                     <th>Post ID</th>
                     <th>Post Board</th>
                     <th>Post Title</th>
                     <th>Post Date</th>
-                    <th>Post Text</th>
-                    <th>Category ID</th>
                     <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
                <c:forEach items="${mDTO.list}" var="post">
     <tr>
+        <td><input type="checkbox" class="postCheckbox" value="${post.postId}"></td>
         <td>${post.postId}</td>
         <td>${post.postBoard}</td>
         <td><a href="/acorn/board/content?postId=${post.postId}&bn=${post.postBoard}">${post.postTitle}</a></td>
         <td><fmt:formatDate value="${post.postDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-        <td>${post.postText}</td>
-        <td>${post.categoryId}</td>
         <td>
             <form action="<c:url value='/my-page/postDel'/>" method="post">
                 <input type="hidden" name="postId" value="${post.postId}">
@@ -76,10 +70,69 @@
             <div class="center-align">
                 <jsp:include page="MyPagenation.jsp"/>
             </div>
+             <!-- 전체 선택 및 전체 삭제 버튼 -->
+            <div class="text-end">
+                <!-- 선택 삭제 버튼 -->
+                <button type="button" class="btn btn-danger" id="deleteSelectedBtn">선택 삭제</button>
+                <!-- 전체 선택 및 전체 삭제 버튼 -->
+                <button type="button" class="btn btn-danger" id="deleteAllBtn">전체 삭제</button>
+            </div>
         </div>
         <!-- 메인 컨텐츠 끝 -->
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+$(document).ready(function() {
+    // 선택 삭제 버튼 클릭 시 선택된 게시물 삭제
+    $("#deleteSelectedBtn").click(function() {
+        $(".postCheckbox:checked").each(function() {
+            var postId = $(this).val();
+            // 선택된 게시물 삭제
+            $.ajax({
+                url: "<c:url value='/my-page/postDel'/>",
+                type: "POST",
+                data: { postId: postId },
+                success: function(response) {
+                    // 삭제된 게시물의 DOM 제거
+                    $("#post-" + postId).closest("tr").remove();
+                    // 페이지 새로고침
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+    // 전체 선택 및 전체 삭제 버튼
+    $("#selectAll").click(function() {
+        $(".postCheckbox").prop('checked', $(this).prop('checked'));
+    });
+
+    // 전체 삭제 버튼 클릭 시 선택된 모든 게시물 삭제
+    $("#deleteAllBtn").click(function() {
+        $(".postCheckbox:checked").each(function() {
+            var postId = $(this).val();
+            // 선택된 게시물 삭제
+            $.ajax({
+                url: "<c:url value='/my-page/postDel'/>",
+                type: "POST",
+                data: { postId: postId },
+                success: function(response) {
+                    // 삭제된 게시물의 DOM 제거
+                    $("#post-" + postId).closest("tr").remove();
+                    // 페이지 새로고침
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+});
+</script>
 </body>
 </html>

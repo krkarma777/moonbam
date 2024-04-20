@@ -185,13 +185,13 @@ public class MyPageController {
         }
     }
 
-    @PostMapping("/postDel") // mapping을 postDel로 변경
+    @PostMapping("/postDel")
     public String postDel(Principal principal,
                           @RequestParam("postId") Long postId,
                           RedirectAttributes redirectAttributes) {
-    	  MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
         if (loginUser != null) {
-            System.out.println("postDel postId: " + postId);
+            // postId에 해당하는 게시물을 삭제합니다.
             int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
             System.out.println("postDel result: " + result);
 
@@ -201,6 +201,31 @@ public class MyPageController {
             return "redirect:/Login";
         }
     }
+
+ //선택된 글 삭제   
+    @PostMapping("/postBatchDelete")
+    public String postBatchDelete(Principal principal,
+                                   @RequestParam(value = "selectedPosts", required = false) List<Long> selectedPosts,
+                                   RedirectAttributes redirectAttributes) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        if (loginUser != null) {
+            if (selectedPosts != null && !selectedPosts.isEmpty()) {
+                for (Long postId : selectedPosts) {
+                    System.out.println("Deleting post with ID: " + postId);
+                    int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
+                    System.out.println("Delete result: " + result);
+                }
+            } else {
+                System.out.println("No posts selected for deletion.");
+            }
+
+            return "redirect:/my-page/post";
+        } else {
+            redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+    }
+
     
 //댓글 삭제
 
