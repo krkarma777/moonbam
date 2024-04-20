@@ -32,8 +32,8 @@
                 <tbody>
                 <c:forEach items="${scrapDTOs}" var="scrap">
                     <tr>
-                        <td>${scrap.scrapId}</td>
-                        <td>${scrap.postId}</td>
+                        <td><a href="/acorn/board/content?postId=${scrap.postId}&bn=movie">${scrap.scrapId}</a></td>
+                        <td><a href="/acorn/board/content?postId=${scrap.postId}&bn=movie">${scrap.postId}</a></td>
                         <td>${scrap.userId}</td>
                         <td><fmt:formatDate value="${scrap.scrapDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
