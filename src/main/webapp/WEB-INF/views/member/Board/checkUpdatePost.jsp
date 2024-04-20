@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <title>게시글 수정 비밀번호 확인 페이지</title>
+    <title>문화인들의 밤</title>
     <!-- 부트스트랩 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     

@@ -1,13 +1,25 @@
 package com.moonBam.controller.content;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,4 +118,14 @@ public class ShowContentController {
 		
 		return "content/showContent";
 	}
+	
+	@RequestMapping("/allMovie")
+	public String showContent(Model model) {
+		System.out.println("in ShowContentController allMovie()");
+		
+		
+		
+		return "movie/allMovie";
+	}
+	
 }

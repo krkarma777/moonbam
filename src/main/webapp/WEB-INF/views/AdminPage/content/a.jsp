@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>문화인들의 밤</title>
 </head>
 <body>
 <a href = "../test">asd</a>

@@ -195,6 +195,7 @@
         <div class="row">
             <button type="submit" class="btn btn-primary submit-button">수정 완료</button>
             <button type="button" class="btn btn-primary submit-button" id="save">임시저장</button>
+            <button type="button" class="btn btn-primary submit-button" id="saveModal">임시저장목록</button>
         </div>
     </form>
 </div>

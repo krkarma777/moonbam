@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>마이페이지</title>
+    <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->

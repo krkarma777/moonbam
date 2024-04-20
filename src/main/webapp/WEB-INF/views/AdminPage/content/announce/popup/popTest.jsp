@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>스크린 사이즈 출력</title>
+<title>문화인들의 밤</title>
 <script type="text/javascript">
 // 사용자 모니터 화면 크기 
 let count = 0;
