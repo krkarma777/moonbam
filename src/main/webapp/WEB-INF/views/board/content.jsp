@@ -443,8 +443,8 @@ body{
 			        지금 회원가입 혹은 로그인하고 공통의 취향을 나눠보세요.
 			      </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
-			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/mainLogin';">로그인</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/mainLogin';">회원가입</button>
 			      </div>
 			    </div>
 			  </div>
