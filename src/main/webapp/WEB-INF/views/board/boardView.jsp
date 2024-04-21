@@ -298,7 +298,7 @@
             border: 1px solid #ddd; /* 경계선을 더 세밀하고 부드럽게 */
             background-color: #f9f9f9; /* 배경색을 더욱 깔끔하게 */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 추가 */
-            width: 500px;
+            width: 200px;
             height: 45px;
             margin: auto;
             overflow-y: hidden; /* 스크롤바를 숨깁니다 */
@@ -595,18 +595,18 @@
 
         // 입력 필드가 아닐 때만 단축키 로직 실행
         if (!isInput) {
-            if (e.altKey && e.key === "c") { // alt+c를 누르면 글 쓰기 페이지로 이동
+            if (e.
+
+                Key && e.key === "c") { //
+
+                // +c를 누르면 글 쓰기 페이지로 이동
                 window.location.href = "<%=request.getContextPath()%>/board/write?bn=<%=postBoard%>";
-            } else if (e.altKey && e.key === "w") { // alt+w를 누르면 새 글 페이지로 이동
+            } else if (e.
+
+                Key && e.key === "w") { //
+
+                // +w를 누르면 새 글 페이지로 이동
                 window.location.href = "<%=request.getContextPath()%>/board/<%=postBoard%>";
-            } else if (e.key === "e") { // e를 누르면 상단으로 스크롤
-                $("html, body").animate({scrollTop: 0}, 1);
-            } else if (e.key === "d") { // d를 누르면 하단으로 스크롤
-                $("html, body").animate({scrollTop: $(document).height()}, 1);
-            } else if (e.key === "q") { // q를 누르면 메인 페이지로 이동
-                window.location.href = "<%=request.getContextPath()%>/main";
-            } else if (e.altKey && e.key === "1") { // 1을 누르면 영화 카테고리로 이동
-                window.location.href = "<%=request.getContextPath()%>/main?cg=movie";
             }
         }
         // 추가적인 단축키 조합을 여기에 구현
@@ -653,7 +653,9 @@
                 List<String> newMovieList = poster.getNewList();
                 for (int i = 0; i < newMovieList.size(); i++) { %>
                 	<div class="movie-slide">
-                    	<img src="<%= newMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                    	<img src="<%= newMovieList.get(i) %>"
+
+                        ="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
                     	<span class="index-label">
 				      		<%= i + 1 %>
 			      		</span>
@@ -802,13 +804,17 @@
 
                                         if (imgExist && !videoExist) {
                                     %>
-                                    <img src="/acorn/resources/images/picture.png" alt="description"
+                                    <img src="/acorn/resources/images/picture.png"
+
+                                    ="description"
                                          class="post-thumbnail-picture">
                                     <%
                                             // 이미지 태그가 포함된 경우의 처리
                                         }
                                         if (videoExist) {%>
-                                    <img src="/acorn/resources/images/video.png" alt="description"
+                                    <img src="/acorn/resources/images/video.png"
+
+                                    ="description"
                                          class="post-thumbnail-video">
                                     <%
                                         }
@@ -925,13 +931,17 @@
 
                                     if (imgExist && !videoExist) {
                                 %>
-                                <img src="/acorn/resources/images/picture.png" alt="description"
+                                <img src="/acorn/resources/images/picture.png"
+
+                                ="description"
                                      class="post-thumbnail-picture">
                                 <%
                                         // 이미지 태그가 포함된 경우의 처리
                                     }
                                     if (videoExist) {%>
-                                <img src="/acorn/resources/images/video.png" alt="description" class="post-thumbnail-video">
+                                <img src="/acorn/resources/images/video.png"
+
+                                ="description" class="post-thumbnail-video">
                                 <%
                                     }
                                 %>
@@ -991,7 +1001,6 @@
                             <div class="col-md-4 pe-1">
                                 <select class="form-select search-form-control"
                                         name="selectSearchPositionText">
-                                    <option value="titleText">제목 + 내용</option>
                                     <option value="postTitle">제목</option>
                                     <option value="postText">내용</option>
                                     <option value="userId">작성자</option>
@@ -1089,12 +1098,11 @@
 			<!-- 리모컨 -->
 			<div class="shortcut-container" style="margin: 0 auto; height:45px;">
             	<div class="shortcut-list">
-                	<span class="shortcut-key">alt+c</span><span class="shortcut-description">글 쓰기</span>
-                	<span class="shortcut-key">alt+w</span><span class="shortcut-description">새 글</span>
-                	<span class="shortcut-key2">e</span><span class="shortcut-description">상단으로</span>
-                	<span class="shortcut-key2">d</span><span class="shortcut-description">하단으로</span>
-                	<span class="shortcut-key2">s</span><span class="shortcut-description">이전</span>
-                	<span class="shortcut-key">1</span><span class="shortcut-description">영화</span>
+                	<span class="shortcut-key">
+
+                        alt+c</span><span class="shortcut-description">글 쓰기</span>
+                	<span class="shortcut-key">
+                        alt+w</span><span class="shortcut-description">새 글</span>
             	</div>
         	</div>
         </div>
@@ -1110,7 +1118,9 @@
                 for (int i = 0; i < hotMovieList.size(); i++) {
                 %>
                 	<div class="movie-slide">
-                   		<img src="<%= hotMovieList.get(i) %>" alt="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                   		<img src="<%= hotMovieList.get(i) %>"
+
+                        ="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
                     	<span class="index-label"><%= i + 1 %></span>
                 	</div>
                 <%} %>
