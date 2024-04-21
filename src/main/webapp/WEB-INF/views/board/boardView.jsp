@@ -787,9 +787,8 @@
                             class="list-group-item list-group-item-action"
                             style="background-color: #dff0d8;">
                         <div class="row">
-                            <div class="col-md-1 text-center-align"><a
-                                    href="/acorn/board/<%=postBoard%>?pc=<%=poscCategoryId %>"
-                                    class="font-black no-underline"><%= categoryName %>
+                            <div class="col-md-1 text-center-align">
+                                <a href="javascript:void(0)" onclick="changeSort2('<%= poscCategoryId %>')"  class="font-black no-underline"><%= categoryName %>
                             </a></div>
                             <div class="col-md-6">
                                 <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>"
@@ -915,9 +914,9 @@
                 %>
                 <div class="list-group-item list-group-item-action">
                     <div class="row">
-                        <div class="col-md-1 text-center-align"><a
-                                href="/acorn/board/<%=postBoard%>?pc=<%=poscCategoryId %>"
-                                class="font-black no-underline"><%= categoryName %>
+                        <div class="col-md-1 text-center-align">
+                            <a href="javascript:void(0)" onclick="changeSort2('<%= poscCategoryId %>')"  class="font-black no-underline">
+                                <%= categoryName %>
                         </a></div>
                         <div class="col-md-6">
                             <a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=postBoard%>"
@@ -1145,17 +1144,11 @@
 
     // 정렬 링크를 클릭했을 때의 동작을 정의하는 함수
     function toggleSort(sortType) {
-        var currentSortIndex = getCurrentSortIndex();
-
         var currentUrl = window.location.href;
-
-        // 첫 번째 클릭시 sortIndex 추가, 두 번째 클릭시 sortIndex 제거
-        if (currentSortIndex !== sortType) {
-            currentUrl += "&sortIndex=" + sortType;
-        }
-
-        // 페이지 로드
-        window.location.href = currentUrl;
+        var newUrl = new URL(currentUrl);
+        newUrl.searchParams.set('sortIndex', sortType);
+        newUrl.searchParams.set('curPage', 1); // 정렬 기준 변경 시 첫 페이지로 리셋
+        window.location.href = newUrl.toString();
     };
 
     // 정렬 옵션 변경 함수
@@ -1163,6 +1156,14 @@
         var currentUrl = window.location.href;
         var newUrl = new URL(currentUrl);
         newUrl.searchParams.set('sortIndex', sortType);
+        newUrl.searchParams.set('curPage', 1); // 정렬 기준 변경 시 첫 페이지로 리셋
+        window.location.href = newUrl.toString();
+    };
+    // 정렬 옵션 변경 함수
+    function changeSort2(pcId) {
+        var currentUrl = window.location.href;
+        var newUrl = new URL(currentUrl);
+        newUrl.searchParams.set('pc', pcId);
         newUrl.searchParams.set('curPage', 1); // 정렬 기준 변경 시 첫 페이지로 리셋
         window.location.href = newUrl.toString();
     };
