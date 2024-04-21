@@ -1147,16 +1147,15 @@
     function toggleSort(sortType) {
         var currentSortIndex = getCurrentSortIndex();
 
-        // URL 생성
-        var url = "/acorn/board/<%=postBoard%>?curPage=<%=curPage%>";
+        var currentUrl = window.location.href;
 
         // 첫 번째 클릭시 sortIndex 추가, 두 번째 클릭시 sortIndex 제거
         if (currentSortIndex !== sortType) {
-            url += "&sortIndex=" + sortType;
+            currentUrl += "&sortIndex=" + sortType;
         }
 
         // 페이지 로드
-        window.location.href = url;
+        window.location.href = currentUrl;
     };
 
     // 정렬 옵션 변경 함수
