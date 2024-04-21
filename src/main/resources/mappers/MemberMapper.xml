@@ -287,7 +287,7 @@
 	</insert>
 	
 	<!-- API 회원가입된 유저 닉네임 변경 -->
-	<update id="updateAPIMemberNickname" parameterType="hashmap">
+	<update id="updateAPIMemberNickname" parameterType="map">
 		UPDATE 	memberDB
 		SET		nickname = #{nickname}
 		WHERE	userId = #{userId}

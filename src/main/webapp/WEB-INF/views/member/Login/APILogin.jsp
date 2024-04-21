@@ -18,14 +18,12 @@
             <div class="card-body">
                 <h3 class="card-title">닉네임을 변경하시겠습니까?</h3>
                 <form action="<c:url value='/changeNickname'/>" method="post">
-                    <input type="hidden" name="userId" value="${dto.userId}">
-                    <input type="hidden" id="check" value="${dto.nickname}">
-                    <input type="text" id="nickname" name="nickname" value="${dto.nickname}" minlength="2" required autofocus="autofocus" class="form-control mb-3">
+                    <input type="hidden" name="userId" value="${userId}">
+                    <input type="text" id="nickname" name="nickname" minlength="2" required autofocus="autofocus" class="form-control mb-3">
                     <span id="confirmNicknameError" style="color: red;"></span>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
                     	<input type="button" id="autoNickname" name="clickType" value="자동 닉네임 생성" class="btn btn-success me-md-2">
                         <input type="submit" name="clickType" value="변경하기" class="btn btn-primary me-md-2">
-                        <input type="submit" name="clickType" value="그대로 사용하기" class="btn btn-secondary">
                     </div>
                 </form>
             </div>
@@ -59,11 +57,13 @@
         	//자동 닉네임 생성기
         	$("#autoNickname").on("click", function(){
         		var nicknameSpace = $("#nickname");
+                var errorSpan = $("#confirmNicknameError");
         		$.ajax({
                     type: "POST",
                     url: "<c:url value='/randomNickname'/>", 
                     success: function (response) {
                     	nicknameSpace.val(response);
+                        errorSpan.text("");
                     },
                     error: function (error) {
                         console.error("닉네임 자동 생성기 에러:", error);
@@ -73,17 +73,17 @@
         	
         	
             //닉네임 중복 확인
-            var prevNickname = ""; 
+            var prevNickname = "";
             $("#nickname").on("focusout", function() {
                 var nickname = $("#nickname").val();
                 var errorSpan = $("#confirmNicknameError");
                 var check = $("#check").val()
-                
+
                 if(check !== nickname){
                     if (nickname !== prevNickname) {
                         $.ajax({
                             type: "POST",
-                            url: "<c:url value='/AjaxNicknameDuplicate'/>", 
+                            url: "<c:url value='/AjaxNicknameDuplicate'/>",
                             data: { nickname: nickname },
                             success: function (response) {
                                 //닉네임이 DB에 저장된 닉네임과 일치하는 데이터가 있을 경우, ajax 출력
@@ -91,7 +91,7 @@
                                     errorSpan.text("이미 사용 중인 닉네임입니다.");
                                 } else {
                                     errorSpan.text("");
-                                } 
+                                }
                             },
                             error: function (error) {
                                 console.error("닉네임 중복 검사 에러:", error);
@@ -101,7 +101,7 @@
                     };
                 };
             });
-            
+
             //닉네임 중복일 경우, 이벤트 중지
             $("form").on("submit", function(){
                 if($("#confirmNicknameError").text() == "이미 사용 중인 닉네임입니다."){

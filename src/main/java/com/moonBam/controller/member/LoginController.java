@@ -80,13 +80,18 @@ public class LoginController {
 	public String notAuthentic() {
 		return "member/Find_Info/notAuthentic";
 	}
-	
-	//OAuth2 로그인 에러 처리페이지
-	@GetMapping("/OAuth2Error")
-	public String OAuth2Error() {
+
+	//OAuth2 로그인 에러 처리페이지(관리자 아이디로 소셜 로그인 시도)
+	@GetMapping("/doNotSocialLoginByAdminID")
+	public String doNotSocialLoginByAdminID() {
 		return "member/Find_Info/doNotSocialLoginByAdminID";
 	}
-	
+
+	//OAuth2 로그인 에러 처리페이지
+	@GetMapping("/OAuth2Error")
+	public String OAuth2Error() { return "member/Find_Info/emailErrorPage";
+	}
+
 	//로그인
 //	SpringSecurity_SecurityConfig에서 처리
 	

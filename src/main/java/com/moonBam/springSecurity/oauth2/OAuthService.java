@@ -2,12 +2,14 @@ package com.moonBam.springSecurity.oauth2;
 
 import java.net.http.HttpClient.Redirect;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +87,7 @@ public class OAuthService extends DefaultOAuth2UserService {
         String role = "";
         if(dto == null) {
 	    		register.setUserId(userId);
-	    		register.setUserPw(sc.encrypt(AnonymousBoardController.getNum(16)));
+	    		register.setUserPw("haveToGetNickname");
 	    		register.setNickname(oac.randomNickname());
 	    		register.setSecretCode(sc.encrypt(AnonymousBoardController.getNum(8)));
 	    		
@@ -111,18 +113,19 @@ public class OAuthService extends DefaultOAuth2UserService {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-		    	
-	    		//새로 회원가입한 유저의 Role 전송(기본값: MEMBER)
-				role = "ROLE_MEMBER";
+
+			OAuth2Error oAuth2Error = new OAuth2Error("닉네임설정"+userId);
+				throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
         }
         
         //이미 가입한 유저일 경우
         if(dto != null) {
         	
-//        	System.out.println("OAuthService: 기존유저의 경우: "+dto);
+        	System.out.println("OAuthService: 기존유저의 경우: "+dto);
 //        	System.out.println("OAuthService: 기존유저 등급: "+dto.getRole());
         	if(dto.getRole().equals("ROLE_ADMIN")) {
-        		 throw new OAuth2AuthenticationException("관리자 아이디로 소셜 로그인 시도");
+				OAuth2Error oAuth2Error = new OAuth2Error("관리자설정");
+				throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
         	}
         	
         	// 소셜에 따라 추가 연동 체크
