@@ -62,6 +62,7 @@
     </style>
     
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/translations/ko.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
