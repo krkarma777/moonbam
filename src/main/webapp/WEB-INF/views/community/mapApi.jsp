@@ -60,15 +60,16 @@
                             var marker = new naver.maps.Marker(markerOptions);
 
                             // 마커 클릭 이벤트
-                            naver.maps.Event.addListener(marker, 'click', function(e) {
-                                // 영화 이름을 클릭했을 때 해당 채팅방으로 이동하는 링크
-                                var movieLink = '<a href="http://localhost:8090/acorn/chatRoom/enter?chatNum=' + chatNum + '">' + roomTitle + '</a>';
-                                
-                                var infoWindow = new naver.maps.InfoWindow({
-                                    content: '<h2>' + movieLink + '</h2><p>' + roomText + '</p>'
-                                });
-                                infoWindow.open(map, marker);
-                            });
+                            naver.maps.Event.addListener(marker, 'click', (function (marker, roomTitle, roomText, chatNum) {
+                                return function () {
+                                    var href = 'http://localhost:8090/acorn/chatRoom/enter?chatNum=' + chatNum;
+                                    var contentString = '<h2><a href="' + href + '">' + roomTitle + '</a></h2>' + '<p>' + roomText + '</p>';
+                                    var infoWindow = new naver.maps.InfoWindow({
+                                        content: contentString
+                                    });
+                                    infoWindow.open(map, marker);
+                                };
+                            })(marker, "<%= chatRoom.getRoomTitle() %>", "<%= chatRoom.getRoomText() %>", "<%= chatRoom.getChatNum() %>"));
                         });
                 <% } } %>
             });
@@ -84,6 +85,34 @@
 
         $(function() {
             initMap();
+        });
+    </script>
+
+    <script type="text/javascript">
+        var arr2 = [
+            { location: '장소1', lat: '위도1', lng: '경도1', RoomTitle: 'RoomTitle1', RoomText: 'RoomText1', ChatNum: '21' },
+            { location: '장소2', lat: '위도2', lng: '경도2', RoomTitle: 'RoomTitle2', RoomText: 'RoomText2', ChatNum: '22' },
+            // arr2에 장소 정보 추가
+        ];
+
+        $(function () {
+            for (var i = 0; i < arr2.length; i++) {
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(arr2[i].lat, arr2[i].lng),
+                    map: map
+                });
+
+                var infoWindow = new naver.maps.InfoWindow();
+
+                naver.maps.Event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        var href = 'http://localhost:8090/acorn/chatRoom/enter?chatNum=' + arr2[i].ChatNum;
+                        var contentString = '<h2><a href="' + href + '">' + arr2[i].RoomTitle + '</a></h2>' + '<p>' + arr2[i].RoomText + '</p>';
+                        infoWindow.setContent(contentString);
+                        infoWindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
         });
     </script>
 </body>
