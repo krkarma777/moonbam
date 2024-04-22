@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -202,24 +203,17 @@ public class MyPageController {
         }
     }
 
- //선택된 글 삭제   
-    @PostMapping("/postBatchDelete")
-    public String postBatchDelete(Principal principal,
-                                   @RequestParam(value = "selectedPosts", required = false) List<Long> selectedPosts,
-                                   RedirectAttributes redirectAttributes) {
+ //전체 글 삭제   
+    @PostMapping("/delAllPosts")
+    public String deleteAllPosts(Principal principal, @RequestBody List<Long> allPostIds, RedirectAttributes redirectAttributes) {
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
         if (loginUser != null) {
-            if (selectedPosts != null && !selectedPosts.isEmpty()) {
-                for (Long postId : selectedPosts) {
-                    System.out.println("Deleting post with ID: " + postId);
-                    int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
-                    System.out.println("Delete result: " + result);
-                }
-            } else {
-                System.out.println("No posts selected for deletion.");
+            for (Long postId : allPostIds) {
+                System.out.println("Deleting post with ID: " + postId);
+                // postId를 사용하여 해당 게시물 삭제 로직 수행
+                mserv.postDel(postId);
             }
-
-            return "redirect:/my-page/post";
+            return "redirect:/my-page/post"; // 모든 게시물 삭제 후에 리다이렉트
         } else {
             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
             return "redirect:/Login";
@@ -258,6 +252,44 @@ public class MyPageController {
 
         return message;
     }    
+  
+  //전체 댓글 삭제   
+    @RequestMapping(value="/delAllComments", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String deleteAllComments(@RequestBody List<String> allCommentIds, @RequestParam(required = false) String aboveComId) {
+        StringBuilder message = new StringBuilder();
+
+        // 모든 댓글 ID에 대해 처리
+        for (String comId : allCommentIds) {
+            if (comId != null && !comId.isEmpty()) {
+                // 위의 댓글 ID에 따라 처리 분기
+                if (aboveComId == null) {
+                    // aboveComId 가 null이면 업데이트 수행
+                    Map<String, String> map = new HashMap<>();
+                    map.put("comId", comId);
+                    map.put("comText", "삭제된 댓글입니다.");
+                    int num = mserv.updateMyComment(map);
+                    if (num == 1) {
+                        message.append("댓글 ").append(comId).append(" 업데이트 성공\n");
+                    } else {
+                        message.append("댓글 ").append(comId).append(" 업데이트 실패\n");
+                    }
+                } else {
+                    // aboveComId 가 null이 아니면 바로 삭제
+                    int num = mserv.deleteMyComment(comId);
+                    if (num == 1) {
+                        message.append("댓글 ").append(comId).append(" 삭제 성공\n");
+                    } else {
+                        message.append("댓글 ").append(comId).append(" 삭제 실패\n");
+                    }
+                }
+            }
+        }
+
+        return message.toString();
+    }
+
+    
     
     //회원탈퇴
     

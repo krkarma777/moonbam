@@ -26,6 +26,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                     <th><input type="checkbox" id="selectAll"></th>
                         <th>Comment ID</th>
                         <th>Post ID</th>
                         <th>Comment Date</th>
@@ -36,6 +37,7 @@
                     <tbody>
                     <c:forEach items="${cDTO.list}" var="comment">
                         <tr>
+                          <td><input type="checkbox" class="commentCheckbox" value="${comment.comId}" data-above-com-id="${comment.aboveComId}" ></td>
                             <td>${comment.comId}</td>
                             <td>${comment.postId}</td>
                             <td>${comment.comDate}</td>
@@ -49,6 +51,13 @@
             <!-- 페이지네이션-->
             <div class="center-align">
             <jsp:include page="MyPagenationComm.jsp"/>
+            </div>
+              <!-- 선택 삭제 및 전체 삭제 버튼 -->
+            <div class="text-end">
+                <!-- 선택 삭제 버튼 -->
+                <button type="button" class="btn btn-danger" id="deleteSelectedBtn">선택 삭제</button>
+                <!-- 전체 삭제 버튼 -->
+                <button type="button" class="btn btn-danger" id="deleteAllBtn">전체 삭제</button>
             </div>
         </div>
         <!-- 메인 컨텐츠 끝 -->
@@ -82,6 +91,61 @@ $(document).ready(function() {
             }
         });
     });
+    
+ // 전체 선택 및 해제
+    $("#selectAll").click(function() {
+        $(".commentCheckbox").prop("checked", $(this).prop("checked"));
+    });
+
+    // 선택 삭제 버튼 클릭 시 선택된 댓글 삭제
+    $("#deleteSelectedBtn").click(function() {
+        $(".commentCheckbox:checked").each(function() {
+            var commentId = $(this).val();
+            console.log(commentId);
+            // 선택된 댓글 삭제
+            $.ajax({
+                type: "POST",
+                url: "<c:url value='/my-page/commDel'/>",
+                data: {
+                    comId: commentId,
+                    aboveComId: $(this).data("above-com-id")
+                },
+                success: function(response) {
+                    alert(response); // 응답 메시지 출력
+                    location.reload(); // 페이지 새로고침
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText); // 에러 메시지 출력
+                }
+            });
+        });
+    });
+
+    // 전체 삭제 버튼 클릭 시 모든 댓글 삭제
+    $("#deleteAllBtn").click(function() {
+    	 $(".commentCheckbox:checked").each(function() {
+             var commentId = $(this).val();
+             // 선택된 댓글 삭제
+             $.ajax({
+                 type: "POST",
+                 url: "<c:url value='/my-page/commDel'/>",
+                 data: {
+                     comId: commentId,
+                     aboveComId: $(this).data("above-com-id")
+                 },
+                 success: function(response) {
+                     alert(response); // 응답 메시지 출력
+                     location.reload(); // 페이지 새로고침
+                 },
+                 error: function(xhr, status, error) {
+                     console.error(xhr.responseText); // 에러 메시지 출력
+                 }
+             });
+         });
+     });
+
+
+
 });
 </script>
 </body>

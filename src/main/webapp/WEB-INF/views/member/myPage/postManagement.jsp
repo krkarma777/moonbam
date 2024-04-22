@@ -51,7 +51,7 @@
                 <tbody>
                <c:forEach items="${mDTO.list}" var="post">
     <tr>
-        <td><input type="checkbox" class="postCheckbox" value="${post.postId}"></td>
+        <td><input type="checkbox" name="check" class="postCheckbox" value="${post.postId}"></td>
         <td>${post.postId}</td>
         <td>${post.postBoard}</td>
         <td><a href="/acorn/board/content?postId=${post.postId}&bn=${post.postBoard}">${post.postTitle}</a></td>
@@ -111,25 +111,38 @@ $(document).ready(function() {
         $(".postCheckbox").prop('checked', $(this).prop('checked'));
     });
 
-    // 전체 삭제 버튼 클릭 시 선택된 모든 게시물 삭제
+    // 전체 삭제 버튼 클릭 시 모든 게시물 삭제
     $("#deleteAllBtn").click(function() {
-        $(".postCheckbox:checked").each(function() {
+        // 모든 게시물의 postId를 담을 배열
+        var allPostIds = [];
+
+        // 각 게시물의 postId를 배열에 추가
+        $(".postCheckbox").each(function() {
             var postId = $(this).val();
-            // 선택된 게시물 삭제
-            $.ajax({
-                url: "<c:url value='/my-page/postDel'/>",
-                type: "POST",
-                data: { postId: postId },
-                success: function(response) {
-                    // 삭제된 게시물의 DOM 제거
-                    $("#post-" + postId).closest("tr").remove();
-                    // 페이지 새로고침
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
+            allPostIds.push(postId);
+        });
+
+        // 게시물이 없는 경우 아무것도 하지 않음
+        if(allPostIds.length === 0) {
+            console.log("No posts available for deletion.");
+            return;
+        }
+
+        // 모든 게시물들을 서버로 전송하여 삭제 요청
+        $.ajax({
+            url: "<c:url value='/my-page/delAllPosts'/>",
+            type: "POST",
+            data: JSON.stringify(allPostIds), // postId 배열을 JSON 형태로 전송
+            contentType: "application/json", // 전송할 데이터의 타입 지정
+            success: function(response) {
+                // 모든 게시물이 삭제되면 DOM에서 해당 요소 제거
+                $(".postCheckbox").closest("tr").remove();
+                // 페이지 새로고침
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
         });
     });
 });
