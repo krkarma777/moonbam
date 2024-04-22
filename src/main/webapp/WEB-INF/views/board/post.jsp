@@ -533,7 +533,7 @@
         <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold;">임시 저장 목록</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-		<div class="modal-body">
+		<div class="modal-body" style="max-height: 400px; overflow-y: auto;">
 			<table class="table">
 				<colgroup>
 					<col style="width: 75%;">
