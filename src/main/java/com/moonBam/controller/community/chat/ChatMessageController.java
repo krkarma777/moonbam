@@ -50,7 +50,7 @@ public class ChatMessageController {
 		//string타입에서 json으로 변경하여  message값만 가져와서 string으로 저장하기 성공
         JSONObject jsonObj = (JSONObject) obj;
         String message = (String) jsonObj.get("message");
-        System.out.println("message      "+message);
+       // System.out.println("message      "+message);
 
         
         ///금칙어 스캔 후 위 message와 비교 후 ** 처리하여 리턴하여 보내주기 (DB엔 쌩으로 저장됨, 보여지기만 대체하여 보냄)
@@ -58,7 +58,7 @@ public class ChatMessageController {
        
         boolean noBadWords = false;
         for (String BadWord : badWordsList) { ////////
-        	System.out.println("먼데 "+ BadWord);
+        	//System.out.println("먼데 "+ BadWord);
      
         	noBadWords = message.contains(BadWord); /////////일치하는 욕 포함된 메세지를 입력하면 여기에 true가 담김
         	

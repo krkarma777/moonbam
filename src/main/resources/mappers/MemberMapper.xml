@@ -4,21 +4,22 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.config.MemberMapper">
 
-	<select id="findByUserId" resultType="MemberDTO">
-		SELECT 	*
-		FROM 	memberDB
-		WHERE	userId = #{userId}
+
+	<select id="findByUserId" resultType="MemberDTO" parameterType="String">
+		SELECT *
+		FROM memberDB
+		WHERE userId = #{userId}
 	</select>
 
-	<insert id="insert" parameterType="MemberCreateRequestDTO">
-		INSERT INTO memberDB (USERID, USERPW, NICKNAME,SECRETCODE, ROLE)
-		VALUES (#{userId}, #{userPw}, #{nickname}, #{secretCode}, #{role})
-	</insert>
-
+	<!-- Spring Security용 -->
+	<select id="userDetail" resultType="MemberDTO" parameterType="String">
+	  select * from  memberDB
+	   where userId= #{userId}
+	</select>
+	
 	<!-- **************************************************************** -->
 	<!-- *********************디버그 Mapper********************************* -->
 	<!-- **************************************************************** -->
-
 
 	<!-- 디버그용 - 회원 정보 찾기 -->	
 	<select id="selectAll" resultType="MemberDTO">
@@ -276,11 +277,11 @@
 	<!-- API 회원가입 -->
 	<insert id="insertAPIMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-			userId, userPw, nickname, 
+			userId, userPw, nickname, secretCode,
 			googleConnected, naverConnected, kakaoConnected
 		)
 		VALUES (
-			#{userId}, #{userPw}, #{nickname},
+			#{userId}, #{userPw}, #{nickname}, #{secretCode},
 			#{googleConnected}, #{naverConnected}, #{kakaoConnected}
 		)
 	</insert>
@@ -315,18 +316,28 @@
 	<!-- *********************로그인 Mapper********************************* -->
 	<!-- **************************************************************** -->
 	
-	<!-- 아이디 찾기 -->
-	<select id="findUserId" resultType="MemberDTO" parameterType="hashmap">
+	<!-- 닉네임 찾기 -->
+	<select id="nicknameByUserId" resultType="String" parameterType="String">
 		SELECT
-			*
+			nickname, googleConnected, naverConnected, kakaoConnected
 		FROM 
 			memberDB
 		WHERE 
-			restoreUserEmailId = #{restoreUserEmailId}
-			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
+			userId = #{userId}
+	</select>
+	
+	
+	<!-- 아이디 찾기 -->
+	<select id="findDTOBySecretCode" resultType="MemberDTO" parameterType="String">
+		SELECT
+			userId, googleConnected, naverConnected, kakaoConnected
+		FROM 
+			memberDB
+		WHERE 
+			secretCode = #{secretCode}
 	</select>
 
-	<!-- 로그인 -->
+	<!-- 로그인 *******************************************************************************************-->
 	<select id="login" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
 			*
@@ -347,42 +358,25 @@
 	</select>
 	
 	<!-- 이메일 중복 확인 에이젝스 -->
-	<select id="registerPossible" resultType="int" parameterType="String">
-		SELECT COUNT(*)
+	<select id="findDTOByUserId" resultType="MemberDTO" parameterType="String">
+		SELECT userId, googleConnected, naverConnected, kakaoConnected
 		FROM memberDB
 		WHERE 
 			userId = #{userId}
 	</select>
 		
-	<!-- 전체 비밀번호 - 닉네임으로 찾기 -->
-	<select id="findPWbyNickname" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userid = #{userid}
-			AND nickname = #{nickname}
-	</select>
-	
-	<!-- 전체 비밀번호 - 이메일로 찾기 -->
-	<select id="findPWbyEmail" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userid = #{userid}
-			AND restoreUserEmailId = #{restoreUserEmailId}
-			AND restoreUserEmailDomain = #{restoreUserEmailDomain}
-	</select>
-	
-	<!-- 전체 비밀번호 출력용 -->
-	<select id="selectMemberData" resultType="MemberDTO" parameterType="String">
+	<!-- 비밀번호 찾기 -->
+	<select id="mailingPW" resultType="MemberDTO" parameterType="hashmap">
 		SELECT
 			*
-		FROM 
+		FROM
 			memberDB
 		WHERE 
 			userId = #{userId}
+			AND secretCode = #{secretCode}
 	</select>
 	
+	<!-- 비밀번호 업데이트 -->
 	<update id="updatePassword" parameterType="hashmap">
 		UPDATE 	memberDB
 		SET		userPw = #{userPw}
@@ -396,15 +390,17 @@
 	<!-- 회원가입 -->
 	<insert id="insertNewMember" parameterType="MemberDTO">
 		INSERT INTO memberDB (
-		userId, userPw, nickname, SECRETCODE ,
-		userSignDate, ROLE
+		userId, userPw, nickname, 
+		secretCode, 
+		userSignDate
 		)
 		VALUES (
-		#{userId}, #{userPw}, #{nickname}, #{secretCode},
-		#{userSignDate}, #{role}
+		#{userId}, #{userPw}, #{nickname},
+		#{secretCode}, 
+		#{userSignDate}
 		)
 	</insert>
-
+	
 	<!-- 아이디 중복 검사 에이젝스 -->
 	<select id="isUserIdDuplicate" resultType="int" parameterType="String">
 		SELECT COUNT(*)
@@ -419,13 +415,4 @@
 		WHERE nickname = #{nickname}
 	</select>
 
-	<!-- 이메일 중복 검사 에이젝스 -->
-	<select id="isUserEmailDuplicate" resultType="int" parameterType="hashmap">
-		SELECT COUNT(*)
-		FROM memberDB
-		WHERE 
-			userEmailId = #{userEmailId}
-			AND userEmailDomain = #{userEmailDomain}
-	</select>
-	
 </mapper>

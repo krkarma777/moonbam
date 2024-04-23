@@ -4,8 +4,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	MemberDTO dto = (MemberDTO)session.getAttribute("loginUser");
-
 	List<String> categoryList = (List<String>)request.getAttribute("categoryList");
 	String category = (String)request.getAttribute("category");
 	
@@ -58,16 +56,17 @@
 		</div>
 		<div class="position-fixed top-0 end-0">
 
-				<!-- 비로그인 -->
+			<!-- 비로그인 -->
 			<sec:authorize access="isAnonymous()">
-				<a href="Login" class="top">로그인</a>
+				<a href="/acorn/mainLogin" class="top">로그인</a>
 			</sec:authorize>
-				<!-- 로그인 -->
-      			<!-- 로그인 -->
+      		
+      		<!-- 로그인 -->
 			<sec:authorize access="isAuthenticated()">
 				<a href="/acorn/logout"  class="top">로그아웃/</a>
-				<a href="MypageServlet"  class="top">마이페이지</a>
+				<a href="/acorn/my-page"  class="top">마이페이지</a>
 			</sec:authorize>
+			
 			<!-- 관리자인 경우 -->
 			<sec:authorize access="hasRole('ADMIN')">
                 <a href="/acorn/AdminPage">관리자페이지</a>

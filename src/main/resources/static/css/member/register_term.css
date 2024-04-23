@@ -1,45 +1,59 @@
 @charset "UTF-8";
 
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f4f4f4;
-	margin: 0;
-	padding: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	max-width: 1000px;
-	min-height: 100vh; 
-	
-}
 .container {
-	max-width: 800px; 
-	margin: 0 auto;
-    width: 60%; 
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+form {
+    width: 100%;
+}
+
+div {
+    margin-bottom: 20px;
 }
 
 textarea {
-	width: 100%;
-    height: 10em;
-    border: none;
+    width: 100%;
+    height: 200px;
     resize: none;
-	margin-bottom: 10px;
-}
-
-.checkboxes {
-	margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 5px;
 }
 
 label {
-	display: block;
-	margin-bottom: 5px;
+    display: block;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
 }
 
 button {
-	padding: 10px;
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	cursor: pointer;
+    padding: 10px 20px;
+    background-color: #ff416c;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff2858;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+#allCheckbox {
+    font-weight: bold;
 }
 

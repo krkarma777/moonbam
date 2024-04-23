@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>문화인들의 밤</title>
 <script type = "text/javascript">
 	<%List<AdminMemberDTO> list = (List<AdminMemberDTO>)session.getAttribute("list");
 	System.out.println("in member" + list);%>

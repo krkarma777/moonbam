@@ -9,7 +9,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>잘못된 접근 페이지</title>
+	<title>문화인들의 밤</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/unfound.css'/>">
 </head>
 
@@ -18,7 +18,7 @@
         <h1>잘못된 접근입니다.</h1>
         <p class="mesg">비정상적인 접근입니다. 회원정보를 다시 입력해주시기 바랍니다.</p>
         <div id="sitesShortCut">
-	        <a href="<%=request.getContextPath()%>/Login" class="links">로그인</a>
+	        <a href="<%=request.getContextPath()%>/mainLogin" class="links">로그인</a>
         </div>
     </div>
 </body>

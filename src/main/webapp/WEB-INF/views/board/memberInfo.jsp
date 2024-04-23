@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원 정보</title>
+    <title>문화인들의 밤</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -47,7 +47,7 @@
         </tr>
         <tr>
             <th scope="row">회원 ROLE</th>
-            <td>${member.userType}</td>
+            <td>${member.role}</td>
         </tr>
         <tr>
             <th scope="row">닉네임</th>

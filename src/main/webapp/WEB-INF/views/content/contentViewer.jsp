@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
@@ -209,12 +209,12 @@
 	contImg = "http://image.tmdb.org/t/p/"+"w342/"+contImg;
 	//http://image.tmdb.org/t/p/w342/awmVj0xmD8CP4g0uD7dUrM8nqi.jpg
 	
-	MemberDTO login = (MemberDTO)session.getAttribute("loginUser");
+	MemberDTO member = (MemberDTO)request.getAttribute("member");
 	String userId = null;
 	String nickname = null;
-	if(login!=null){
-		userId = login.getUserId();
-		nickname = login.getNickname();
+	if(member!=null){
+		userId = member.getUserId();
+		nickname = member.getNickname();
 	}
 	
 	List<ReviewDTO> reviewList = (List<ReviewDTO>)request.getAttribute("reviewList");
@@ -248,7 +248,7 @@
 	//ready
 	$(document).ready(function(){
 		$("#show_length").text($("#postText").val().length+"/"+max_length); //글자수 표시
-		$("#writeReview").on("click", writeReview);  //리뷰작성
+		/* $("#writeReview").on("click", writeReview);  //리뷰작성 */
 		$("#postText").on("keyup", check_length); 	 //글자수 제한
 		$("#postText").on("keypress", check_enter);  //엔터키 제한
 		$(".rate input").on("change", rating)  		//별점 선택
@@ -257,9 +257,6 @@
 		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
 		// console.log("tests")
 		// showCredits();
-		
-		//화면 로딩시 내 리뷰 표시 함수 
-		setMyReview();
 		
 		// 별점 막대그래프 높이 설정 함수
 		setAvgGraph();
@@ -279,7 +276,7 @@
 				},
 				dataType: "json",
 				success: function(data, status, xhr){
-					console.log("성공: ",	 data);
+					//console.log("성공: ",	 data);
 
 					var cardHtml = "";
 					$.each(data, function(i, actor) {
@@ -368,10 +365,10 @@
 	
 	//화면 로딩시 내 리뷰 표시 함수 
 	function setMyReview(){
-		<%
+<%-- 		<%
 		//로그인 정보 확인
 		if(login!=null){
-		%>
+		%> --%>
 		// 화면 최초 생성시 로그인상태+작성했던 리뷰가 있다면 불러와서 표시
 		//내 리뷰 불러오기
 		$.ajax(
@@ -402,7 +399,7 @@
 				}
 			}//ajax	
 		);//ajax
-		<%}%>//if 종료
+<%-- 		<%}%>//if 종료 --%>
 	}
 	
 	// 공감버튼 토글
@@ -507,13 +504,14 @@
 	// 리뷰 작성 완료
 	function writeReview(){
 
-		//로그인 정보 확인
+<%-- 		//로그인 정보 확인
 		<%
 		if(login!=null){
-		%>
+		%> --%>
 		
 		var contId = $("#contId").val();
 		var postText = $("#postText").val().substr(0, max_length);
+		<%-- console.log("리뷰쓰기 테스트 "+contId+" "+postText+" <%=userId%>"+" <%=nickname%>"); --%>
 		//내용이 있을 시만 저장작업 진행 && contId에 null값이 저장되지 않았을 경우에만 진행
 		if(postText.length!=0 && contId !="null"){
 			$.ajax(
@@ -541,13 +539,24 @@
 				}//json
 			);//ajax
 		}//내용검사if
-		<%}%>
+		<%-- <%}%> --%>
 	}//function
 </script>
+<sec:authorize access="isAuthenticared()">
+	<script>
+		$(document).ready(function(){
+			$("#writeReview").on("click", writeReview);  //리뷰작성
+			
+			//화면 로딩시 내 리뷰 표시 함수 
+			setMyReview();
+		});//ready
+	</script>
+</sec:authorize>
 </head>
 <body>
 	<!--네비게이션바  -->
-	<jsp:include page="//common/navbar.jsp"></jsp:include>
+	<jsp:include page="../common/navBar.jsp"></jsp:include>
+	<%-- <jsp:include page="//common/navbar.jsp"></jsp:include> --%>
 	<!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="#">Navbar</a>

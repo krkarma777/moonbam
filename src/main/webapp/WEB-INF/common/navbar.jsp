@@ -14,11 +14,11 @@
             <ul class="navbar-nav">
             <c:choose>
                 <c:when test="${not empty sessionScope.loginUser}">
-                    <li class="nav-item"><a href="<c:url value='/Logout'/>" class="nav-link">로그아웃</a></li>
+                    <li class="nav-item"><a href="<c:url value='/logout'/>" class="nav-link">로그아웃</a></li>
                     <li class="nav-item"><a href="<c:url value='/MyPageServlet'/>" class="nav-link">마이페이지</a></li>
                 </c:when>
                 <c:otherwise>
-                    <li class="nav-item"><a href="<c:url value='/Login'/>" class="nav-link">로그인</a></li>
+                    <li class="nav-item"><a href="<c:url value='/mainLogin'/>" class="nav-link">로그인</a></li>
                     <!-- <li class="nav-item"><a href="#" class="nav-link">회원가입</a></li> -->
                 </c:otherwise>
             </c:choose>             

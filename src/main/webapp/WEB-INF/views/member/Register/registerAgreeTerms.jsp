@@ -10,7 +10,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>약관동의 페이지</title>
+    <title>문화인들의 밤</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/member/register_term.css'/>">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
@@ -44,7 +44,6 @@
                 </textarea>
                 <label><input type="checkbox" class="terms" name="checked_Withdraw">회원 탈퇴 및 서비스 이용 중지에 동의합니다.</label>
             </div>
-            <br>
 
             <div>
                 <label><input type="checkbox" id="allCheckbox" onclick="clickAllChk(this.checked)">모두 동의합니다.</label>

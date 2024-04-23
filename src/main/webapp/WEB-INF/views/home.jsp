@@ -2,7 +2,7 @@
 <%@ page session="false" %>
 <html>
 <head>
-	<title>Home</title>
+	<title>문화인들의 밤</title>
 </head>
 <body>
 <h1>

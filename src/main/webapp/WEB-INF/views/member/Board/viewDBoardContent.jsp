@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>글</title>
+	<title>문화인들의 밤</title>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<!-- 외부 css 파일 -->
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/member/unfound.css'/>">
@@ -497,9 +497,6 @@
          var anonymousReplyNum = $(this).data('reply-num');
          var replyPassword = $('#replyPasswordToDelete').val();
          
- //출력됨        console.log(anonymousReplyNum);
- //출력됨        console.log(replyPassword);
-
          $.ajax({
              url: "<c:url value='/deleteReply'/>",
              type: "DELETE",

@@ -45,8 +45,7 @@ public class RegisterDAO {
 		return num > 0;
 	}
 
-	public boolean RegisterPossible(String userId) {
-		int num = session.selectOne("com.config.MemberMapper.registerPossible", userId);
-		return num > 0;
+	public MemberDTO findDTOByUserId(String userId) {
+		return session.selectOne("com.config.MemberMapper.findDTOByUserId", userId);
 	}
 }

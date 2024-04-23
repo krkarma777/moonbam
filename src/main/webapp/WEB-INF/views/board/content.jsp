@@ -11,7 +11,7 @@
 	String postId = request.getParameter("postId");
 %>
 <meta charset="UTF-8">
-<title>Display Content</title>
+<title>문화인들의 밤</title>
 
 
 
@@ -54,7 +54,27 @@ function scrollToComments() {
 
 <script type="text/javascript">
 $("document").ready(function() {
+	// 삭제 버튼 클릭 이벤트 핸들러
 
+	$(document).on('click', '.delete-post-btn', function() {
+		// 게시글 ID 가져오기
+		var postId = $(this).data('post-id');
+
+		if (confirm('이 게시글을 삭제하시겠습니까?')) {
+			// $.ajax({
+			// 	url: '/acorn/api/post/' + postId, // 요청할 URL
+			// 	type: 'DELETE', // HTTP 메소드
+			// 	success: function(response) {
+			// 		alert(response.message);
+			// 		window.location.reload();
+			// 	},
+			// 	error: function(xhr) {
+			// 		alert('삭제 실패: ' + xhr.responseJSON.message);
+			// 	}
+			// });
+			alert("관리자 삭제된 게시글 db 연동중")
+		}
+	});
 	$("#commentHead").click(function () {
 		var url = "/acorn/board/postLike?postId=" + <%= request.getParameter("postId")%>;
 		$.ajax({
@@ -129,7 +149,7 @@ $("document").ready(function() {
 			var postOneView = '<div class="container mt-4">' +
 					'<div class="post-section">' +
 					'<div class="post-title">' +
-					'<h3>' + response.pDTO.postTitle + '</h3>' +
+					'<h3>' + escapeHtml(response.pDTO.postTitle) + '</h3>' +
 					'</div>' +
 					'<div class="post-meta d-flex justify-content-between">' +
 					'<div>' +
@@ -157,8 +177,8 @@ $("document").ready(function() {
 			var updatedel = '';
 			if (isAuthorized) {
 				updatedel = `
-				            <a href="/acorn/board/edit?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
-				            <a href="/acorn/board/delete?postId=<%= postId %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">삭제</button></a>
+				            <a href="/acorn/board/edit?postId=<%= request.getParameter("postId") %>&bn=<%=request.getParameter("bn")%>"><button type="button" class="btn btn-action btn-spacing">수정</button></a>
+							<a href="javascript:void(0);" data-post-id="<%= postId %>" class="delete-post-btn btn btn-danger">삭제</a>
 				    `;
 			}//
 
@@ -170,6 +190,16 @@ $("document").ready(function() {
 			console.log("에러 발생 => ", error);
 		}
 	});//end ajax
+	function escapeHtml(text) {
+		var map = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#039;'
+		};
+		return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+	}
 
 });//end doc
 
@@ -380,7 +410,7 @@ body{
 <body>
 
 	<!-- 네비게이션바 -->
-	<jsp:include page="//common/navbar.jsp"/>
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
 	
 	<div class="container mt-4">
 		<div class="post-section">
@@ -413,8 +443,8 @@ body{
 			        지금 회원가입 혹은 로그인하고 공통의 취향을 나눠보세요.
 			      </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
-			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/mainLogin';">로그인</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/mainLogin';">회원가입</button>
 			      </div>
 			    </div>
 			  </div>
@@ -431,9 +461,9 @@ body{
 					
    					<!-- 오른쪽에 위치할 기타 버튼들 -->
 					<sec:authorize access="isAuthenticated()">
-						<a href="/acorn/board/write?bn=${requestScope.bn}" class="btn btn-action btn-spacing">글쓰기</a>
+						<a href="/acorn/board/write?bn=<%=request.getParameter("bn")%>" class="btn btn-action btn-spacing">글쓰기</a>
 					</sec:authorize>
-						<!-- 수정, 삭제 버튼-->					
+						<!-- 수정, 삭제 버튼-->
    						<span id="updatadel"></span>
    					</div><!-- end 오른쪽 버튼 -->  				
    				</div><!-- end <div class="d-flex justify-content-between"> -->  				

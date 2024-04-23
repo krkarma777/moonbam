@@ -1,13 +1,25 @@
 package com.moonBam.controller.content;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,14 +49,17 @@ public class ShowContentController {
 
 
 		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-		
-		// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
-		String likeUserId = loginUser.getUserId();
-
-		//임시 컨텐츠 데이터 생성 (나중에 삭제)
-		if(contId==null) {
-			contId = "1";
+		String likeUserId = null;
+		if(loginUser!=null) {
+			// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
+			likeUserId= loginUser.getUserId();
+			request.setAttribute("member", loginUser);
 		}
+
+//		//임시 컨텐츠 데이터 생성 (나중에 삭제)
+//		if(contId==null) {
+//			contId = "1";
+//		}
 		
 		String nextPage = "";
 		// 예외처리 : contId 부재시
@@ -103,4 +118,14 @@ public class ShowContentController {
 		
 		return "content/showContent";
 	}
+	
+	@RequestMapping("/allMovie")
+	public String showContent(Model model) {
+		System.out.println("in ShowContentController allMovie()");
+		
+		
+		
+		return "movie/allMovie";
+	}
+	
 }

@@ -10,11 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +24,10 @@ import com.moonBam.dto.AnonymousBoardDTO;
 import com.moonBam.dto.AnonymousCommentDTO;
 import com.moonBam.service.member.AnonymousBoardService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 public class AnonymousBoardController {
 
@@ -35,6 +37,10 @@ public class AnonymousBoardController {
 	@Autowired
 	AjaxController ajaxController;
 	
+	@Autowired
+	static
+	PasswordEncoder encoder;
+	
 	//게시판 글 목록 보기
 	@GetMapping("/viewDBoardList")
 	public ModelAndView viewDBoardList( 
@@ -42,7 +48,7 @@ public class AnonymousBoardController {
             @RequestParam(defaultValue = "10") int perPage,
 			String orderBy, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		
-		// 전체 글 개수 가져오기 (페이지네이션에 사용될 수 있음)
+		// 전체 글 개수 가져오기 (페이지네이션에 사용)
 	    List<AnonymousBoardDTO> allPosts  = serv.viewDBoardList(orderBy);
 	    int totalPosts = allPosts.size();
 		
@@ -146,8 +152,8 @@ public class AnonymousBoardController {
         String now = format.format(nowDate);
 	    dto.setPostDate(now);
 
-	    
 		serv.insertPost(dto);
+		
 		List<AnonymousBoardDTO> list = serv.viewDBoardList("boardNum");
 		ModelAndView mav = new ModelAndView();
 			mav.addObject("list", list);
@@ -279,7 +285,7 @@ public class AnonymousBoardController {
 	    dto.setEdittedDate(now);
 	    
 	    serv.updateDBoard(dto);
-	    return "redirect:/viewDBoardContent/?boardNum="+dto.getBoardNum();
+	    return "redirect:/viewDBoardContent?boardNum="+dto.getBoardNum();
 	}
 	
 	
@@ -297,7 +303,7 @@ public class AnonymousBoardController {
 	@PostMapping("/deletePost")
 	public String  deletePost(String nickname, int boardNum) {
 		serv.deleteDBoard(boardNum);
-		return "redirect:/viewDBoardList/";
+		return "redirect:/viewDBoardList";
 	}
 	
 	
@@ -320,8 +326,9 @@ public class AnonymousBoardController {
 	    } catch (UnknownHostException e) {
 	        result = "";
 	    }
-	    result = SecurityController.encrypt(result);
-	   return result; 
+	    result = encoder.encode(result);
+	    
+	    return result; 
 	}//*********************************************************************
 
 
