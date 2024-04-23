@@ -27,7 +27,6 @@
             <select class="form-select" onchange="location = this.value;">
                 <option selected>회원 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRprtedMem">신고회원 관리</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemGrade">회원등급 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRule">등급 관리 규칙 설정</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRestricted">이용 제한 회원 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageDeletedMember">삭제된 회원 데이터 관리</option>
@@ -38,9 +37,6 @@
             <select class="form-select" onchange="location = this.value;">
                 <option selected>공지 및 기타 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageAnnounce">공지글</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageEvent">이벤트</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageAPI">API</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMonitoring">모니터링</option>
             </select>
         </div>
     </div>

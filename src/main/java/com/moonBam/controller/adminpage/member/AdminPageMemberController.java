@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.moonBam.dto.AdminDeletedMemberDTO;
 import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.AdminRestrictedMemberDTO;
 import com.moonBam.service.adminpage.AdminMemberService;
@@ -60,10 +61,20 @@ public class AdminPageMemberController {
 	
 	//신고회원 강퇴기능
 	@RequestMapping("/AdminPage/KickUser")
-	public ModelAndView KickUser(@RequestParam String[] userArr, ModelAndView mav) {
+	public ModelAndView kickUser(@RequestParam String[] userArr, ModelAndView mav) {
 		System.out.println("in adminpage.post.DeletePost");
 		List<String> deletelist = Arrays.asList(userArr);
-		int n = rservice.delReportedPost(deletelist);
+		
+		System.out.println("강퇴 대상자 명단");
+		for(String target : deletelist) {
+			System.out.println(target);
+		}
+		System.out.println("==========");
+		
+		System.out.println("서비스레이어에 강퇴 대상자 명단 전달");
+		int n = mservice.kickUser(deletelist);
+		
+		
 		System.out.println(n+"개의 사용자 정지");
 		
 		List<AdminReportDTO> list = rservice.SearchReport(null);
@@ -85,7 +96,6 @@ public class AdminPageMemberController {
 		map.put("criteria", criteria);
 		System.out.println(map);
 
-//		System.out.println("간다");
 		List<AdminRestrictedMemberDTO> list = mservice.getRestrictedMemberList();
 		System.out.println(list);
 		mav.addObject("list", list);
@@ -97,12 +107,25 @@ public class AdminPageMemberController {
 	
 	
 	
+	
 	//삭제된 회원 데이터 조회
 	@GetMapping("/AdminPage/toAdminPageDeletedMember")
-	public String toAdminPageMonitoring() {
-		return "/AdminPage/AdminPageDeletedMember";
+	public ModelAndView toAdminPageMonitoring(String SearchValue, String criteria, ModelAndView mav) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("SearchValue", SearchValue);
+		map.put("criteria", criteria);
+		
+		List<AdminDeletedMemberDTO> list = mservice.getDeletedMemberList(map);
+		
+		mav.addObject(list);
+		mav.setViewName("/AdminPage/AdminPageDeletedMember");
+		return mav;
 	}
 	
+	
 	//삭제된 회원 데이터 완전삭제
+	
+	
 	
 }

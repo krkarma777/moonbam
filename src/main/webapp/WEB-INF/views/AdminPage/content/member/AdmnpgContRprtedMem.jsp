@@ -57,7 +57,6 @@
 			<th>도배</th>
 			<th>규정위반</th>
 			<th>기타</th>
-			<th>조치</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -65,17 +64,14 @@
 		<c:if test="${list != null}">
 			<c:forEach var="dto" items="${list}">
 				<tr>
-					<td><input type="checkbox"></td>
+					<td><input type="checkbox" class="chkBox" data-xxx="${dto.userId}"></td>
 					<td>${dto.userId}</td>
 					<td>${dto.sexual}</td>
 					<td>${dto.lang}</td>
 					<td>${dto.abusing}</td>
 					<td>${dto.ruleviolation}</td>
 					<td>${dto.etc}</td>
-					<td>
-						<button class="btn btn-sm btn-pink">정지</button>
-						<button class="btn btn-sm btn-pink">강퇴</button>
-					</td>
+					
 				</tr>
 			</c:forEach>
 		</c:if>
@@ -89,8 +85,78 @@
 		</tbody>
 	</table>
 	<div>
-		<button type="button" class="btn btn-pink">강등</button>
-		<button type="button" class="btn btn-pink">정지</button>
-		<button type="button" class="btn btn-pink">강퇴</button>
+		<button type="button" class="btn btn-pink" id="suspendChecked">정지</button>
+		<button type="button" class="btn btn-pink" id="delChecked">강퇴</button>
 	</div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type = "text/javascript">
+
+	$(document).ready(function(){
+		
+		$("#delChecked").on("click", delChecked);
+		$("suspendChecked").on("click", suspendChecked);
+		
+		function delChecked(){
+			
+			//디버깅용 확인
+			console.log("chkArr");
+			//삭제할 글id저장용 배열
+			let dupUserArr = [];
+			//체크된 글 id를 배열에 저장
+			$(".chkBox:checked").each(function(i,e){
+				dupUserArr.push($(this).attr("data-xxx"));
+			});//each
+			//확인
+			console.log("dupUserArr: "+dupUserArr);
+			
+			//중복제거
+			var userArr = [];
+			for(userid of dupUserArr){
+				if(!userArr.includes(userid)){
+					userArr.push(userid);
+				}	
+			}
+			
+			//확인
+			console.log("userArr: " + userArr);
+	
+			//전송
+			var target = "<%=request.getContextPath()%>" + "/AdminPage/kickUser?userArr="+postArr;
+			console.log(target);
+			location.href = "<%=request.getContextPath()%>" + "/AdminPage/kickUser?userArr="+postArr;
+		}//delChecked
+		
+		function suspendChecked(){
+			
+			//디버깅용 확인
+			console.log("chkArr");
+			//삭제할 글id저장용 배열
+			let dupUserArr = [];
+			//체크된 글 id를 배열에 저장
+			$(".chkBox:checked").each(function(i,e){
+				dupUserArr.push($(this).attr("data-xxx"));
+			});//each
+			//확인
+			console.log("dupPostArr: "+dupUserArr);
+			
+			//중복제거
+			var userArr = [];
+			for(userid of dupUserArr){
+				if(!userArr.includes(userid)){
+					userArr.push(userid);
+				}	
+			}
+			
+			//확인
+			console.log("userArr: " + userArr);
+	
+			//전송
+			var target = "<%=request.getContextPath()%>" + "/AdminPage/suspendUser?userArr="+userArr;
+			console.log(target);
+			location.href = "<%=request.getContextPath()%>" + "/AdminPage/suspendUser?userArr="+userArr;
+		}//delChecked
+		
+	});//document
+</script>

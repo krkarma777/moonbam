@@ -3,9 +3,37 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AdminMemberMapper">
+
+	<select id = "getRestrictedMemberList" resultType = "AdminRestrictedMemberDTO">
+		select * from ADMINRESTRICTEDMEMBER
+	</select>
  
      <select id="SearchMember" resultType="AdminMemberDTO" parameterType="string">
-         select userid, username, nickname, usertype, usersigndate from memberDB where userid like #{SearchValue}
+         select * from memberDB where userid like #{SearchValue}
     </select>
+	
+	<!-- 신고처리된 대상자 강퇴 처리시 삭제된 회원 데이터에 저장 -->
+	<insert id="saveInDeletedlist" parameterType = "String">
+		insert into admindeletedmemer values (
+		#{userId}, #{userPw}, #{nickname}, #{secretCode},
+		#{googleConnected}, #{naverConnected}, #{kakaoConnected},
+		#{userSignDate}, #{role}, #{enabled}, '강퇴], 'today+30'
+		)
+	</insert>
+	
+	<!-- 삭제된 회원 테이블에 저장 후 기존 회원 테이블에서 삭제 -->
+	<delete id = "deleteFromMemberDB">
+		delete from memberdb where userid = #{userId}
+	</delete>
+	<!-- 복원? -->
+	
+	<!-- 신고처리된 대상자 정지 처리시 비활성화 -->
+	
+	<!-- 신고처리된 대상자 이용제한 회원 테이블에 저장 -->
+	
+	<select id = "getDeletedMemberList" resultType = "AdminDeletedMemberDTO">
+		select * from admindeletedmember
+	</select>
+	
 	
 </mapper>
