@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -63,7 +66,13 @@
                             </div>
                             <button type="submit" class="btn btn-primary">프로필 업데이트</button>
                         </form>
-                        <button onclick="window.location.href = 'withdraw';">Withdraw</button>
+                        
+                      <form action=<c:url value='/my-page/updatePwd'/> method="Post" >
+                       <input type="submit" value="비밀번호 변경">
+                       </form>
+                       <form action=<c:url value='/my-page/withdraw'/> method="Post" >
+                       <input type="submit" value="회원 탈퇴">
+                       </form>
                     </div>
                 </div>
             </div>

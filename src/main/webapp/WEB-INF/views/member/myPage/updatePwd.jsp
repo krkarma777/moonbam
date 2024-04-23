@@ -5,29 +5,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>회원 탈퇴</title>
-    
+	<meta charset="UTF-8">
+	<title>문화인들의 밤</title>
+
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-    <h1>회원 탈퇴</h1>
-    <form action="<c:url value='/my-page/confirm'/>"    method="post" modelAttribute="withdrawForm">
-    <input type="hidden" name="userId" value="${loginUser.userId }">
-    
+    <h1>비밀번호 변경</h1>
+    <form action="<c:url value='/my-page/UpdatePassword'/>" method="get" >
+        <input type="hidden" name="userId" value="${loginUser.userId }">
+        <!-- 기존 비밀번호 확인 ajax 필요-->
         <label for="password">비밀번호:</label>
-        <input type="password" id="password" name="password" class="pw" required>
+        <input type="password" id="password" name="password" required>
+        <span></span>
         <br>
-        <label for="confirmPassword">비밀번호 확인:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" class="pw" required>
-          <span id="pwMismatch" style="color: red;"></span> 
-        <br>
+        
+        <!-- 비밀번호 입력칸(6글자 이상)(반드시 입력되어야 함) -->
+        <label for="userPw">비밀번호 (최소 6글자)</label> 
+        <input type="password" id="userPw" name="userPw" class="pw" minlength="6" required maxlength="30"> 
+
+        <!-- 비밀번호 재입력칸(6글자 이상)(반드시 입력되어야 함) -->
+        <label for="userPwConfirm">비밀번호 재입력</label> 
+        <input type="password" id="userPwConfirm" name="userPwConfirm" class="pw" required maxlength="30">
+        <!-- 비밀번호와 비밀번호 재입력이 상이할 경우, 문구 출력 -->
+        <span id="pwMismatch" style="color: red;"></span> 
         
         <input type="submit" id="submitbutton" value="탈퇴">
     </form>
-    
-      <script  type="text/javascript">
+    <script  type="text/javascript">
         $(function(){
             $(".pw").on("input", function(){
                 $("#pwMismatch").text("");
@@ -37,7 +43,7 @@
         	<!--  틀린 기존 비밀번호 입력하면 submit안되게 하는 ajax-->         
             $("#submitbutton").on("click", function(event){
                 // 비밀번호와 비밀번호 재입력이 일치하지 않는 경우
-                if ($("#password").val() !== $("#confirmPassword").val()) {
+                if ($("#userPw").val() !== $("#userPwConfirm").val()) {
                     errorMessage = "입력한 비밀번호가 일치하지 않습니다.";
                     $("#pwMismatch").text(errorMessage);
                     $("#userPw").focus();

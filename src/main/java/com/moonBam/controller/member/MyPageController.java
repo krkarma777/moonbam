@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
@@ -53,9 +54,12 @@ public class MyPageController {
 
     @Autowired
     RegisterService rserv;
+    
+    @Autowired
+    LoginDAO ldao;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+     PasswordEncoder encoder;
 
     @GetMapping("/scrap")
     public String scrap(Model model, Principal principal) {
@@ -293,40 +297,116 @@ public class MyPageController {
     
     //회원탈퇴
     
-    @RequestMapping("/withdraw")
+    @PostMapping("/withdraw")
     public String withdrawPage(Principal principal, HttpSession session, Model model) {
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-        if (loginUser != null) {
-            model.addAttribute("loginUser", loginUser);
-            return "member/myPage/withdraw";
-        } else {
-            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+        
+        //비로그인 상태일 때 진행
+        if(loginUser == null) {
+        	session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
             return "redirect:/Login";
         }
+        
+        if(loginUser.getKakaoConnected()==1 || loginUser.getGoogleConnected()==1 || loginUser.getNaverConnected()==1) {
+            return "member/myPage/withdrawSocial";
+        }
+            model.addAttribute("loginUser", loginUser);
+            return "member/myPage/withdraw";
+        
     }
 
     @PostMapping("/confirm")
     public String confirmWithdraw(@RequestParam("password") String password,
                                   @RequestParam("confirmPassword") String confirmPassword,
-                                  Principal principal,
                                   HttpSession session,
-                                  Model model) {
-        // 로그인한 사용자 정보를 가져옴
-        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-        if (loginUser != null) {
-            if (password.equals(confirmPassword)) {
-                mserv.deleteUser(loginUser.getUserId(), password);
-                // 회원 탈퇴 후 세션에서 로그인 사용자 정보 삭제
-                session.removeAttribute("loginUser");
-                return "redirect:/logout"; // 로그아웃 처리
-            } else {
-                model.addAttribute("errorMessage", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-                return "redirect:/withdraw";
-            }
-        } else {
-            session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
+                                  Model mode, @RequestParam("userId") String userId) {
+        //userPw != confirmPassword 일 경우 에러페이지로 넘어감
+    	if (!password.equals(confirmPassword)) {
+        	
+        	return "member/Find_Info/emailErrorPage";
         }
+        //아이디를 쓰는 DTO
+        MemberDTO dto = ldao.userDetail(userId);
+        
+    	//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)
+		boolean canLogin = false;
+		try {
+			canLogin = encoder.matches(password, dto.getUserPw());
+		} catch (Exception e) {
+			return "member/Find_Info/emailErrorPage";
+		}
+		//delete 후 deletememberDB로 insert
+	//	String result = mserv.deleteUser(userId);
+ 
+        serv.IDDelete(userId);
+        
+        return "redirect:/";
+
     }
 
+//끝    
+  //비밀번호 변경
+    
+    @PostMapping("/updatePwd")
+    public String updatePwd(Principal principal, HttpSession session, Model model) {
+       
+    	MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        
+        //비로그인 상태일 때 진행
+        if(loginUser == null) {
+        	session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+        
+        if(loginUser.getKakaoConnected()==1 || loginUser.getGoogleConnected()==1 || loginUser.getNaverConnected()==1) {
+        	return "member/Find_Info/emailErrorPage";
+        }
+            model.addAttribute("loginUser", loginUser);
+            return "member/myPage/updatePwd";       
+    }
+    
+    //비밀번호 업데이트
+    @GetMapping("/UpdatePassword")
+    public String UpdatePassword(String userId, String userPw,
+    		@RequestParam("password") String password,
+         @RequestParam("userPwConfirm") String userPwConfirm) {
+
+    	
+    	System.out.println("userId: "+userId);
+    	System.out.println("password: "+password);
+    	System.out.println("userPw: "+userPw);
+    	System.out.println("userPwConfirm: "+userPwConfirm);
+    	
+    	//새로운 비밀번호, 재확인 일치하는지 확인
+    	if (!userPw.equals(userPwConfirm)) {
+    		System.out.println("새로운 비밀번호, 재확인 일치하는지 확인");
+        	return "member/Find_Info/emailErrorPage";
+        }
+    	// 기존 비밀번호 일치하는지 확인
+    	  MemberDTO dto = ldao.userDetail(userId);
+    
+  		boolean canLogin = false;
+  		try {
+  			System.out.println("기존 비밀번호 일치하는지 확인");
+  			canLogin = encoder.matches(password, dto.getUserPw());
+  		} catch (Exception e) {
+  			return "member/Find_Info/emailErrorPage";
+  		}
+
+        //비밀번호 암호화
+        String realPassword = encoder.encode(userPw);
+
+        //비밀번호 변경을 위한 Map 생성
+        Map<String, String> map = new HashMap<>();
+            map.put("userId", userId);
+            map.put("userPw", realPassword);
+
+        //비밀번호 업데이트
+        serv.updatePassword(map);
+
+        //비밀번호 변경 후 jsp 이동
+        return "redirect:/my-page/info";
+    }
+
+    
 }
