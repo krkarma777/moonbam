@@ -154,7 +154,10 @@ if (rateAmount > 0) {
 						//console.log("별점: " + jsonData.score)
 						if(jsonData.score!=null){
 							$("#rating"+jsonData.score).attr("checked", "checked");
-						}	
+						}
+						$("#reviewBtn").text("수정하기")
+					}else{
+						$("#reviewBtn").text("리뷰쓰기")
 					}
 				},
 				error: function(xhr, status, e){
@@ -296,7 +299,7 @@ if (rateAmount > 0) {
 						updateMyReview(jsonData);         //리뷰 표시 업데이트 함수
 						$('#exampleModal').modal('hide');
 						$("#cont_myreview_container").show();
-						
+						$("#reviewBtn").text("수정하기")
 					},
 					error: function(xhr, status, e){
 						console.log("실패: " + xhr.status);
@@ -310,7 +313,6 @@ if (rateAmount > 0) {
 	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 	
-	showCredits();
 </script>
 <sec:authorize access="isAuthenticared()">
 	<script>
@@ -475,14 +477,12 @@ if (rateAmount > 0) {
 		<div style="display: flex; widht: 100%; height: 375px;">
 			<!-- 영화 포스터 -->
 			<div>
-				<img src="http://image.tmdb.org/t/p/w342${content.getContImg() }"
-					height="375px" width="250px">
+				<img src="http://image.tmdb.org/t/p/w342${content.getContImg() }" height="375px" width="250px">
 			</div>
 
 			<div style="width: 950px;">
 				<!-- 영화 제목, 개봉일 -->
-				<div
-					style="font-size: 35px; background-color: #ffb2c4; color: white; height: 52px; width: 949px; position: relative;">
+				<div style="font-size: 35px; background-color: #ffb2c4; color: white; height: 52px; width: 949px; position: relative;">
 					<b><span style="margin-left: 4px;"> <%
  if (content.getContTitle().length() > 40) {
  %>
@@ -492,8 +492,8 @@ if (rateAmount > 0) {
 							${content.getContTitle()} <%
  }
  %>
-					</span></b> <span
-						style="font-size: 20px; position: absolute; bottom: 0; right: 5px;">개봉일:
+					</span></b> 
+					<span style="font-size: 20px; position: absolute; bottom: 0; right: 5px;">개봉일:
 						<%=releaseDate%></span>
 				</div>
 
@@ -528,8 +528,8 @@ if (rateAmount > 0) {
 										<div class="card-header" id="myreview_user">Quote</div>
 										<div class="card-body" style="height: 280px;">
 											<blockquote class="blockquote mb-0">
-												<p id="myreview_text">A well-known quote, contained in a
-													blockquote element.</p>
+												<div id="myreview_text">A well-known quote, contained in a
+													blockquote element.</div>
 												<%-- <footer class="blockquote-footer" id="myreview_footer">Someone famous in <cite title="Source Title"><%=nickname %></cite></footer> --%>
 											</blockquote>
 										</div>
@@ -553,10 +553,10 @@ if (rateAmount > 0) {
 						</div>
 						<div style="position: absolute; bottom: 0; right: 1px;">
 							<button class="btn"
-								style="background-color: #ff416c; color: white;" id="allReview">+</button>
-							<button class="btn"
+								style="background-color: #ff416c; color: white;" id="allReview">리뷰++</button>
+							<button class="btn" id="reviewBtn"
 								style="background-color: #ff416c; color: white;"
-								data-bs-toggle="modal" data-bs-target="#exampleModal">리뷰쓰기</button>
+								data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
 						</div>
 					</div>
 				</div>
@@ -696,11 +696,11 @@ if (rateAmount > 0) {
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">Close</button>
+						data-bs-dismiss="modal">취소</button>
 					<!-- <button type="button" class="btn btn-primary" id="writeReview">Save changes</button> -->
-					<button type="button" class="btn btn-primary" id="writeReview"
+					<button type="button" class="btn" id="writeReview" style="background-color: #ff416c; color:white;"
 						data-bs-toggle="popover" data-bs-title="알림"
-						data-bs-content="로그인이 필요한 작업입니다">Save changes</button>
+						data-bs-content="로그인이 필요한 작업입니다">완료</button>
 				</div>
 			</div>
 		</div>
