@@ -13,7 +13,8 @@
 <%
 //1. 국내영화/해외영화 구분해서 가져와야함.(이건 api 바꿔야하긴 함)
 //2. 더보기 태그 국내 영화 해외영화 바꿔야함(1번이 되면 가능)
-List<PostPageDTO> movieList = (List<PostPageDTO>) request.getAttribute("movieList");
+List<PostPageDTO> movieList = (List<PostPageDTO>)request.getAttribute("movieList");
+System.out.println(movieList.size());
 List<PostPageDTO> movieMeetList = (List<PostPageDTO>) request.getAttribute("movieMeetList");
 List<PostPageDTO> movieInfoList = (List<PostPageDTO>) request.getAttribute("movieInfoList");
 ContentDataFormating cdf = new ContentDataFormating();
@@ -45,7 +46,10 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	<div style="background-color: #ffb2c4; height: 30px; width:1199px; font-size: 19px; ">
 		<b>
 		<span style="float: left; color:white">
-			<a href="" style="color:white;">신작 영화 순위</a>
+			<a href="" style="color:white;">박스 오피스</a>
+		</span>
+		<span style="float: right; color:white">
+			<!-- <a href="movieSearch" style="color:white;" >더보기</a> -->
 		</span>
 		</b>
 	</div>
@@ -54,7 +58,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 			<div class="inner" id="lastClone">
 				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
 				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
@@ -65,7 +69,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 			<div class="inner">
 				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
 				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
@@ -77,7 +81,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 			<div class="inner">
 				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
 				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
@@ -91,7 +95,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 				for (int i = 1; i <= movieTopList.size() - 6; i++) {
 				%>
 				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
@@ -201,7 +205,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 					<div style="height: 30px; width: 600px; padding:0px;"><b style="font-size: 16px" id="i">
 						<a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=post.getPostBoard()%>" style="color:black;">
 							<%=post.getPostTitle()%>[<%=post.getCommentCount()%>]</a> 
-						<span style="float: right;"><%=displayDate%>|<%=post.getViewNum()%> | <%=post.getLikeNum()%>&nbsp</span>
+						<span style="float: right;"><%=displayDate%> | <%=post.getViewNum()%> | <%=post.getLikeNum()%>&nbsp&nbsp</span>
 						</b>
 					</div>
 					<%count++;} %>
@@ -209,14 +213,21 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 					
 					<td>
 					<%
-					for (int i=8; i<movieList.size(); i++) {
+					for (int i=7; i<movieList.size(); i++) {
 						PostPageDTO post = movieList.get(i);
 						String displayDate = cdf.minuteHourDay(post);
 					%>
 					<div style="height: 30px; width: 600px; padding:0px;"><b style="font-size: 16px" id="i">
 						<a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=post.getPostBoard()%>" style="color:black;">
-							<%=post.getPostTitle()%>[<%=post.getCommentCount()%>]</a> 
-						<span style="float: right;"><%=displayDate%>|<%=post.getViewNum()%> | <%=post.getLikeNum()%></span>
+							<span>
+							<%if(post.getPostTitle().length()>22){ %>
+								<%=post.getPostTitle().substring(0, 21) %>...
+							<%}else{ %>
+								<%=post.getPostTitle() %>
+							<%} %>	
+							[<%=post.getCommentCount()%>]
+							</span></a> 
+						<span style="float: right;"><%=displayDate%> | <%=post.getViewNum()%> | <%=post.getLikeNum()%></span>
 						</b>
 					</div>
 					<%count++;} %>

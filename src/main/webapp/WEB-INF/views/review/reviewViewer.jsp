@@ -3,6 +3,9 @@
 <%@page import="com.moonBam.dto.ReviewDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,6 +77,8 @@
 	#postText{
 		padding-bottom: 50px;
 		overflow: hidden;
+	    overflow:hidden;
+	    word-wrap:break-word;
 		min-height: 300px;
 	}
 	
@@ -109,6 +114,50 @@
 		margin-top: 20px;
 		padding-left: 10px;
 	}
+	
+	
+	/* 댓글 섹션 스타일 조정 */
+	.comment-section .card {
+	    border: 1px solid #ced4da; /* 카드 테두리 */
+	}
+	
+	.comment-section .card-header {
+	    background-color: #f8f9fa; /* 댓글 카드 헤더 배경색 */
+	    color: #495057; /* 댓글 카드 헤더 텍스트 색상 */
+	}
+	
+	/* 댓글 리스트 스타일 */
+	.comment-list {
+	    list-style: none;
+	    padding: 0;
+	    margin-top: 10px;
+	}
+	
+	.comment-list .comment-item {
+	    padding: 10px 0;
+	    border-bottom: 1px solid #e9ecef; /* 구분선 */
+	}
+	
+	.comment-item:last-child {
+	    border-bottom: none; /* 마지막 아이템의 하단 경계선 제거 */
+	}
+	
+	.comment-content {
+	    margin-bottom: 0; /* 댓글 내용의 하단 여백 제거 */
+	}
+	
+	.comment-meta {
+	    font-size: 0.9em;
+	    color: #6c757d;
+	}
+	
+	.comment-actions {
+	    text-align: right;
+	}
+	
+	.comment-actions button {
+	    font-size: 0.8em;
+	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
@@ -124,7 +173,7 @@
 		String likeNum = review.getLikeNum();
 		Long contId = review.getContId();
 		
-		/* String likeUserId = (String)request.getAttribute("likeUserId"); */
+		/* String loginUserId = (String)request.getAttribute("loginUserId"); */
 		
 		ContentDTO content = (ContentDTO)request.getAttribute("content");
 		String contTitle = content.getContTitle();
@@ -141,12 +190,33 @@
 	}
 	
 	$(document).ready(function(){
+		
+		$("#review-delete").on("click", deleteReview);
 		$("#like_wrapper").on("click", likeToggle);
 		$("#share_twitter").on("click", shareTwitter);
 		$("#share_facebook").on("click", shareFacebook);
 		$("#share_copy").on("click", shareCopy); // 링크복사
 	});
 	
+	function deleteReview(){
+		$.ajax(
+			{
+				type: "delete",
+				url:"review",
+				data: {
+					"postId": "${review.postId}",
+				},
+				dataType: "text",
+				success: function(data, status, xhr){
+					location.href = "content-page?contId=${review.contId}";
+				},
+				error: function(xhr, status, e){
+					alert("로그인 정보가 없습니다.");
+				}
+			}//json	
+		);//ajax
+	}
+
 	//트위터 공유하기
 	function shareTwitter() {
 	    var sendText = "<%=contTitle%> - <%=userId%>님의 리뷰"; // 전달할 텍스트
@@ -207,30 +277,28 @@
 		
 		//로그인정보가 있을 때
 		//DB에 비동기 반영
-		<%-- <%if(likeUserId!=null){%> --%>
-		if("${likeUserId}"!=""){
-			$.ajax(
-				{
-					type: "post",
-					url:"like",
-					data: {
-						"userId": "<%=userId%>",
-						"postId": <%=postId%>,
-						"isLike": isLike
-					},
-					dataType: "text",
-					success: function(data, status, xhr){
-						if(isLike==0)
-							$("#likeNum").text($("#likeNum").text()-1);
-						else{
-							$("#likeNum").text($("#likeNum").text()-1+2);
-						}
-					},
-					error: function(xhr, status, e){
+		<%-- <%if(loginUserId!=null){%> --%>
+		$.ajax(
+			{
+				type: "post",
+				url:"like",
+				data: {
+					"userId": "<%=userId%>",
+					"postId": <%=postId%>,
+					"isLike": isLike
+				},
+				dataType: "text",
+				success: function(data, status, xhr){
+					if(isLike==0)
+						$("#likeNum").text($("#likeNum").text()-1);
+					else{
+						$("#likeNum").text($("#likeNum").text()-1+2);
 					}
-				}//json	
-			);//ajax
-		}
+				},
+				error: function(xhr, status, e){
+				}
+			}//json	
+		);//ajax
 	}
 </script>
 </head>
@@ -249,10 +317,11 @@
 				<div class="row">
 					<div class="col" id="reviewTitle">
 						<div>
-							<%=nickname %>님의 리뷰	 
+							<%=nickname %>님의 리뷰
 							<div id="postDate"><%=postDate %></div>
 						</div>
 						<div>
+							<!-- 좋아요 버튼 -->
 							<button id="like_wrapper">
 								<span class="like_btn" style="color:red">
 								<%if("1".equals(isLike)){%>♥ 
@@ -261,6 +330,7 @@
 								
 								<span id="likeNum"><%=(likeNum!=null)?(likeNum):("") %></span>
 							</button>
+							
 						</div>
 					</div>
 					<div class="col" id="contImg">
@@ -286,12 +356,21 @@
 			<!-- 버튼 그룹 -->
 			<div id="btns" class="row">
 				
-				<!-- 좋아요 버튼 -->
-				<div class="col" id="like_wrapper2">
+				
+				<div class="col">
+					<!-- 영화정보 버튼 -->
 					<a type="button" class="btn btn-outline-warning" href="content-page?contId=<%=contId%>">영화정보</a>
-					
-					
+					<!-- 글수정, 삭제 버튼 -->
+					<!-- 버튼 표시: 로그인된 상태, 로그인 정보와 리뷰 작성자 정보가 일치해야함 -->
+					<!-- 버튼 클릭시 : 서버에서 로그인정보 확인할 수 없을시 현재 페이지로 리다이렉트후 로그인 정보를 확인할 수 없습니다 경고문 출력 -->
+					<sec:authorize access="isAuthenticated()">
+						<c:if test="${loginUserId eq review.userId}">
+							<!-- <a type="button" class="btn btn-outline-warning" id="review-edit">수정</a> -->
+							<a type="button" class="btn btn-outline-warning" id="review-delete">삭제</a>
+						</c:if>
+					</sec:authorize>
 				</div>
+				
 				<!-- 더보기 버튼  -->
 				<div class="col" id="show_more_wrapper">
 					<!-- <button id="show_more">

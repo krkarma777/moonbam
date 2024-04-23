@@ -40,7 +40,9 @@ public class BoardViewController {
         String postCategoryId = paramMap.get("pc"); //get?pc=
         
         // 페이지당 게시글 수 설정
-        int perPage = 15;
+
+        int perPage = 17;
+
         int offset = (curPage - 1) * perPage;
         
         // 요청에 따른 매개변수 맵 설정
