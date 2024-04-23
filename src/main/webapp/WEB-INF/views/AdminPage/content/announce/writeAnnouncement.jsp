@@ -71,6 +71,16 @@
 				<td colspan="3"><textarea style="width: 100%" rows="10" name="annoText" maxlength="500"> </textarea></td>
 			</tr>
 			<tr>
+    <td>카테고리</td>
+    <td colspan="3"> <!-- select (option 전체, 영화, 소모임) -->
+        <select name="category">
+            <option value="all">전체</option>
+            <option value="movie">영화</option>
+            <option value="club">소모임</option>
+        </select>
+    </td>
+</tr>
+			<tr>
 				<td>시작일 - 종료일</td>
 				<td ><input type="text" id="datePicker" class="dateTimePicker" name="dateTimePicker" style="width: 100%" ></td>
 			</tr>

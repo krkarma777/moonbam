@@ -15,7 +15,8 @@ public class AnnouncementDTO {
 	private String startDate;
 	private String endDate;
 	private String popup = "no";
-
+	private String category;
+	
 	private String[] writeDateArr;
 	private String[] updateDateArr;
 	private String[] startDateArr;
@@ -37,7 +38,7 @@ public class AnnouncementDTO {
 	}
 
 	public AnnouncementDTO(int annoNum, String annoTitle, String annoText, String annoWriter, String writeDate,
-			String updateDate, String startDate, String endDate, String popup) {
+			String updateDate, String startDate, String endDate, String popup, String category) {
 		super();
 		System.out.println("AnnouncementDTO.AnnouncementDTO()");
 		this.annoNum = annoNum;
@@ -48,7 +49,8 @@ public class AnnouncementDTO {
 		this.updateDate = updateDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
-
+		this.category = category;
+		
 		TimeParsing tp = new TimeParsing();
 		this.writeDateArr = tp.db2Arr(this.writeDate);
 		this.updateDateArr = tp.db2Arr(this.updateDate);
@@ -65,7 +67,7 @@ public class AnnouncementDTO {
 
 	// insert constructor
 	public AnnouncementDTO(int annoNum, String annoTitle, String annoText, String annoWriter, String startDate,
-			String endDate, String popup) {
+			String endDate, String popup, String category) {
 		super();
 		this.annoNum = annoNum;
 		this.annoTitle = annoTitle;
@@ -73,7 +75,8 @@ public class AnnouncementDTO {
 		this.annoWriter = annoWriter;
 		this.startDate = startDate;
 		this.endDate = endDate;
-
+		this.category = category;
+		
 		if ("popup".equals(popup)) {
 			this.popup = popup;
 		} else {
@@ -197,10 +200,19 @@ public class AnnouncementDTO {
 	public void setEndDateArr(String[] endDateArr) {
 		this.endDateArr = endDateArr;
 	}
+	
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
 	public void setTimes() {
 		setTimes(this.writeDate, this.annoWriter, this.annoTitle, this.annoText);
 	}
+	
 	public void setTimes(String writeDate, String updaString, String staString, String endString) {
 		TimeParsing tp = new TimeParsing();
 		this.writeDateArr = tp.db2Arr(writeDate);

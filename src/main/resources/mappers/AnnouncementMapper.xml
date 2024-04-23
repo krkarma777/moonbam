@@ -3,8 +3,8 @@
 	
 	<!-- 추가 -->
 	<insert id="insertAnnouncement" parameterType="AnnouncementDTO">
-		insert into Announcement (annoNum, annoTitle, annoText, annoWriter, popup, writeDate, updateDate, startDate, endDate )
-		VALUES (annoNum_seq.NEXTVAL, #{annoTitle}, #{annoText}, #{annoWriter}, #{popup}, sysdate, sysdate, to_date(#{startDate}, 'yyyy/mm/dd hh24:mi:ss'), to_date(#{endDate}, 'yyyy/mm/dd hh24:mi:ss'))
+		insert into Announcement (annoNum, annoTitle, annoText, annoWriter, popup, writeDate, updateDate, startDate, endDate, category )
+		VALUES (annoNum_seq.NEXTVAL, #{annoTitle}, #{annoText}, #{annoWriter}, #{popup}, sysdate, sysdate, to_date(#{startDate}, 'yyyy/mm/dd hh24:mi:ss'), to_date(#{endDate}, 'yyyy/mm/dd hh24:mi:ss'), #{category})
 	</insert>
 	
 	<!-- 조회 list -->
@@ -16,13 +16,13 @@
 
  	<!-- 조회 one -->
 	<select id="oneAnnouncement" resultType="AnnouncementDTO" parameterType="String">
-		select annoNum, annoTitle, annoText, annoWriter, popup, writeDate, updateDate, startDate,
+		select annoNum, annoTitle, annoText, annoWriter, popup, category, writeDate, updateDate, startDate,
 		endDate from Announcement where annoNum = #{annoNum}
 	</select>
 	
 	<!-- 수정 -->
 	<update id="updateAnnouncement" parameterType="AnnouncementDTO">
-		update Announcement set annoTitle = #{annoTitle}, annoText =  #{annoText}, popup = #{popup}, updateDate = sysdate, startDate = to_date(#{startDate}, 'yyyy/mm/dd hh24:mi:ss'), endDate = to_date(#{endDate}, 'yyyy/mm/dd hh24:mi:ss') where annoNum = #{annoNum}
+		update Announcement set annoTitle = #{annoTitle}, annoText =  #{annoText}, popup = #{popup},category= #{category} ,updateDate = sysdate, startDate = to_date(#{startDate}, 'yyyy/mm/dd hh24:mi:ss'), endDate = to_date(#{endDate}, 'yyyy/mm/dd hh24:mi:ss') where annoNum = #{annoNum}
 	</update>
 	
 	<!-- 삭제 -->
@@ -33,7 +33,6 @@
 	<!-- 팝업  번호 리스트 -->
 	<select id="popupNumList" resultType="int">
 	select annoNum from Announcement where (startDate <![CDATA[<]]> sysdate and endDate <![CDATA[>]]> sysdate)  and popup = #{popupList} order by annoNum desc
-	<!-- select annoNum from Announcement where popup = #{popupList} order by annoNum desc -->
 	</select>
 	
 	<!-- 팝업 리스트 -->
@@ -44,10 +43,12 @@
 	
 	<!-- 검색 -->
 <!-- annoText의 컴럼 타입이 clob이라사 일반적으로 문자검색시 에러발생 -->
+<!-- 
 	<select id="searchAnnoList" parameterType="map" resultType="AnnouncementDTO">
 		SELECT annoNum, annoTitle, annoText, annoWriter, popup, writeDate, updateDate, startDate, endDate FROM announcement WHERE annoTitle = #{annoTitle} ORDER BY annoNum DESC;
 	</select>
-	
+ -->	
+ 
 	<!-- count column  -->
 	<select id="lastPage" resultType="int" parameterType="String">
 		SELECT CEIL(COUNT(*) / 10) FROM Announcement where annotitle like '%'||#{word}||'%' or annotext like '%'||#{word}||'%'

@@ -3,7 +3,6 @@ package com.moonBam.controller.adminpage.announcement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,15 +33,13 @@ public class AnnouncementController {
 	// / 추가함
 	@RequestMapping("AdminPage/InsertAnnouncementController")
 
-	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, @RequestParam(required = false) MultipartFile img) {
-
+	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, String category, @RequestParam(required = false) MultipartFile img) {
 		System.out.println("AnnouncementController.InsertAnnouncementController()");
-		
 	
 		String annoWriter = "관리자"; 
 		TimeParsing tp = new TimeParsing();
 		String[] dates = tp.tp2Arr(dateTimePicker); // 시작일 종료일 분리
-		AnnouncementDTO dto = new AnnouncementDTO(0, annoTitle, annoText, annoWriter, dates[0], dates[1], popup);
+		AnnouncementDTO dto = new AnnouncementDTO(0, annoTitle, annoText, annoWriter, dates[0], dates[1], popup, category);
 		int done = service.insertAnnouncement(dto);
 		return nextPage;
 	}
@@ -75,11 +72,11 @@ public class AnnouncementController {
 	}
 
 	@RequestMapping("AdminPage/UpdateAnnouncementController")
-	public String update(int annoNum, String annoTitle, String annoText, String annoWriter, String popup,
+	public String update(int annoNum, String annoTitle, String annoText, String annoWriter, String popup, String category,
 			@RequestParam String dateTimePicker) {
 		System.out.println("AnnouncementController.UpdateAnnouncementController()");
 		String[] dates = dateTimePicker.split(" - "); // 시작일 종료일 분리
-		AnnouncementDTO dto = new AnnouncementDTO(annoNum, annoTitle, annoText, annoWriter, dates[0], dates[0], popup);
+		AnnouncementDTO dto = new AnnouncementDTO(annoNum, annoTitle, annoText, annoWriter, dates[0], dates[0], popup, category);
 		service.updateAnnouncement(dto);
 		 return nextPage; 
 	}
