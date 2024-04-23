@@ -47,7 +47,6 @@
 		padding-top: 20px;
 		padding-bottom: 20px;
 	}
-	
 	#postText{
 		border: none;
 	   /*  overflow: scroll; */
@@ -86,7 +85,6 @@
 		text-decoration: none;
 		color: white;
 	}
-
 	#review_col{
 		margin: 10px;
 		background-color: #f8f8f8;
@@ -123,7 +121,6 @@
 	#review_score{
 		font-size: 17px;
 	}
-	
 	.like_btn{
 		-webkit-user-select:none;
 		-moz-user-select:none;

@@ -122,7 +122,6 @@ public class ShowContentController {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("contId", contId);
 		map.put("likeUserId", likeUserId);
-
 		List<ReviewDTO> reviewList = service.selectReviews(map);
 		model.addAttribute("reviewList", reviewList);
 
@@ -136,6 +135,10 @@ public class ShowContentController {
 			}
 		}
 		model.addAttribute("creditList", creditList);
+		
+		// 별점 리스트 가져와서 전달 (평균별점 계산용)
+		List<RateDTO> rateList = service.selectRates(contId);
+		request.setAttribute("rateList", rateList);
 		
 		return "content/showContent";
 	}
