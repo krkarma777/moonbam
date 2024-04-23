@@ -45,7 +45,10 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	<div style="background-color: #ffb2c4; height: 30px; width:1199px; font-size: 19px; ">
 		<b>
 		<span style="float: left; color:white">
-			<a href="" style="color:white;">신작 영화 순위</a>
+			<a href="" style="color:white;">박스 오피스</a>
+		</span>
+		<span style="float: right; color:white">
+			<!-- <a href="movieSearch" style="color:white;" >더보기</a> -->
 		</span>
 		</b>
 	</div>
@@ -201,7 +204,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 					<div style="height: 30px; width: 600px; padding:0px;"><b style="font-size: 16px" id="i">
 						<a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=post.getPostBoard()%>" style="color:black;">
 							<%=post.getPostTitle()%>[<%=post.getCommentCount()%>]</a> 
-						<span style="float: right;"><%=displayDate%>|<%=post.getViewNum()%> | <%=post.getLikeNum()%>&nbsp</span>
+						<span style="float: right;"><%=displayDate%> | <%=post.getViewNum()%> | <%=post.getLikeNum()%>&nbsp&nbsp</span>
 						</b>
 					</div>
 					<%count++;} %>
@@ -209,14 +212,21 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 					
 					<td>
 					<%
-					for (int i=8; i<movieList.size(); i++) {
+					for (int i=7; i<movieList.size(); i++) {
 						PostPageDTO post = movieList.get(i);
 						String displayDate = cdf.minuteHourDay(post);
 					%>
 					<div style="height: 30px; width: 600px; padding:0px;"><b style="font-size: 16px" id="i">
 						<a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=post.getPostBoard()%>" style="color:black;">
-							<%=post.getPostTitle()%>[<%=post.getCommentCount()%>]</a> 
-						<span style="float: right;"><%=displayDate%>|<%=post.getViewNum()%> | <%=post.getLikeNum()%></span>
+							<span>
+							<%if(post.getPostTitle().length()>22){ %>
+								<%=post.getPostTitle().substring(0, 21) %>...
+							<%}else{ %>
+								<%=post.getPostTitle() %>
+							<%} %>	
+							[<%=post.getCommentCount()%>]
+							</span></a> 
+						<span style="float: right;"><%=displayDate%> | <%=post.getViewNum()%> | <%=post.getLikeNum()%></span>
 						</b>
 					</div>
 					<%count++;} %>

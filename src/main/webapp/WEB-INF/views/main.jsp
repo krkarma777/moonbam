@@ -73,12 +73,13 @@ var list = <%= request.getAttribute("list") %>;
 				<a href="/acorn/?cg=movie"><img class="rounded-2"
 					src="resources/images/camera-reels.svg" width="250px" height="250px"></a>
 			</div>
+			<div style="width: 20px;"></div>
 			<!-- <a>누르면 MoveToContentsHomeServlet로 이동 -->
-			<div class="align-self-center px-5"
+			<!-- <div class="align-self-center px-5"
 				style="background-color: transparent">
 				<a href="/acorn/?dg=tv"><img class="rounded-2"
 					src="resources/images/tv.png" width="250px" height="250px"></a>
-			</div>
+			</div> -->
 			<div class="align-self-center" style="background-color: transparent">
 				<a href="/acorn/?cg=community"><img class="rounded-2"
 					src="resources/images/community.svg" width="250px" height="250px"></a>

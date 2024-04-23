@@ -18,9 +18,11 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.moonBam.dto.ContentDTO;
+
 @Repository
 public class KoficAPI {
-	private String DailyBoxOfficeListURL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
+	//영화 진흥위원회 키
 	@Value("${kofic.key}")
 	private String key;
 	private final SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
@@ -40,6 +42,7 @@ public class KoficAPI {
 	}
 
 	public List<JSONObject> dailyBoxOfficeList() {
+		String URL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
 		// 하루전 날짜 가져오기
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
@@ -53,7 +56,7 @@ public class KoficAPI {
 		List<JSONObject> dailyList = new ArrayList<>();
 		
 		try {
-			URL requestURL = new URL(DailyBoxOfficeListURL + "?" + makeQueryString(map));
+			URL requestURL = new URL(URL + "?" + makeQueryString(map));
 			HttpURLConnection con = (HttpURLConnection) requestURL.openConnection();
 
 			// get으로 요청
@@ -70,7 +73,6 @@ public class KoficAPI {
 
 			// json 객체로 변환
 			JSONObject responseBody = new JSONObject(response.toString());
-			System.out.println("1" + responseBody);
 
 			// 데이터 추출
 			JSONObject boxOfficeResult = responseBody.getJSONObject("boxOfficeResult");
@@ -91,5 +93,54 @@ public class KoficAPI {
 		}
 		
 		return dailyList;
+	}
+	
+	public List<ContentDTO> saveMovie(int curPage){
+		List<ContentDTO> allMovieList = new ArrayList<>();
+		String searchListURL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
+		for (int i=0; i<curPage; i++) {
+			Map<String, String> map = new HashMap<>();
+			map.put("key", key);
+			map.put("curPage", Integer.toString(curPage));
+			map.put("itemPerPage", "2");
+			
+			try {
+				URL requestURL = new URL(searchListURL+"?"+makeQueryString(map));
+				HttpURLConnection con = (HttpURLConnection) requestURL.openConnection();
+				
+				con.setRequestMethod("GET");
+				con.setDoInput(true);
+				
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+				String readline = null;
+				StringBuffer response = new StringBuffer();
+				while ((readline = br.readLine()) != null) {
+					response.append(readline);
+				}
+				
+				JSONObject responseBody = new JSONObject(response.toString());
+				
+				JSONObject movieListResult = responseBody.getJSONObject("movieListResult");
+				System.out.println(movieListResult);
+				
+				JSONArray movieList = movieListResult.getJSONArray("movieList");
+				Iterator<Object> iter = movieList.iterator();
+				while (iter.hasNext()) {
+					JSONObject boxOffice = (JSONObject) iter.next();
+					ContentDTO dto = new ContentDTO();
+					dto.setContId((Long)boxOffice.get("movieCd"));
+					dto.setContTitle((String)boxOffice.get("movieNm"));
+					dto.setReleaseDate((String)boxOffice.get("openDt"));
+					dto.setNation((String)boxOffice.get("nation"));
+					
+//					allMovieList.add(boxOffice);
+				}
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return allMovieList;
 	}
 }
