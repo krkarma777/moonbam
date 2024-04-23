@@ -45,7 +45,7 @@ where comid = #{comId}
 </update>
 
 
-<update id="updateComment" parameterType="hashmap">
+<update id="updateMyComment" parameterType="hashmap">
 update commentDB 
 set comtext = #{comText}
 where comid = #{comId}

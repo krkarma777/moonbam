@@ -25,19 +25,8 @@
       margin-left: 10px;
       width: 340px;
     }
-    .item2 {
-      margin-top: 2px;
-      margin-bottom: 5px;
-      margin-left: 10px;
-      width: 100px;
-    }
-    #myTextarea {
-      border: 1px solid E5E5E5;
-      border-radius: 5px;
-      margin-left: 10px;
-      width: 450px;
-      height: 170px; 
-    }
+ 
+    
     span {
       font-size: 18px;
     }
@@ -54,12 +43,12 @@
 <input type="hidden" name="reporterId" value="${reporterId }"> 
 <!--  고객이 볼 필요는 없으니 hidden으로 form에 포함시켜 넘기기-->
 <!--  -->
-	<table border="1">
+	<table border="1" >
 	
 		<tr align="center" style=" background-color: #ffb2c4; color:black; margin-left: auto;">
 		
 			<td><b>회원 신고 양식</b><br>
-			<span style="color: gray; font-size: 13px">무분별한 신고행위는 사이트 이용에 제재를 받을 수 있습니다.</span></td>
+			<span style="color: white; font-size: 13px">무분별한 신고행위는 사이트 이용에 제재를 받을 수 있습니다.</span></td>
 			<br>
 		</tr>
 			<tr>
