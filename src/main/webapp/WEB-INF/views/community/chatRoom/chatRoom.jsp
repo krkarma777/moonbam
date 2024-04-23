@@ -61,37 +61,18 @@ session.removeAttribute("mesg");
 					</c:if></td>
 			</tr>
 		</thead>
-		<tbody id="message">
-			<form id="chatForm">
-				<tr>
-					<td colspan="3" style="float: left; width: 50%;">
-						<table>
-							<tr>
-								<td><span id="user" style="cursor: pointer;"
-									onclick="openMemberWindow()">user</span></td>
-								<td>yy/mm/dd/hh:mm</td>
-							</tr>
-							<tr>
-								<td><span id="msg" style="cursor: pointer;"
-									onclick="openReportWindow()">your msg</span></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" style="float: right; width: 50%;">
-						<table>
-							<tr>
-								<td>yy/mm/dd/hh:mm</td>
-							</tr>
-							<tr>
-								<td style="word-wrap: break-word">my msg</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</form>
+		<tbody id="message1">
+			<tr>
+				<td>
+					<form id="chatForm">
+						<!-- new tag start -->
+						<div class="chat_wrap">
+							<div id="chat" class="chat"></div>
+						</div>
+					</form>
+				</td>
+			</tr>
+			<!-- new tag end -->
 		</tbody>
 		<tfoot>
 			<tr>
@@ -158,18 +139,15 @@ session.removeAttribute("mesg");
 						});
 				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 					'type':'ENTER',
-					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.',
+					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
 					}));
 			});
 		}
 
 		/* 메시지 전송 */
 		function sendMessage() {
-
 			// 여기서 "" 처리
 			 if(document.getElementById('messageContent').value.trim() != '') {
-					
-	
 				var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
 				var userId = `${userIdInSession}`; // 사용자 닉네임
 				var message = escapeHtml($("#messageContent").val()); // 메세지 
@@ -188,45 +166,34 @@ session.removeAttribute("mesg");
 		// 이전 메세지 추가(위치는 맨위)
 		function showMessageOutput(body) {
 			let content = JSON.parse(body.chatContent);
-			let align;
-			let userTag;
-			let timeTag = `<span>` + content.serverTime + `</span>`;
-			let msgTag;
-			
-			// enter
-			if(content.type == 'ENTER'){
-				className = "enter";
-				align = "center";
-				msgTag = "<span>" + content.message + "</span>";
-				$("#message").append(
-				    "<tr><td class='" + className + "' colspan='3' style='float: " + align + "; width: 50%;'>" +
-				    "<table><tr><td>" + msgTag + "</td></tr></table></td></tr>"
-				);
-			}else{
-				// my message
-				if (`${userIdInSession}` == content.userId) {
-					align = "right";
-					className = "my";
-					userTag = `<span>나<span>`;
-					msgTag = `<span>` + content.message + `</span>`;
-				}
-				// other's message
-				else {
-					className="other";
-					align = "left";
-					userTag = `<tr><td class=`+ className+`><span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + `${nickNameInSession }` + `</span>`
-					msgTag = `<span id="msg" style="cursor: pointer;" onclick="openReportWindow()">` + content.message + `</span>`;
-				}
-				console.log("add")
-				$("#message").append(
-						 `<tr><td class=`+ className +` colspan='3' style='float: '`+ align + `'; width: 50%;'><table><tr><td>` 
-						 + userTag + `</td><td>` + timeTag + `</td></tr>`+ 
-						 `<tr><td>` + msgTag + `</td></tr></table></td></tr>`);
-			}
+			createMsgTag(content)
 		}
+		
+	function createMsgTag(content) {
+	    let chatLi;
+	    let nickName = `${nickNameInSession}`;
+		let time = content.serverTime;
+		let message = content.message;
+		
+	    let align = (content.userId == `${userIdInSession}`) ? "right" : "left";
+	    console.log(align)
+	    
+	    if (content.type == 'ENTER') {
+	        // 입장 메시지일 경우
+	        chatLi = "<li class='enter'><div class='message'><span>"+message+"</span></div></li>";
+	    } else {
+	    	console.log("talk")
+	        // 일반 메시지일 경우
+	         chatLi = "<li><div class='"+align+"'><span>"+nickName+"</span><span>"+time+"</span></div><div class='message'><span>"+message+"</span></div></li>"; 
+	    }
+	    $("#chat").append(chatLi);
+	 // 스크롤바 아래 고정
+	 // 하지만 동작 안함
+	    $("#chat").scrollTop($('div.chat').prop('scrollHeight'));
+	}
 
 		// 취야점 보안
-		// 스크립트 정지
+		// 스크립트 코드 정지
 		function escapeHtml(unsafe) {
     		return unsafe.replace(/&/g, "&amp;")
 	        .replace(/</g, "&lt;")
@@ -234,7 +201,6 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-		
 	</script>
 </body>
 </html>
