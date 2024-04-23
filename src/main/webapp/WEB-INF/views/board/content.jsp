@@ -149,7 +149,7 @@ $("document").ready(function() {
 			var postOneView = '<div class="container mt-4">' +
 					'<div class="post-section">' +
 					'<div class="post-title">' +
-					'<h3>' + response.pDTO.postTitle + '</h3>' +
+					'<h3>' + escapeHtml(response.pDTO.postTitle) + '</h3>' +
 					'</div>' +
 					'<div class="post-meta d-flex justify-content-between">' +
 					'<div>' +
@@ -190,6 +190,16 @@ $("document").ready(function() {
 			console.log("에러 발생 => ", error);
 		}
 	});//end ajax
+	function escapeHtml(text) {
+		var map = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#039;'
+		};
+		return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+	}
 
 });//end doc
 
@@ -338,7 +348,7 @@ $("document").ready(function() {
 /* 사이드바 위치 조절*/
 .sidebar {
     position: fixed; /* 고정된 위치에 표시 */
-    right: 100px; /* 오른쪽 여백 */
+    right: 200px; /* 오른쪽 여백 */
     top: 85%; /* 화면의 중간 높이 */
     transform: translateY(-80%); /* 세로 중앙 정렬 */
 }
@@ -433,8 +443,8 @@ body{
 			        지금 회원가입 혹은 로그인하고 공통의 취향을 나눠보세요.
 			      </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/Login';">로그인</button>
-			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/RegisterTerms';">회원가입</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/mainLogin';">로그인</button>
+			        <button type="button" class="btn btn-primary" onclick="location.href='/acorn/mainLogin';">회원가입</button>
 			      </div>
 			    </div>
 			  </div>
