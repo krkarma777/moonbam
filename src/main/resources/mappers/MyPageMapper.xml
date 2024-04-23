@@ -47,11 +47,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
       <!-- 내댓글 삭제 -->
-    <delete id="commDel" parameterType="int">
+    <delete id="deleteMyComment" parameterType="String">
     delete
     from commentDB
     where comId = #{comId}
    </delete>
+   
+   <update id="updateComment" parameterType="hashmap">
+update commentDB 
+set comtext = #{comText}
+where comid = #{comId}
+</update>
    <!-- 내리뷰 삭제 -->
    <delete id="postDel" parameterType="Long">
     delete

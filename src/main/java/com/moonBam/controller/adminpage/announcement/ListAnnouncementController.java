@@ -21,7 +21,7 @@ public class ListAnnouncementController {
 	//ListAnnouncementController to AdminPage/AdminPageAnnounce
 	
 	@GetMapping("AdminPage/AdminPageAnnounce")
-	public ModelAndView listAnnouncement(String currentPage, @RequestParam(required = false) String word) {
+	public ModelAndView listAnnouncement(@RequestParam(required = false) String currentPage, @RequestParam(required = false) String word) {
 		System.out.println("ListAnnouncementController.listAnnouncement()");
 		// currentPage, word null 값 처리 및 초기화, boot에서 change String to int
 		int currentNum = (currentPage != null) ? Integer.parseInt(currentPage) : 1;

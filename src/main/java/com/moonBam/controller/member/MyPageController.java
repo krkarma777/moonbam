@@ -1,21 +1,32 @@
 package com.moonBam.controller.member;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
+import com.moonBam.dto.board.ScrapDTO;
+import com.moonBam.service.ScrapService;
 import com.moonBam.service.member.LoginService;
 import com.moonBam.service.member.MemberLoginService;
 import com.moonBam.service.member.MemberService;
@@ -39,8 +50,35 @@ public class MyPageController {
     MemberLoginService memberLoginService;
 
     @Autowired
+    ScrapService scrapService;
+
+    @Autowired
     RegisterService rserv;
     
+    @Autowired
+    LoginDAO ldao;
+
+    @Autowired
+     PasswordEncoder encoder;
+
+    @GetMapping("/scrap")
+    public String scrap(Model model, Principal principal) {
+        MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+        List<ScrapDTO> scrapDTOS = scrapService.findAll(memberDTO.getUserId());
+        model.addAttribute("scrapDTOs", scrapDTOS);
+        return "member/myPage/scrapManagement";
+    }
+
+    @GetMapping("/scrap/{scrapId}")
+    public String scrapDelete(Principal principal, @PathVariable Long scrapId) {
+        MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
+        ScrapDTO scrapDTO = scrapService.findById(scrapId);
+        if (Objects.equals(memberDTO.getUserId(), scrapDTO.getUserId())){
+            scrapService.delete(scrapId);
+        }
+        return "redirect:/my-page/scrap";
+    }
+
     @GetMapping
     public String myPage(Model model, Principal principal) {
         return "member/myPage/MyPageTemplate";
@@ -105,7 +143,7 @@ public class MyPageController {
             // 업데이트된 정보를 DB에 저장
             mserv.updateMember(loginUser);
 
-            return "redirect:/info"; // 닉네임 업데이트가 성공했으므로 MyPage로 리다이렉트
+            return "redirect:/my-page/info"; // 닉네임 업데이트가 성공했으므로 MyPage로 리다이렉트
         }
     }
     
@@ -152,19 +190,223 @@ public class MyPageController {
         }
     }
 
-    @PostMapping("/postDel") // mapping을 postDel로 변경
-    public String postDel(@SessionAttribute("loginUser") MemberDTO loginUser,
+    @PostMapping("/postDel")
+    public String postDel(Principal principal,
                           @RequestParam("postId") Long postId,
                           RedirectAttributes redirectAttributes) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
         if (loginUser != null) {
-            System.out.println("postDel postId: " + postId);
+            // postId에 해당하는 게시물을 삭제합니다.
             int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
             System.out.println("postDel result: " + result);
 
-            return "redirect:/myPost";
+            return "redirect:/my-page/post";
         } else {
             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
             return "redirect:/Login";
         }
     }
+
+ //전체 글 삭제   
+    @PostMapping("/delAllPosts")
+    public String deleteAllPosts(Principal principal, @RequestBody List<Long> allPostIds, RedirectAttributes redirectAttributes) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        if (loginUser != null) {
+            for (Long postId : allPostIds) {
+                System.out.println("Deleting post with ID: " + postId);
+                // postId를 사용하여 해당 게시물 삭제 로직 수행
+                mserv.postDel(postId);
+            }
+            return "redirect:/my-page/post"; // 모든 게시물 삭제 후에 리다이렉트
+        } else {
+            redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+    }
+
+    
+//댓글 삭제
+
+    @RequestMapping(value="/commDel", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String commentUpdate(@RequestParam String comId, @RequestParam(required = false) String aboveComId) {
+        String message = "";
+
+        // If aboveComId is provided, delete the comment
+        if (aboveComId != null && !aboveComId.isEmpty()) {
+            // Delete the comment
+            int num = mserv.deleteMyComment(comId);
+            if (num == 1) {
+                message = "댓글이 삭제되었습니다.";
+            } else {
+                message = "댓글을 삭제할 수 없습니다.";
+            }
+        } else {
+            // If aboveComId is not provided, update the comment to indicate it's deleted
+            Map<String, String> map = new HashMap<>();
+            map.put("comId", comId);
+            map.put("comText", "삭제된 댓글입니다.");
+            int num = mserv.updateMyComment(map);
+            if (num == 1) {
+                message = "댓글이 삭제되었습니다.";
+            } else {
+                message = "댓글을 삭제할 수 없습니다.";
+            }
+        }
+
+        return message;
+    }    
+  
+  //전체 댓글 삭제   
+    @RequestMapping(value="/delAllComments", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String deleteAllComments(@RequestBody List<String> allCommentIds, @RequestParam(required = false) String aboveComId) {
+        StringBuilder message = new StringBuilder();
+
+        // 모든 댓글 ID에 대해 처리
+        for (String comId : allCommentIds) {
+            if (comId != null && !comId.isEmpty()) {
+                // 위의 댓글 ID에 따라 처리 분기
+                if (aboveComId == null) {
+                    // aboveComId 가 null이면 업데이트 수행
+                    Map<String, String> map = new HashMap<>();
+                    map.put("comId", comId);
+                    map.put("comText", "삭제된 댓글입니다.");
+                    int num = mserv.updateMyComment(map);
+                    if (num == 1) {
+                        message.append("댓글 ").append(comId).append(" 업데이트 성공\n");
+                    } else {
+                        message.append("댓글 ").append(comId).append(" 업데이트 실패\n");
+                    }
+                } else {
+                    // aboveComId 가 null이 아니면 바로 삭제
+                    int num = mserv.deleteMyComment(comId);
+                    if (num == 1) {
+                        message.append("댓글 ").append(comId).append(" 삭제 성공\n");
+                    } else {
+                        message.append("댓글 ").append(comId).append(" 삭제 실패\n");
+                    }
+                }
+            }
+        }
+
+        return message.toString();
+    }
+
+    
+    
+    //회원탈퇴
+    
+    @PostMapping("/withdraw")
+    public String withdrawPage(Principal principal, HttpSession session, Model model) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        
+        //비로그인 상태일 때 진행
+        if(loginUser == null) {
+        	session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+        
+        if(loginUser.getKakaoConnected()==1 || loginUser.getGoogleConnected()==1 || loginUser.getNaverConnected()==1) {
+            return "member/myPage/withdrawSocial";
+        }
+            model.addAttribute("loginUser", loginUser);
+            return "member/myPage/withdraw";
+        
+    }
+
+    @PostMapping("/confirm")
+    public String confirmWithdraw(@RequestParam("password") String password,
+                                  @RequestParam("confirmPassword") String confirmPassword,
+                                  HttpSession session,
+                                  Model mode, @RequestParam("userId") String userId) {
+        //userPw != confirmPassword 일 경우 에러페이지로 넘어감
+    	if (!password.equals(confirmPassword)) {
+        	
+        	return "member/Find_Info/emailErrorPage";
+        }
+        //아이디를 쓰는 DTO
+        MemberDTO dto = ldao.userDetail(userId);
+        
+    	//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)
+		boolean canLogin = false;
+		try {
+			canLogin = encoder.matches(password, dto.getUserPw());
+		} catch (Exception e) {
+			return "member/Find_Info/emailErrorPage";
+		}
+		//delete 후 deletememberDB로 insert
+	//	String result = mserv.deleteUser(userId);
+ 
+        serv.IDDelete(userId);
+        
+        return "redirect:/";
+
+    }
+
+//끝    
+  //비밀번호 변경
+    
+    @PostMapping("/updatePwd")
+    public String updatePwd(Principal principal, HttpSession session, Model model) {
+       
+    	MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        
+        //비로그인 상태일 때 진행
+        if(loginUser == null) {
+        	session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+        
+        if(loginUser.getKakaoConnected()==1 || loginUser.getGoogleConnected()==1 || loginUser.getNaverConnected()==1) {
+        	return "member/Find_Info/emailErrorPage";
+        }
+            model.addAttribute("loginUser", loginUser);
+            return "member/myPage/updatePwd";       
+    }
+    
+    //비밀번호 업데이트
+    @GetMapping("/UpdatePassword")
+    public String UpdatePassword(String userId, String userPw,
+    		@RequestParam("password") String password,
+         @RequestParam("userPwConfirm") String userPwConfirm) {
+
+    	
+    	System.out.println("userId: "+userId);
+    	System.out.println("password: "+password);
+    	System.out.println("userPw: "+userPw);
+    	System.out.println("userPwConfirm: "+userPwConfirm);
+    	
+    	//새로운 비밀번호, 재확인 일치하는지 확인
+    	if (!userPw.equals(userPwConfirm)) {
+    		System.out.println("새로운 비밀번호, 재확인 일치하는지 확인");
+        	return "member/Find_Info/emailErrorPage";
+        }
+    	// 기존 비밀번호 일치하는지 확인
+    	  MemberDTO dto = ldao.userDetail(userId);
+    
+  		boolean canLogin = false;
+  		try {
+  			System.out.println("기존 비밀번호 일치하는지 확인");
+  			canLogin = encoder.matches(password, dto.getUserPw());
+  		} catch (Exception e) {
+  			return "member/Find_Info/emailErrorPage";
+  		}
+
+        //비밀번호 암호화
+        String realPassword = encoder.encode(userPw);
+
+        //비밀번호 변경을 위한 Map 생성
+        Map<String, String> map = new HashMap<>();
+            map.put("userId", userId);
+            map.put("userPw", realPassword);
+
+        //비밀번호 업데이트
+        serv.updatePassword(map);
+
+        //비밀번호 변경 후 jsp 이동
+        return "redirect:/my-page/info";
+    }
+
+    
 }

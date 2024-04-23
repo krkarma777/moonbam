@@ -5,6 +5,7 @@ import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.board.PostPageDTO;
 import com.moonBam.dto.board.PostUpdateRequestDTO;
 import com.moonBam.service.PostService;
+import com.moonBam.service.ScrapService;
 import com.moonBam.service.member.MemberLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,15 +28,24 @@ public class BoardAPIController {
 
     private final MemberLoginService memberLoginService;
 
+    private final ScrapService scrapService;
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Validated PostDTO postDTO,
                                     BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = getErrors(bindingResult);
+            String s = errors.values().stream().toList().get(0);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "입력 값에 오류가 있습니다.", "errors", errors));
+                    .body(Map.of("message", s, "errors", errors));
         }
+
+        // XSS 방지를 위해 입력값에서 스크립트 태그를 제거하는 로직 추가
+        String sanitizedPostText = sanitizeHtml(postDTO.getPostText());
+        String sanitizedPostTitle = sanitizeHtml(postDTO.getPostTitle());
+        postDTO.setPostText(sanitizedPostText);
+        postDTO.setPostTitle(sanitizedPostTitle);
 
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
@@ -57,9 +67,15 @@ public class BoardAPIController {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = getErrors(bindingResult);
+            String s = errors.values().stream().toList().get(0);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "입력 값에 오류가 있습니다.", "errors", errors));
+                    .body(Map.of("message", s, "errors", errors));
         }
+
+        // XSS 방지를 위해 입력값에서 스크립트 태그를 제거하는 로직 추가
+        String sanitizedPostText = sanitizeHtml(postUpdateRequestDTO.getPostText());
+        postUpdateRequestDTO.setPostText(sanitizedPostText);
+        postUpdateRequestDTO.setPostTitle(sanitizeHtml(postUpdateRequestDTO.getPostTitle()));
 
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
@@ -98,6 +114,8 @@ public class BoardAPIController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "글을 삭제할 권한이 없습니다."));
         }
 
+        scrapService.findAllByPostId(postId).forEach((scrapDTO -> scrapService.delete(scrapDTO.getScrapId())));
+
         postService.delete(postId);
 
         return ResponseEntity.ok(Map.of("message", "삭제가 완료되었습니다."));
@@ -118,6 +136,12 @@ public class BoardAPIController {
             isAuthorized = loginUser.getUserId().equals(pDTO.getUserId());
         }
     	return ResponseEntity.ok(Map.of("pDTO", pDTO, "isAuthorized", isAuthorized));
+    }
+
+    private String sanitizeHtml(String input) {
+        return input.replaceAll("(?i)<script.*?>.*?</script>", "") // 스크립트 태그 제거
+                .replaceAll("(?i)<.*?javascript:.*?>.*?</.*?>", "") // "javascript:" URI 사용 제거
+                .replaceAll("(?i)<.*?\\bon.*?>.*?</.*?>", ""); // 이벤트 핸들러 제거 (예: onclick)
     }
 }
 

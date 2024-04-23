@@ -240,6 +240,11 @@ window.onload = init;
                 var mesg = "";
                 var length = data.length;
                 var comId = 0;
+              	//지금 로그인하고 있는 사용자 id에 @ . 이 html 인코딩 처리되어 유니코드로 나와서
+            	//이 부분을 디코드 해서 저장시킨 [현재 사용자의 id]임
+            	var enCodeUserId = '<sec:authentication property="name"/>'
+            	var deCodeUserId = enCodeUserId.replace("&#64;","@").replace("&#46;",".")
+            	////////////////////////////
                 // 댓글이 없는 경우
                 if (length == 0) {
                     mesg = "<div class='text-center'>댓글이 없습니다.</div>";
@@ -302,8 +307,8 @@ window.onload = init;
                             mesg += "&nbsp;&nbsp;&nbsp;<input type='hidden' id='replyCommentId" + comId + "' name='replyuserId' value=" + userId2 + ">"
                            // mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong" + comId + "'>" + nickname2 + "</strong>";
                             mesg += "<br>"
-                            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' name='replyCommentComtext'></textarea>"; //답글 다는 창
-                            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'>"
+                            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' class='form-control' style='width:500px' name='replyCommentComtext'></textarea>"; //답글 다는 창
+                            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'></div>"
                             mesg += "</div>";
                             //////////////
 
@@ -345,7 +350,7 @@ window.onload = init;
                                 mesg += "</div>";
                                 mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' class='comment-content' style='border:none;outline:none' id='comText" + comId + "' readonly value='" + comText + "'>";
 
-                                if (userId == "<sec:authentication property="name"/>") {
+                                if (userId == deCodeUserId) {
 
                                     if (comText != "삭제된 댓글입니다.") {
                                         mesg += "<div class='comment-actions'>";

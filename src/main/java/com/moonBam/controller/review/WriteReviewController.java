@@ -39,6 +39,8 @@ public class WriteReviewController {
 		} else {
 			
 			// DB에 등록, 등록된 review객체 받아옴
+			String postText = review.getPostText();
+			review.setPostText(postText.replace("<", "&lt;").replace(">", "&gt;").replace("\"","&quot;"));
 			review = service.writeReview(review);
 			
 			// javascript에서 텍스트를 JSON.parse()로 json객체로 변환하여 사용할 수 있게하기 위해 하는 작업

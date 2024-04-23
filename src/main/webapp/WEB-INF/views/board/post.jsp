@@ -240,10 +240,20 @@
 
 			ClassicEditor
 					.create(document.querySelector('#editor'), {
-						extraPlugins: [MyCustomUploadAdapterPlugin], // 필요한 추가 플러그인 설정
+						extraPlugins: [MyCustomUploadAdapterPlugin], // Include your existing custom upload adapter
+						mediaEmbed: {
+							// Configuration options for the MediaEmbed plugin
+							previewsInData: true
+						},
+						toolbar: {
+							items: [
+								'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+								'outdent', 'indent', '|', 'imageUpload', 'mediaEmbed', 'blockQuote', 'undo', 'redo'
+							]
+						}
 					})
 					.then(editor => {
-						editorInstance = editor; // 에디터 인스턴스 저장
+						editorInstance = editor; // Store editor instance for use in other functions
 					})
 					.catch(error => {
 						console.error(error);
@@ -274,8 +284,8 @@
 				} else {
 					postSaveList.forEach(function(postSave) {
 						var row = $('<tr></tr>');
-						row.append(`<td><span style="font-size: 20px;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + postSave.postSaveTitle + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
-						row.append('<td style="text-align: center; vertical-align: middle;"><button class="delete-btn" data-id="' + postSave.postSaveId + '" style="background: none; border: none;"><i class="fa-regular fa-trash-can"></i></button></td>');
+						row.append(`<td><span style="font-size: 20px; cursor: pointer;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + postSave.postSaveTitle + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
+						row.append('<td style="text-align: center; vertical-align: middle;"><button class="delete-btn" data-id="' + postSave.postSaveId + '" style="background: none; border: none;"><i class="fa-regular fa-trash-can" style="font-size: medium;"></i></button></td>');
 						modalBody.append(row);
 					});
 				}
@@ -322,7 +332,6 @@
 						},
 						success: function(response) {
 							// 성공 시 페이지 새로고침
-							location.reload();
 							alert('임시저장글이 삭제되었습니다.');
 						},
 						error: function(xhr, status, error) {
@@ -524,7 +533,7 @@
         <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold;">임시 저장 목록</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-		<div class="modal-body">
+		<div class="modal-body" style="max-height: 400px; overflow-y: auto;">
 			<table class="table">
 				<colgroup>
 					<col style="width: 75%;">

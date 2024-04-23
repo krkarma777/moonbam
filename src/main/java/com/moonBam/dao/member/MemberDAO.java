@@ -1,6 +1,7 @@
 package com.moonBam.dao.member;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -72,6 +73,21 @@ private int totalCommCount(String name) {
 
 public void updateMember(MemberDTO loginUser) {
 	session.update("updateNickname",loginUser);
+	
+}
+
+public int deleteMyComment(String comId) {
+	int num = session.delete("deleteMyComment",comId);
+	return num;
+}
+
+public int updateMyComment(Map<String, String> map) {
+	int num = session.update("updateMyComment", map);
+	return num;
+}
+
+public void deleteUser(String userId, String password) {
+	session.delete("deleteUser", password);
 	
 }
 

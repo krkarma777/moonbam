@@ -22,7 +22,7 @@ public class CommunityHomeController {
 	@Autowired
     CommunityHomeService cService;
 	
-	@PostMapping("/communitySearch")
+	@RequestMapping("/communitySearch")
 	public String communitySearch(Model model, String searchCategory, String searchValue, String curPage) {
 		System.out.println("in CommunityHomeController communitySearch()");
 		if(curPage==null) {
