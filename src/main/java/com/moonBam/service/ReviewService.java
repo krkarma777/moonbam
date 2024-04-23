@@ -74,4 +74,8 @@ public class ReviewService {
 		return reviewList;
 	}
 
+	public void deleteReview(String postId) {
+		dao.deleteReview(postId);
+	}
+
 }
