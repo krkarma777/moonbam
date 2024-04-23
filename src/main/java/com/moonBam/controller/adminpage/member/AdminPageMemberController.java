@@ -47,6 +47,7 @@ public class AdminPageMemberController {
 		System.out.println("in adminpage.post.DeletePost");
 		List<String> deletelist = Arrays.asList(userArr);
 		int n = rservice.delReportedPost(deletelist);
+		
 		System.out.println(n+"개의 사용자 정지");
 		
 		List<AdminReportDTO> list = rservice.SearchReport(null);
@@ -93,6 +94,8 @@ public class AdminPageMemberController {
 	}
 	
 	//이용제한 사용자 이용제한 해제
+	
+	
 	
 	//삭제된 회원 데이터 조회
 	@GetMapping("/AdminPage/toAdminPageDeletedMember")

@@ -1,6 +1,10 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.moonBam.dto.AdminReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 	<style>
 		.container {
 			padding-top: 20px;
@@ -57,26 +61,31 @@
 		</tr>
 		</thead>
 		<tbody>
-		<c:forEach var="dto" items="${list}">
-			<tr>
-				<td><input type="checkbox"></td>
-				<td>${dto.userId}</td>
-				<td>${dto.sexual}</td>
-				<td>${dto.lang}</td>
-				<td>${dto.abusing}</td>
-				<td>${dto.ruleviolation}</td>
-				<td>${dto.etc}</td>
-				<td>
-					<button class="btn btn-sm btn-pink">정지</button>
-					<button class="btn btn-sm btn-pink">강퇴</button>
-				</td>
-			</tr>
-		</c:forEach>
+		
+		<c:if test="${list != null}">
+			<c:forEach var="dto" items="${list}">
+				<tr>
+					<td><input type="checkbox"></td>
+					<td>${dto.userId}</td>
+					<td>${dto.sexual}</td>
+					<td>${dto.lang}</td>
+					<td>${dto.abusing}</td>
+					<td>${dto.ruleviolation}</td>
+					<td>${dto.etc}</td>
+					<td>
+						<button class="btn btn-sm btn-pink">정지</button>
+						<button class="btn btn-sm btn-pink">강퇴</button>
+					</td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
 		<c:if test="${list == null}">
 			<tr>
 				<td colspan="8">검색조건을 입력하십시오.</td>
 			</tr>
 		</c:if>
+		
 		</tbody>
 	</table>
 	<div>
