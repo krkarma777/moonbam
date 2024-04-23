@@ -37,9 +37,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<!-- 채팅방 강퇴 -->
-	<delete id = "ChatKickUser" parameterType="String">
-		delete from chatMember where userid=#{user}
-	</delete>
+	<!-- delete가 아니라 update로 isKicked t로 변경 -->
+	<update id = "ChatKickUser" parameterType = "String">
+		update chatmember set isKicked = 't' where userid = #{user}
+	</update>
 
 	
 	

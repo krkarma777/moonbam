@@ -53,7 +53,10 @@ public class ChatController {
 		String roomTitle = chatRoom.getRoomTitle();
 		String addr1 = chatRoom.getAddr1();
 		LocalDate mmDate = chatRoom.getmDate();//모임방 이름에 사용할  모임날짜		
-		String loc = addr1.substring(0, 2);//모임방 이름에 사용할 지역 뽑아오기(eg. 서울, 대전 두글자만)
+		//String loc = addr1.substring(0, 2);//모임방 이름에 사용할 지역 뽑아오기(eg. 서울, 대전 두글자만)
+		///////
+		String[] addr_arr = addr1.split(" ");
+		String loc = addr_arr[0];
 		roomTitle = roomTitle+"/"+loc+"/"+mmDate;
 		chatRoom.setRoomTitle(roomTitle);
 		//cDate 설정
@@ -126,7 +129,19 @@ public class ChatController {
 	
 	@RequestMapping(value = "/ChatKickUser", method = RequestMethod.GET)
 	public String ChatKickUser (String user) {
-		int n = crService.ChatKickUser(user);
+		
+		int n = 0;
+		
+		System.out.println("ChatKickUser===================");
+		System.out.println("강퇴할 유저의 이름 확ㅇ인 후 서비스레이어 전달");
+		System.out.println(user);
+		System.out.println("=================================");
+		
+		n = crService.ChatKickUser(user);
+		
+		System.out.println("1이면 정상처리됨==========");
+		System.out.println(n);
+		System.out.println("====================");
 		
 		return "";
 	}

@@ -31,12 +31,14 @@
     </style>
 </head>
 <body>
+
 <div class="container">
     <!-- chart data -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const xValues = [1,2,3,4,5,6,7,8,9,10,11];
             const yValues = [7,8,8,9,9,9,10,11,14,14,15];
+
 
             new Chart("myChart", {
                 type: "line",
