@@ -2,8 +2,9 @@
 <%@ page import = "com.moonBam.dto.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>   
 <style>
 	.table {
 		margin-top: 20px;
@@ -27,9 +28,9 @@
 
 </style>
 <div class="container">
-	<h2 class="mt-4 mb-3">이용제한된 회원 관리</h2>
+	<h2 class="mt-4 mb-3">삭제된 회원데이터 관리</h2>
 	<hr>
-	<form action="<%=request.getContextPath()%>/AdminPage/RestrictedMemberList" method="post" class="mb-3">
+	<form action="<%=request.getContextPath()%>/AdminPage/toAdminPageDeletedMember" method="get" class="mb-3">
 		<div class="input-group mb-3">
 			<select name="SearchCondition" class="form-select">
 				<option value="userid">회원ID</option>
@@ -44,13 +45,9 @@
 	<table class="table table-bordered">
 		<thead class="header">
 		<tr>
-			<th>제재번호</th>
 			<th>회원ID</th>
-			<th>상태</th>
-			<th>이용제한 사유</th>
-			<th>제재 시작일</th>
-			<th>제재 종료일</th>
-			<th>처분상태</th>
+			<th>삭제 사유</th>
+			<th>최종삭제일</th>
 			<th>조치</th>
 		</tr>
 		</thead>
@@ -58,22 +55,18 @@
 		<c:if test="${list != null}">
 			<c:forEach var="dto" items="${list}">
 				<tr>
-					<td>${dto.actno}</td>
-					<td>${dto.userid}</td>
-					<td>${dto.status}</td>
+					<td>${dto.userId}</td>
 					<td>${dto.cause}</td>
-					<td>${dto.action}</td>
-					<td>${dto.actionstart}</td>
-					<td>${dto.actionend}</td>
+					<td>${dto.expdate}</td>
 					<td>
-						<button type="button" class="btn btn-custom">해제</button>
+						<button type="button" class="btn btn-custom">복원</button>
 					</td>
 				</tr>
 			</c:forEach>
 		</c:if>
 		<c:if test="${list == null}">
 			<tr>
-				<td colspan="8">검색조건을 입력하십시오.</td>
+				<td colspan="4">검색조건을 입력하십시오.</td>
 			</tr>
 		</c:if>
 		</tbody>

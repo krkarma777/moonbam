@@ -35,7 +35,7 @@
 		<b>더보기</b>
 	</div>
 	<!-- 나중에 이거 새창이 띄워져야함  -->
-	<!-- 참여인원정보, 내정보보기, 방나가기, 방삭제하기(방장만 볼 수 있음) -->
+	<!-- 참여인원정보, 내정보보기, 방나가기, 방삭제하기(방장만 볼 수 있음), 강퇴 -->
 	
 	<div style="margin-bottom: 15px; height: 108px; width: 100%;">
 		<span class="title"><b>${chatroomDTO.roomTitle }</b></span><br>
@@ -67,7 +67,8 @@
 	
 	<!-- 대화 상대 -->
 	<div style="margin-bottom: 15px; width:100%; height: 320px;">
-		<span class="title" style="height: 20px;"><b>대화 상대</b></span><br>
+		<span class="title" style="height: 20px;"><b>대화 상대</b></span>
+		<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="#"><b>초대하기</b></button><br>
 		<c:forEach items="${memberDtoList }" var="memberDtolist"><!-- 현재 채팅방 안에 있는 member들만 모였음 -->
 		
 			<c:if test="${memberDtolist.userId != memberDTO.userId }"> <!-- 근데 본인은 제외하고 출력 -->
@@ -77,6 +78,11 @@
 					<div>
 						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnReport('${memberDtolist.userId }')"><b>신고하기</b></button>
 					</div>
+					<c:if test="${leadermemberDto.userId == memberDTO.userId}">
+					<div>
+						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnKick('${memberDtolist.userId }')"><b>강퇴하기</b></button>
+					</div>
+					</c:if>
 				</div>
 			</c:if>		
 		</c:forEach>
@@ -131,6 +137,12 @@
 			
 		}
 		
+		//채팅 멤버 강퇴
+		
+		function fnKick(userId) {
+			location.href = "/acorn/Chatmore/ChatKickUser?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
+		}
+		
 		
 		//방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
@@ -145,6 +157,7 @@
 		function fnRemove() {
 			console.log("fnRemove");
 			$("#goOutForm").attr("action","/acorn/chatRoom/remove").submit();
+			window.history.back();
 		}
 
 		//button기능에 팝업으로 자식창 띄우기 openUrl 변수에 controller 주소 달면 됨

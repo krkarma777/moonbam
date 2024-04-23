@@ -3,7 +3,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <head>
 	<meta charset="UTF-8">
 	<title>문화인들의 밤</title>
@@ -36,14 +37,16 @@ System.out.println("삭제된 게시글 관리 jsp페이지");
 			<th>완전삭제예정일</th>
 			<th>복원</th>
 		</tr>
-		<tr th:each="dPost : ${list }">
-			<td th:text="${dPost.getPostid()}"></td>
-			<td th:text="${dPost.getPosttitle()}"></td>
-			<td th:text="${dPost.getUserid()}"></td>
-			<td th:text="${dPost.getCause()}"></td>
-			<td th:text="${dPost.getExpiredate()}"></td>
+		<c:forEach var="dto" items="${list }">
+		<tr>
+			<td >${dto.postid}</td>
+			<td >${dto.posttitle}</td>
+			<td >${dto.userid}</td>
+			<td >${dto.cause}</td>
+			<td >${dto.expiredate}</td>
 			<td><input type="button" value="복원"></td>
 		</tr>
+		</c:forEach>
 	</table>
 </form>
 

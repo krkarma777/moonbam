@@ -1,10 +1,9 @@
-//package com.moonBam.controller.board.beforeRefactor;
+//package com.moonBam.controller.message;
 //
+//import java.security.Principal;
+//import java.util.HashMap;
+//import java.util.List;
 //
-//import com.moonBam.dto.MemberDTO;
-//import com.moonBam.dto.board.MessageDTO;
-//import com.moonBam.service.MessageService;
-//import com.moonBam.service.member.MemberLoginService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Controller;
 //import org.springframework.ui.Model;
@@ -12,13 +11,14 @@
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 //
-//import java.security.Principal;
-//import java.util.HashMap;
-//import java.util.List;
+//import com.moonBam.dto.MemberDTO;
+//import com.moonBam.dto.board.MessageDTO;
+//import com.moonBam.service.MessageService;
+//import com.moonBam.service.member.MemberLoginService;
 //
 //@Controller
 //public class MessageController {
-//	
+//
 //	@Autowired
 //	MessageService memberService;
 //
