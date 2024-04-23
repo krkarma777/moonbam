@@ -104,13 +104,15 @@ public class MainController {
             	String searchValue = "";
             	CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
             	model.addAttribute("cpDTO", cpDTO);
+            	//chatRoomMapList 주석 달아서 mapAPI쓸 때만 사용
+            	if(false){
            	 List<ChatRoomDTO> chatRoomMapList = crService.getAllChatRooms();
 			    System.out.println("chatRoomMapList: "+chatRoomMapList);
 			    if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
 			        // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 모델에 추가
 			        model.addAttribute("chatRoomMapList", chatRoomMapList);
 			    }
-			    
+            	}
             	model.addAttribute("category", category);
             	categoryList.add("전체");
 	    		categoryList.add("영화");
