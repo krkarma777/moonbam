@@ -15,9 +15,6 @@
 		// 글 보기
 		$(".classAnnotitle").on("click", classAnnotitle);
 
-		/* --------- */
-		/* 함수 구현 */
-
 		// 글쓰기
 		function buttonAnnoWrite() {
 			$("#formAnnoList").attr("action", "WriteAnnouncementController")
@@ -26,8 +23,8 @@
 
 		// buttonAnnoWord 검색
 		function buttonAnnoWord() {
-			$("#formAnnoList").attr("action", "AdminPageAnnounce")
-					.submit();
+			var annoNum = "${dto.annoNum}";
+		    window.location.href = "<%=request.getContextPath()%>/AdminPage/AdminPageAnnounce?annoNum=" + annoNum;
 		}
 
 		// 질문 왜 아래 코드 없으면 글쓰기로 이동하는가
@@ -70,10 +67,10 @@ ${word }
 <div class="container">
 	<h1 class="mt-5">관리자페이지 공지사항</h1>
 	<hr>
-	<form action="<%=request.getContextPath()%>/AdminPage/RestrictedMemberList" method="post" class="mb-3">
+	<form action="<%=request.getContextPath()%>/AdminPage/RestrictedMemberList" method="post" class="mb-3" id="formAnnoList">
 		<div class="input-group mb-3">
 			<input type="text" class="form-control" placeholder="검색조건 입력" id="SearchValue" name="SearchValue" value="${word}">
-			<button type="submit" class="btn btn-primary" id="buttonAnnoWord">검색</button>
+			<button type="button" class="btn btn-primary" id="buttonAnnoWord" onclick ="ViewAnnouncementController?annoNum=${dto.annoNum}">검색</button>
 			<button type="button" class="btn btn-secondary" id="buttonAnnoWrite">글쓰기</button>
 		</div>
 	</form>
