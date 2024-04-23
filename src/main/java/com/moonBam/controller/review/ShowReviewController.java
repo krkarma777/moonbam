@@ -32,7 +32,7 @@ public class ShowReviewController {
 		
 		// 세션에서 로그인 정보 파싱
 		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-		String likeUserId=null;
+		String likeUserId=null; // 로그인 유저아이디
 		if(loginUser!=null) {
 			likeUserId = loginUser.getUserId();
 		}
@@ -50,7 +50,7 @@ public class ShowReviewController {
 			ContentDTO content = service.selectContent(contId);
 			request.setAttribute("content", content);
 			request.setAttribute("review", review);
-			request.setAttribute("likeUserId", likeUserId);
+			request.setAttribute("loginUserId", likeUserId); //
 			request.setAttribute("mesg", (String)request.getAttribute("mesg"));
 			nextPage = "review/reviewViewer";
 		}

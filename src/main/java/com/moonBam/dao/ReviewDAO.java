@@ -101,4 +101,8 @@ public ReviewDTO writeReview(ReviewDTO review) {
 		return null;
 	}
 
+	public void deleteReview(String postId) {
+		session.delete("deleteReview", postId);
+	}
+
 }

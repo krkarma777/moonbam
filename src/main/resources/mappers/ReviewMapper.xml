@@ -5,6 +5,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ReviewMapper">
+	
+	<delete id="deleteReview" parameterType="String">
+		delete from postdb where postId = #{postId} 
+	</delete>
 
 	<select id="check" parameterType="ReviewDTO" resultType="int">
 		select count(*) from postdb where postBoard='review' and userId=#{userId} and contId=#{contId}
