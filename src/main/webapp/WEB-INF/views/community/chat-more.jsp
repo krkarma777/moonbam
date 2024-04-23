@@ -35,7 +35,7 @@
 		<b>더보기</b>
 	</div>
 	<!-- 나중에 이거 새창이 띄워져야함  -->
-	<!-- 참여인원정보, 내정보보기, 방나가기, 방삭제하기(방장만 볼 수 있음) -->
+	<!-- 참여인원정보, 내정보보기, 방나가기, 방삭제하기(방장만 볼 수 있음), 강퇴 -->
 	
 	<div style="margin-bottom: 15px; height: 108px; width: 100%;">
 		<span class="title"><b>${chatroomDTO.roomTitle }</b></span><br>
@@ -76,6 +76,9 @@
 					<span style="opacity: 0.7;">&nbsp&nbsp가입한 날짜 ${memberDtolist.userSignDate }</span>
 					<div>
 						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnReport('${memberDtolist.userId }')"><b>신고하기</b></button>
+					</div>
+					<div>
+						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnKick('${memberDtolist.userId }')"><b>강퇴하기</b></button>
 					</div>
 				</div>
 			</c:if>		
@@ -131,6 +134,12 @@
 			
 		}
 		
+		//채팅 멤버 강퇴
+		
+		function fnKick(userId) {
+			location.href = "/acorn/Chatmore/ChatKickUser?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
+		}
+		
 		
 		//방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
@@ -145,6 +154,7 @@
 		function fnRemove() {
 			console.log("fnRemove");
 			$("#goOutForm").attr("action","/acorn/chatRoom/remove").submit();
+			window.history.back();
 		}
 
 		//button기능에 팝업으로 자식창 띄우기 openUrl 변수에 controller 주소 달면 됨
