@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -20,8 +20,8 @@ var list = <%= request.getAttribute("list") %>;
     	// 팝업 창 위치 &크기 변수
 		let sLeft=0;
 		let sTop=0;
-		let width ;
-    	let height ;
+		let width;
+    	let height;
     	
         for (var i = 0; i < list.length; i++) {
         	let flag= false;	/*  false 시 팝업 안나옴 */

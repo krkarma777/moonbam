@@ -13,7 +13,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 <!-- 정상 지도 뿌리기 (이거 열어두면 송하 돈 나감)  작동 테스트 완료-->
 <!-- <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script> -->
 <!-- 임시 지도 뿌리기 (오류 나는 게 맞음)  -->
@@ -165,8 +165,8 @@ button {
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">
-							<div class="border-bottom" style="height: 40px; width: 299px; background-color: #ffb2c4; align-content: center;">
-								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;">[<%=category %>] <%=roomTitle %></a>
+							<div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
+								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;">[<%=category %>] <%=roomTitle %></a>
 							</div>
 							<div class="border-top" style="height: 225px; width: 299px;">
 								<div style=" font-size: 18px; height: 175px;">
@@ -240,6 +240,8 @@ button {
      }
  }
  %>
+ 
+ 
 </script>
 
 	

@@ -58,7 +58,7 @@
 
 			<!-- 비로그인 -->
 			<sec:authorize access="isAnonymous()">
-				<a href="mainLogin" class="top">로그인</a>
+				<a href="/acorn/mainLogin" class="top">로그인</a>
 			</sec:authorize>
       		
       		<!-- 로그인 -->

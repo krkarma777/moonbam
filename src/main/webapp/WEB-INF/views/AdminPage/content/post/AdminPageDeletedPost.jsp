@@ -6,7 +6,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>MoonBam</title>
+	<title>문화인들의 밤</title>
 </head>
 <body>
 <%
