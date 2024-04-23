@@ -8,10 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<!-- 모임방 chatRoom 개설 -->
      <insert id="saveChatRoom" parameterType="ChatRoomDTO">
          insert into ChatRoom values (
-
-         	chatNum_seq.NEXTVAL, #{roomTitle}, #{roomText},
-         	#{currentNow}, #{amount}, #{post}, #{addr1}, #{addr2},
-         	#{cDate}, #{mDate}, #{category}, #{leaderId})
+         chatNum_seq.NEXTVAL, #{roomTitle}, #{roomText},
+         #{currentNow}, #{amount}, #{post}, #{addr1}, #{addr2},
+         #{cDate}, #{mDate}, #{category}, #{leaderId})
     </insert>
     
     <!-- leaderId와 roomtitle로 chatRoom select -->

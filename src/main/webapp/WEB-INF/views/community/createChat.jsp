@@ -47,51 +47,8 @@
 
   <script>
     $(document).ready(function() {
-		// 달력       
-		$("#mDate").datepicker({
-			dateFormat: "yy-mm-dd",
-            onSelect: function(dateText, inst) {
-              // 선택한 날짜
-              var selectedDate = new Date(dateText);
-              console.log(selectedDate);
-
-              // 오늘 날짜
-              var today = new Date();
-
-              // 14일 후의 날짜
-              var twoWeeksLater = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14);
-
-              // 선택한 날짜와 오늘 날짜의 차이 계산
-              var timeDiff = selectedDate.getTime() - today.getTime();
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-              if (diffDays <= 14 && diffDays >= 0) {
-                // 선택한 날짜가 오늘로부터 14일 이내인 경우에만 입력
-                $(this).val(dateText);
-              } else {
-                // 그렇지 않은 경우에는 "날짜를 선택하세요"로 변경
-                $(this).val('');
-                $(this).attr('placeholder', '선택 불가: 오늘로부터 14일 이내의 날짜를 선택해주세요.');
-              }
-            }
-          });
-
-		// 모임 소개글 글자수 제한 및 실시간 글자수 표시
-		$("#myTextarea").on("input", function() {
-	        const maxLength = 150;
-	        let text = $(this).val();
-	        const count = text.length;
-	        
-	        if (count > maxLength) {
-	          text = text.substring(0, maxLength);
-	          $(this).val(text);
-	        }
-        
-        	$("#charCount").text(count);
- 		});
-
-      
-		//카테고리가 변경될 때 작성 양식 변경됨
+    	
+    	//카테고리가 변경될 때 작성 양식 변경됨
 		$('#category').change(function(){
 		      var selectedCategory = $(this).val();
 		      var placeholderText = "";
@@ -102,7 +59,7 @@
 		        placeholderText = "도서명 또는 작가명을 적어주세요";
 		      } else if(selectedCategory === "music") {
 		        placeholderText = "노래이름 또는 가수명을 적어주세요";
-		      } else if(selectedCategory === "ect") {
+		      } else if(selectedCategory === "etc") {
 		        placeholderText = "모임에서 공유하고 싶은 주제를 적어주세요";
 		      } else {
 		        placeholderText = "카테고리를 선택하세요";
@@ -121,6 +78,54 @@
 		// roomTitle 초기 설정
 		$('#roomTitle').attr("placeholder", "카테고리를 선택하세요");
 		$('#roomTitle').attr("disabled", true);
+		
+	 	// 모임장소 입력란 읽기전용으로 설정
+	    $('#sample4_postcode').attr("readonly", true);
+	    $('#sample4_roadAddress').attr("readonly", true);
+	    $('#sample4_jibunAddress').attr("readonly", true);
+    	
+		// 달력       
+		$("#mDate").datepicker({
+			dateFormat: "yy-mm-dd",
+            onSelect: function(dateText, inst) {
+              // 선택한 날짜
+              var selectedDate = new Date(dateText);
+
+              // 오늘 날짜
+              var today = new Date();
+
+              // 14일 후의 날짜
+              var twoWeeksLater = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14);
+
+              // 선택한 날짜와 오늘 날짜의 차이 계산
+              var timeDiff = selectedDate.getTime() - today.getTime();
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+              if (diffDays <= 14 && diffDays >= 0) {
+                // 선택한 날짜가 오늘로부터 14일 이내인 경우에만 입력
+                $(this).val(dateText);
+              } else {
+                // 그렇지 않은 경우에는 "날짜를 선택하세요"로 변경
+                alert("선택 불가: 오늘로부터 14일 이내의 날짜를 선택해주세요.");
+                $(this).val('');
+                $(this).attr('placeholder', '날짜를 선택해주세요.');
+              }
+            }
+          }).attr('readonly', 'readonly');//날짜 입력란을 읽기전용으로 만듦(글자 입력 안 되도록)
+
+		// 모임 소개글 글자수 제한 및 실시간 글자수 표시
+        $("#myTextarea").on("input", function() {
+            const maxLength = 150;
+            let text = $(this).val();
+            // 줄 바꿈 문자를 빈 문자열로 치환하여 제외시킴
+            text = text.replace(/\n/g, '');
+            if (text.length > maxLength) {
+                text = text.substring(0, maxLength);
+                $(this).val(text);
+            }
+
+            $("#charCount").text(text.length);
+        }); 
 	
 		// 폼 제출 전 양식 확인
 	  	$("#createChat").on("submit", function() {
@@ -133,14 +138,16 @@
 			const postcode = $("#sample4_postcode").val();
 			const roadAddress = $("#sample4_roadAddress").val();
 			const jibunAddress = $("#sample4_jibunAddress").val();
-	          
+	        
 			if (category === "" || roomTitle === "" || amount === "" || mDate === "" || roomText === "" 
 	            || postcode === "" || roadAddress === "" || jibunAddress === "") {
 	            alert("모든 입력 항목을 채워주세요.");
 	            event.preventDefault();
 	            return false;
-			}          
-	          	          
+			}else{
+ 				// 모임 목록 창(부모창) 리로드
+ 				window.opener.location.reload();
+			}
 	 	});//
       
       
@@ -162,7 +169,7 @@
         <option value="movie">영화</option>
         <option value="book">독서</option>
         <option value="music">음악</option>
-        <option value="ect">기타</option>
+        <option value="etc">기타</option>
       </select>
       <input class="form-control form-control-sm item" type="text" placeholder="카테고리를 선택하세요" id="roomTitle" name="roomTitle">
     
@@ -175,7 +182,7 @@
       </select>
     
       <span>모임 장소</span>
-      <input class="btn" style="background-color: #ff416c; color: white; font-size: 10px; width:70px;" type="button" onclick="sample4_execDaumPostcode()" value="주소검색"><br>
+      <input class="btn" style="background-color: #ff416c; color: white; font-size: 10px; width:65px; text-align: center;" type="button" onclick="sample4_execDaumPostcode()" value="주소검색"><br>      
       <!-- 다음주소 시작-->
       <input class="form-control form-control-sm item2" type="text" name="post" id="sample4_postcode" placeholder="우편번호">      
       <input class="form-control form-control-sm item" type="text" name="addr1" id="sample4_roadAddress" placeholder="도로명주소">
@@ -197,7 +204,7 @@
         <input class="btn" type="reset" value="초기화" style="background-color: #ff416c; color:white; float: left;">
         <input class="btn" type="submit" value="만들기" style="background-color: #ff416c; color:white; float: right;">
       </div>
-    </form> 
+    </form>
   </div>
 
 <!-- 다음 주소 -->
