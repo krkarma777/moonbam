@@ -1,9 +1,11 @@
 package com.moonBam.controller;
 
 import com.moonBam.controller.content.KoficAPI;
+import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.CommunityPageDTO;
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.board.PostPageDTO;
+import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityHomeService;
 import com.moonBam.service.MainService;
 import com.moonBam.service.PostService;
@@ -36,7 +38,8 @@ public class MainController {
     
     @Autowired
     KoficAPI kofic;
-
+    @Autowired
+	ChatRoomService crService;
     // pupop
     @Autowired
     AnnouncementService annoService;
@@ -101,7 +104,13 @@ public class MainController {
             	String searchValue = "";
             	CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
             	model.addAttribute("cpDTO", cpDTO);
-            	
+           	 List<ChatRoomDTO> chatRoomMapList = crService.getAllChatRooms();
+			    System.out.println("chatRoomMapList: "+chatRoomMapList);
+			    if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
+			        // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 모델에 추가
+			        model.addAttribute("chatRoomMapList", chatRoomMapList);
+			    }
+			    
             	model.addAttribute("category", category);
             	categoryList.add("전체");
 	    		categoryList.add("영화");

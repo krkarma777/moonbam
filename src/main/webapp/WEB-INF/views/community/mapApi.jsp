@@ -6,7 +6,7 @@
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-
+<script src="resources/js/fullpage/jquery.fullPage.js"></script>
 <body>
     <!-- 네이버 지도가 뿌려질 곳 -->
     <div id="map" style="width:100%;height:75vh; margin: 0 auto;"></div>
@@ -22,6 +22,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#showMapBtn').click(function () {
+            	console.log("map 호출");
                 <% if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
                     for (ChatRoomDTO chatRoom : chatRoomMapList) { %>
                         var Addr_val = "<%= chatRoom.getAddr2() %>";
