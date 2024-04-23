@@ -2,6 +2,7 @@ package com.moonBam.controller.community;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatRoomDTO;
-import com.moonBam.service.BadWordsService;
 import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
@@ -36,9 +36,6 @@ public class ChatController {
 	@Autowired
 	CommunityEnterOutService comEnterOutService;
 	
-	@Autowired
-	BadWordsService bwService;
-	
 	//소모임 대문에서 개설버튼 누르면 소모임 만드는 폼으로 이동
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
 	public String createChat() {
@@ -56,9 +53,8 @@ public class ChatController {
 		//roomTitle 설정
 		String roomTitle = chatRoom.getRoomTitle();
 		String addr1 = chatRoom.getAddr1();
-		LocalDate mmDate = chatRoom.getmDate();//모임방 이름에 사용할  모임날짜		
-		//String loc = addr1.substring(0, 2);//모임방 이름에 사용할 지역 뽑아오기(eg. 서울, 대전 두글자만)
-		///////
+		LocalDate thismDate = chatRoom.getmDate();//지금 모임방의 모임날짜 가져오기
+		String mmDate = thismDate.format(DateTimeFormatter.ofPattern("MM-dd"));//모임방 이름에 사용할 모임날짜 04-30 형식으로 변경		
 		String[] addr_arr = addr1.split(" ");
 		String loc = addr_arr[0];
 		roomTitle = roomTitle+"/"+loc+"/"+mmDate;
@@ -150,48 +146,4 @@ public class ChatController {
 		return "";
 	}
 	
-
-	
-	//쪽지를 통한 초대기능
-	@RequestMapping(value = "/inviteUser", method = RequestMethod.GET)
-	public String inviteUser(String from, String to, String chatLink) {
-		
-		System.out.println("in ChatController======================");
-		System.out.println("컨트롤러에서 초대하는 사람, 받는 사람, 초대하는 방 링크 수신");
-		System.out.println(from + to + chatLink);
-		
-		System.out.println("Map에 데이터 저장 ");
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("from", from);
-		map.put("to", to);
-		map.put("chatLink", chatLink);
-		System.out.println(map);
-		
-		System.out.println("ㅅ서비스 레이어 전달");
-		
-		
-		return "";
-	}
-	
-	//금칙어 설정 기능
-	@RequestMapping(value = "/setBadWords", method = RequestMethod.GET)
-	public String setBadWords(String badWords, Boolean isIn) {
-		
-		System.out.println("in ChatController.setBadWords");
-		System.out.println("금칙어 설정 단어와 입출력 여부 수신");
-		System.out.println(badWords + "    " + isIn);
-		
-		System.out.println("isIn true면 DB에 저장하는 서비스 레이어 함수 호출");
-		System.out.println("isIn false면 DB에서 삭제하는 서비스 레이어 함수 호출");
-
-		if(isIn==true) {
-			bwService.insertBadWords(badWords);
-		}else {
-			bwService.deleteBadWords(badWords);
-		}
-		
-		
-		
-		return "";
-	}
 }//end class

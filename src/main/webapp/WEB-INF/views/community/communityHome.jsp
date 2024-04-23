@@ -3,6 +3,7 @@
 <%@page import="com.moonBam.dto.board.PageDTO"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,7 +14,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 <!-- 정상 지도 뿌리기 (이거 열어두면 송하 돈 나감)  작동 테스트 완료-->
 <!-- <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fy0xnhraqx&submodules=geocoder"></script> -->
 <!-- 임시 지도 뿌리기 (오류 나는 게 맞음)  -->
@@ -56,22 +57,29 @@
 		})
 		
 		//community개설로 이동
-		$("#createCommunity").click(function(){			
-			// 새 창에서 소모임 개설 페이지 열기
-		    var newWindow = window.open('about:blank', '_blank', 'width=470px,height=705px');
-			
-		    // 새 창의 위치를 브라우저의 정중앙으로 설정
-		    var screenWidth = window.screen.width;
-		    var screenHeight = window.screen.height;
-		    var windowWidth = 470;
-		    var windowHeight = 705;		
-		    var left = (screenWidth - windowWidth) / 2;
-		    var top = (screenHeight - windowHeight) / 2;
-		    
-		    newWindow.moveTo(left, top);
-		    
-		    newWindow.location.href = 'http://localhost:8090/acorn/createChat';
-		})
+		$("#createCommunity").click(function(){
+			//로그인 되어있는 경우에만 방 개설 가능
+			var userId = '<sec:authentication property="name"/>';
+			if ( userId == "anonymousUser" ){
+				alert("로그인이 필요한 작업입니다.");
+				event.preventDefault();
+			}else{
+				// 새 창에서 소모임 개설 페이지 열기
+			    var newWindow = window.open('about:blank', '_blank', 'width=470px,height=705px');
+				
+			    // 새 창의 위치를 브라우저의 정중앙으로 설정
+			    var screenWidth = window.screen.width;
+			    var screenHeight = window.screen.height;
+			    var windowWidth = 470;
+			    var windowHeight = 705;		
+			    var left = (screenWidth - windowWidth) / 2;
+			    var top = (screenHeight - windowHeight) / 2;
+			    
+			    newWindow.moveTo(left, top);
+			    
+			    newWindow.location.href = 'http://localhost:8090/acorn/createChat';
+			}
+		})//
 		
 	})
 </script>
@@ -165,8 +173,8 @@ button {
 					%>
 					<td id="<%=count%>" style="width: 300px; height: 265px; float: left">
 						<div class="border" style="width: 300px; height: 265px;">
-							<div class="border-bottom" style="height: 40px; width: 299px; background-color: #ffb2c4; align-content: center;">
-								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;">[<%=category %>] <%=roomTitle %></a>
+							<div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
+								<a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;">[<%=category %>] <%=roomTitle %></a>
 							</div>
 							<div class="border-top" style="height: 225px; width: 299px;">
 								<div style=" font-size: 18px; height: 175px;">
@@ -240,6 +248,8 @@ button {
      }
  }
  %>
+ 
+ 
 </script>
 
 	

@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.ChatRoomDTO;
+import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.CommunityEnterOutService;
+import com.moonBam.service.member.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +26,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ChatRoomController {
 	
+	@Autowired
+	MemberService memberService;
 	
 	@Autowired
 	CommunityEnterOutService comEnterOutService;
@@ -56,7 +60,7 @@ public class ChatRoomController {
 		//select조건 2개 map에 저장
 		chatMemberInsertMap.put("userId", userIdInSession);
 		chatMemberInsertMap.put("chatNum", chatNum);
-		System.out.println("chatMemberInsertMap 확인 chatRoomInsert "+chatMemberInsertMap);
+//		System.out.println("chatMemberInsertMap 확인 chatRoomInsert "+chatMemberInsertMap);
 		
 		String nextWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; //정상 진행jsp
 		
@@ -127,16 +131,19 @@ public class ChatRoomController {
 		//chatNum과 userIdInSession을 조건으로 가진 select 결과가 있는지 없는지 ChatMemberDTO가져와서 null이 아닐 때만 링크 접속하게 하기
 		//나중에 여기에 "강퇴"칼럼의 Y,N 값을 확인해야함 (N만 입장 가능)
 		
-		String userIdInSession = principal.getName();//현재 나의 Id
-		request.setAttribute("userIdInSession", userIdInSession); //////////////형이 필요해서 저장해둔거
+		String userIdInSession = principal.getName();
+		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
+		String nickNameInSession = memberDTO.getNickname();
+		request.setAttribute("userIdInSession", userIdInSession); ////////////// 형이 필요해서 저장해둔거, userId
+		request.setAttribute("nickNameInSession", nickNameInSession); //////////////형이 필요해서 저장해둔거, nickName
+		System.out.println(userIdInSession);
+		System.out.println(nickNameInSession);
 		
 		Map<String, Object> chatMemberselectMap = new HashMap<>();
 		chatMemberselectMap.put("userId", userIdInSession);
 		chatMemberselectMap.put("chatNum", chatNum);
 		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
-		
-		
-		
+				
 		//정상진행 시 chatRoom.jsp로 진입
 		String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp
 	
@@ -158,16 +165,12 @@ public class ChatRoomController {
 			returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
 		}
 		
-		
 		/////////request에 저장하여 jsp로 chatNum 전달함 (더보기에서 사용할 예정)
 		request.setAttribute("ChatRoomDTO", this.chatRoomSelectBychatNum( (int) chatMemberselectMap.get("chatNum")));
 		
 		
 		return returnWhere;
 	}
-	
-	
-	
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
@@ -240,8 +243,8 @@ public class ChatRoomController {
 	}
 	
 	
-	
-	@RequestMapping("/reportWindow")
+	// 메세지 신고 새 창
+	@RequestMapping("chatRoom/reportWindow")
 	public String reportWindow() {
 		System.out.println("reportWindow");
 		return "community/chatRoom/report";
@@ -254,31 +257,32 @@ public class ChatRoomController {
 		System.out.println("chatReport");
 	}
 	
-	@RequestMapping("/memberWindow")
+	// 유저 정보 새 창
+	@RequestMapping("chatRoom/memberWindow")
 	public String memberWindow() {
 		System.out.println("memberWindow");
 		return "community/chatRoom/member";
 	}
 	
 	// 전달 받을 데이터 수정 필요, 신고 처리 필요함
-		@RequestMapping(value="/chatMember", method = RequestMethod.POST)
-		@ResponseBody
-		public void chatMember() {
-			System.out.println("chatMember");
-		}
+	@RequestMapping(value="/chatMember", method = RequestMethod.POST)
+	@ResponseBody
+	public void chatMember() {
+		System.out.println("chatMember");
+	}
 		
-		// 전달 받을 데이터 수정 필요, 신고 처리 필요함
-		@RequestMapping(value="/newLeader", method = RequestMethod.POST)
-		@ResponseBody
-		public void newLeader() {
-			System.out.println("newLeader");
-		}
-		
-		// 전달 받을 데이터 수정 필요, 신고 처리 필요함
-		@RequestMapping(value="/memberRemove", method = RequestMethod.POST)
-		@ResponseBody
-		public void memberRemove() {
-			System.out.println("memberRemove");
-		}
+	// 전달 받을 데이터 수정 필요, 신고 처리 필요함
+	@RequestMapping(value="/newLeader", method = RequestMethod.POST)
+	@ResponseBody
+	public void newLeader() {
+		System.out.println("newLeader");
+	}
+	
+	// 전달 받을 데이터 수정 필요, 신고 처리 필요함
+	@RequestMapping(value="/memberRemove", method = RequestMethod.POST)
+	@ResponseBody
+	public void memberRemove() {
+		System.out.println("memberRemove");
+	}
 		
 }
