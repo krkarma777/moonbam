@@ -25,6 +25,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="/acorn/resources/css/myPage.css">
+<style>
+        /* 기본적인 링크 스타일 */
+        a {
+            color: #007bff; /* 링크 색상 */
+            text-decoration: none; /* 밑줄 제거 */
+            transition: color 0.3s; /* 색상 변화에 애니메이션 적용 */
+        }
+
+        /* 마우스를 올렸을 때 링크 색상 변경 */
+        a:hover {
+            color: #0056b3; /* 변경할 색상 */
+        }
+    </style>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/navBar.jsp"/>
