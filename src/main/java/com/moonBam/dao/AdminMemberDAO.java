@@ -61,6 +61,7 @@ public class AdminMemberDAO {
 
 	public List<AdminDeletedMemberDTO> getDeletedMemberList(HashMap<String, String> map) {
 		List<AdminDeletedMemberDTO> list = session.selectList("AdminMemberMapper.getDeletedMemberList", map);
+		System.out.println(list);
 		return list;
 	}
 

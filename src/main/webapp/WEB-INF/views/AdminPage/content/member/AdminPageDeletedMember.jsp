@@ -55,9 +55,9 @@
 		<c:if test="${list != null}">
 			<c:forEach var="dto" items="${list}">
 				<tr>
-					<td>${dto.userid}</td>
+					<td>${dto.userId}</td>
 					<td>${dto.cause}</td>
-					<td>${dto.expiredate}</td>
+					<td>${dto.expdate}</td>
 					<td>
 						<button type="button" class="btn btn-custom">복원</button>
 					</td>

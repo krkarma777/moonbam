@@ -118,7 +118,9 @@ public class AdminPageMemberController {
 		
 		List<AdminDeletedMemberDTO> list = mservice.getDeletedMemberList(map);
 		
-		mav.addObject(list);
+		mav.addObject("list", list);
+		System.out.println("리스트 jsp 전달");
+		System.out.println(list);
 		mav.setViewName("/AdminPage/AdminPageDeletedMember");
 		return mav;
 	}
