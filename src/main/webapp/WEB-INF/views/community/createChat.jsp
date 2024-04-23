@@ -66,6 +66,7 @@
 		      }
 	
 		      $('#roomTitle').attr("placeholder", placeholderText);
+		      $('#roomTitle').val("");
 		      
 		      // 카테고리가 선택되지 않았을 때 입력창 비활성화
 		      if (selectedCategory === "") {
@@ -82,7 +83,6 @@
 	 	// 모임장소 입력란 읽기전용으로 설정
 	    $('#sample4_postcode').attr("readonly", true);
 	    $('#sample4_roadAddress').attr("readonly", true);
-	    $('#sample4_jibunAddress').attr("readonly", true);
     	
 		// 달력       
 		$("#mDate").datepicker({
