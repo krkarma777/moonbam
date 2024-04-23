@@ -27,6 +27,6 @@ public class MapAPIController {
 	        model.addAttribute("chatRoomMapList", chatRoomMapList);
 	    }
 
-	    return "community/communityHome"; // 반환할 뷰의 이름을 리턴
+	    return "community/mapApi"; // 반환할 뷰의 이름을 리턴
 	}
 }
