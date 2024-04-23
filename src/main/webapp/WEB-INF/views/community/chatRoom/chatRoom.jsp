@@ -63,33 +63,33 @@ session.removeAttribute("mesg");
 		</thead>
 		<tbody id="message">
 			<form id="chatForm">
-			<tr>
-				<td colspan="3" style="float: left; width: 50%;">
-					<table>
-						<tr>
-							<td><span id="user" style="cursor: pointer;"
-								onclick="openMemberWindow()">user</span></td>
-							<td>yy/mm/dd/hh:mm</td>
-						</tr>
-						<tr>
-							<td><span id="msg" style="cursor: pointer;"
-								onclick="openReportWindow()">your msg</span></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" style="float: right; width: 50%;">
-					<table>
-						<tr>
-							<td>yy/mm/dd/hh:mm</td>
-						</tr>
-						<tr>
-							<td style="word-wrap: break-word">my msg</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
+				<tr>
+					<td colspan="3" style="float: left; width: 50%;">
+						<table>
+							<tr>
+								<td><span id="user" style="cursor: pointer;"
+									onclick="openMemberWindow()">user</span></td>
+								<td>yy/mm/dd/hh:mm</td>
+							</tr>
+							<tr>
+								<td><span id="msg" style="cursor: pointer;"
+									onclick="openReportWindow()">your msg</span></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="float: right; width: 50%;">
+						<table>
+							<tr>
+								<td>yy/mm/dd/hh:mm</td>
+							</tr>
+							<tr>
+								<td style="word-wrap: break-word">my msg</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
 
 			</form>
 		</tbody>
@@ -166,25 +166,21 @@ session.removeAttribute("mesg");
 		/* 메시지 전송 */
 		function sendMessage() {
 
-// 여기서 "" 처리
- if(document.getElementById('messageContent').value.trim() == '') {
-	console.log("공백")
- }else{
-console.log("문자열")
- }
-			
-	/* 
-	var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
-			var userId = `${userIdInSession}`; // 사용자 닉네임
-			var message = escapeHtml($("#messageContent").val()); // 메세지 
-			var serverTime = new Date().toLocaleString();
-			stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
-				'type' : 'TALK',
-				'userId' : userId,
-				'message' : message,
-				'serverTime' : serverTime}));
-			document.getElementById('messageContent').value = ''; 
-			*/
+			// 여기서 "" 처리
+			 if(document.getElementById('messageContent').value.trim() != '') {
+					
+	
+				var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
+				var userId = `${userIdInSession}`; // 사용자 닉네임
+				var message = escapeHtml($("#messageContent").val()); // 메세지 
+				var serverTime = new Date().toLocaleString();
+				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
+					'type' : 'TALK',
+					'userId' : userId,
+					'message' : message,
+					'serverTime' : serverTime}));
+				document.getElementById('messageContent').value = ''; 
+			 }
 		}
 
 		// 메세지 출력
