@@ -67,7 +67,8 @@
 	
 	<!-- 대화 상대 -->
 	<div style="margin-bottom: 15px; width:100%; height: 320px;">
-		<span class="title" style="height: 20px;"><b>대화 상대</b></span><br>
+		<span class="title" style="height: 20px;"><b>대화 상대</b></span>
+		<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="#"><b>초대하기</b></button><br>
 		<c:forEach items="${memberDtoList }" var="memberDtolist"><!-- 현재 채팅방 안에 있는 member들만 모였음 -->
 		
 			<c:if test="${memberDtolist.userId != memberDTO.userId }"> <!-- 근데 본인은 제외하고 출력 -->
@@ -77,9 +78,11 @@
 					<div>
 						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnReport('${memberDtolist.userId }')"><b>신고하기</b></button>
 					</div>
+					<c:if test="${leadermemberDto.userId == memberDTO.userId}">
 					<div>
 						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnKick('${memberDtolist.userId }')"><b>강퇴하기</b></button>
 					</div>
+					</c:if>
 				</div>
 			</c:if>		
 		</c:forEach>

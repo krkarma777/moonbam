@@ -75,12 +75,12 @@ public class AdminPageMemberController {
 		int n = mservice.kickUser(deletelist);
 		
 		
-		System.out.println(n+"개의 사용자 정지");
+		System.out.println(n+"개의 사용자 강퇴");
 		
 		List<AdminReportDTO> list = rservice.SearchReport(null);
 		
 		mav.addObject("list",list);
-		mav.setViewName("/AdminPage/AdminPageReportedPost");
+		mav.setViewName("/AdminPage/AdminMemberReported");
 		
 		return mav;
 	}

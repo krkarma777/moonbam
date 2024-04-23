@@ -13,11 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 	
 	<!-- 신고처리된 대상자 강퇴 처리시 삭제된 회원 데이터에 저장 -->
-	<insert id="saveInDeletedlist" parameterType = "String">
-		insert into admindeletedmemer values (
+	<insert id="saveInDeletedlist" parameterType = "MemberDTO">
+		insert into admindeletedmember values (
 		#{userId}, #{userPw}, #{nickname}, #{secretCode},
 		#{googleConnected}, #{naverConnected}, #{kakaoConnected},
-		#{userSignDate}, #{role}, #{enabled}, '강퇴], 'today+30'
+		#{userSignDate}, #{role}, 'false', '강퇴', SYSDATE+30
 		)
 	</insert>
 	

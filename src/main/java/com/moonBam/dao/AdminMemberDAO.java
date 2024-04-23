@@ -4,6 +4,8 @@ package com.moonBam.dao;
 import com.moonBam.dto.AdminDeletedMemberDTO;
 import com.moonBam.dto.AdminMemberDTO;
 import com.moonBam.dto.AdminRestrictedMemberDTO;
+import com.moonBam.dto.MemberDTO;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -30,24 +32,24 @@ public class AdminMemberDAO {
 		return list;
 	}
 	
-	public int saveInDeletedlist(List<String> deletelist) {
+	public int saveInDeletedlist(List<MemberDTO> mlist) {
 		
-		System.out.println("in AdminReportDAO");
+		System.out.println("in AdminMemberDAO");
 		System.out.println("dao에서 강퇴 대상자 수신");
-		System.out.println(deletelist);
+		System.out.println("deletelist : ");
+		System.out.println(mlist);
 		System.out.println("===================");
 		
 		System.out.println("mapper에 전달");
 		int n =0;
 		
-		for(int i = 0; i < deletelist.size(); i++) {
-			session.insert("AdminMemberMapper.saveInDeletedlist", deletelist.get(i));
+		for(int i = 0; i < mlist.size(); i++) {
+			System.out.println(mlist.get(i));
+			session.insert("AdminMemberMapper.saveInDeletedlist", mlist.get(i));
 			n += 1;
 		}
 		System.out.println(n+"개 대상자 삭제된 회원 데이터에 저장");
 		System.out.println("==============");
-		
-		
 		
 		return n;
 	}

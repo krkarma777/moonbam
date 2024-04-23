@@ -123,9 +123,9 @@
 			console.log("userArr: " + userArr);
 	
 			//전송
-			var target = "<%=request.getContextPath()%>" + "/AdminPage/kickUser?userArr="+postArr;
+			var target = "<%=request.getContextPath()%>" + "/AdminPage/KickUser?userArr="+userArr;
 			console.log(target);
-			location.href = "<%=request.getContextPath()%>" + "/AdminPage/kickUser?userArr="+postArr;
+			location.href = "<%=request.getContextPath()%>" + "/AdminPage/KickUser?userArr="+userArr;
 		}//delChecked
 		
 		function suspendChecked(){

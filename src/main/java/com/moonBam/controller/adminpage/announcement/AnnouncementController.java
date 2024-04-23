@@ -3,7 +3,7 @@ package com.moonBam.controller.adminpage.announcement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +22,7 @@ public class AnnouncementController {
 	
 	// write
 	// / 추가함
-	@GetMapping("AdminPage/WriteAnnouncementController")
+	@PostMapping("AdminPage/WriteAnnouncementController")
 	public String WriteAnnouncement(@RequestParam(required = false) String word) {
 		System.out.println("WriteAnnouncementController.WriteAnnouncementController()");
 		String nextPage = "AdminPage/content/announce/writeAnnouncement";

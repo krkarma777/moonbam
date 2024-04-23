@@ -65,7 +65,7 @@ public class AdminMemberService {
 		System.out.println("강퇴 대상자를 삭제된 회원 데이터로 insert");
 		System.out.println("강퇴 대상자를 dao로 전달");
 		int n1 = 0;
-		n1 = mdao.saveInDeletedlist(deletelist);
+		n1 = mdao.saveInDeletedlist(mlist);
 		System.out.println(n1 + "명 삭제된 데이터에 insert");
 
 		System.out.println("대상자를 기존 memberDB에서 삭제");
