@@ -2,6 +2,8 @@ package com.moonBam.dao;
 
 
 import com.moonBam.dto.*;
+
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -96,9 +98,22 @@ public ReviewDTO writeReview(ReviewDTO review) {
 		int num = session.update("reportReview", report);
 	}
 
-	public List<ReviewDTO> allReview(HashMap<String, String> map) {
-		List<ReviewDTO> reviewList = session.selectList("allReview", map);
-		return null;
+	public ReviewPageDTO allReview(HashMap<String, String> map) {
+		ReviewPageDTO rpDTO = new ReviewPageDTO();
+		int perPage = rpDTO.getPerPage();
+		int offset = (Integer.parseInt(map.get("curPage"))-1)*perPage;
+		
+		List<ReviewDTO> reviewList = session.selectList("allReview", map, new RowBounds(offset, perPage));
+		
+		rpDTO.setCurPage(Integer.parseInt(map.get("curPage")));
+		rpDTO.setList(reviewList);
+		rpDTO.setTotalCount(totalCount(session, map));
+		
+		return rpDTO;
+	}
+	
+	private int totalCount(SqlSessionTemplate session, HashMap<String, String> map) {
+		return session.selectOne("reviewTotalCount", map);
 	}
 
 	public void deleteReview(String postId) {

@@ -69,9 +69,9 @@ public class ReviewService {
 		dao.reportReview(report);
 	}
 
-	public List<ReviewDTO> allReview(HashMap<String, String> map) {
-		List<ReviewDTO> reviewList = dao.allReview(map);
-		return reviewList;
+	public ReviewPageDTO allReview(HashMap<String, String> map) {
+		ReviewPageDTO rpDTO = dao.allReview(map);
+		return rpDTO;
 	}
 
 	public void deleteReview(String postId) {

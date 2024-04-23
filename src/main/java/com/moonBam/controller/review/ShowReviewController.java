@@ -3,6 +3,7 @@ package com.moonBam.controller.review;
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReviewDTO;
+import com.moonBam.dto.ReviewPageDTO;
 import com.moonBam.service.ReviewService;
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ public class ShowReviewController {
 		String likeUserId=null; // 로그인 유저아이디
 		if(loginUser!=null) {
 			likeUserId = loginUser.getUserId();
+			request.setAttribute("member", loginUser);
 		}
 
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -59,24 +61,28 @@ public class ShowReviewController {
 	}
 	
 	@RequestMapping("/allReview")
-	public String allReview(Principal principal, Model model, String contId, HttpSession session) {
+	public String allReview(Principal principal, Model model, String contId, HttpSession session, HttpServletRequest request,
+							String curPage) {
 		System.out.println("in ShowReviewController allReview()");
-		System.out.println(contId);
+		if(curPage==null) {
+			curPage="1";
+		}
 		
-		// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
-		String likeUserId = principal.getName();
+		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+		String likeUserId = null;
+		if(loginUser!=null) {
+			// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
+			likeUserId= loginUser.getUserId();
+			request.setAttribute("member", loginUser);
+		}
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("contId", contId);
-		map.put("likeUserId", likeUserId);//페이지 사용중인 유저id (각 리뷰에 좋아요 눌렀는지 불러오기 위하여 전달)
-		List<ReviewDTO> reviewList = service.allReview(map);
-		if(null==reviewList) {
-			String mesg = "리뷰가 없습니다.";
-			session.setAttribute("mesg", mesg);
-			return "main";
-		}else {
-			model.addAttribute("reviewList", reviewList);
-			return "review/allReview";
-		}
+		map.put("likeUserId", likeUserId);
+		map.put("curPage", curPage);
+		ReviewPageDTO rpDTO = service.allReview(map);
+		model.addAttribute("rpDTO", rpDTO);
+		
+		return "review/allReview";
 	}
 }

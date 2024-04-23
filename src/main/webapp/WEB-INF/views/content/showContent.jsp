@@ -451,11 +451,6 @@ if (rateAmount > 0) {
 	user-select: none
 }
 
-#show_length {
-	color: gray;
-	text-align: right;
-}
-
 }
 .del_deco {
 	text-decoration: none;
