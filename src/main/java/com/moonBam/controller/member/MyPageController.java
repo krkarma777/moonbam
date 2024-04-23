@@ -371,7 +371,7 @@ public class MyPageController {
     		@RequestParam("password") String password,
          @RequestParam("userPwConfirm") String userPwConfirm) {
 
-    	
+    	System.out.println("push Test ");
     	System.out.println("userId: "+userId);
     	System.out.println("password: "+password);
     	System.out.println("userPw: "+userPw);
