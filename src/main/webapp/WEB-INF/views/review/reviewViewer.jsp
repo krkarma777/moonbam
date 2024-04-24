@@ -99,7 +99,7 @@
 	
 	#header{
 		padding-top: 50px;
-		background: orange;
+		background: #ff416c;
 	}
 	
 	.no_side_padding{
@@ -323,7 +323,7 @@
 						<div>
 							<!-- 좋아요 버튼 -->
 							<button id="like_wrapper">
-								<span class="like_btn" style="color:red">
+								<span class="like_btn" style="color:#ff416c">
 								<%if("1".equals(isLike)){%>♥ 
 								<%}else{ %>♡<%} %>
 								</span>
@@ -334,8 +334,8 @@
 						</div>
 					</div>
 					<div class="col" id="contImg">
-						<a href="content-page?contId=<%=contId%>" class="noEffect">
-							<img src="<%=contImg %>" width="150" height="150" style="margin-top:10px; margin-bottom:10px;">
+						<a href="showContent?contId=<%=contId%>" class="noEffect">
+							<img src="<%=contImg %>" width="100" height="150" style="margin-top:10px; margin-bottom:10px;">
 						</a>
 <%-- 					<div class="col-5">
 							<%=contTitle %>
@@ -359,14 +359,14 @@
 				
 				<div class="col">
 					<!-- 영화정보 버튼 -->
-					<a type="button" class="btn btn-outline-warning" href="content-page?contId=<%=contId%>">영화정보</a>
+					<a type="button" class="btn" style="background-color: #ff416c; color: white;" href="showContent?contId=<%=contId%>">영화정보</a>
 					<!-- 글수정, 삭제 버튼 -->
 					<!-- 버튼 표시: 로그인된 상태, 로그인 정보와 리뷰 작성자 정보가 일치해야함 -->
 					<!-- 버튼 클릭시 : 서버에서 로그인정보 확인할 수 없을시 현재 페이지로 리다이렉트후 로그인 정보를 확인할 수 없습니다 경고문 출력 -->
 					<sec:authorize access="isAuthenticated()">
 						<c:if test="${loginUserId eq review.userId}">
 							<!-- <a type="button" class="btn btn-outline-warning" id="review-edit">수정</a> -->
-							<a type="button" class="btn btn-outline-warning" id="review-delete">삭제</a>
+							<a type="button" class="btn" style="background-color: #ff416c; color: white;" id="review-delete">삭제</a>
 						</c:if>
 					</sec:authorize>
 				</div>

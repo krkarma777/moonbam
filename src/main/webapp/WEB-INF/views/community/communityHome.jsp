@@ -146,7 +146,6 @@ button {
 						int amount = chatRoom.getAmount();
 						String addr1 = chatRoom.getAddr1();
 						String category = chatRoom.getCategory();
-						
 							
 						switch(category) {
 						    case "music" : category = "음악";
@@ -157,8 +156,6 @@ button {
 					         	 break;
 						    case "etc": category = "기타";
 						    	 break;
-						    	 
-						    	 
 					}
 						
 						
