@@ -12,17 +12,38 @@
                 #{id, jdbcType=NUMERIC} AS contId, 
                 #{title, jdbcType=VARCHAR} AS contTitle,  
                 #{overview, jdbcType=CLOB} AS description, 
-                null AS nation, 
+                null AS nation,  <!-- 여기에는 nation 값이 명시적으로 null로 설정됩니다 -->
                 #{release_date, jdbcType=DATE} AS releaseDate, 
                 #{vote_average, jdbcType=NUMERIC} AS avgRate, 
-                'movie' AS contType, 
+                #{genres, jdbcType=VARCHAR} AS contType,  <!-- genre_ids 값을 contType에 저장 -->
                 #{poster_path, jdbcType=VARCHAR} AS contImg,
-               	#{popularity, jdbcType=NUMERIC} AS popularity
-            FROM dual
+                #{popularity, jdbcType=NUMERIC} AS popularity
+            FROM dual  <!-- Oracle DB에서 단일 행을 반환하는 데 사용되는 테이블 -->
         ) incoming
         ON (cdb.contId = incoming.contId)
         WHEN NOT MATCHED THEN 
-            INSERT (contId, contTitle, description, nation, releaseDate, avgRate, contType, contImg, popularity)
-            VALUES (incoming.contId, incoming.contTitle, incoming.description, incoming.nation, incoming.releaseDate, incoming.avgRate, incoming.contType, incoming.contImg, incoming.popularity)
+            INSERT (
+                contId, 
+                contTitle, 
+                description, 
+                nation, 
+                releaseDate, 
+                avgRate, 
+                contType,  <!-- contType 컬럼에 genre_ids 값을 저장 -->
+                contImg, 
+                popularity
+            )
+            VALUES (
+                incoming.contId, 
+                incoming.contTitle, 
+                incoming.description, 
+                incoming.nation, 
+                incoming.releaseDate, 
+                incoming.avgRate, 
+                incoming.contType,  <!-- 이 부분이 genre_ids에서 받은 값을 사용 -->
+                incoming.contImg, 
+                incoming.popularity
+            )
     </insert>
 </mapper>
+
