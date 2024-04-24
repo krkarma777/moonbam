@@ -1,5 +1,18 @@
 package com.moonBam.controller;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.moonBam.controller.adminpage.AdminCounter;
 import com.moonBam.controller.content.KoficAPI;
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.CommunityPageDTO;
@@ -12,18 +25,6 @@ import com.moonBam.service.PostService;
 import com.moonBam.service.adminpage.announcement.AnnouncementService;
 
 import jakarta.servlet.http.HttpSession;
-
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 @Controller
@@ -44,10 +45,16 @@ public class MainController {
     @Autowired
     AnnouncementService annoService;
     
+    @Autowired
+    AdminCounter counter;
+    
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category, Principal principal,
     						HttpSession session) {
         System.out.println("principal = " + principal);
+        
+        counter.init();//접속자 +1
+        
         String nextPage = "main";
 
         List<PostPageDTO> moviePostList = service.selectAll(new HashMap<String, String>() {
