@@ -71,8 +71,10 @@
 		<thead class="header-row">
 		<tr>
 			<th>글번호</th>
-			<th>제목</th>
-			<th>작성일</th>
+			<th >제목</th>
+			<th>시작일</th>
+			<th>종료일</th>
+			<!-- <th>작성일</th> -->
 			<th>작성자</th>
 		</tr>
 		</thead>
@@ -80,8 +82,10 @@
 		<c:forEach var="dto" items="${list}">
 			<tr>
 				<td>${dto.annoNum}</td>
-				<td><a href="ViewAnnouncementController?annoNum=${dto.annoNum}">${dto.annoTitle}</a></td>
-				<td>${dto.writeDate}</td>
+				<td style="width: 50%;"><a href="ViewAnnouncementController?annoNum=${dto.annoNum}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${dto.annoTitle}</a></td>
+				<td>${dto.startDate}</td>
+				<td>${dto.endDate}</td>
+				<%-- <td>${dto.writeDate}</td> --%>
 				<td>${dto.annoWriter}</td>
 			</tr>
 		</c:forEach>

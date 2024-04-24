@@ -9,7 +9,7 @@
 	
 	<!-- 조회 list -->
 	<select id="listAnnouncement" resultType="AnnouncementDTO" parameterType="map">
-		SELECT * FROM ( SELECT a.*, ROWNUM AS rnum FROM ( SELECT * FROM Announcement where annotitle like '%'||#{word}||'%' or annotext like '%'||#{word}||'%' ORDER BY annoNum DESC ) a 
+		SELECT * FROM ( SELECT a.*, ROWNUM AS rnum FROM ( SELECT * FROM Announcement where annotitle like '%'||#{word}||'%' or annotext like '%'||#{word}||'%' ORDER BY startDate DESC ) a 
 		WHERE ROWNUM <![CDATA[<]]>= ${end} ) WHERE rnum >= ${start}
 	</select>
 

@@ -55,10 +55,9 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 			"timePicker24Hour": true,
 			"timePickerIncrement": 30,
 			"startDate": "<%=today%>",
-			"endDate": "<%=nextWeekDay%>
-	",
+			"endDate": "<%=nextWeekDay%>",
 			locale : {
-				format : 'YYYY/MM/DD HH:mm:ss'
+				format : 'YYYY/MM/DD HH:mm'
 			}
 		});
 	});

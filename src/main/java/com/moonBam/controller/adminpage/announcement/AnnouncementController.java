@@ -1,5 +1,7 @@
 package com.moonBam.controller.adminpage.announcement;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,14 +12,21 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AnnouncementDTO;
+import com.moonBam.service.PostService;
 import com.moonBam.service.adminpage.announcement.AnnouncementService;
+import com.moonBam.service.member.MemberLoginService;
 import com.moonBam.util.TimeParsing;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class AnnouncementController {
 	@Autowired
 	AnnouncementService service;
 
+	 private final MemberLoginService memberLoginService;
+	
 	String nextPage = "redirect:toAdminPageAnnounce";
 	
 	// write
@@ -32,10 +41,9 @@ public class AnnouncementController {
 	// insert
 	// / 추가함
 	@RequestMapping("AdminPage/InsertAnnouncementController")
-	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, String category, @RequestParam(required = false) MultipartFile img) {
+	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, String category, Principal principal, @RequestParam(required = false) MultipartFile img) {
 		System.out.println("AnnouncementController.InsertAnnouncementController()");
-	
-		String annoWriter = "관리자"; 
+		String annoWriter =  memberLoginService.findByPrincipal(principal).getNickname(); 
 		TimeParsing tp = new TimeParsing();
 		String[] dates = tp.tp2Arr(dateTimePicker); // 시작일 종료일 분리
 		AnnouncementDTO dto = new AnnouncementDTO(0, annoTitle, annoText, annoWriter, dates[0], dates[1], popup, category);
@@ -61,8 +69,6 @@ public class AnnouncementController {
 	@RequestMapping("AdminPage/RetrieveAnnouncementController")
 	public ModelAndView Retrieve(String annoNum, Model m) {
 		System.out.println("AnnouncementController.RetrieveAnnouncementController()");
-		System.out.println("AnnouncementController.RetrieveAnnouncementController()");
-		
 		AnnouncementDTO dto = service.oneAnnouncement(annoNum);
 		ModelAndView mav = new ModelAndView();
 		// 날짜 설정
