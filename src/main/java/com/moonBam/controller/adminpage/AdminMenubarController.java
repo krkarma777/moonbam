@@ -40,6 +40,7 @@ public class AdminMenubarController {
 		mav.addObject("list1", list1);
 		mav.setViewName("/AdminPage/AdminPageStatStat");
 		
+		//미신고 처리 받아와서 list2로 
 		return mav;
 	}
 	

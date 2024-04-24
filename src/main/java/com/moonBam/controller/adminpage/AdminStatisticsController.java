@@ -34,7 +34,7 @@ public class AdminStatisticsController {
 		}
 	}
 
-	//@Scheduled(fixedRate = 1000) //1초마다 DB업데이트
+	@Scheduled(fixedRate = 5000) //5초마다 DB업데이트
 	public void updateCounter() {
 		int n = counter.getNum();
 		int num = asService.countVisitor(n);

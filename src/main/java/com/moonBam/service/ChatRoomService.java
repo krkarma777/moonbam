@@ -46,9 +46,10 @@ public class ChatRoomService {
 		
 		int n = dao.ChatKickUser(user);
 		
-		
+		System.out.println("방 인원 수 -1");
 		int n2 = dao.updateCurrentNow(chatNum);
-		
+		System.out.println("n2가 1이면 정상처리됨");
+		System.out.println(n2);
 		
 		return n;
 	}
