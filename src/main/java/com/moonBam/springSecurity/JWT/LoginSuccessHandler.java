@@ -4,18 +4,16 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.moonBam.springSecurity.SpringSecurityUser;
+import com.moonBam.controller.adminpage.AdminCounter;
 import com.moonBam.springSecurity.oauth2.OAuthUser;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -23,7 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final JWTUtil jwtUtil;
-
+	
     public LoginSuccessHandler(JWTUtil jwtUtil) {
 
         this.jwtUtil = jwtUtil;
@@ -63,5 +61,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             response.addHeader("Set-Cookie", cookieValue);
             response.sendRedirect("/acorn");
         }
+        
     }
 }

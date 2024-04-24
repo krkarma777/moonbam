@@ -39,12 +39,17 @@ public class ChatRoomService {
 	}
 
 
-	public int ChatKickUser(String user) {
+	public int ChatKickUser(String user, String chatNum) {
 		System.out.println("서비스 레이어에서 강퇴 대상 이름 수신 후 dao 전달=========");
 		System.out.println(user);
 		System.out.println("===========================================");
 		
 		int n = dao.ChatKickUser(user);
+		
+		System.out.println("방 인원 수 -1");
+		int n2 = dao.updateCurrentNow(chatNum);
+		System.out.println("n2가 1이면 정상처리됨");
+		System.out.println(n2);
 		
 		return n;
 	}

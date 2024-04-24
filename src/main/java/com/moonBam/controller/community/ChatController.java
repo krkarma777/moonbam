@@ -137,11 +137,13 @@ public class ChatController {
 		System.out.println(userId);
 		System.out.println("=================================");
 		
-		n = crService.ChatKickUser(userId);
+		n = crService.ChatKickUser(userId, chatNum);
 		
 		System.out.println("1이면 정상처리됨==========");
 		System.out.println(n);
 		System.out.println("====================");
+		
+		
 		
 		return "redirect:/chatRoom?chatNum="+chatNum;
 	}

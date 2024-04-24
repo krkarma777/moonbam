@@ -11,7 +11,7 @@
   </select>
   
   <select id="memberByChatMemberId" parameterType="string" resultType="MemberDTO" >
-	select * from memberdb where userid = #{userId}
+	select * from memberdb where userid = #{userId} 
   </select>
   
   <select id="ChatLeaderIdByChatNum" parameterType="int" resultType="string">
