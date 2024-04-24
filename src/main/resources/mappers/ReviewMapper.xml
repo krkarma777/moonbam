@@ -223,4 +223,8 @@
 		    ORDER BY postDate desc
 		)
     </select>
+    
+    <select id="myReview" resultType="ReviewDTO" parameterType="hashmap">
+    	select * from postdb where contid = #{contId} and nickname = #{nickname} and postboard = 'review'
+    </select>
 </mapper>

@@ -1,3 +1,5 @@
+<%@page import="com.moonBam.dto.ContentDTO"%>
+<%@page import="com.moonBam.dto.MemberDTO"%>
 <%@page import="com.moonBam.dto.ReviewPageDTO"%>
 <%@page import="com.moonBam.dto.ReviewDTO"%>
 <%@page import="java.util.List"%>
@@ -7,6 +9,18 @@
 <%
 	ReviewPageDTO rpDTO = (ReviewPageDTO)request.getAttribute("rpDTO");
 	List<ReviewDTO> reviewList = rpDTO.getList();
+	
+	MemberDTO member = (MemberDTO) request.getAttribute("member");
+	String userId = null;
+	String nickname = null;
+	if (member != null) {
+		userId = member.getUserId();
+		nickname = member.getNickname();
+	}
+	
+	String contId = (String)request.getAttribute("contId");
+	
+	ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
 %>
 <html>
 <head>
@@ -51,6 +65,17 @@ button {
 	color: gray;
 	text-align: right;
 }
+#postText {
+	border: none;
+	/*  overflow: scroll; */
+	overflow: auto;
+	overflow-x: hidden;
+	outline: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	resize: none; /*remove the resize handle on the bottom right*/
+}
 </style>
 </head>
 
@@ -66,7 +91,11 @@ button {
 			<!-- 개설 버튼 -->
 			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" 
 			id="createCommunity" data-bs-toggle="modal" data-bs-target="#exampleModal"><b>
-				리뷰쓰기
+				<%if(myReview==null){ %>
+					리뷰쓰기
+				<%}else{ %>
+					수정하기
+				<%} %>
 			</b></button>
 		</div>
 		<%if(reviewList==null){ %>
@@ -129,9 +158,9 @@ button {
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<input type="hidden" value="<%=reviewList.get(0).getContId() %>" id="contId">
+					<input type="hidden" value="<%=contId %>" id="contId">
 					<textarea cols="50" rows="12" id="postText"></textarea>
-					<p id="show_length">length</p>
+					<p id="show_length">0/200</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
@@ -151,14 +180,16 @@ button {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <sec:authorize access="isAuthenticared()">
 <script type="text/javascript">
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 	$(document).ready(function(){
-		$("#writeReview").on("click", writeReview);  //리뷰작성
-		$("#show_length").text($("#postText").val().length+"/"+max_length); //글자수 표시
 		$("#postText").on("keyup", check_length); 	 //글자수 제한
-		$("#postText").on("keypress", check_enter);  //엔터키 제한
+		$("#writeReview").click(writeReview); //리뷰 작성
 	})
 	
-	// 글자수 제한
+	//최대글자수
+	var max_length = 200;
 	function check_length(){
 		//console.log(this.value.length);
 		var length = this.value.length;
@@ -169,11 +200,34 @@ button {
 		$("#show_length").text(length+"/"+max_length);
 	}
 	
-	// 엔터키 제한
-	function check_enter(){
-		if(event.keyCode==13){
-			event.returnValue=false;
-		}
+	function writeReview(){
+		var contId = $("#contId").val();
+		var postText = $("#postText").val().substr(0, max_length);
+		var userId = <%=userId%>
+		console.log(userId);
+		if(postText.length!=0 && contId !="null"){
+			$.ajax(
+				{
+					type: "post",
+					url:"my-review",
+					data: {
+						"contId": contId,
+						"userId": "<%=userId%>",
+						"nickname": "<%=nickname%>",
+						"postText": postText
+					},
+					dataType: "text",
+					success: function(data, status, xhr){
+						if(userid!=null){
+							location.reload(true);
+						}
+					},
+					error: function(xhr, status, e){
+						console.log("실패: " + xhr.status);
+					}
+				}//json
+			);//ajax
+		}//내용검사if
 	}
 </script>
 </sec:authorize>

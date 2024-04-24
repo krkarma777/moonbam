@@ -78,4 +78,8 @@ public class ReviewService {
 		dao.deleteReview(postId);
 	}
 
+	public ReviewDTO myReview(HashMap<String, String> map) {
+		return dao.myReview(map);
+	}
+
 }

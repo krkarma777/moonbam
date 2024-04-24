@@ -74,6 +74,14 @@ public class ShowReviewController {
 			// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
 			likeUserId= loginUser.getUserId();
 			request.setAttribute("member", loginUser);
+			
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("contId", contId);
+			map.put("likeUserId", likeUserId);
+			String nickname = loginUser.getNickname();
+			map.put("nickname", nickname);
+			ReviewDTO myReview = service.myReview(map);
+			model.addAttribute("myreview", myReview);
 		}
 		
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -81,7 +89,9 @@ public class ShowReviewController {
 		map.put("likeUserId", likeUserId);
 		map.put("curPage", curPage);
 		ReviewPageDTO rpDTO = service.allReview(map);
+		
 		model.addAttribute("rpDTO", rpDTO);
+		model.addAttribute("contId", contId);
 		
 		return "review/allReview";
 	}

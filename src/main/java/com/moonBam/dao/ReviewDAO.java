@@ -120,4 +120,8 @@ public ReviewDTO writeReview(ReviewDTO review) {
 		session.delete("deleteReview", postId);
 	}
 
+	public ReviewDTO myReview(HashMap<String, String> map) {
+		return session.selectOne("myReview", map);
+	}
+
 }
