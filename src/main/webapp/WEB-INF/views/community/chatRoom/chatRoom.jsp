@@ -30,8 +30,6 @@ session.removeAttribute("mesg");
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body onload="connect()">
-	${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
-
 	<table border="1" style="background: white; width: 500px">
 		<thead>
 			<tr>
@@ -55,7 +53,7 @@ session.removeAttribute("mesg");
 
 			<tr>
 				<!-- 첫 화면부터 공간 차지함 -->
-				<td class="text_align_c" id='toggle_state'><br> <c:if
+				<td colspan="2" class="text_align_c" id='toggle_state'><br> <c:if
 						test="${sen.lastCv==1}">
 					</c:if> <c:if test="${sen.lastCv==0}">
 					</c:if></td>
