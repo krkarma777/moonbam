@@ -22,6 +22,7 @@ public class AdminStatisticsDAO {
 		System.out.println("집계 인원 : " + num);
 		
 		n = session.update("AdminStatisticsMapper.countVisitor", num);
+		//System.out.println(n);
 		
 		if (n == 1) {
 			System.out.println("정상적으로 집계됨");
