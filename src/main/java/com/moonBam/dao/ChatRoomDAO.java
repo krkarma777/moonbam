@@ -68,4 +68,11 @@ public class ChatRoomDAO {
 		return n;
 	}
 
+	public int updateCurrentNow(String chatNum) {
+		int n = 0;
+		n = session.update("ChatMapper.updateCurrentNow", chatNum);
+		
+		return n;
+	}
+
 }

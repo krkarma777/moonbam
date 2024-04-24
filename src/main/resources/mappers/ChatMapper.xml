@@ -40,6 +40,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id = "ChatKickUser" parameterType = "String">
 		update chatmember set isKicked = 't' where userid = #{user}
 	</update>
+	
+	<update id = "updateCurrentNow">
+		update chatroom set currentnow = #{currentNow} where chatNum = #{chatNum}
+	</update>
 
 	
 	

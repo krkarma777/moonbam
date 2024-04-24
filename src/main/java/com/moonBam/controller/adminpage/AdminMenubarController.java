@@ -1,11 +1,23 @@
 package com.moonBam.controller.adminpage;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.moonBam.dto.AdminCounterDTO;
 
 @Controller
 public class AdminMenubarController {
-
+	
+	@Autowired
+	AdminCounter counter;
+	
+	@Autowired
+	AdminStatisticsController asController;
+	
 	//처음 접속시화면
 	@RequestMapping(value = "/AdminPage")
 	public String AdminMain() {
@@ -16,9 +28,19 @@ public class AdminMenubarController {
 	//좌측 메뉴 이동 url
 	//통계1
 	@RequestMapping(value = "/AdminPage/toStatistics")
-	public String AdmintoStatistics() {
+	public ModelAndView AdmintoStatistics(ModelAndView mav) {
 		System.out.println("in adminpage.MainController : AdmintoStatistics()");
-		return "/AdminPage/AdminPageStatStat";
+		
+		List<AdminCounterDTO> list1 = asController.getCount();
+		
+		System.out.println("통계확인 페이지 전달 전의 list1");
+		System.out.println(list1);
+		System.out.println("======================");
+		
+		mav.addObject("list1", list1);
+		mav.setViewName("/AdminPage/AdminPageStatStat");
+		
+		return mav;
 	}
 	
 	//통계2
