@@ -30,6 +30,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body onload="connect()">
+_thread
 	<table border="1" style="background: white; width: 500px">
 		<thead>
 			<tr>
@@ -135,7 +136,8 @@
 						function(messageOutput) {
 				showMessageOutput(JSON.parse(messageOutput.body));
 						});
-				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			// 수정
+				stompClient.send("/acorn/chat/send_thead/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 					'type':'ENTER',
 					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
 					}));
@@ -150,7 +152,8 @@
 				var userId = `${userIdInSession}`; // 사용자 닉네임
 				var message = escapeHtml($("#messageContent").val()); // 메세지 
 				var serverTime = new Date().toLocaleString();
-				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
+// 수정
+				stompClient.send("/acorn/chat/send_thead2/"+chatNum, {}, JSON.stringify({
 					'type' : 'TALK',
 					'userId' : userId,
 					'message' : message,

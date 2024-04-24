@@ -145,8 +145,9 @@ public class ChatRoomController {
 		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
 				
 		//정상진행 시 chatRoom.jsp로 진입
-		String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp
-	
+		// 수정 함, 삭제필요
+		String returnWhere = "community/chatRoom/chatRoom_thread"; //chatRoom.jsp
+//	String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp //원본 
 		try {
 			
 			ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberselectMap);
