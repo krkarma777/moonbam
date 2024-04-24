@@ -50,8 +50,8 @@
             <div style="text-align: center;">
                 <h1>내 게시글</h1>
             </div>
-            <table class="table table-custom">
-                <thead>
+            <table  class="table table-striped ">
+                <thead class="table-danger">
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
                     <th>Post ID</th>
@@ -61,7 +61,7 @@
                     <th>Delete</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody >
                <c:forEach items="${mDTO.list}" var="post">
     <tr>
         <td><input type="checkbox" name="check" class="postCheckbox" value="${post.postId}"></td>
