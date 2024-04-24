@@ -7,7 +7,7 @@
 <mapper namespace="Chatmore">
 
   <select id="ChatMemberIdByChatNum" parameterType="int" resultType="string">
-  	select userId from ChatMember where chatnum = #{chatNum}
+  	select userId from ChatMember where chatnum = #{chatNum} and isKicked = 'f'
   </select>
   
   <select id="memberByChatMemberId" parameterType="string" resultType="MemberDTO" >
