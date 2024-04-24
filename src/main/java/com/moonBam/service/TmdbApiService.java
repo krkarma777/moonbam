@@ -1,6 +1,9 @@
 package com.moonBam.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,34 @@ public class TmdbApiService {
 	@Autowired
 	TmdbApiDAO dao;
 	
+	Map<Integer, String> genresMap = new HashMap<Integer, String>();
+
+	/*
+	 *{ "id": 878, "name": "Science Fiction" }, { "id":
+	 * 10770, "name": "TV Movie" }, { "id": 53, "name": "Thriller" }, { "id": 10752,
+	 * "name": "War" }, { "id": 37, "name": "Western" } ] }
+	 */
 	public int getAndSaveMovies(int limitPage) throws Exception {
+		
+		genresMap.put(28, "Action");
+		genresMap.put(12, "Adventure");
+		genresMap.put(16, "Animation");
+		genresMap.put(35, "Comedy");
+		genresMap.put(80, "Crime");
+		genresMap.put(99, "Documentary");
+		genresMap.put(18, "Drama");
+		genresMap.put(10751, "Family");
+		genresMap.put(14, "Fantasy");
+		genresMap.put(36, "History");
+		genresMap.put(27, "Horror");
+		genresMap.put(10402, "Music");
+		genresMap.put(9648, "Mystery");
+		genresMap.put(10749, "Romance");
+		genresMap.put(878, "Science Fiction");
+		genresMap.put(10770, "Movie");
+		genresMap.put(53, "Thriller");
+		genresMap.put(10752, "War");
+		genresMap.put(37, "Western");
 		
 		// 임시 대참사 제한 : 500
 		if (limitPage>500) {
@@ -33,8 +63,20 @@ public class TmdbApiService {
 			
 			// movie 데이터들이 담겨있는 list 순회하며 한행씩 insert
 			List<MovieResultResponseDTO> movies = movieResponse.getResults();
+			
 			for(int i=0;i<movies.size();i++) {
 				// 2. num insertMovie(dto)
+				List<Integer> genre_ids =  movies.get(i).getGenre_ids();
+				String genres = "";
+				for (Integer genre_id : genre_ids) {
+					if(genres.equals(""))
+						genres+=genresMap.get(genre_id);
+					else
+						genres+=","+genresMap.get(genre_id);
+					System.out.println("genres: "+genres);
+				}
+				movies.get(i).setGenres(genres);
+				System.out.println(movies.get(i).getGenres());
 				int num = dao.insertMovie(movies.get(i));
 			}
 			insertedPage ++;

@@ -1,6 +1,7 @@
 package com.moonBam.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -41,6 +42,32 @@ public class MovieResultResponseDTO {
     private String poster_path;
     //private int vote_count;
     private double popularity;
+    
+    private List<Integer> genre_ids;
+    private String genres;
+	public MovieResultResponseDTO(Long id, String title, String overview, LocalDate release_date, float vote_average,
+			String poster_path, double popularity, List<Integer> genre_ids, String genres) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.overview = overview;
+		this.release_date = release_date;
+		this.vote_average = vote_average;
+		this.poster_path = poster_path;
+		this.popularity = popularity;
+		this.genre_ids = genre_ids;
+		this.genres = genres;
+	}
+	public MovieResultResponseDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public String toString() {
+		return "MovieResultResponseDTO [id=" + id + ", title=" + title + ", overview=" + overview + ", release_date="
+				+ release_date + ", vote_average=" + vote_average + ", poster_path=" + poster_path + ", popularity="
+				+ popularity + ", genre_ids=" + genre_ids + ", genres=" + genres + "]";
+	}
 	public Long getId() {
 		return id;
 	}
@@ -83,11 +110,17 @@ public class MovieResultResponseDTO {
 	public void setPopularity(double popularity) {
 		this.popularity = popularity;
 	}
-	@Override
-	public String toString() {
-		return "MovieResultResponseDto [id=" + id + ", title=" + title + ", overview=" + overview + ", release_date="
-				+ release_date + ", vote_average=" + vote_average + ", poster_path=" + poster_path + ", popularity="
-				+ popularity + "]";
+	public List<Integer> getGenre_ids() {
+		return genre_ids;
+	}
+	public void setGenre_ids(List<Integer> genre_ids) {
+		this.genre_ids = genre_ids;
+	}
+	public String getGenres() {
+		return genres;
+	}
+	public void setGenres(String genres) {
+		this.genres = genres;
 	}
     
     

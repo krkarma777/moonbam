@@ -383,7 +383,7 @@
 					//console.log("성공: " + data);
 					if(data.length>0){
 						var jsonData = JSON.parse(data);
-						$("#postText").text(jsonData.postText);
+						$("#postText").html(jsonData.postText);
 						updateMyReview(jsonData)
 						$('#exampleModal').modal('hide');
 						$("#cont_myreview_container").show();
@@ -490,9 +490,10 @@
 		$("#myreview_link").attr("href", "review?postId="+review.postId);
 		$("#myreview_user").text("<%=nickname %>");
 		if(review.postText.length>150){
-			$("#myreview_text").text(review.postText.substr(0, 145)+" ...");
+			$("#myreview_text").html(review.postText.substr(0, 145)+" ...");
 		}else{
-			$("#myreview_text").text(review.postText);
+			$("#myreview_text").html(review.postText);
+
 		}
 		var length = $("#postText").val().length;
 		
