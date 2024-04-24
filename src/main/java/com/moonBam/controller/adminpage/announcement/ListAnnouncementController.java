@@ -38,9 +38,8 @@ public class ListAnnouncementController {
 		map.put("word", word);
 		map.put("start", start);
 		map.put("end", end);
-System.out.println(map);
-//	여기서 현재 페이지 마지막 페이지 전달
 		
+		//	여기서 현재 페이지 마지막 페이지 전달
 		List<AnnouncementDTO> list = service.listAnnouncement(map);
 		// get lastPage
 		int lastPage = service.lastPage(word);

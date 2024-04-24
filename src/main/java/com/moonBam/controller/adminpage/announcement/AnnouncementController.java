@@ -32,7 +32,6 @@ public class AnnouncementController {
 	// insert
 	// / 추가함
 	@RequestMapping("AdminPage/InsertAnnouncementController")
-
 	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, String category, @RequestParam(required = false) MultipartFile img) {
 		System.out.println("AnnouncementController.InsertAnnouncementController()");
 	
@@ -62,6 +61,8 @@ public class AnnouncementController {
 	@RequestMapping("AdminPage/RetrieveAnnouncementController")
 	public ModelAndView Retrieve(String annoNum, Model m) {
 		System.out.println("AnnouncementController.RetrieveAnnouncementController()");
+		System.out.println("AnnouncementController.RetrieveAnnouncementController()");
+		
 		AnnouncementDTO dto = service.oneAnnouncement(annoNum);
 		ModelAndView mav = new ModelAndView();
 		// 날짜 설정

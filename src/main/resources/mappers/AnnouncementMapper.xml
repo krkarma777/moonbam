@@ -8,7 +8,6 @@
 	</insert>
 	
 	<!-- 조회 list -->
- 
 	<select id="listAnnouncement" resultType="AnnouncementDTO" parameterType="map">
 		SELECT * FROM ( SELECT a.*, ROWNUM AS rnum FROM ( SELECT * FROM Announcement where annotitle like '%'||#{word}||'%' or annotext like '%'||#{word}||'%' ORDER BY annoNum DESC ) a 
 		WHERE ROWNUM <![CDATA[<]]>= ${end} ) WHERE rnum >= ${start}
@@ -40,14 +39,6 @@
 	select annoNum, annoTitle, annoText, annoWriter, popup,  writeDate, updateDate, startDate,
 		endDate from Announcement where (startDate <![CDATA[<]]> sysdate and endDate <![CDATA[>]]> sysdate)  and popup = #{popupList} order by annoNum desc
 	</select>
-	
-	<!-- 검색 -->
-<!-- annoText의 컴럼 타입이 clob이라사 일반적으로 문자검색시 에러발생 -->
-<!-- 
-	<select id="searchAnnoList" parameterType="map" resultType="AnnouncementDTO">
-		SELECT annoNum, annoTitle, annoText, annoWriter, popup, writeDate, updateDate, startDate, endDate FROM announcement WHERE annoTitle = #{annoTitle} ORDER BY annoNum DESC;
-	</select>
- -->	
  
 	<!-- count column  -->
 	<select id="lastPage" resultType="int" parameterType="String">

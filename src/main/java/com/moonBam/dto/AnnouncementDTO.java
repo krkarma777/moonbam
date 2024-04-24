@@ -14,9 +14,9 @@ public class AnnouncementDTO {
 	private String updateDate;
 	private String startDate;
 	private String endDate;
-	private String popup = "no";
+	private String popup;
 	private String category;
-	
+
 	private String[] writeDateArr;
 	private String[] updateDateArr;
 	private String[] startDateArr;
@@ -50,18 +50,14 @@ public class AnnouncementDTO {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.category = category;
-		
+
 		TimeParsing tp = new TimeParsing();
 		this.writeDateArr = tp.db2Arr(this.writeDate);
 		this.updateDateArr = tp.db2Arr(this.updateDate);
 		this.startDateArr = tp.db2Arr(this.startDate);
 		this.endDateArr = tp.db2Arr(this.endDate);
 
-		if ("popup".equals(popup)) {
-			this.popup = popup;
-		} else {
-			this.popup = "no";
-		}
+		this.popup = ("on".equals(popup)) ? popup : "no";
 
 	}
 
@@ -76,13 +72,8 @@ public class AnnouncementDTO {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.category = category;
-		
-		if ("popup".equals(popup)) {
-			this.popup = popup;
-		} else {
-			this.popup = "no";
-		}
 
+		this.popup = ("on".equals(popup)) ? popup : "no";
 	}
 
 	@Override
@@ -161,11 +152,7 @@ public class AnnouncementDTO {
 	}
 
 	public void setPopup(String popup) {
-		if ("popup".equals(popup)) {
-			this.popup = popup;
-		} else {
-			this.popup = "no";
-		}
+		this.popup = popup;
 	}
 	// new add
 
@@ -200,7 +187,7 @@ public class AnnouncementDTO {
 	public void setEndDateArr(String[] endDateArr) {
 		this.endDateArr = endDateArr;
 	}
-	
+
 	public String getCategory() {
 		return category;
 	}
@@ -212,7 +199,7 @@ public class AnnouncementDTO {
 	public void setTimes() {
 		setTimes(this.writeDate, this.annoWriter, this.annoTitle, this.annoText);
 	}
-	
+
 	public void setTimes(String writeDate, String updaString, String staString, String endString) {
 		TimeParsing tp = new TimeParsing();
 		this.writeDateArr = tp.db2Arr(writeDate);

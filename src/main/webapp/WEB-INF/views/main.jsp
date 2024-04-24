@@ -24,7 +24,7 @@ var list = <%= request.getAttribute("list") %>;
     	let height ;
     	
         for (var i = 0; i < list.length; i++) {
-        	let flag= true;	/*  false 시 팝업 안나옴 */
+        	let flag= false;	/*  false 시 팝업 안나옴 */
         	if(flag){
         		// 팝업 창의 위치 설정
         		setPostion(i);

@@ -51,6 +51,10 @@
 			<td colspan="3"><span>${dto.annoText}</span></td>
 		</tr>
 		<tr>
+			<td>카테고리</td>
+			<td colspan="3"><span>${dto.category}</span></td>
+		</tr>
+		<tr>
 			<td>작성일</td>
 			<td>
 		 	<c:forEach var="times" items="${dto.writeDateArr}" varStatus="status">
@@ -80,7 +84,7 @@
 		</tr>
 			<tr>
 				<td>팝업 허용</td><td colspan="3"><input type="checkbox" id="popup" name="popup"  
-    <c:if test="${dto.popup == 'popup'}">
+    <c:if test="${dto.popup == 'on'}">
        checked="checked" 
     </c:if>
     disabled="disabled"></td>
