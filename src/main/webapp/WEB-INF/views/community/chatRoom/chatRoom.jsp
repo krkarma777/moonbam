@@ -191,12 +191,6 @@ session.removeAttribute("mesg");
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
-		/* 멤버 */
-		function openMemberWindow() {
-			var url = "memberWindow";
-			window.open(url, "_blank", "width=600,height=400");
-		}
-
 		var stompClient = null;
 
 		// 소켓 연결
@@ -266,9 +260,9 @@ session.removeAttribute("mesg");
 			//console.log("시간 잘라서 확인하기 완료?",timeShort)
 			if(whosMessage == "my-chat"){
 				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
-}else{
-	  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
-}
+			}else{
+				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			}
 	       
 	    }
 	    $("#chat").append(chatLi);
