@@ -8,6 +8,152 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>문화인들의 밤</title>
+<link rel="stylesheet" href="resources/css/showContent.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
+<style>
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+    .rate { display: inline-block;border: 0;margin-right: 15px;}
+	.rate > input {display: none;}
+	.rate > label {float: right;color: #ddd}
+	.rate > label:before {display: inline-block;font-size: 1rem;padding: .3rem .2rem;margin: 0;cursor: pointer;font-family: FontAwesome;content: "\f005 ";}
+	.rate .half:before {content: "\f089 "; position: absolute;padding-right: 0;}
+	.rate input:checked ~ label, 
+	.rate label:hover,.rate label:hover ~ label { color: #ff416c !important;  } 
+	.rate input:checked + .rate label:hover,
+	.rate input input:checked ~ label:hover,
+	.rate input:checked ~ .rate label:hover ~ label,  
+	.rate label:hover ~ input:checked ~ label { color: #ff416c !important;  } 
+	
+* {
+	padding: 0;
+	margin: 0;
+}
+
+#graph {
+	height: 70px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-bottom: 20px;
+}
+
+.graph_bar {
+	/* background-color: #0d6efd; */
+	background-color: #ff416c;
+	margin-left: 1px;
+	margin-right: 1px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	text-align: center;
+}
+
+#show_length {
+	color: gray;
+	text-align: right;
+}
+
+#postText {
+	border: none;
+	/*  overflow: scroll; */
+	overflow: auto;
+	overflow-x: hidden;
+	outline: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	resize: none; /*remove the resize handle on the bottom right*/
+}
+
+#cont_myreview_container {
+	display: none;
+	border: none;
+}
+
+#myreview_link {
+	text-decoration: none;
+	color: white;
+}
+
+#myreview_text {
+	max-height: 300px;
+	overflow: hidden;
+	font-size: 16px;
+}
+
+#myreview_footer {
+	font-size: 16px;
+}
+
+#myreview_link {
+	text-decoration: none;
+	color: white;
+}
+
+#review_col {
+	margin: 10px;
+	background-color: #f8f8f8;
+	border: 1px solid #E2E2E2;
+	border-radius: 16px;
+	padding: 20px;
+	max-width: 25%;
+	/* min-width: 350px; */
+	min-width: 200px;
+}
+
+#review_title {
+	margin-top: 50px;
+	margin-bottom: 25px;
+}
+
+#review_nick {
+	font_size: 18px;
+	height: 24px
+}
+
+#review_hr {
+	margin-bottom: 8px;
+}
+
+#remove_deco {
+	text-decoration: none;
+	color: black;
+}
+
+#review_body {
+	font-size: 15px;
+	height: 135px;
+	margin-bottom: 5px;
+	overflow-wrap: break-word;
+	overflow: hidden;
+}
+
+#review_score {
+	font-size: 17px;
+}
+
+.like_btn {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none
+}
+
+}
+.del_deco {
+	text-decoration: none;
+	color: black;
+}
+</style>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
 <%
 MemberDTO member = (MemberDTO) request.getAttribute("member");
 String userId = null;
@@ -50,31 +196,12 @@ for (int i = 0; i < rateAmount; i++) {
 	rateDistribution[(int) score - 1]++;
 }
 
-String avgRate = "리뷰가 존재하지 않습니다.";
+String avgRate = "평점이 존재하지 않습니다.";
 // 별점이 1개 이상일 때
 if (rateAmount > 0) {
 	avgRate = String.format("%.1f", sum / rateAmount / 2);
 }
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>문화인들의 밤</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-	crossorigin="anonymous">
-<link rel="stylesheet" href="resources/css/movieHome.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("#allReview").click(function(){
-			location.href="allReview?contId=<%=contId%>";
-		})
-	})
 	
 	//최대글자수
 	var max_length = 200;
@@ -87,6 +214,9 @@ if (rateAmount > 0) {
 		$("#postText").on("keypress", check_enter);  //엔터키 제한
 		$(".rate input").on("change", rating)  		//별점 선택
 		$(".like_btn").on("click", likeToggle) 		// 공감버튼 클릭
+		$("#allReview").click(function(){
+			location.href="allReview?contId=<%=contId%>";
+		})
 		
 		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
 		// console.log("tests")
@@ -310,9 +440,6 @@ if (rateAmount > 0) {
 		<%-- <%}%> --%>
 	}//function
 	
-	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-	
 </script>
 <sec:authorize access="isAuthenticared()">
 	<script>
@@ -324,144 +451,6 @@ if (rateAmount > 0) {
 		});//ready
 	</script>
 </sec:authorize>
-<style>
-@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-    .rate { display: inline-block;border: 0;margin-right: 15px;}
-	.rate > input {display: none;}
-	.rate > label {float: right;color: #ddd}
-	.rate > label:before {display: inline-block;font-size: 1rem;padding: .3rem .2rem;margin: 0;cursor: pointer;font-family: FontAwesome;content: "\f005 ";}
-	.rate .half:before {content: "\f089 "; position: absolute;padding-right: 0;}
-	.rate input:checked ~ label, 
-	.rate label:hover,.rate label:hover ~ label { color: #ff416c !important;  } 
-	.rate input:checked + .rate label:hover,
-	.rate input input:checked ~ label:hover,
-	.rate input:checked ~ .rate label:hover ~ label,  
-	.rate label:hover ~ input:checked ~ label { color: #ff416c !important;  } 
-	
-* {
-	padding: 0;
-	margin: 0;
-}
-
-#graph {
-	height: 70px;
-	padding-left: 5px;
-	padding-right: 5px;
-	margin-bottom: 20px;
-}
-
-.graph_bar {
-	/* background-color: #0d6efd; */
-	background-color: #ff416c;
-	margin-left: 1px;
-	margin-right: 1px;
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	text-align: center;
-}
-
-#show_length {
-	color: gray;
-	text-align: right;
-}
-
-#postText {
-	border: none;
-	/*  overflow: scroll; */
-	overflow: auto;
-	overflow-x: hidden;
-	outline: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-	resize: none; /*remove the resize handle on the bottom right*/
-}
-
-#cont_myreview_container {
-	display: none;
-	border: none;
-}
-
-#myreview_link {
-	text-decoration: none;
-	color: white;
-}
-
-#myreview_text {
-	max-height: 300px;
-	overflow: hidden;
-	font-size: 16px;
-}
-
-#myreview_footer {
-	font-size: 16px;
-}
-
-#myreview_link {
-	text-decoration: none;
-	color: white;
-}
-
-#review_col {
-	margin: 10px;
-	background-color: #f8f8f8;
-	border: 1px solid #E2E2E2;
-	border-radius: 16px;
-	padding: 20px;
-	max-width: 25%;
-	/* min-width: 350px; */
-	min-width: 200px;
-}
-
-#review_title {
-	margin-top: 50px;
-	margin-bottom: 25px;
-}
-
-#review_nick {
-	font_size: 18px;
-	height: 24px
-}
-
-#review_hr {
-	margin-bottom: 8px;
-}
-
-#remove_deco {
-	text-decoration: none;
-	color: black;
-}
-
-#review_body {
-	font-size: 15px;
-	height: 135px;
-	margin-bottom: 5px;
-	overflow-wrap: break-word;
-	overflow: hidden;
-}
-
-#review_score {
-	font-size: 17px;
-}
-
-.like_btn {
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none
-}
-
-#show_length {
-	color: gray;
-	text-align: right;
-}
-
-}
-.del_deco {
-	text-decoration: none;
-	color: black;
-}
-</style>
 </head>
 
 <body class="bg-light" style="height: 100vh;">
@@ -483,15 +472,12 @@ if (rateAmount > 0) {
 			<div style="width: 950px;">
 				<!-- 영화 제목, 개봉일 -->
 				<div style="font-size: 35px; background-color: #ffb2c4; color: white; height: 52px; width: 949px; position: relative;">
-					<b><span style="margin-left: 4px;"> <%
- if (content.getContTitle().length() > 40) {
- %>
-							<%=content.getContTitle().substring(0, 40)%> ... <%
-							} else {
-							%>
-							${content.getContTitle()} <%
- }
- %>
+					<b><span style="margin-left: 4px;"> 
+					<%if (content.getContTitle().length() > 40) { %>
+						<%=content.getContTitle().substring(0, 40)%> ... 
+					<%} else { %>
+						${content.getContTitle()}
+					<%} %>
 					</span></b> 
 					<span style="font-size: 20px; position: absolute; bottom: 0; right: 5px;">개봉일:
 						<%=releaseDate%></span>
@@ -580,86 +566,50 @@ if (rateAmount > 0) {
 			<div class="carousel-container">
 				<div class="carousel-slide">
 					<div class="inner" id="lastClone">
-						<%
-						for (int i = creditList.size() - 6; i < creditList.size(); i++) {
-						%>
+						<%for (int i = creditList.size() - 6; i < creditList.size(); i++) { %>
 						<div style="width: 201px; height: auto;">
-							<%
-							if (null == creditList.get(i)) {
-							%>
+							<%if (null == creditList.get(i)) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								width="197px">
-							<%
-							} else {
-							%>
+							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
 								width="197px" height="296px">
-							<%
-							}
-							%>
+							<%} %>
 						</div>
-						<%
-						}
-						%>
+						<%} %>
 					</div>
 
-					<%
-					int count = 0;
-					for (int i = 0; i < (creditList.size() / 6); i++) {
-					%>
-					<div class="inner">
-						<%
-						for (int j = 0; j < 6; j++) {
-						%>
-						<div style="width: 201px; height: auto;">
-							<%
-							if (null == creditList.get(count)) {
-							%>
+					<%int count = 0;
+					for (int i = 0; i < (creditList.size() / 6); i++) { %>
+						<div class="inner">
+						<%for (int j = 0; j < 6; j++) { %>
+							<div style="width: 201px; height: auto;">
+							<%if (null == creditList.get(count)) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								height="296px" width="197px" style="bottom: 0px;">
-							<%
-							} else {
-							%>
+							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(count).getProfile_path()%>"
 								width="197px" height="296px">
-							<%
-							}
-							%>
+							<%} %>
 						</div>
-						<%
-						count++;
-						}
-						%>
+						<%count++; }%>
 					</div>
-					<%
-					}
-					%>
-
+					<%} %>
 					<div class="inner" id="firstClone">
-						<%
-						for (int i = 0; i < 6; i++) {
-						%>
+						<%for (int i = 0; i < 6; i++) { %>
 						<div style="width: 201px; height: auto;">
-							<%
-							if (null == creditList.get(i)) {
-							%>
+							<%if (null == creditList.get(i)) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								width="197px">
-							<%
-							} else {
-							%>
+							<%} else { %>
 							<img class="innerImage" alt="resource/images/person-x.svg"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
 								width="197px" height="296px">
-							<%
-							}
-							%>
+							<%} %>
 						</div>
-						<%
-						}
-						%>
+						<%} %>
 					</div>
 				</div>
 				<button id="prevBtn">
@@ -698,19 +648,17 @@ if (rateAmount > 0) {
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">취소</button>
 					<!-- <button type="button" class="btn btn-primary" id="writeReview">Save changes</button> -->
-					<button type="button" class="btn" id="writeReview" style="background-color: #ff416c; color:white;"
-						data-bs-toggle="popover" data-bs-title="알림"
-						data-bs-content="로그인이 필요한 작업입니다">완료</button>
+					<button type="button" class="btn" style="background-color: #ff416c; color:white;" id="writeReview" data-bs-toggle="popover" data-bs-title="알림" data-bs-content="로그인이 필요한 작업입니다">완료</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-		crossorigin="anonymous"></script>
-	<script type="text/javascript">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script type="text/javascript">
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 //캐러셀
 const carouselSlide = document.querySelector('.carousel-slide');
 const carouselImages = document.querySelectorAll('.inner');
@@ -745,6 +693,7 @@ carouselSlide.addEventListener('transitionend', () => {
 		carouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
 	}
 });
+
 </script>
 </body>
 </html>

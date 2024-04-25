@@ -16,6 +16,7 @@ import java.util.Map;
 
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,14 +24,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.CreditDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.MoviePageDTO;
 import com.moonBam.dto.RateDTO;
 import com.moonBam.dto.ReviewDTO;
+import com.moonBam.service.MainService;
 import com.moonBam.service.ReviewService;
 import com.moonBam.service.TmdbApiService;
 
@@ -43,12 +48,14 @@ public class ShowContentController {
 	MemberLoginService memberLoginService;
 	@Autowired
 	TmdbApiService tmdbApiService;
-	
+	@Autowired
+    MainService mService;
 	@Autowired
 	KoficAPI kofic;
 	//영화 진흥위원회 키
 	@Value("${kofic.key}")
 	private String key;
+	
 	
 	@RequestMapping("/saveMovie")
 	@ResponseBody
@@ -144,14 +151,62 @@ public class ShowContentController {
 	}
 	
 	@RequestMapping("/movieSearch")
-	@ResponseBody
-	public String showContent(Model model, String curPage, String repNationCd) {
-		System.out.println("in ShowContentController allMovie()");
+	public String showContent(Model model, String curPage, String searchCategory, String searchValue) {
+		System.out.println("in movieSearch(): "+ searchCategory+ " " + searchValue);
+		if(curPage==null) {
+			curPage="1";
+		}
 		
-//		List<JSONObject> allMovieList = kofic.allMovieList(curPage);
-//		model.addAttribute("allmovieList", allMovieList);
+		if(searchValue==null) {
+			searchValue="";
+		}
+		
+		switch(searchCategory) {
+		    case "Drama" : searchCategory = "드라마";
+		         break;
+		    case "Comedy": searchCategory = "코미디";
+		         break;
+		    case "Thriller": searchCategory = "스릴러";
+	         	 break;
+		}
+		System.out.println(searchCategory+ " " + searchValue);
+		
+		MoviePageDTO mpDTO = mService.searchMovieList(curPage, searchCategory, searchValue);
+		
+		model.addAttribute("mpDTO", mpDTO);
+		
+		model.addAttribute("searchCategory", searchCategory);
+		model.addAttribute("searchValue", searchValue);
+		
+		List<String> categoryList = new ArrayList<>();;
+		String category = "movie";
+		model.addAttribute("category", category);
+		categoryList.add("전체");
+		categoryList.add("드라마");
+		categoryList.add("코미디");
+		categoryList.add("스릴러");
+		model.addAttribute("categoryList", categoryList);
 		
 		return "movie/allMovie";
+	}
+	
+	@RequestMapping("/genre")
+	public String genre(Model model, String genre, HttpSession session) {
+		if(genre==null) {genre="Drama";}
+		List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
+		session.setAttribute("genreMovieTopList", genreMovieTopList);
+		model.addAttribute("genre", genre);
+		
+		List<String> categoryList = new ArrayList<>();;
+		String category = "movie";
+		model.addAttribute("category", category);
+		categoryList.add("전체");
+		categoryList.add("드라마");
+		categoryList.add("코미디");
+		categoryList.add("스릴러");
+		model.addAttribute("categoryList", categoryList);
+		
+		return "movie/movieHome";
 	}
 	
 }
