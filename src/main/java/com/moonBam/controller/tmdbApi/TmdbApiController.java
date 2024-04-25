@@ -25,11 +25,6 @@ public class TmdbApiController {
 	@ResponseBody
 	public String getAndSaveMovies(int limitPage) {
 		
-		//임시구문
-		if(limitPage==0) {
-			limitPage=1;
-		}
-		
 		int insertedPage = 0;
 		try {
 			insertedPage = tmdbApiService.getAndSaveMovies(limitPage);
