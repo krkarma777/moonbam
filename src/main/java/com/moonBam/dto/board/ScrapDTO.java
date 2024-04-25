@@ -15,4 +15,6 @@ public class ScrapDTO {
 	private String userId;
 	private Long postId;
 	private Date scrapDate;
+	private String postTitle;
+	private String postBoard; // postBoard 속성 추가
 }

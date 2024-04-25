@@ -307,8 +307,8 @@ window.onload = init;
                             mesg += "&nbsp;&nbsp;&nbsp;<input type='hidden' id='replyCommentId" + comId + "' name='replyuserId' value=" + userId2 + ">"
                            // mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong" + comId + "'>" + nickname2 + "</strong>";
                             mesg += "<br>"
-                            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' name='replyCommentComtext'></textarea>"; //답글 다는 창
-                            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'>"
+                            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' class='form-control' style='width:500px' name='replyCommentComtext'></textarea>"; //답글 다는 창
+                            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'></div>"
                             mesg += "</div>";
                             //////////////
 
