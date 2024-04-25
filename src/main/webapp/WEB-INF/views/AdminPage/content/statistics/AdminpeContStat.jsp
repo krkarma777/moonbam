@@ -40,6 +40,8 @@
 <%
 List<AdminCounterDTO> list1 = (List<AdminCounterDTO>)request.getAttribute("list1");
 System.out.println(list1);
+AdminReportDTO rDTO = (AdminReportDTO)request.getAttribute("rDTO");
+System.out.println(rDTO);
 System.out.println("=======");
 %>
 <script>
@@ -99,9 +101,7 @@ System.out.println("=======");
     <hr>
     <h2>미처리 신고</h2>
     <p>신고된 게시글/댓글</p>
-    <p>영리, 개인정보침해, 불법, 음란, 폭언, 도배, 이용규칙위반</p>
-    <p>신고된 사용자</p>
-    <p>영리, 개인정보침해, 불법, 음란, 폭언, 도배, 이용규칙위반</p>
+    <p>음란물 ${rDTO.sexual }건 , 언어규정위반 ${rDTO.lang }건, 도배 ${rDTO.abusing }건, 규정위반 ${rDTO.ruleviolation }건, 기타 ${rDTO.etc }건</p>
 </div>
 </body>
 </html>

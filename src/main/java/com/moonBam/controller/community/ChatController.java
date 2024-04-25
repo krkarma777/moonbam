@@ -148,4 +148,6 @@ public class ChatController {
 		return "redirect:/chatRoom?chatNum="+chatNum;
 	}
 	
+//	@RequestMapping()
+	
 }//end class

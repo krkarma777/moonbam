@@ -65,6 +65,16 @@ public class AdminMemberDAO {
 		return list;
 	}
 
+	public int cleanDeletedMember() {
+		int n = session.delete("AdminMemberMapper.cleanDeletedMember");
+		return n;
+	}
+
+	public int releaseUser(String userId) {
+		int n = session.update("AdminMemberMapper.releaseUser", userId);
+		return n;
+	}
+
 
 
 }
