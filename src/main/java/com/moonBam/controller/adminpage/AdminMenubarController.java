@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AdminCounterDTO;
+import com.moonBam.dto.AdminReportDTO;
 
 @Controller
 public class AdminMenubarController {
@@ -20,9 +21,26 @@ public class AdminMenubarController {
 	
 	//처음 접속시화면
 	@RequestMapping(value = "/AdminPage")
-	public String AdminMain() {
+	public ModelAndView AdminMain(ModelAndView mav) {
 		System.out.println("in adminpage.MainController : AdminMain()");
-		return "AdminPage/AdminPageMain";
+		List<AdminCounterDTO> list1 = asController.getCount();
+		
+		System.out.println("통계확인 페이지 전달 전의 list1");
+		System.out.println(list1);
+		System.out.println("======================");
+		
+		mav.addObject("list1", list1);
+		
+		AdminReportDTO rDTO = asController.getUndone();
+		System.out.println("통계페이지 전달 전의 list2");
+		System.out.println(rDTO);
+		
+		mav.addObject("rDTO", rDTO);
+		
+		mav.setViewName("/AdminPage/AdminPageStatStat");
+		
+		//미신고 처리 받아와서 list2로 
+		return mav;
 	}
 	
 	//좌측 메뉴 이동 url
@@ -38,8 +56,14 @@ public class AdminMenubarController {
 		System.out.println("======================");
 		
 		mav.addObject("list1", list1);
-		mav.setViewName("/AdminPage/AdminPageStatStat");
 		
+		AdminReportDTO rDTO = asController.getUndone();
+		System.out.println("통계페이지 전달 전의 list2");
+		System.out.println(rDTO);
+		
+		mav.addObject("rDTO", rDTO);
+		
+		mav.setViewName("/AdminPage/AdminPageStatStat");
 		//미신고 처리 받아와서 list2로 
 		return mav;
 	}
