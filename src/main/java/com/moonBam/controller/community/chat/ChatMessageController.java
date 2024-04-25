@@ -51,7 +51,7 @@ public class ChatMessageController {
 		// insert db
 		ctDto.setChatContent(chatContent);
 		ctDto.setChatNum(chatNum);
-		chatMessagesService.insert(ctDto); // 메시지 저장, db 저장 완료 ///////////////////////
+	//	chatMessagesService.insert(ctDto); // 메시지 저장, db 저장 완료 ///////////////////////
 
 		// string을 json객체로 쪼갰음 왜냐면 chatContent안에 userid와 time 등도 같이 있어서. 내가 비교할건
 		// message뿐이라 떼와야했음
