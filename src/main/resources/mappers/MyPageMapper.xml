@@ -32,6 +32,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     WHERE userId = #{userId}
 </select>
 
+<!-- 내가 스크랩한 게시글 총 개수 조회 -->
+<select id="countMyScraps" resultType="int" parameterType="String">
+    SELECT COUNT(*) FROM scrap
+    WHERE userId = #{userId}
+</select>
+
         <!-- 내가 작성한 댓글 조회 -->
 <select id="selectMyComm" parameterType="string" resultType="CommentDTO">
     SELECT c.comId, c.postId, c.userId, c.comDate, c.comText, c.nickname, c.aboveCom, c.aboveComId, p.postTitle, p.postBoard

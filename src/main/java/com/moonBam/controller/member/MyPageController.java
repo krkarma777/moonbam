@@ -25,6 +25,7 @@ import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
+import com.moonBam.dto.MyScrapDTO;
 import com.moonBam.dto.board.ScrapDTO;
 import com.moonBam.service.ScrapService;
 import com.moonBam.service.member.LoginService;
@@ -61,12 +62,24 @@ public class MyPageController {
     @Autowired
      PasswordEncoder encoder;
 
+
     @GetMapping("/scrap")
-    public String scrap(Model model, Principal principal) {
+    public String scrap(Model model,String curPage, Principal principal) {
         MemberDTO memberDTO = memberLoginService.findByPrincipal(principal);
-        List<ScrapDTO> scrapDTOS = scrapService.findAll(memberDTO.getUserId());
-        model.addAttribute("scrapDTOs", scrapDTOS);
+        if (memberDTO != null) {
+            String name = principal.getName();
+            if (curPage == null) {
+                curPage = "1";
+            }
+        MyScrapDTO sDTO =mserv.findAllScrap(curPage, name);
+   // List<ScrapDTO> scrapDTOS = scrapService.findAll(memberDTO.getUserId());
+        model.addAttribute("sDTO", sDTO);
+        model.addAttribute("curPage", curPage);
         return "member/myPage/scrapManagement";
+        } else {
+
+            return "redirect:/Login";
+        }
     }
 
     @GetMapping("/scrap/{scrapId}")
