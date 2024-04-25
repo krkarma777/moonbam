@@ -139,8 +139,8 @@ session.removeAttribute("mesg");
 
 			<tr>
 				<!-- 첫 화면부터 공간 차지함 -->
-				<td class="text_align_c" id='toggle_state'><br> <c:if
-						test="${sen.lastCv==1}">
+				<td colspan="2" class="text_align_c" id='toggle_state'><br>
+					<c:if test="${sen.lastCv==1}">
 					</c:if> <c:if test="${sen.lastCv==0}">
 					</c:if></td>
 			</tr>
@@ -261,7 +261,7 @@ session.removeAttribute("mesg");
 		
 	function createMsgTag(content) {
 	    let chatLi;
-	    let nickName = `${nickNameInSession}`;
+	    let nickName = content.nickName;
 		let time = content.serverTime;
 	
 		let message = content.message;

@@ -6,6 +6,8 @@
 <%@page import="com.moonBam.dto.ReviewDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +49,6 @@
 		padding-top: 20px;
 		padding-bottom: 20px;
 	}
-	
 	#postText{
 		border: none;
 	   /*  overflow: scroll; */
@@ -86,7 +87,6 @@
 		text-decoration: none;
 		color: white;
 	}
-
 	#review_col{
 		margin: 10px;
 		background-color: #f8f8f8;
@@ -123,7 +123,6 @@
 	#review_score{
 		font-size: 17px;
 	}
-	
 	.like_btn{
 		-webkit-user-select:none;
 		-moz-user-select:none;
@@ -251,9 +250,13 @@
 		/* $("#writeReview").on("click", writeReview);  //리뷰작성 */
 		$("#postText").on("keyup", check_length); 	 //글자수 제한
 		$("#postText").on("keypress", check_enter);  //엔터키 제한
-		$(".rate input").on("change", rating)  		//별점 선택
-		$(".like_btn").on("click", likeToggle) 		// 공감버튼 클릭
+		$(".rate input").on("change", rating);  	//별점 선택
+		$(".like_btn").on("click", likeToggle); 	// 공감버튼 클릭
 		
+		$("#aiForm").on("submit", aiRequest);
+		$("#sample-q1").on("click", aiRequest);
+		$("#sample-q2").on("click", aiRequest);
+		$("#sample-q3").on("click", aiRequest);
 		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
 		// console.log("tests")
 		// showCredits();
@@ -262,6 +265,45 @@
 		setAvgGraph();
 		
 	});//ready
+	
+	// ai request
+	function aiRequest(e){
+		/* alert("test"); */
+		e.preventDefault();
+		if(this.type=="button"){
+			var prompt = this.innerText;
+		}else{
+			var prompt = $("#prompt").val();
+		}
+		if(prompt.length<=3){
+			alert("3글자 이상 입력해주세요.")
+		} else if (prompt.length>100){
+			alert("100자를 넘을 수 없습니다.")
+		} else{
+			//console.log(prompt);
+			
+			$("#ai-response-context").show();
+			$("#ai-response").text("AI가 요청을 처리중입니다...");
+			$.ajax(
+				{
+					type: "post",
+					url:"chatgpt",
+					data: {
+						"prompt": prompt,
+					},
+					dataType: "text",
+					success: function(data, status, xhr){
+						console.log(data);
+						$("#ai-response").text(data);
+					},
+					error: function(xhr, status, e){
+						console.log("실패: " + xhr.status);
+						$("#ai-response").text("AI가 응답에 실패하였습니다.");
+					}
+				}//ajax	
+			);//ajax
+		}
+	}
 	
 	// 화면 로딩시 출연진 정보 로딩 및 출력
 	function showCredits(){
@@ -384,7 +426,7 @@
 					//console.log("성공: " + data);
 					if(data.length>0){
 						var jsonData = JSON.parse(data);
-						$("#postText").text(jsonData.postText);
+						$("#postText").html(jsonData.postText);
 						updateMyReview(jsonData)
 						$('#exampleModal').modal('hide');
 						$("#cont_myreview_container").show();
@@ -491,9 +533,10 @@
 		$("#myreview_link").attr("href", "review?postId="+review.postId);
 		$("#myreview_user").text("<%=nickname %>");
 		if(review.postText.length>150){
-			$("#myreview_text").text(review.postText.substr(0, 145)+" ...");
+			$("#myreview_text").html(review.postText.substr(0, 145)+" ...");
 		}else{
-			$("#myreview_text").text(review.postText);
+			$("#myreview_text").html(review.postText);
+
 		}
 		var length = $("#postText").val().length;
 		
@@ -535,6 +578,7 @@
 					},
 					error: function(xhr, status, e){
 						console.log("실패: " + xhr.status);
+						console.log(contId, "<%=userId%>","<%=nickname%>", postText)
 					}
 				}//json
 			);//ajax
@@ -542,7 +586,7 @@
 		<%-- <%}%> --%>
 	}//function
 </script>
-<sec:authorize access="isAuthenticared()">
+<sec:authorize access="isAuthenticated()">
 	<script>
 		$(document).ready(function(){
 			$("#writeReview").on("click", writeReview);  //리뷰작성
@@ -624,6 +668,7 @@
 				    
 				    <!-- Button trigger modal -->
 				    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Write Your Feeling !</button>
+				    <button type="button" class="btn btn-primary" onclick='$("#AI-CONTEXT").toggle()'>AI</button>
 				  </div>
 				</div>
 			</div>
@@ -673,9 +718,36 @@
 					</div>	
 					<div class="col-lg-2"></div>
 				</div>
-				
+				<div class="row" id="AI-CONTEXT" style="width:100%; display:none;; margin-top:30px">
+					<div class="card" style="width: 50rem;">
+					  <div class="card-body">
+					    <h5 class="card-title">AI에게 평가 부탁하기</h5>
+					    <p class="card-text">AI에게 해당 영화에 대해 질문하거나 평가를 부탁할 수 있습니다 !</p>
+					    
+					    <form action="chatgpt" method="post" id="aiForm">
+					    	<div class="input-group mb-3">
+							  <span class="input-group-text" id="inputGroup-sizing-default">요청입력</span>
+							  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="prompt" name="prompt">
+							</div>
+					    </form>
+					    
+					    <div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-bottom:15px">
+						  <button type="button" class="btn btn-outline-secondary" id="sample-q1">${content.contTitle}에 대한 주요 리뷰 요약해 줄 수 있어?</button>
+						  <button type="button" class="btn btn-outline-secondary" id="sample-q2">${content.contTitle} 영화의 재밌는 비하인드 스토리가 있으면 알려줘!</button>
+						  <button type="button" class="btn btn-outline-secondary" id="sample-q3">${content.contTitle} 같은 비슷한 영화 있을까?</button>
+						</div>
+					    
+					    <div class="card" id="ai-response-context" STYLE="display:none;" >
+						  <div class="card-body" id="ai-response">
+						    
+						  </div>
+						</div>
+					  </div>
+					</div>
+				</div>
 			</div>
 		</div>
+		
 		<!-- 출연진 표시 -->
 		<div class="row pad_side" id="castList_title">
 			<a href="MoveToAllReview" id="reviews_title" class="del_deco"><h3>출연진 ></h3	></a>
@@ -774,14 +846,14 @@
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
-	      	<input type="hidden" value="<%=contId %>" id="contId">
+	      	<input type="hidden" value="<%=contId%>" id="contId">
 	        <textarea cols="50" rows="12" id="postText"></textarea>
 	        <p id="show_length">length</p>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 	        <!-- <button type="button" class="btn btn-primary" id="writeReview">Save changes</button> -->
-	        <button type="button" class="btn btn-primary" id="writeReview" data-bs-toggle="popover" data-bs-title="알림" data-bs-content="로그인이 필요한 작업입니다">Save changes</button>
+	        <button type="button" class="btn" style="background-color: #ff416c; color:white;" id="writeReview" data-bs-toggle="popover" data-bs-title="알림" data-bs-content="로그인이 필요한 작업입니다">완료</button>
 	      </div>
 	    </div>
 	  </div>

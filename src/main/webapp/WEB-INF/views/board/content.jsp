@@ -348,7 +348,7 @@ $("document").ready(function() {
 /* 사이드바 위치 조절*/
 .sidebar {
     position: fixed; /* 고정된 위치에 표시 */
-    right: 100px; /* 오른쪽 여백 */
+    right: 200px; /* 오른쪽 여백 */
     top: 85%; /* 화면의 중간 높이 */
     transform: translateY(-80%); /* 세로 중앙 정렬 */
 }

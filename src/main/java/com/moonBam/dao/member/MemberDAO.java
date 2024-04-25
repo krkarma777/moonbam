@@ -1,6 +1,7 @@
 package com.moonBam.dao.member;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -11,6 +12,7 @@ import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
+import com.moonBam.dto.MyScrapDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.member.MemberCreateRequestDTO;
 
@@ -75,5 +77,33 @@ public void updateMember(MemberDTO loginUser) {
 	
 }
 
+public int deleteMyComment(String comId) {
+	int num = session.delete("deleteMyComment",comId);
+	return num;
+}
 
+public int updateMyComment(Map<String, String> map) {
+	int num = session.update("updateMyComment", map);
+	return num;
+}
+
+public void deleteUser(String userId, String password) {
+	session.delete("deleteUser", password);
+	
+}
+
+public MyScrapDTO findAllScrap(String curPage, String name) {
+	MyScrapDTO sDTO = new MyScrapDTO();
+	
+	int perPage = sDTO.getPerPage();
+	int offset = (Integer.parseInt(curPage)-1)*perPage;
+	List<PostDTO> selectMyPostPaged = session.selectList("ScrapMapper.findAll",name, new RowBounds(offset, perPage));
+	sDTO.setCurPage(Integer.parseInt(curPage));
+	sDTO.setList(selectMyPostPaged);
+	sDTO.setTotalCount(totalPostScrap(name));
+	return sDTO;
+}
+private int  totalPostScrap(String name) {
+	return session.selectOne("countMyScraps",name);
+}
 }
