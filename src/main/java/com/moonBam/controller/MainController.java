@@ -71,9 +71,9 @@ public class MainController {
         // popup
         List<Integer> list = annoService.popupNnumList("popup");
       	
-        model.addAttribute("movieList", moviePostList);
-        model.addAttribute("movieMeetList", movieMeetList);
-        model.addAttribute("movieInfoList", movieInfoList);
+        session.setAttribute("movieList", moviePostList);
+        session.setAttribute("movieMeetList", movieMeetList);
+        session.setAttribute("movieInfoList", movieInfoList);
         // popup
         model.addAttribute("list", list);
         
@@ -88,14 +88,22 @@ public class MainController {
 		    		session.setAttribute("dailyList", dailyList);
 	    		}
 	    		
-	    		//장르 인기순 가져오기
+	    		
 	    		List<ContentDTO> movieTopList = mService.selectTop();
-	    		model.addAttribute("movieTopList", movieTopList);
+	    		session.setAttribute("movieTopList", movieTopList);
+	    		
+	    		//장르 인기순 가져오기
+	    		//처음엔 드라마로.
+	    		String genre = "Drama";
+	    		List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
+	    		session.setAttribute("genreMovieTopList", genreMovieTopList);
+	    		model.addAttribute("genre", genre);
 	    		
 	    		model.addAttribute("category", category);
 	    		categoryList.add("전체");
-	    		categoryList.add("한국영화");
-	    		categoryList.add("해외영화");
+	    		categoryList.add("드라마");
+	    		categoryList.add("코미디");
+	    		categoryList.add("스릴러");
 	    		model.addAttribute("categoryList", categoryList);
                 nextPage = "movie/movieHome";
                 break;
@@ -103,6 +111,7 @@ public class MainController {
             	String curPage = "1";
             	String searchCategory = "";
             	String searchValue = "";
+            	
             	CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
             	model.addAttribute("cpDTO", cpDTO);
             	
