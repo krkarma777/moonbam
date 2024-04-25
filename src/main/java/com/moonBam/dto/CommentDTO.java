@@ -15,7 +15,9 @@ public class CommentDTO {
 	private String nickname;
 	private int aboveCom;
 	private String aboveComId;
-	
+	private String postTitle;
+	private String postBoard; // postBoard 속성 추가
+
 	
 
 	public CommentDTO() {
@@ -25,7 +27,7 @@ public class CommentDTO {
 
 
 	public CommentDTO(int comId, Long postId, String userId, String comDate, String comText, String nickname,
-			int aboveCom, String aboveComId) {
+			int aboveCom, String aboveComId, String postTitle, String postBoard) { // postBoard 매개변수 추가
 		super();
 		this.comId = comId;
 		this.postId = postId;
@@ -35,6 +37,8 @@ public class CommentDTO {
 		this.nickname = nickname;
 		this.aboveCom = aboveCom;
 		this.aboveComId = aboveComId;
+		this.postTitle = postTitle;
+		this.postBoard = postBoard; // postBoard 초기화
 	}
 
 
@@ -133,19 +137,32 @@ public class CommentDTO {
 		this.aboveComId = aboveComId;
 	}
 
+	public String getPostTitle() {
+		return postTitle;
+	}
 
+	public void setPostTitle(String postTitle) {
+		this.postTitle = postTitle;
+	}
+
+	public String getPostBoard() {
+		return postBoard;
+	}
+
+	public void setPostBoard(String postBoard) {
+		this.postBoard = postBoard;
+	}
 
 	@Override
 	public String toString() {
 		return "CommentDTO [comId=" + comId + ", postId=" + postId + ", userId=" + userId + ", comDate=" + comDate
 				+ ", comText=" + comText + ", nickname=" + nickname + ", aboveCom=" + aboveCom + ", aboveComId="
-				+ aboveComId + "]";
+				+ aboveComId + ", postTitle=" + postTitle + ", postBoard=" + postBoard + "]";
 	}
 
 
-
-	
-
-
-	
+	public void setMember(MemberDTO memberDTO) {
+		this.userId = memberDTO.getUserId();
+		this.nickname = memberDTO.getNickname();
+	}
 }

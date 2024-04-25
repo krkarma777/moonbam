@@ -26,15 +26,15 @@ public class PostDTO implements IPost {
 
     private Long contId;
 
-	@NotBlank
-	@Size(max = 40)
+	@NotBlank(message = "제목을 입력해주세요.")
+	@Size(max = 40, message = "제목 길이가 너무 깁니다.")
     private String postTitle;
 
     private Date postDate;
 
     private Date postEditDate;
 
-	@NotBlank
+	@NotBlank(message = "글 내용을 입력해주세요.")
     private String postText;
 
     private String nickname;

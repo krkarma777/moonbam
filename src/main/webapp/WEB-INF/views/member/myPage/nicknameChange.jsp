@@ -6,10 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>마이페이지</title>
+    <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -25,7 +27,7 @@
 
         <div class="shadow form-section">
             <!-- 닉네임 수정 폼 -->
-            <form id="nicknameForm" action="<c:url value='/updateNickname'/>" method="post">
+            <form id="nicknameForm" action="<c:url value='/my-page/updateNickname'/>"   method="post">
                 <div class="mb-3">
                     <p>현재 닉네임: ${loginUser.nickname}</p>
                     <label for="newNickname" class="form-label">새로운 닉네임 (최소 2글자)</label>
@@ -35,7 +37,7 @@
                 <div class="spinner-container" style="display:none;">
                     <span id="loadingSpinner_for_nickname" class="loadingSpinner"></span>
                 </div>
-                <button type="button" id="updateNicknameButton" class="btn-outline">닉네임 수정</button>
+                <button type="submit" id="updateNicknameButton" class="btn-outline">닉네임 수정</button>
             </form>
         </div>
     </div>

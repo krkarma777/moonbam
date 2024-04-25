@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-
 <style>
 
     .text-pink {
@@ -72,7 +71,7 @@
                 <td><input type="checkbox" class="chkPost" data-xxx="${dto.targetId}"></td>
                 <td>${fn:indexOf(list, dto)+1}</td> <!-- Displaying index as report number -->
                 <td><a href="#" class="showContent text-pink">${dto.targetId}</a></td>
-                <td>${dto.reporter}</td>
+                <td>${dto.reporterId}</td>
                 <td>${dto.userId}</td>
                 <td>${dto.sexual}</td>
                 <td>${dto.lang}</td>
@@ -89,3 +88,87 @@
     <button type="button" id="chkAll" class="btn btn-pink">모두 선택/해제</button>
     <button type="button" id="delChecked" class="btn btn-pink">삭제</button>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type = "text/javascript">
+
+	$(document).ready(function(){
+		
+		$("#chkAll").on("click", chkArr);
+		$("#delChecked").on("click", delChecked);
+		$(".showContent").on("click", showContent);
+		
+		var flag = 1;
+		function chkArr(){
+			//console.log("chkArr");
+			if (flag==1){
+				$(".chkPost").attr("checked", true);
+				flag = 0;
+			}else{
+				$(".chkPost").attr("checked", false);
+				flag = 1;
+			}
+		}//chkArr
+		
+		
+		function delChecked(){
+			
+			//디버깅용 확인
+			console.log("chkArr");
+			//삭제할 글id저장용 배열
+			let dupPostArr = [];
+			//체크된 글 id를 배열에 저장
+			$(".chkPost:checked").each(function(i,e){
+				dupPostArr.push($(this).attr("data-xxx"));
+			});//each
+			//확인
+			console.log("dupPostArr: "+dupPostArr);
+			
+			//중복제거
+			var postArr = [];
+			for(postid of dupPostArr){
+				if(!postArr.includes(postid)){
+					postArr.push(postid);
+				}	
+			}
+			
+			//확인
+			console.log("postArr: " + postArr);
+	
+			//전송
+			var target = "<%=request.getContextPath()%>" + "/AdminPage/DeletePost?postArr="+postArr;
+			console.log(target);
+			location.href = "<%=request.getContextPath()%>" + "/AdminPage/DeletePost?postArr="+postArr;
+		}//delChecked
+		
+		//해당 글 아이디 클릭시 자식창으로 글 내용 확인
+		function showContent(){
+			//글 아이디 파싱 확인
+			var postid = $(this).text()
+			console.log(postid);
+			
+			// 글 내용 보여줄 자식창을 변수에 저장
+			
+			
+			//ajax로 글 내용 받아서 자식창으로 전달
+			$.ajax({
+				type: "get",
+				url:"AdminShowPostContentServlet",
+				data:{postid:postid},
+				dataType:"json",
+				success:function(data, status, xhr){
+					
+					//childWin;
+					
+				},//success
+				error:function(xhr, status, error){
+					console.log(error);
+				}
+			})//ajax
+			
+			
+			
+		}//showContent
+		
+	});//document
+</script>

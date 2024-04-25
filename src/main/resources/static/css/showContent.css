@@ -1,0 +1,94 @@
+@charset "UTF-8";
+a{
+	text-decoration: none;
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+}
+
+.carousel-container {
+	width: 1200px;
+	margin: auto; /*width가 지정되어 있어야 가운데로 옴.*/
+	overflow: hidden;
+	position: relative;
+}
+
+.carousel-container2 {
+	width: 1200px;
+	margin: auto; /*width가 지정되어 있어야 가운데로 옴.*/
+	overflow: hidden;
+	position: relative;
+}
+
+.carousel-slide {
+	display: flex;
+	width: 1200px;
+	margin: auto;
+}
+
+.carousel-slide2 {
+	display: flex;
+	width: 1200px;
+	margin: auto;
+}
+
+.inner {
+	display: flex;
+	width: 100%;
+}
+
+.inner2 {
+	display: flex;
+	width: 100%;
+}
+
+.innerImage {
+	margin-right: 3.5px;
+}
+
+#prevBtn {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translate(0%, -50%);
+	background-color: white;
+	opacity: 0.5;
+	/*background: no-repeat;*/
+	border: none;
+}
+
+#prevBtn2 {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translate(0%, -50%);
+	background-color: white;
+	opacity: 0.5;
+	/*background: no-repeat;*/
+	border: none;
+}
+
+#nextBtn {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translate(0%, -50%);
+	background-color: white;
+	opacity: 0.5;
+	/*background: no-repeat;*/
+	border: none;
+}
+
+#nextBtn2 {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translate(0%, -50%);
+	background-color: white;
+	opacity: 0.5;
+	/*background: no-repeat;*/
+	border: none;
+}

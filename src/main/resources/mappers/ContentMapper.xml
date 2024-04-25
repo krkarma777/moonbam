@@ -8,6 +8,49 @@
 
     <!-- 추후 탑10만 셀렉되도록 수정해야 함 -->
     <select id="selectTop" resultType="ContentDTO">
-    	select * from contentdb where rownum between 1 and 12 order by popularity desc
+    	select * from contentdb where rownum between 1 and 10 order by releasedate desc, popularity desc
+    </select>
+    
+    <!-- 장르 탑 10개 출력 -->
+    <select id="selectGenreTop" resultType="ContentDTO" parameterType="String">
+    	select * from contentdb where rownum between 1 and 10 and conttype like '%'||#{genre}||'%' order by popularity desc
+    </select>
+    
+    <select id="movieTotalCount" resultType="int" parameterType="HashMap">
+    	select count(*) from contentdb
+    	<where>
+			<if test = "searchCategory == '전체'">
+			 	conttype like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '드라마'">
+			 	conttype like '%'||'Drama'||'%' and conttitle like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '코미디'">
+			 	conttype like '%'||'Comedy'||'%' and conttitle like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '스릴러'">
+			 	conttype like '%'||'Thriller'||'%' and conttitle like '%'||#{searchValue}||'%'
+			</if>
+		</where>
+		order by contid desc
+    </select>
+    
+    <select id="searchMovieList" parameterType="HashMap" resultType="ContentDTO">
+    	select * from contentdb
+    	<where>
+			<if test = "searchCategory == '전체'">
+			 	conttype like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '드라마'">
+			 	conttype like '%'||'Drama'||'%' and conttitle like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '코미디'">
+			 	conttype like '%'||'Comedy'||'%' and conttitle like '%'||#{searchValue}||'%'
+			</if>
+			<if test = "searchCategory == '스릴러'">
+			 	conttype like '%'||'Thriller'||'%' and conttitle like '%'||#{searchValue}||'%'
+			</if>
+		</where>
+		order by contid desc
     </select>
 </mapper>

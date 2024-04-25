@@ -1,3 +1,4 @@
+<%@page import="org.json.JSONObject"%>
 <%@page import="com.moonBam.dto.ContentDTO"%>
 <%@page import="com.moonBam.controller.board.util.ContentDataFormating"%>
 <%@page import="java.util.Date"%>
@@ -12,16 +13,20 @@
 <%
 //1. 국내영화/해외영화 구분해서 가져와야함.(이건 api 바꿔야하긴 함)
 //2. 더보기 태그 국내 영화 해외영화 바꿔야함(1번이 되면 가능)
-List<PostPageDTO> movieList = (List<PostPageDTO>) request.getAttribute("movieList");
-List<PostPageDTO> movieMeetList = (List<PostPageDTO>) request.getAttribute("movieMeetList");
-List<PostPageDTO> movieInfoList = (List<PostPageDTO>) request.getAttribute("movieInfoList");
+List<PostPageDTO> movieList = (List<PostPageDTO>)session.getAttribute("movieList");
 ContentDataFormating cdf = new ContentDataFormating();
-List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTopList");
+List<ContentDTO> movieTopList = (List<ContentDTO>) session.getAttribute("movieTopList");
+List<ContentDTO> genreMovieTopList = (List<ContentDTO>) session.getAttribute("genreMovieTopList");
+
+String genre = (String)request.getAttribute("genre");
+System.out.println("in movieHome.jsp: "+genre);
+
+List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList");
 %>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -31,7 +36,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 </head>
 <body class="bg-light" style="height: 100vh;">
 	<!-- 네비게이션 바 -->
-	<jsp:include page="common/navBar.jsp"></jsp:include>
+	<jsp:include page="../common/navBar.jsp"></jsp:include>
 
 	<div style="height: 50px"></div>
 	
@@ -39,60 +44,75 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 <div style="height: 910px; width: 1200px; margin: auto;">
 	
 	<!-- 신작 영화 순위 -->
-	<div style="background-color: #ffb2c4; height: 30px; width:1199px; font-size: 19px; ">
+	<div style="background-color: #ffb2c4; height: 30px; width:1200px; font-size: 19px; ">
 		<b>
 		<span style="float: left; color:white">
-			<a href="" style="color:white;">신작 영화 순위</a>
+			<a href="" style="color:white;">박스 오피스</a>
+		</span>
+		<span style="float: right; color:white">
+			<a href="movieSearch" style="color:white; float: rigth;">더보기</a>
 		</span>
 		</b>
 	</div>
 	<div class="carousel-container">
 		<div class="carousel-slide">
 			<div class="inner" id="lastClone">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 6; i <= movieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner">
-				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 1; i <= movieTopList.size() - 5; i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			
 			<div class="inner">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 6; i <= movieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			
 			<div class="inner" id="firstClone">
 				<%
-				for (int i = 1; i <= movieTopList.size() - 6; i++) {
+				for (int i = 1; i <= movieTopList.size() - 5; i++) {
 				%>
-				<div style="width: 201px; height:auto;">
-					<a href="content-page?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
@@ -109,56 +129,69 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 	
 	<!-- 영화 순위(태그) -->
 	<!-- 아직 구현되지는 않음. 영화 데이터 가져오는 것 중에 장르가 없어서. -->
-	<div style="background-color: #ffb2c4; margin-top: 4px; height: 30px; width:1199px; font-size: 19px;">
+	<div style="background-color: #ffb2c4; margin-top: 4px; height: 30px; width:1200px; font-size: 19px; color:white;">
 		<b>
-		<a href="" style="color:white;">#드라마</a>
-		<a href="" style="color:white;">#코미디</a>
-		<a href="" style="color:white;">#스릴러</a>
+		#<a href="genre?genre=Drama" class="" style="color:white;">드라마</a>
+		#<a href="genre?genre=Comedy" class="" style="color:white;">코미디</a>
+		#<a href="genre?genre=Thriller" class="" style="color:white;">스릴러</a>
+		<a href="movieSearch?searchCategory=<%=genre %>" style="color:white; float:right;">더보기</a>
 		</b>
 	</div>
 	<div class="carousel-container2">
 		<div class="carousel-slide2">
 			<div class="inner2" id="lastClone2">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 6; i <= genreMovieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner2">
-				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 1; i <= genreMovieTopList.size() - 5; i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner2">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 6; i <= genreMovieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner2" id="firstClone2">
-				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 1; i <= genreMovieTopList.size() - 5; i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
@@ -186,6 +219,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 						<span style="float: right;"><a href="/acorn/board/movie" style="color:white;">더보기&nbsp</a></span>
 					</th>
 				</tr>
+				<div id="genreList">
 				<tr>
 					<td>
 					<%int count = 0;
@@ -198,7 +232,7 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 					<div style="height: 30px; width: 600px; padding:0px;"><b style="font-size: 16px" id="i">
 						<a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=post.getPostBoard()%>" style="color:black;">
 							<%=post.getPostTitle()%>[<%=post.getCommentCount()%>]</a> 
-						<span style="float: right;"><%=displayDate%>|<%=post.getViewNum()%> | <%=post.getLikeNum()%>&nbsp</span>
+						<span style="float: right;"><%=displayDate%> | <%=post.getViewNum()%> | <%=post.getLikeNum()%>&nbsp&nbsp</span>
 						</b>
 					</div>
 					<%count++;} %>
@@ -206,26 +240,34 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 					
 					<td>
 					<%
-					for (int i=8; i<movieList.size(); i++) {
+					for (int i=7; i<movieList.size(); i++) {
 						PostPageDTO post = movieList.get(i);
 						String displayDate = cdf.minuteHourDay(post);
 					%>
 					<div style="height: 30px; width: 600px; padding:0px;"><b style="font-size: 16px" id="i">
 						<a href="/acorn/board/content?postId=<%=post.getPostId()%>&bn=<%=post.getPostBoard()%>" style="color:black;">
-							<%=post.getPostTitle()%>[<%=post.getCommentCount()%>]</a> 
-						<span style="float: right;"><%=displayDate%>|<%=post.getViewNum()%> | <%=post.getLikeNum()%></span>
+							<span>
+							<%if(post.getPostTitle().length()>22){ %>
+								<%=post.getPostTitle().substring(0, 21) %>...
+							<%}else{ %>
+								<%=post.getPostTitle() %>
+							<%} %>	
+							[<%=post.getCommentCount()%>]
+							</span></a> 
+						<span style="float: right;"><%=displayDate%> | <%=post.getViewNum()%> | <%=post.getLikeNum()%></span>
 						</b>
 					</div>
 					<%count++;} %>
 					</td>
 				</tr>
+				</div>
 			</table>
 		</div>
 	</div>
 </div>
 
 	<!-- 푸터 -->
-	<jsp:include page="common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 
 <script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -235,10 +277,8 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 <script type="text/javascript">
 	$(document).ready(function(){
 		
-		
-		
 	})
-		
+	
 	<!-- 신작 영화 순위 용 -->
 	const carouselSlide = document.querySelector('.carousel-slide');
 	const carouselImages = document.querySelectorAll('.inner');
@@ -267,7 +307,6 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 
 	// Jump to First/Last Slide
 	carouselSlide.addEventListener('transitionend', () => {
-		console.log(carouselImages[counter]);
 		if (carouselImages[counter].id === 'lastClone') {
 			carouselSlide.style.transition = 'none'; // 트랜지션 효과 없애기
 			counter = carouselImages.length - 2; // couter 초기화
@@ -288,34 +327,33 @@ List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTo
 
 	let counter2 = 1;
 	const size2 = carouselImages2[0].clientWidth;
-	carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+	carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 
 	// Buttons
 	nextBtn2.addEventListener('click', () => {
 		if (counter >= carouselImages2.length - 1) return;
 		carouselSlide2.style.transition = "transform 0.4s ease-in-out";
 		counter2++;
-		carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+		carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 	});
 		
 	prevBtn2.addEventListener('click', () => {
 		if (counter <= 0) return;
 		carouselSlide2.style.transition = "transform 0.4s ease-in-out";
 		counter2--;
-		carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+		carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 	});
 
 	// Jump to First/Last Slide
 	carouselSlide2.addEventListener('transitionend', () => {
-		console.log(carouselImages2[counter]);
 		if (carouselImages2[counter2].id === 'lastClone2') {
 			carouselSlide2.style.transition = 'none'; // 트랜지션 효과 없애기
 			counter2 = carouselImages2.length - 2; // couter 초기화
-			carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)'; // 실제 마지막 이미지로 이동.
+			carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)'; // 실제 마지막 이미지로 이동.
 		} else if (carouselImages2[counter2].id === 'firstClone2') {
 			carouselSlide2.style.transition = 'none';
-			counter2 = carouselImages2.length - counter; // couter 초기화
-			carouselSlide2.style.transform = 'translateX(' + (-size * counter2) + 'px)';
+			counter2 = carouselImages2.length - counter2; // couter 초기화
+			carouselSlide2.style.transform = 'translateX(' + (-size2 * counter2) + 'px)';
 		}
 	});
 

@@ -3,15 +3,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <head>
 	<meta charset="UTF-8">
-	<title>MoonBam</title>
+	<title>문화인들의 밤</title>
 </head>
 <body>
-<%List<AdminDeletedPostDTO> list = (List<AdminDeletedPostDTO>)request.getAttribute("list"); %>
-<%System.out.println("in jsp"); %>
-<%System.out.println(list); %>
+<%
+System.out.println("삭제된 게시글 관리 jsp페이지"); 
+%>
 <h1>삭제된 게시글 관리</h1>
 <hr>
 <form action = "<%=request.getContextPath() %>/AdminPage/AdminPageDeletedPost">
@@ -36,6 +37,16 @@
 			<th>완전삭제예정일</th>
 			<th>복원</th>
 		</tr>
+		<c:forEach var="dto" items="${list }">
+		<tr>
+			<td >${dto.postid}</td>
+			<td >${dto.posttitle}</td>
+			<td >${dto.userid}</td>
+			<td >${dto.cause}</td>
+			<td >${dto.expiredate}</td>
+			<td><input type="button" value="복원"></td>
+		</tr>
+		</c:forEach>
 	</table>
 </form>
 

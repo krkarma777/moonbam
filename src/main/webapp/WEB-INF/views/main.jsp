@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -20,11 +20,11 @@ var list = <%= request.getAttribute("list") %>;
     	// 팝업 창 위치 &크기 변수
 		let sLeft=0;
 		let sTop=0;
-		let width ;
-    	let height ;
+		let width;
+    	let height;
     	
         for (var i = 0; i < list.length; i++) {
-        	let flag= false;	/*  false 시 팝업 안나옴 */
+        	let flag= true;	/*  false 시 팝업 안나옴 */
         	if(flag){
         		// 팝업 창의 위치 설정
         		setPostion(i);
@@ -73,12 +73,13 @@ var list = <%= request.getAttribute("list") %>;
 				<a href="/acorn/?cg=movie"><img class="rounded-2"
 					src="resources/images/camera-reels.svg" width="250px" height="250px"></a>
 			</div>
+			<div style="width: 20px;"></div>
 			<!-- <a>누르면 MoveToContentsHomeServlet로 이동 -->
-			<div class="align-self-center px-5"
+			<!-- <div class="align-self-center px-5"
 				style="background-color: transparent">
 				<a href="/acorn/?dg=tv"><img class="rounded-2"
 					src="resources/images/tv.png" width="250px" height="250px"></a>
-			</div>
+			</div> -->
 			<div class="align-self-center" style="background-color: transparent">
 				<a href="/acorn/?cg=community"><img class="rounded-2"
 					src="resources/images/community.svg" width="250px" height="250px"></a>

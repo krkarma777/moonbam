@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>문밤</title>
+<title>문화인들의 밤</title>
 </head>
 <body>
 <h1>"chatError" 페이지</h1>

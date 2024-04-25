@@ -2,6 +2,7 @@ package com.moonBam.controller.community;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,8 +53,10 @@ public class ChatController {
 		//roomTitle 설정
 		String roomTitle = chatRoom.getRoomTitle();
 		String addr1 = chatRoom.getAddr1();
-		LocalDate mmDate = chatRoom.getmDate();//모임방 이름에 사용할  모임날짜		
-		String loc = addr1.substring(0, 2);//모임방 이름에 사용할 지역 뽑아오기(eg. 서울, 대전 두글자만)
+		LocalDate thismDate = chatRoom.getmDate();//지금 모임방의 모임날짜 가져오기
+		String mmDate = thismDate.format(DateTimeFormatter.ofPattern("MM-dd"));//모임방 이름에 사용할 모임날짜 04-30 형식으로 변경		
+		String[] addr_arr = addr1.split(" ");
+		String loc = addr_arr[0];
 		roomTitle = roomTitle+"/"+loc+"/"+mmDate;
 		chatRoom.setRoomTitle(roomTitle);
 		//cDate 설정
@@ -124,11 +127,27 @@ public class ChatController {
 		return "";
 	}
 	
-	@RequestMapping(value = "/ChatKickUser", method = RequestMethod.GET)
-	public String ChatKickUser (String user) {
-		int n = crService.ChatKickUser(user);
+	@RequestMapping(value = "/Chatmore/ChatKickUser", method = RequestMethod.GET)
+	public String ChatKickUser (String userId, String chatNum) {
 		
-		return "";
+		int n = 0;
+		
+		System.out.println("ChatKickUser===================");
+		System.out.println("강퇴할 유저의 이름 확ㅇ인 후 서비스레이어 전달");
+		System.out.println(userId);
+		System.out.println("=================================");
+		
+		n = crService.ChatKickUser(userId, chatNum);
+		
+		System.out.println("1이면 정상처리됨==========");
+		System.out.println(n);
+		System.out.println("====================");
+		
+		
+		
+		return "redirect:/chatRoom?chatNum="+chatNum;
 	}
+	
+//	@RequestMapping()
 	
 }//end class
