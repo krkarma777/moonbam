@@ -25,8 +25,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id = "deleteFromMemberDB">
 		delete from memberdb where userid = #{userId}
 	</delete>
-	<!-- 복원? -->
 	
+	<!-- 이용제한 해제 -->
+	<update id = "releaseUser">
+	update memberdb set enabled = "True" where userid = #{userId}
+	</update>
 	<!-- 신고처리된 대상자 정지 처리시 비활성화 -->
 	
 	<!-- 신고처리된 대상자 이용제한 회원 테이블에 저장 -->

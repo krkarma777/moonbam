@@ -40,7 +40,7 @@ public class AdminStatisticsDAO {
 		return n;
 	}
 	
-	//통계 가져오기
+	//접속자통계 가져오기
 	
 	public List<AdminCounterDTO> getCount(){
 		List<AdminCounterDTO> list = new ArrayList<>();
