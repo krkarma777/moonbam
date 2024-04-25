@@ -1,3 +1,4 @@
+<%@page import="com.moonBam.dto.ContentDTO"%>
 <%@page import="com.moonBam.controller.board.util.MoviePoster" %>
 <%@page import="com.moonBam.controller.board.util.ContentDataFormating" %>
 <%@page import="com.moonBam.controller.board.util.ViewService" %>
@@ -40,11 +41,13 @@
         String category = service.BoardNameCategory(postBoard);
         String link = service.linkMainCategory(postBoard);
         String boardType = service.linkDropDownCategory(postBoard);
-
+	
+        List<ContentDTO> movieTopList = (List<ContentDTO>) session.getAttribute("movieTopList");
+        List<ContentDTO> genreMovieTopList = (List<ContentDTO>) session.getAttribute("genreMovieTopList");
     %>
 
 
-    <title>문밤</title>
+    <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -213,8 +216,8 @@
 
         /* 페이지 번호에 마우스를 올렸을 때 스타일 */
         .pagination .page-link:hover {
-            background-color: #1e7e34; /* 마우스 호버 시 초록색 변화 */
-            background-image: linear-gradient(180deg, #1e7e34, #218838);
+            background-color: #FF285A; /* 마우스 호버 시 초록색 변화 */
+            background-image: linear-gradient(180deg, #FF285A, #FF174D);
             /* 그라디언트 효과 */
             color: white; /* 글자색 유지 */
         }
@@ -646,16 +649,13 @@
 	<div style="display: flex; width: 100%; height:100%;">
 		<!-- 신작 영화 순위 -->
 		<div style="width: 200px; height: 100%; text-align: center;">
-			<span style="color:#ff416c;"><b>🌄신작 <%= category %> 랭킹🌄</b></span>
+			<span style="color:#ff416c;"><b>🌄신작 영화 랭킹🌄</b></span>
 			<div class="list-group slider-container slide1" style="border-radius: 0px;">
-				<%
-            	MoviePoster poster = new MoviePoster(postBoard);
-                List<String> newMovieList = poster.getNewList();
-                for (int i = 0; i < newMovieList.size(); i++) { %>
+				<%for (int i = 0; i < movieTopList.size(); i++) { %>
                 	<div class="movie-slide">
-                    	<img src="<%= newMovieList.get(i) %>"
-
-                        ="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                		<a href="/acorn/showContent?contId=<%=movieTopList.get(i).getContId()%>">
+                    		<img src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i).getContImg()%>" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                    	</a>
                     	<span class="index-label">
 				      		<%= i + 1 %>
 			      		</span>
@@ -1038,8 +1038,7 @@
                     int nextPage = endPage + 1;
                 %>
 
-                <div class="page-numbers text-center">
-                    <ul class="pagination">
+                    <ul class="pagination" style="">
 
                         <%-- "이전" 버튼 --%>
                         <%
@@ -1086,11 +1085,7 @@
                             }
                         %>
                     </ul>
-				</div>
-				<!-- 페이지 숫자 검색창 -->
-            	<form action="" method="get" onsubmit="submitForm(event)">
-            		<input type="number" name="curPage" style="width: 50px">
-            	</form>
+				
 			</div>
 			</div>
 			
@@ -1108,18 +1103,15 @@
 		
 		<!-- 전체 영화 순위 -->
 		<div style="width: 200px; height: 100%; text-align: center;">
-			<span style="color:#ff416c;"><b>💥전체 <%= category %> 랭킹💥</b></span>
+			<span style="color:#ff416c;"><b>💥장르 영화 랭킹💥</b></span>
 			<div class="list-group slider-container slide2" style="border-radius: 0px;">
                 <!-- 영화 포스터 반복 구간 -->
                 <%-- 서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복 --%>
-                <%
-                List<String> hotMovieList = poster.getHotList();
-                for (int i = 0; i < hotMovieList.size(); i++) {
-                %>
+                <%for (int i = 0; i < genreMovieTopList.size(); i++) { %>
                 	<div class="movie-slide">
-                   		<img src="<%= hotMovieList.get(i) %>"
-
-                        ="Movie Poster" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                		<a href="/acorn/showContent?contId=<%=genreMovieTopList.get(i).getContId()%>">
+                   			<img src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i).getContImg()%>" class="img-fluid mb-2 slide-image" width="200px" height="300px">
+                   		</a>
                     	<span class="index-label"><%= i + 1 %></span>
                 	</div>
                 <%} %>

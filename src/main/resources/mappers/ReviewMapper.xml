@@ -5,6 +5,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ReviewMapper">
+	
+	<delete id="deleteReview" parameterType="String">
+		delete from postdb where postId = #{postId} 
+	</delete>
 
 	<select id="check" parameterType="ReviewDTO" resultType="int">
 		select count(*) from postdb where postBoard='review' and userId=#{userId} and contId=#{contId}
@@ -191,5 +195,36 @@
 		    where (postBoard, contId) in (('review', #{contId}))
 		    ORDER BY postDate desc
 		)
+		order by postid desc
+    </select>
+    
+    <select id="reviewTotalCount" resultType="int" parameterType="HashMap">
+    	SELECT count(*)
+		FROM (
+		    select *
+		    from 
+		    postdb left join ratedb using(userId, contId)
+		    
+		    <!--각 리뷰 좋아요수 조인  -->
+		    left join  
+		    (
+		        select postId, count(*) As likeNum from likedb group by postId
+		    ) using (postId)
+		    
+		    <!--각 리뷰 본인이 좋아요 누른지 여부 조인  -->
+		    <if test="likeUserId!=null">
+			    left join 
+			    (
+			        select postId, isLike from likedb where userId = #{likeUserId}
+			    ) using (postId)
+		    </if>
+		    
+		    where (postBoard, contId) in (('review', #{contId}))
+		    ORDER BY postDate desc
+		)
+    </select>
+    
+    <select id="myReview" resultType="ReviewDTO" parameterType="hashmap">
+    	select * from postdb where contid = #{contId} and nickname = #{nickname} and postboard = 'review'
     </select>
 </mapper>
