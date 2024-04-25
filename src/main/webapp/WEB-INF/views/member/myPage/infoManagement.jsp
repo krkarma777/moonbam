@@ -34,11 +34,6 @@
                                        value="${loginUser.userId}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label for="userPw" class="form-label">새 비밀번호</label>
-                                <input type="password" class="form-control" id="userPw" name="userPw"
-                                       placeholder="새 비밀번호 입력">
-                            </div>
-                            <div class="mb-3">
                                 <label for="nickname" class="form-label">닉네임(읽기 전용)</label>
                                 <input type="text" class="form-control" id="nickname" name="nickname"
                                        value="${loginUser.nickname}" readonly>
@@ -64,14 +59,13 @@
                                        name="kakaoConnected" ${loginUser.kakaoConnected == 1 ? 'checked' : ''} disabled>
                                 <label class="form-check-label" for="kakaoConnected">카카오 연동됨</label>
                             </div>
-                            <button type="submit" class="btn btn-primary">프로필 업데이트</button>
                         </form>
                         
                       <form action=<c:url value='/my-page/updatePwd'/> method="Post" >
-                       <input type="submit" value="비밀번호 변경">
+                       <input type="submit" class="btn btn-primary" value="비밀번호 변경">
                        </form>
                        <form action=<c:url value='/my-page/withdraw'/> method="Post" >
-                       <input type="submit" value="회원 탈퇴">
+                       <input type="submit" class="btn btn-primary" value="회원 탈퇴">
                        </form>
                     </div>
                 </div>
