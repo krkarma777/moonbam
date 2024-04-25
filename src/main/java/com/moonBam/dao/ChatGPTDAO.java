@@ -50,7 +50,7 @@ public class ChatGPTDAO {
 
 	    Map<String, Object> requestBody = new HashMap<>();
 	    requestBody.put("model", "gpt-3.5-turbo"); //모델 설정 주의 - 잘못 설정시 404 반환 / gpt-3.5-turbo / gpt-4 / gpt-4-1106-preview
-	    //requestBody.put("max_tokens", maxTokens);
+	    requestBody.put("max_tokens", maxTokens);
 	    requestBody.put("messages", Collections.singletonList(Map.of("role", "user", "content", prompt)));
 
 	    // JSON 안전 생성

@@ -578,6 +578,7 @@
 					},
 					error: function(xhr, status, e){
 						console.log("실패: " + xhr.status);
+						console.log(contId, "<%=userId%>","<%=nickname%>", postText)
 					}
 				}//json
 			);//ajax
@@ -845,7 +846,7 @@
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
-	      	<input type="hidden" value="하이하이" id="contId">
+	      	<input type="hidden" value="<%=contId%>" id="contId">
 	        <textarea cols="50" rows="12" id="postText"></textarea>
 	        <p id="show_length">length</p>
 	      </div>
