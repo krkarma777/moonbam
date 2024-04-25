@@ -165,6 +165,7 @@ public class ChatRoomController {
 		/////////request에 저장하여 jsp로 chatNum 전달함 (더보기에서 사용할 예정)
 		request.setAttribute("ChatRoomDTO", this.chatRoomSelectBychatNum( (int) chatMemberselectMap.get("chatNum")));
 		
+		// 
 		
 		return returnWhere;
 	}

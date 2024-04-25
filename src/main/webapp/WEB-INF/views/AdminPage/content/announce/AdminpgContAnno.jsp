@@ -10,7 +10,7 @@
 		$("#buttonAnnoWrite").on("click", buttonAnnoWrite);
 
 		// 검색
-		$("#buttonAnnoWord").on("click", buttonAnnoWord);
+		$("#buttonAnnoWord").on("click", buttonAnnoWord).attr("method", "get");
 
 		// 글 보기
 		$(".classAnnotitle").on("click", classAnnotitle);
@@ -72,10 +72,10 @@ ${word }
 	<hr>
 	<form action="<%=request.getContextPath()%>/AdminPage/RestrictedMemberList" method="post" class="mb-3">
 		<div class="input-group mb-3">
-			<input type="text" class="form-control" placeholder="검색조건 입력" id="SearchValue" name="SearchValue" value="${word}">
-			<button type="submit" class="btn btn-primary" id="buttonAnnoWord">검색</button>
-			<button type="button" class="btn btn-secondary" id="buttonAnnoWrite">글쓰기</button>
-		</div>
+            <input type="text" class="form-control" placeholder="검색조건 입력" id="SearchValue" name="SearchValue" value="${word}">
+            <button type="submit" class="btn btn-primary" id="buttonAnnoWord" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" >검색</button>
+            <button type="button" class="btn" style="float:right; background-color: #ffb2c4; color:white; margin-left: auto;" id="buttonAnnoWrite" >글쓰기</button>
+        </div>
 	</form>
 	<table class="table table-hover">
 		<thead class="header-row">

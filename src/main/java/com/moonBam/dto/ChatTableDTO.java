@@ -12,9 +12,19 @@ public class ChatTableDTO {
     }
 	private MessageType type; // 메시지 타입
 	
+	public String getNickName() {
+		return nickName;
+	}
+
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
 	private int id; //행 id
 	private int chatNum; //채팅방 번호 
 	private String chatContent; //[ { } ] 형태로 저장될 예정 (아래 확인)
+	private String nickName;
 	/*[
 	  {
 	    "time": "2024-04-08-11-36-00",

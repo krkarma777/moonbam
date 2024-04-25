@@ -1,5 +1,6 @@
 package com.moonBam.controller.community.chat;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.ChatTableDTO;
+import com.moonBam.dto.MemberDTO;
+import com.moonBam.service.member.MemberService;
 import com.moonBam.util.FileUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -25,14 +29,16 @@ public class ChatMessageController {
 
 	@Autowired
 	private ChatMessagesService chatMessagesService;
-
+	@Autowired
+	MemberService memberService;
+	
 	Set<Integer> numbers = new HashSet<>();
 
 // 받고 주고
 	@MessageMapping("/chat/send/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
 	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @RequestParam String chatContent,
-			@DestinationVariable("chatNum") int chatNum) {
+			@DestinationVariable("chatNum") int chatNum, Principal principal) {
 		ctDto.setChatNum(chatNum);
 		ctDto.setChatContent(chatContent);
 
@@ -59,12 +65,18 @@ public class ChatMessageController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
 		JSONObject jsonObj = (JSONObject) obj;
 		String message = (String) jsonObj.get("message");
 		// System.out.println("message "+message);
 
+		// add nickname
+				String userIdInSession = principal.getName();
+				MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
+				String nickNameInSession = memberDTO.getNickname();
+				ctDto.setNickName(nickNameInSession);
+		
 		/// 금칙어 스캔 후 위 message와 비교 후 ** 처리하여 리턴하여 보내주기 (DB엔 쌩으로 저장됨, 보여지기만 대체하여 보냄)
 		List<String> badWordsList = chatMessagesService.badWordsSelectAll();
 

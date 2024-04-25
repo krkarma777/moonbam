@@ -7,45 +7,131 @@
 <head>
 <meta charset="EUC-KR">
 <title>Chat Room</title>
-	<!-- 방 삭제 시 실패했을 때 띄울 알림창  -->
-	<%
-	String mesg = (String) session.getAttribute("mesg");
-	if (mesg != null) {
-	%>
-	
-	<script>
-			alert("<%=mesg%>");
-			</script>
-	
-	<%
-	}
-	
-	session.removeAttribute("mesg");
-	%>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+rel="stylesheet"
+integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+crossorigin="anonymous">
+<style type="text/css">
+
+
+/*내가 보낸 채팅 말풍선  */
+.my-chat {
+    position:relative;
+    width:200px;
+    padding:20px;
+    background-color:#ffb2c4;
+    border-radius:4px;
+    color:black;
+    top: 200%; left: 75%; margin-left: -100px;
+ }
+ 
+ /*내가 보낸 채팅 말풍선 꼬리  */
+.my-chat:after {
+	content:'';
+    position:absolute;
+    top:50%;
+    right:-10px;
+    border-left:16px solid #ffb2c4;
+    border-top:10px solid transparent;
+    border-bottom:10px solid transparent;
+    transform:translateY(-50%);
+}
+
+
+/*남이 보낸 채팅 말풍선  */
+.target-chat{
+    position:relative;
+    width:200px;
+    padding:20px;
+    background-color:#FFE0E7;
+    border-radius:4px;
+    color:black;
+
+ }
+ 
+ /*남이 보낸 채팅 말풍선 꼬리 */
+ .target-chat:after {
+	content:'';
+    position:absolute;
+    top:50%;
+    left:-10px;
+    border-right:16px solid #FFE0E7;
+    border-top:10px solid transparent;
+    border-bottom:10px solid transparent;
+    transform:translateY(-50%);
+}
+ 
+ /* 말풍선 디자인  */
+ .chat_box{
+ 	padding: 20px;
+ 	
+ }
+
+/*스크롤*/
+.chat_wrap{
+   padding-left:0;
+
+    margin:0;
+
+    list-style-type:none;
+
+    display:flex;
+
+    flex-direction: column-reverse;
+
+    overflow-y:scroll;
+
+    height:600px;
+
+}
+
+</style>
+
+
+
+<!-- 방 삭제 시 실패했을 때 띄울 알림창  -->
+<%
+String mesg = (String) session.getAttribute("mesg");
+if (mesg != null) {
+%>
+
+<script>
+		alert("<%=mesg%>");
+		</script>
+
+<%
+}
+
+session.removeAttribute("mesg");
+%>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	
+	
 </head>
 <body onload="connect()">
-	<table border="1" style="background: white; width: 500px">
-		<thead>
-			<tr>
-				<td>
+	${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
+
+	<table style="background: white; width: 100%;">
+	 
+		<thead class="header">
+			<tr >
+				<td style="background-color: #ffb2c4; color:white;">
 					<!-- 제목, 토글 버튼 --> <input type="checkbox" id="toggle" hidden>
-					<label for="toggle" class="toggleSwitch"> <span
+					<label for="toggle" class="toggleSwitch"> <span 
 						id="toggleIcon" class="toggleButton">▶
 							${ChatRoomDTO.roomTitle}</span>
-				</label>
-				</td>
-
-
-				<td style="width: 20px;">
+					</label>
+				
 					<!-- 설정이 더보기, 더보기로 가는 주소 실행 -->
-					<button
-						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button>
+					<%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
+						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button> --%>
+					<span style="float:right; color:white; margin-left: auto;"
+						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
 				</td>
 
 
@@ -58,14 +144,18 @@
 					</c:if> <c:if test="${sen.lastCv==0}">
 					</c:if></td>
 			</tr>
+		
 		</thead>
+	
 		<tbody id="message1">
 			<tr>
 				<td>
 					<form id="chatForm">
 						<!-- new tag start -->
-						<div class="chat_wrap">
-							<div id="chat" class="chat"></div>
+						<div class="chat_wrap" >
+							<div id="chat" >
+								
+							</div>
 						</div>
 					</form>
 				</td>
@@ -74,13 +164,13 @@
 		</tbody>
 		<tfoot>
 			<tr>
+			<div>
 				<td colspan="2"><input type="text" id="messageContent"
-					name="messageContent" style="width: 85%"
-					onkeydown="if (event.keyCode === 13) { sendMessage(); }"> <input
-					type="button" id="send" value="전송" onclick="sendMessage()">
+					name="messageContent" style="width: 86%"
+					onkeydown="if (event.keyCode === 13) { sendMessage(); }" class="form-control-sm">
+					<input type="button" id="send" value="전송" class="btn" onclick="sendMessage()" style="float:right; background-color: #ff416c; color:white; margin-left: auto;">
 				</td>
-
-
+			</div>	
 			</tr>
 		</tfoot>
 	</table>
@@ -89,6 +179,7 @@
 
 
 	<script>
+	
 	
 		/* 토글 처리 */
 		$('input[id="toggle"]')
@@ -148,6 +239,7 @@
 			 if(document.getElementById('messageContent').value.trim() != '') {
 				var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
 				var userId = `${userIdInSession}`; // 사용자 닉네임
+				//console.log("유저아이디 먼데",userId)
 				var message = escapeHtml($("#messageContent").val()); // 메세지 
 				var serverTime = new Date().toLocaleString();
 				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
@@ -169,25 +261,28 @@
 		
 	function createMsgTag(content) {
 	    let chatLi;
-	    let nickName = `${nickNameInSession}`;
+	    let nickName = content.nickName;
 		let time = content.serverTime;
+	
 		let message = content.message;
 		
-	    let align = (content.userId == `${userIdInSession}`) ? "right" : "left";
-	    console.log(align)
-	    
+	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+	   
 	    if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
-	        chatLi = "<li class='enter'><div class='message'><span>"+message+"</span></div></li>";
+	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+	    
 	    } else {
 	    	console.log("talk")
 	        // 일반 메시지일 경우
-	         chatLi = "<li><div class='"+align+"'><span>"+nickName+"</span><span>"+time+"</span></div><div class='message'><span>"+message+"</span></div></li>"; 
+	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
+			//console.log("시간 잘라서 확인하기 완료?",timeShort)
+	        chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>"; 
+	         
 	    }
 	    $("#chat").append(chatLi);
-	 // 스크롤바 아래 고정
-	 // 하지만 동작 안함
-	    $("#chat").scrollTop($('div.chat').prop('scrollHeight'));
+	    
+
 	}
 
 		// 취야점 보안
@@ -199,6 +294,13 @@
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
+		
+		
+		//
+		
+		
+		
+		
 	</script>
 </body>
 </html>

@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<%@ page import="java.util.List" %>
+<%@ page import="com.moonBam.dto.*" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,14 +37,36 @@
     </style>
 </head>
 <body>
+<%
+List<AdminCounterDTO> list1 = (List<AdminCounterDTO>)request.getAttribute("list1");
+System.out.println(list1);
+System.out.println("=======");
+%>
+<script>
+ var xValues = [];
+ var yValues = [];
+ 
+</script>
+
+
+<c:forEach var="item" items="${list1}">
+    <script>
+        var data = "${item}"; // 데이터를 JavaScript 변수로 받아옴
+        var splitedData = data.split(/[\[\],;\s-=]+/);
+        console.log(splitedData);
+        
+        xValues.push(splitedData[4]);
+        yValues.push(splitedData[9]);
+    </script>
+</c:forEach>
+
 
 <div class="container">
     <!-- chart data -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const xValues = [1,2,3,4,5,6,7,8,9,10,11];
-            const yValues = [7,8,8,9,9,9,10,11,14,14,15];
-
+            console.log(xValues);
+            console.log(yValues);
 
             new Chart("myChart", {
                 type: "line",
@@ -66,7 +94,7 @@
         <h2>접속자 통계</h2>
         <!-- 그래프 -->
         <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-        <p>현재 접속자 수: <strong>XX명</strong></p>
+        <!-- <p>현재 접속자 수: <strong>XX명</strong></p> -->
     </div>
     <hr>
     <h2>미처리 신고</h2>
