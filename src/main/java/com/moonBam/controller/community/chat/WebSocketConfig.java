@@ -9,15 +9,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    @Override
+	
+	@Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat-socket").setAllowedOrigins("http://localhost:9092").withSockJS();
+		// http://localhost:8090/acorn/chat-socket
+		// 강사님께 질문 만약 주소가 
+//		registry.addEndpoint("/chat-socket").setAllowedOrigins("http://localhost:9092").withSockJS();
+		registry.addEndpoint("/chat-socket").setAllowedOrigins("http://localhost:9092").withSockJS();
     }
-
-    @Override
+	
+	@Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
     	registry.enableSimpleBroker("/topic/");
         registry.setApplicationDestinationPrefixes("/acorn");
     }
+	
 }

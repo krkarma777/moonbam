@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.CommunityPageDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityHomeService;
 
 @Controller
@@ -22,7 +24,9 @@ public class CommunityHomeController {
 	@Autowired
     CommunityHomeService cService;
 	
-	@RequestMapping("/communitySearch")
+	@Autowired
+	ChatRoomService crService;
+	@PostMapping("/communitySearch")
 	public String communitySearch(Model model, String searchCategory, String searchValue, String curPage) {
 		System.out.println("in CommunityHomeController communitySearch()");
 		if(curPage==null) {
@@ -71,7 +75,7 @@ public class CommunityHomeController {
 			CommunityPageDTO cpDTO= cService.myChatList(searchCategory, searchValue, curPage, userid);
 			
 			model.addAttribute("cpDTO", cpDTO);
-			
+		
 			List<String> categoryList = new ArrayList<>();;
 			categoryList.add("전체");
 			categoryList.add("영화");

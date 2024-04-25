@@ -48,11 +48,11 @@ pageEncoding="UTF-8"%>
 					
 					<td><%=dto.getQnaid() %></td>
 					<td><%=dto.getCat() %></td>
-					<td><a href=""><%=dto.getTitle() %></a>a></td>
+					<td><a href=""><%=dto.getTitle() %></a></td>
 					<td><%=dto.getText() %></td>
 					<td><%=dto.getAnswer() %></td>
 					<td><%=dto.getAnswerdate() %></td>
-					<td><input type = "button" value = "삭제"></td>
+					<td><input type = "button" value = "수정"><input type = "button" value = "삭제"></td>
 				</tr>
 			<%} %>
 		<%} %>	

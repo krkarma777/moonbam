@@ -5,6 +5,7 @@ import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
+import com.moonBam.dto.MyScrapDTO;
 import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.member.MemberCreateRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +77,11 @@ public class MemberService {
 	public void deleteUser(String userId, String password) {
 	dao.deleteUser(userId, password);
 		
+	}
+
+	public MyScrapDTO findAllScrap(String curPage, String name) {
+		MyScrapDTO sDTO = dao.findAllScrap(curPage, name);
+		return sDTO;
 	}
 
 

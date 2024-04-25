@@ -49,19 +49,47 @@ public class AdminReportDAO {
 	}
 
 	public List<PostDTO> getPostList(List<String> list) {
+		System.out.println("in AdminReportDAO.getPostList");
+		System.out.println("dao에서 리스트 수신 확인 후 매퍼 전달");
+		System.out.println(list);
 		List<PostDTO>rlist = session.selectList("AdminReportMapper.getPostList", list);
+		
+		System.out.println("매퍼에서 출력된 리스트 확인 후 반환============");
+		System.out.println(rlist);
+		System.out.println("================================");
+		
 		return rlist;
 	}
 
 	public int reportDone(List<String> list) {
+		System.out.println("reportDone==========================");
+		System.out.println("신고글 테이블에서 신고처리 yes로 바꿀 글 아이디 목록");
+		System.out.println(list);
+		System.out.println("사이즈 : " + list.size());
+		System.out.println("====================================");
+		
 		int count = 1;
-		for (String reportId : list) {
-			session.update("AdminReportMapper.reportDone", reportId);
-			count+=1;
-		}
+//		for (String reportId : list) {
+			session.update("AdminReportMapper.reportDone", list);
+//			count+=1;
+//		}
+		
+		System.out.println("update처리된 행의 갯수 ====================");
+		System.out.println(count);
+		System.out.println("같으면 정상처리됨");
+		System.out.println("=====================================");
 		
 		return count;
 	}
+
+	public List<AdminReportDTO> getUndone() {
+		List<AdminReportDTO> list = session.selectList("AdminReportMapper.getUndone");
+		System.out.println("in AdminReportDAO.getUndone : list");
+		System.out.println(list);
+		return list;
+	}
+
+	
 
 	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moonBam.dao.AdminDeletedPostDAO;
 import com.moonBam.dao.AdminReportDAO;
@@ -38,12 +39,16 @@ public class AdminReportService {
 		return list;
 	}
 
+	@Transactional
 	public int delReportedPost(List<String> list) {
 		System.out.println("in admin.ReportService.delReportedPost");
 		
-		System.out.println("2. 게시물DB에서 해당되는 신고번호의 게시물을 List로 저장");
+		System.out.println("게시물DB에서 해당되는 신고번호 리스트 수신 확인 후 리스트로 저장 ========");
 //		Boolean isPostListRetrieved = false;
+		System.out.println("list");
+		System.out.println(list);
 		
+		System.out.println("리스트를 dao로 전달 후 해당되는 리스트 받아오기");
 		List<PostDTO> rList = new ArrayList<PostDTO>();
 		rList = rdao.getPostList(list);
 		System.out.println(rList);
@@ -60,6 +65,12 @@ public class AdminReportService {
 		System.out.println(n2 + "개 레코드 삭제됨");
 		
 		return n2;
+	}
+
+	public List<AdminReportDTO> getUndone() {
+		List<AdminReportDTO> list = rdao.getUndone();
+		
+		return list;
 	}
 
 }

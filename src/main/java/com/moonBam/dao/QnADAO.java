@@ -16,6 +16,7 @@ public class QnADAO {
 
     public int submitQNA(QnADTO qna){
         int num = 0;
+        System.out.println(qna);
         session.insert("QnAmapper.submitQnA");
         return num;
     }

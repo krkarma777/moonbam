@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ChatGPTMapper">
+    <select id="getUserAIUsage" resultType="int" parameterType="String">
+    	select usageCount from userAIUsage where userId=#{userId}
+    </select>
+    
+    <update id="upsertUsageCount" parameterType="String">
+        MERGE INTO userAIUsage USING dual
+        ON (userid = #{userid})
+        WHEN MATCHED THEN
+            UPDATE SET usageCount = usageCount + 1
+        WHEN NOT MATCHED THEN
+            INSERT (userid, usageCount) VALUES (#{userid}, 1)
+    </update>
+    
+    <delete id="resetUsageCount">
+    	delete from userAIUsage
+    </delete>
+</mapper>
+
