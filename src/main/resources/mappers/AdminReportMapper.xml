@@ -41,8 +41,8 @@ order by REPORTID asc
 	</when>
 	</choose>
 	group by userid
-
 </select>
+
 	
 <delete id = "delReportedPost" parameterType = "list">
  delete 
@@ -81,6 +81,18 @@ order by REPORTID asc
  	#{item}
  	</foreach>
 </update>
+
+<select id = "getUndone" resultType = "AdminReportDTO">
+	SELECT 
+	    SUM(CASE WHEN lang = 't' THEN 1 ELSE 0 END) AS lang,
+	    SUM(CASE WHEN sexual = 't' THEN 1 ELSE 0 END) AS sexual,
+	    SUM(CASE WHEN abusing = 't' THEN 1 ELSE 0 END) AS abusing,
+	    SUM(CASE WHEN ruleviolation = 't' THEN 1 ELSE 0 END) AS ruleviolation,
+	    SUM(CASE WHEN etc = 't' THEN 1 ELSE 0 END) AS etc
+	FROM 
+	    adminreported
+    where action = 'no'
+</select>
 	
 	
 </mapper>

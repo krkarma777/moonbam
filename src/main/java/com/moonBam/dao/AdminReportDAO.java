@@ -82,6 +82,13 @@ public class AdminReportDAO {
 		return count;
 	}
 
+	public List<AdminReportDTO> getUndone() {
+		List<AdminReportDTO> list = session.selectList("AdminReportMapper.getUndone");
+		System.out.println("in AdminReportDAO.getUndone : list");
+		System.out.println(list);
+		return list;
+	}
+
 	
 
 	

@@ -66,7 +66,7 @@
 					<td>${dto.actionstart}</td>
 					<td>${dto.actionend}</td>
 					<td>
-						<button type="button" class="btn btn-custom">해제</button>
+						<button type="button" class="btn btn-custom" id="suspendChecked">해제</button>
 					</td>
 				</tr>
 			</c:forEach>

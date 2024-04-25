@@ -104,7 +104,25 @@ public class AdminPageMemberController {
 	}
 	
 	//이용제한 사용자 이용제한 해제
-	
+	@RequestMapping("/AdminPage/releaseUser")
+	public ModelAndView releaseUser(@RequestParam String[] userArr, ModelAndView mav) {
+		System.out.println("in adminpage.member.releaseUser");
+
+		int n = 0;
+		
+		for(String userId : userArr) {
+			mservice.releaseUser(userId);
+		}
+		
+		if(n == 0) {
+			System.out.println("정지 해제");
+		}else {
+			System.out.println("오류");
+		}
+		mav.setViewName("redirect:/AdminPage/RestrictedMemberList");
+		
+		return mav;
+	}
 	
 	
 	
@@ -127,6 +145,11 @@ public class AdminPageMemberController {
 	
 	
 	//삭제된 회원 데이터 완전삭제
+	public void cleanDeletedMember() {
+		int n = 0;
+		n = mservice.cleanDeletedMember();
+		System.out.println("완전삭제된 회원의 데이터 : " + n + "건");
+	}
 	
 	
 	

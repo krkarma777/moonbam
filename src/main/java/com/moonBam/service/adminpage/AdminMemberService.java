@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moonBam.dao.AdminMemberDAO;
 import com.moonBam.dao.member.MemberDAO;
@@ -42,6 +43,7 @@ public class AdminMemberService {
 	}
 	
 	//신고된 회원 강퇴
+	@Transactional
 	public int kickUser(List<String> deletelist) {
 		System.out.println("in AdminReportService.kickUser");
 		System.out.println("서비스 레이어에서 강퇴 대상자 명단 수신");
@@ -86,6 +88,19 @@ public class AdminMemberService {
 		List<AdminDeletedMemberDTO> list = mdao.getDeletedMemberList(map);
 		
 		return list;
+	}
+
+	public int cleanDeletedMember() {
+		System.out.println("in adminmemberservice.cleandeletedmember");
+		int n = 0;
+		n = mdao.cleanDeletedMember();
+		return n;
+	}
+
+	public int releaseUser(String userId) {
+		System.out.println("in adminmemberservice.releaseUser");
+		int n = mdao.releaseUser(userId);
+		return n;
 	}
 	
 }

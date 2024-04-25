@@ -79,4 +79,13 @@ public class AdminDeletedPostDAO {
 		return count;
 	}
 
+	public void cleanDeletedPost() {
+		session.delete("AdminDeletedPostMapper.cleanDeletedPost");
+	}
+
+	public AdminDeletedPostDTO getDeletedPost(String postId) {
+		AdminDeletedPostDTO deletedPostDTO = session.selectOne("AdminDeletedPostMapper.getDeletedPost", postId);
+		return deletedPostDTO;
+	}
+
 }

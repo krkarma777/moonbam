@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AdminDeletedPostDTO;
 import com.moonBam.dto.AdminReportDTO;
+import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.adminpage.AdminDeletedPostService;
 import com.moonBam.service.adminpage.AdminReportService;
 
@@ -23,6 +24,7 @@ public class AdminPostController {
 	
 	@Autowired
 	AdminDeletedPostService dpservice;
+	
 	
 	//신고글 리스트 조회
 	@RequestMapping(value = "/AdminPage/AdminPostReported")
@@ -86,6 +88,24 @@ public class AdminPostController {
 	}
 	
 	//삭제된 게시글 완전삭제
+	//@Scheduled(cron = "0 0 0 1 1 *")
+	public void cleanDeletedPost() {
+		dpservice.cleanDeletedPost();
+	}
+	
+	//삭제된 게시글에서 복원
+	@RequestMapping(value = "/AdminPage/restoreDeletedPost")
+	public ModelAndView restoreDeletedPost(ModelAndView mav, String postId) {
+		
+		int n = dpservice.restoreDeletedPost(postId);
+		
+		if(n ==1) {
+			System.out.println("성공적으로 복원되었습니다");
+		}else {
+			System.out.println("복원실패");
+		}
+		return mav;
+	}
 	
 	//삭제된 댓글 조회
 	@RequestMapping(value = "/AdminPage/AdminPageDeletedComment")

@@ -11,10 +11,10 @@
 	<!-- 운영자 삭제 -->
 	<insert id="insertDeletedPostsfromReport" parameterType = "AdminDeletedPostDTO">
 		insert into admindeletedpost values(
-			#{deletedate}, #{postid}, #{postboard},
+			SYSDATE, #{postid}, #{postboard},
 			#{userid}, #{contid}, #{posttitle},
 			#{postdate}, #{posteditdate}, #{posttext},
-			#{categoryid}, #{cause}, #{expiredate}
+			#{categoryid}, #{cause}, SYSDATE+30
 		)
 	</insert>
 	
@@ -24,5 +24,13 @@
 		
 		)
 	</insert>
+	
+	<delete id="cleanDeletedPost">
+		delete * from admindeletedpost
+	</delete>
+	
+	<select id = "getDeletedPost" parameterType = "String">
+		select * from admindeletedpost where postid = #{postId}
+	</select>
 
 </mapper>

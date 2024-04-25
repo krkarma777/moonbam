@@ -1,13 +1,16 @@
 package com.moonBam.controller.adminpage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AdminCounterDTO;
+import com.moonBam.dto.AdminReportDTO;
+import com.moonBam.service.adminpage.AdminReportService;
 import com.moonBam.service.adminpage.AdminStatisticsService;
 
 @Controller
@@ -18,6 +21,9 @@ public class AdminStatisticsController {
 	
 	@Autowired
 	AdminStatisticsService asService;
+	
+	@Autowired
+	AdminReportService rService;
 	
 	public AdminStatisticsController() {
 		super();
@@ -48,6 +54,15 @@ public class AdminStatisticsController {
 		List<AdminCounterDTO> list = asService.getCount();
 		
 		return list;
+	}
+	
+	public AdminReportDTO getUndone(){
+		List<AdminReportDTO> list2 = rService.getUndone();
+		System.out.println("in AdminStatisticsController");
+		System.out.println(list2);
+		AdminReportDTO rDTO = list2.get(0);
+		
+		return rDTO;
 	}
 	
 	
