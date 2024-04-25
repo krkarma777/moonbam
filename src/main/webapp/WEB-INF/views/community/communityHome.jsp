@@ -77,7 +77,7 @@
             }
         })//
         
-    })
+    })  
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
     rel="stylesheet"
@@ -161,13 +161,13 @@
                     <td id="<%=count%>" style="width: 300px; height: 265px; float: left">
                         <div class="border" style="width: 300px; height: 265px;">
                             <div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
-                                <a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 19px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;">[<%=category %>] <%=roomTitle %></a>
+                                <a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 16px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;">[<%=category %>] <%=roomTitle %></a>
                             </div>
                             <div class="border-top" style="height: 225px; width: 299px;">
                                 <div style=" font-size: 18px; height: 175px;">
                                     <%=roomText %>
                                 </div>
-                                <div style="width: 100%; height:49px; font-size: 18px; padding-left: 2px; padding-right: 5px; position:relative;">
+                                <div style="width: 100%; height:49px; font-size: 15px; padding-left: 2px; padding-right: 5px; position:relative;">
                                     <div style="float: left;"><%=addr1 %></div>
                                     <div style="position: absolute; right: 0; bottom: 0; margin-right: 2px;"><%=currentNow %>/<%=amount %></div>
                                 </div>
