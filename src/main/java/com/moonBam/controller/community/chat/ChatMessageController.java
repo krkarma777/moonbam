@@ -32,6 +32,7 @@ public class ChatMessageController {
 	@Autowired
 	MemberService memberService;
 	
+	// 파일 이름 저장
 	Set<Integer> numbers = new HashSet<>();
 
 // 받고 주고

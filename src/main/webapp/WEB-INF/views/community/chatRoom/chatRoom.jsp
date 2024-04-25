@@ -263,10 +263,8 @@ session.removeAttribute("mesg");
 	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
 			//console.log("시간 잘라서 확인하기 완료?",timeShort)
 	        chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>"; 
-	         
 	    }
 	    $("#chat").append(chatLi);
-	
 	}
 
 		// 취야점 보안
@@ -278,11 +276,6 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-		
-		
-		//
-		
-		
 		
 		
 	</script>
