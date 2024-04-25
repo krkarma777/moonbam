@@ -253,10 +253,12 @@
 		$(".rate input").on("change", rating);  	//별점 선택
 		$(".like_btn").on("click", likeToggle); 	// 공감버튼 클릭
 		
+		// ai 요청 이벤트
 		$("#aiForm").on("submit", aiRequest);
 		$("#sample-q1").on("click", aiRequest);
 		$("#sample-q2").on("click", aiRequest);
 		$("#sample-q3").on("click", aiRequest);
+		
 		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
 		// console.log("tests")
 		// showCredits();
@@ -266,7 +268,7 @@
 		
 	});//ready
 	
-	// ai request
+	// AI 요청 및 응답 출력 함수
 	function aiRequest(e){
 		/* alert("test"); */
 		e.preventDefault();

@@ -218,6 +218,12 @@ if (rateAmount > 0) {
 			location.href="allReview?contId=<%=contId%>";
 		})
 		
+		// ai 요청 이벤트
+		$("#aiForm").on("submit", aiRequest);
+		$("#sample-q1").on("click", aiRequest);
+		$("#sample-q2").on("click", aiRequest);
+		$("#sample-q3").on("click", aiRequest);
+		
 		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
 		// console.log("tests")
 		// showCredits();
@@ -226,6 +232,46 @@ if (rateAmount > 0) {
 		setAvgGraph();
 		
 	});//ready
+	
+	
+	// AI 요청 및 응답 출력 함수
+	function aiRequest(e){
+		/* alert("test"); */
+		e.preventDefault();
+		if(this.type=="button"){
+			var prompt = this.innerText;
+		}else{
+			var prompt = $("#prompt").val();
+		}
+		if(prompt.length<=3){
+			alert("3글자 이상 입력해주세요.")
+		} else if (prompt.length>100){
+			alert("100자를 넘을 수 없습니다.")
+		} else{
+			//console.log(prompt);
+			
+			$("#ai-response-context").show();
+			$("#ai-response").text("AI가 요청을 처리중입니다...");
+			$.ajax(
+				{
+					type: "post",
+					url:"chatgpt",
+					data: {
+						"prompt": prompt,
+					},
+					dataType: "text",
+					success: function(data, status, xhr){
+						console.log(data);
+						$("#ai-response").text(data);
+					},
+					error: function(xhr, status, e){
+						console.log("실패: " + xhr.status);
+						$("#ai-response").text("AI가 응답에 실패하였습니다.");
+					}
+				}//ajax	
+			);//ajax
+		}
+	}
 	
 	// 별점 막대그래프 높이 설정 함수
 	function setAvgGraph(){
@@ -453,7 +499,7 @@ if (rateAmount > 0) {
 </sec:authorize>
 </head>
 
-<body class="bg-light" style="height: 100vh;">
+<body class="bg-light">
 
 	<!-- 네비게이션바 -->
 	<jsp:include page="../common/navBar.jsp"></jsp:include>
@@ -538,6 +584,7 @@ if (rateAmount > 0) {
 							</div>
 						</div>
 						<div style="position: absolute; bottom: 0; right: 1px;">
+							<button type="button" class="btn btn-primary" onclick='$("#AI-CONTEXT").toggle()'>AI</button>
 							<button class="btn"
 								style="background-color: #ff416c; color: white;" id="allReview">리뷰++</button>
 							<button class="btn" id="reviewBtn"
@@ -546,6 +593,35 @@ if (rateAmount > 0) {
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		
+		<!-- AI -->
+		<div class="row" id="AI-CONTEXT" style="width:100%; display:none; margin-BOTTOM:15px; margin-TOP:15px; MARGIN-LEFT:10px">
+			<div class="card" style="width: 50rem;">
+			  <div class="card-body">
+			    <h5 class="card-title">AI에게 평가 부탁하기</h5>
+			    <p class="card-text">AI에게 해당 영화에 대해 질문하거나 평가를 부탁할 수 있습니다 !</p>
+			    
+			    <form action="chatgpt" method="post" id="aiForm">
+			    	<div class="input-group mb-3">
+					  <span class="input-group-text" id="inputGroup-sizing-default">요청입력</span>
+					  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="prompt" name="prompt">
+					</div>
+			    </form>
+			    
+			    <div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-bottom:15px">
+				  <button type="button" class="btn btn-outline-secondary" id="sample-q1">${content.contTitle}에 대한 주요 리뷰 요약해 줄 수 있어?</button>
+				  <button type="button" class="btn btn-outline-secondary" id="sample-q2">${content.contTitle} 영화의 재밌는 비하인드 스토리가 있으면 알려줘!</button>
+				  <button type="button" class="btn btn-outline-secondary" id="sample-q3">${content.contTitle} 같은 비슷한 영화 있을까?</button>
+				</div>
+			    
+			    <div class="card" id="ai-response-context" STYLE="display:none;" >
+				  <div class="card-body" id="ai-response">
+				    
+				  </div>
+				</div>
+			  </div>
 			</div>
 		</div>
 
@@ -558,6 +634,8 @@ if (rateAmount > 0) {
 			<div style="font-size: 15px; margin: 4px;">
 				${content.getDescription() }</div>
 		</div>
+		
+		
 
 		<!-- 배우정보 -->
 		<div style="width: 100%; height: 300px;">
