@@ -99,17 +99,24 @@ button {
 }
 .pagination .page-link{
 	border: none;
-	color:black; 
+	color:white; 
 	background-color: #ff416c; 
 	opacity:0.8;
 	color: white;
 }
 .pagination .page-item.active .page-link{
-	color:black; 
+	color:white; 
 	background-color: #ff416c;
 	opacity:0.8; 
-	color: black;
+	color: white;
 	border: none;
+}
+/* 활성화된 페이지 번호 스타일 */
+.pagination .page-item.active .page-link {
+    background-color: #FF285A;
+    background-image: linear-gradient(180deg, #FF285A, #FF174D);
+    /* 그라디언트 효과 */
+    border: none; /* 테두리 제거 */
 }
 </style>
 

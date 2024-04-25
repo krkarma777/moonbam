@@ -24,7 +24,7 @@
 <div style="height: 50px"></div>
 
 <!-- 바디 -->
-<div style="width: 900px; margin: auto; border:1px solid black;">
+<div style="width: 1200px; height:910px; margin: auto; border:1px solid black;">
 
 </div>
 
