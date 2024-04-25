@@ -14,8 +14,6 @@
 //1. 국내영화/해외영화 구분해서 가져와야함.(이건 api 바꿔야하긴 함)
 //2. 더보기 태그 국내 영화 해외영화 바꿔야함(1번이 되면 가능)
 List<PostPageDTO> movieList = (List<PostPageDTO>)session.getAttribute("movieList");
-List<PostPageDTO> movieMeetList = (List<PostPageDTO>) session.getAttribute("movieMeetList");
-List<PostPageDTO> movieInfoList = (List<PostPageDTO>) session.getAttribute("movieInfoList");
 ContentDataFormating cdf = new ContentDataFormating();
 List<ContentDTO> movieTopList = (List<ContentDTO>) session.getAttribute("movieTopList");
 List<ContentDTO> genreMovieTopList = (List<ContentDTO>) session.getAttribute("genreMovieTopList");

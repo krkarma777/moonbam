@@ -547,7 +547,6 @@ if (rateAmount > 0) {
 					</div>
 				</div>
 			</div>
-
 		</div>
 
 		<!-- 시놉시스 -->

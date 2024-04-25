@@ -91,15 +91,26 @@ public class MainController {
             switch (category) {
             case "movie":
 	    		List<ContentDTO> movieTopList = mService.selectTop();
-	    		model.addAttribute("movieTopList", movieTopList);
-	    		
+                session.setAttribute("movieTopList", movieTopList);
+                session.setAttribute("movieList", moviePostList);
+                session.setAttribute("movieMeetList", movieMeetList);
+                session.setAttribute("movieInfoList", movieInfoList);
+                model.addAttribute("list", annoService.popupNnumList("popup"));
 	    		List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
 	    		session.setAttribute("dailyList", dailyList);
-	    		
+
+                //장르 인기순 가져오기
+                //처음엔 드라마로.
+                String genre = "Drama";
+                List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
+                session.setAttribute("genreMovieTopList", genreMovieTopList);
+                model.addAttribute("genre", genre);
+
 	    		model.addAttribute("category", category);
-	    		categoryList.add("전체");
-	    		categoryList.add("한국영화");
-	    		categoryList.add("해외영화");
+                categoryList.add("전체");
+                categoryList.add("드라마");
+                categoryList.add("코미디");
+                categoryList.add("스릴러");
 	    		model.addAttribute("categoryList", categoryList);
                 nextPage = "movie/movieHome";
                 break;
