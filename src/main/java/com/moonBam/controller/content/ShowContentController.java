@@ -151,14 +151,17 @@ public class ShowContentController {
 	}
 	
 	@RequestMapping("/movieSearch")
-	public String showContent(Model model, String curPage, String searchCategory, String searchValue) {
-		System.out.println("in movieSearch(): "+ searchCategory+ " " + searchValue);
+	public String movieSearch(Model model, String curPage, String searchCategory, String searchValue) {
 		if(curPage==null) {
 			curPage="1";
 		}
 		
 		if(searchValue==null) {
 			searchValue="";
+		}
+		
+		if(searchCategory==null) {
+			searchCategory="";
 		}
 		
 		switch(searchCategory) {
@@ -169,7 +172,6 @@ public class ShowContentController {
 		    case "Thriller": searchCategory = "스릴러";
 	         	 break;
 		}
-		System.out.println(searchCategory+ " " + searchValue);
 		
 		MoviePageDTO mpDTO = mService.searchMovieList(curPage, searchCategory, searchValue);
 		
