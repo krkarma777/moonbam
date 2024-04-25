@@ -54,7 +54,24 @@ public class ChatRoomDAO {
 	
 
 	public int ChatKickUser(String user) {
-		int n = session.delete("ChatMapper.ChatKickUser", user);
+		System.out.println("dao레이어에서 강퇴 유저 이름 수신 후 매퍼 전달 ==========");
+		System.out.println(user);
+		System.out.println("===========================================");
+		System.out.println("강퇴 대상 유저 isKicked 칼럼 t로 업데이트");
+		
+		int n = session.update("ChatMapper.ChatKickUser", user);
+		
+		System.out.println("n이 1이면 정상 처리===============================");
+		System.out.println(n);
+		System.out.println("=============================================");
+		
+		return n;
+	}
+
+	public int updateCurrentNow(String chatNum) {
+		int n = 0;
+		n = session.update("ChatMapper.updateCurrentNow2", chatNum);
+		
 		return n;
 	}
 

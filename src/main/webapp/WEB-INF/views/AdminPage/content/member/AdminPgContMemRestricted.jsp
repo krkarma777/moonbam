@@ -2,6 +2,8 @@
 <%@ page import = "com.moonBam.dto.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <style>
 	.table {
 		margin-top: 20px;
@@ -46,25 +48,29 @@
 			<th>회원ID</th>
 			<th>상태</th>
 			<th>이용제한 사유</th>
+			<th>제재 시작일</th>
+			<th>제재 종료일</th>
+			<th>처분상태</th>
 			<th>조치</th>
 		</tr>
 		</thead>
 		<tbody>
-		<c:forEach var="dto" items="${list}">
-			<tr>
-				<td>${dto.actno}</td>
-				<td>${dto.userid}</td>
-				<td>${dto.status}</td>
-				<td>${dto.cause}</td>
-				<td>${dto.action}</td>
-				<td>${dto.actionstart}</td>
-				<td>${dto.actionend}</td>
-				<td>
-					<button type="button" class="btn btn-custom">해제</button>
-					<button type="button" class="btn btn-custom">연장</button>
-				</td>
-			</tr>
-		</c:forEach>
+		<c:if test="${list != null}">
+			<c:forEach var="dto" items="${list}">
+				<tr>
+					<td>${dto.actno}</td>
+					<td>${dto.userid}</td>
+					<td>${dto.status}</td>
+					<td>${dto.cause}</td>
+					<td>${dto.action}</td>
+					<td>${dto.actionstart}</td>
+					<td>${dto.actionend}</td>
+					<td>
+						<button type="button" class="btn btn-custom" id="suspendChecked" >해제</button>
+					</td>
+				</tr>
+			</c:forEach>
+		</c:if>
 		<c:if test="${list == null}">
 			<tr>
 				<td colspan="8">검색조건을 입력하십시오.</td>

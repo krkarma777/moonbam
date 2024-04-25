@@ -45,24 +45,24 @@ public class QnAController {
 
     //문의 작성 후 저장
     @PostMapping("/submit_qna")
-    @ResponseBody
     public String submitQNA(String qna_title, String qna_text){
         
-        //작성한 문의 리스트 받아오기
+        //작성한 문의 DTO 받아오기
         QnADTO qna = new QnADTO();
         qna.setTitle(qna_title);
         qna.setText(qna_text);
         
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/mm/dd");
-        String dateString = today.format(formatter);
-        qna.setPostdate(dateString);
+//        LocalDate today = LocalDate.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/mm/dd");
+//        String dateString = today.format(formatter);
+//        qna.setPostdate(dateString);
 
         int num =0;
+        System.out.println("DB에 저장할 qna");
+        System.out.println(qna);
         num = service.submitQNA(qna);
+        
 
-        //TODO num = 1이면 mesg = "정상적으로 제출되었습니다."
-
-        return "";
+        return "redirect:/qna";
     }
 }

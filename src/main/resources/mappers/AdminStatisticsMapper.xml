@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminStatisticsMapper" >
+
+	<update id = "countVisitor" parameterType = "int">
+		update counter set counter = counter + #{num} where countday = to_date(sysdate,'yy/mm/dd')
+	</update>
+	
+	<insert id = "countStartToday">
+		INSERT INTO counter (COUNTDAY, COUNTER) VALUES (TO_DATE(sysdate,'yyyy/mm/dd'), 0)
+	</insert>
+	
+	<select id = "getCount" resultType = "AdminCounterDTO">
+		SELECT * FROM (
+    		SELECT * FROM counter ORDER BY counter.countday ASC
+			) WHERE ROWNUM &lt; 30
+	</select>
+	
+</mapper>

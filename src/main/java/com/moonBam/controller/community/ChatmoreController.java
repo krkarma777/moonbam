@@ -95,11 +95,11 @@ public class ChatmoreController {
 		//회원 신고하기 눌렀을 때 띄워지는 자식 팝업창 리턴.
 		//링크에 신고할 회원의 id와 나의 채팅방 num을 쿼리스트링 방식으로 붙여보냈음
 		
-		String reporterId = principal.getName();
+		/* String reporterId = principal.getName(); */
 		
 		m.addAttribute("userId", userId);
 		m.addAttribute("chatNum", chatNum);
-		m.addAttribute("reporterId", reporterId);
+		/* m.addAttribute("reporterId", reporterId); */
 		//System.out.println(userId+"4444444444444444444444444  "+chatNum);
 		
 		
@@ -107,8 +107,11 @@ public class ChatmoreController {
 	}
 	
 	@RequestMapping(value = "/Chatmore/ChatmoreReport", method=RequestMethod.POST)
-	public String ChatmoreReportPost(AdminReportDTO adminReportDTO,  @RequestParam("chatNum") int chatNum,  HttpSession session) {
+	public String ChatmoreReportPost(AdminReportDTO adminReportDTO,  @RequestParam("chatNum") int chatNum,  HttpSession session, Principal principal) {
 		//@RequestParam("targetId") String targetId, 내가 이걸 왜?
+		
+		String reporterId = principal.getName();
+		adminReportDTO.setReporterId(reporterId);
 		
 		// AdminReportDTO DB에 insert 날릴거임
 		System.out.println("AdminReportDTO"+adminReportDTO+"     "+"chatNum"+chatNum);

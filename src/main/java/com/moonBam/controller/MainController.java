@@ -1,9 +1,12 @@
 package com.moonBam.controller;
 
+import com.moonBam.controller.adminpage.AdminCounter;
 import com.moonBam.controller.content.KoficAPI;
+import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.CommunityPageDTO;
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.board.PostPageDTO;
+import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityHomeService;
 import com.moonBam.service.MainService;
 import com.moonBam.service.PostService;
@@ -36,21 +39,26 @@ public class MainController {
     
     @Autowired
     KoficAPI kofic;
-
+    @Autowired
+    ChatRoomService crService;
     // pupop
     @Autowired
     AnnouncementService annoService;
-    
+    @Autowired
+    AdminCounter counter;
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category, Principal principal,
     						HttpSession session) {
         System.out.println("principal = " + principal);
+
+        counter.init();//접속자 +1
+
         String nextPage = "main";
 
         List<PostPageDTO> moviePostList = service.selectAll(new HashMap<String, String>() {
             {
                 put("board", "movie");
-                put("postCount", "14");
+                put("postCount", "5");
             }
         });
 
@@ -71,9 +79,9 @@ public class MainController {
         // popup
         List<Integer> list = annoService.popupNnumList("popup");
       	
-        session.setAttribute("movieList", moviePostList);
-        session.setAttribute("movieMeetList", movieMeetList);
-        session.setAttribute("movieInfoList", movieInfoList);
+        model.addAttribute("movieList", moviePostList);
+        model.addAttribute("movieMeetList", movieMeetList);
+        model.addAttribute("movieInfoList", movieInfoList);
         // popup
         model.addAttribute("list", list);
         
@@ -82,28 +90,16 @@ public class MainController {
         if (category != null) {
             switch (category) {
             case "movie":
-	    		//박스 오피스 목록 가져오기
-	    		if(session.getAttribute("dailyList")==null) {
-	    			List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
-		    		session.setAttribute("dailyList", dailyList);
-	    		}
-	    		
-	    		
 	    		List<ContentDTO> movieTopList = mService.selectTop();
-	    		session.setAttribute("movieTopList", movieTopList);
+	    		model.addAttribute("movieTopList", movieTopList);
 	    		
-	    		//장르 인기순 가져오기
-	    		//처음엔 드라마로.
-	    		String genre = "Drama";
-	    		List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
-	    		session.setAttribute("genreMovieTopList", genreMovieTopList);
-	    		model.addAttribute("genre", genre);
+	    		List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
+	    		session.setAttribute("dailyList", dailyList);
 	    		
 	    		model.addAttribute("category", category);
 	    		categoryList.add("전체");
-	    		categoryList.add("드라마");
-	    		categoryList.add("코미디");
-	    		categoryList.add("스릴러");
+	    		categoryList.add("한국영화");
+	    		categoryList.add("해외영화");
 	    		model.addAttribute("categoryList", categoryList);
                 nextPage = "movie/movieHome";
                 break;
@@ -111,13 +107,13 @@ public class MainController {
             	String curPage = "1";
             	String searchCategory = "";
             	String searchValue = "";
-            	
             	CommunityPageDTO cpDTO= cService.chatRoomList(searchCategory, searchValue, curPage);
             	model.addAttribute("cpDTO", cpDTO);
-            	
-            	String communityCategory = "communitySearch";
-        		model.addAttribute("communityCategory", communityCategory);
-            	
+                List<ChatRoomDTO> chatRoomMapList = crService.getAllChatRooms();
+                if (chatRoomMapList != null && !chatRoomMapList.isEmpty()) {
+                    // chatRoomMapList가 null이 아니고 비어 있지 않은 경우에만 모델에 추가
+                    model.addAttribute("chatRoomMapList", chatRoomMapList);
+                }
             	model.addAttribute("category", category);
             	categoryList.add("전체");
 	    		categoryList.add("영화");
