@@ -136,18 +136,14 @@ public class ChatRoomController {
 		String nickNameInSession = memberDTO.getNickname();
 		request.setAttribute("userIdInSession", userIdInSession); ////////////// 형이 필요해서 저장해둔거, userId
 		request.setAttribute("nickNameInSession", nickNameInSession); //////////////형이 필요해서 저장해둔거, nickName
-		System.out.println(userIdInSession);
-		System.out.println(nickNameInSession);
 		
 		Map<String, Object> chatMemberselectMap = new HashMap<>();
 		chatMemberselectMap.put("userId", userIdInSession);
 		chatMemberselectMap.put("chatNum", chatNum);
 		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
 				
-		//정상진행 시 chatRoom.jsp로 진입
-		// 수정 함, 삭제필요
-		String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp
-//	String returnWhere = "community/chatRoom/chatRoom"; //chatRoom.jsp //원본 
+		String returnWhere = "community/chatRoom/chatRoom";
+		
 		try {
 			
 			ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberselectMap);
