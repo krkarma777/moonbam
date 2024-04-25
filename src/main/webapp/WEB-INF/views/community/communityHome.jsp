@@ -47,6 +47,8 @@
 			autoScrolling:true,
 			scrollHorizontally: true,
 	        navigation:true,
+	        navigationTooltips:['Community', 'Community Map'],
+	        showActiveTooltip: true,
 		});
 		
 		//내 채팅방 목록 보기
