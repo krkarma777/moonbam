@@ -248,6 +248,8 @@ session.removeAttribute("mesg");
 			console.log("body : " +body.chatContent)
 		    let content = JSON.parse(body.chatContent);
 			let message = content.message;
+
+
 			let time = content.serverTime;
 	    let chatLi;
 	    
@@ -262,7 +264,12 @@ session.removeAttribute("mesg");
 	        // 일반 메시지일 경우
 	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
 			//console.log("시간 잘라서 확인하기 완료?",timeShort)
-	        chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>"; 
+			if(whosMessage == "my-chat"){
+				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+}else{
+	  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+}
+	       
 	    }
 	    $("#chat").append(chatLi);
 	}
