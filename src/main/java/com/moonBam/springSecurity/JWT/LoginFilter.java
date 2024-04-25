@@ -33,7 +33,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
     	userIdSave = request.getParameter("userIdSave");
-    	
     	System.out.println("LoginFilter: 아이디 저장: " + userIdSave);				//체크되면 on
     	
 		//클라이언트 요청에서 username, password 추출

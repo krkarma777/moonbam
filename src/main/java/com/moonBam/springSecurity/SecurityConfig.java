@@ -105,17 +105,22 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
         //권한따라 허용되는 url 설정
         security.authorizeHttpRequests(
                 (authorize) -> authorize
-                        //"/memberList", "/AdminPage/**" 주소는 DB role 컬럼의 데이터값이 ROLE_ADMIN인 사람만 사용 가능
-                        .requestMatchers("/board/write/**", "/board/delete/**", "/board/edit/**", "/board/note/**", "/board/postLike/**").authenticated()
-                        .requestMatchers("/memberList", "/AdminPage/**").hasRole("ADMIN")
-                        //그외 모든 요청은 모든 유저가 사용 가능
-                        .anyRequest().permitAll()
-        );
-
-        //세션관리
-        //JWT를 통한 인증/인가를 위해서 세션을 STATELESS 상태로 설정
-        //*****************************************************************************************************************************************
-        security.sessionManagement((session) -> session
+                //"/memberList", "/AdminPage/**" 주소는 DB role 컬럼의 데이터값이 ROLE_ADMIN인 사람만 사용 가능
+				.requestMatchers(
+						"/memberList",
+						"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
+						"/Chatmore", "/Chatmore/ChatmoreReport"
+				).hasRole("MEMBER")
+        .requestMatchers("/board/write/**", "/board/delete/**", "/board/edit/**", "/board/note/**", "/board/postLike/**").authenticated()
+				.requestMatchers("/AdminPage/**").hasRole("ADMIN")
+                //그외 모든 요청은 모든 유저가 사용 가능
+                .anyRequest().permitAll()
+				);
+		
+		//세션관리
+		//JWT를 통한 인증/인가를 위해서 세션을 STATELESS 상태로 설정
+		//*****************************************************************************************************************************************
+		security.sessionManagement((session) -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         //페이지 접속할 때 해당 페이지에 대한 권한 없는 경우, 가는 페이지
