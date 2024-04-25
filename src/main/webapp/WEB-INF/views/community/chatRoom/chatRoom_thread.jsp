@@ -13,10 +13,9 @@
 	if (mesg != null) {
 	%>
 	
-	<script>
+		<script>
 			alert("<%=mesg%>");
-			</script>
-	
+		</script>
 	<%
 	}
 	
@@ -48,10 +47,7 @@ _thread
 					<button
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button>
 				</td>
-
-
 			</tr>
-
 			<tr>
 				<!-- 첫 화면부터 공간 차지함 -->
 				<td colspan="2" class="text_align_c" id='toggle_state'><br>
@@ -85,9 +81,6 @@ _thread
 			</tr>
 		</tfoot>
 	</table>
-
-
-
 
 	<script>
 	
@@ -136,12 +129,13 @@ _thread
 						function(messageOutput) {
 				showMessageOutput(JSON.parse(messageOutput.body));
 						});
-			// 수정
+			// 입장 메세지 전송
 				stompClient.send("/acorn/chat/send_thead/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 					'type':'ENTER',
 					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
 					}));
 			});
+			event.preventDefault();
 		}
 
 		/* 메시지 전송 */
@@ -153,7 +147,7 @@ _thread
 				var message = escapeHtml($("#messageContent").val()); // 메세지 
 				var serverTime = new Date().toLocaleString();
 // 수정
-				stompClient.send("/acorn/chat/send_thead2/"+chatNum, {}, JSON.stringify({
+				stompClient.send("/acorn/chat/send_thead/"+chatNum, {}, JSON.stringify({
 					'type' : 'TALK',
 					'userId' : userId,
 					'message' : message,
@@ -201,7 +195,7 @@ _thread
 	        .replace(/>/g, "&gt;")
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
-		}
+    };
 	</script>
 </body>
 </html>

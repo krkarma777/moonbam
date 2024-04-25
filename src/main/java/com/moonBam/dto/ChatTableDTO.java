@@ -20,7 +20,6 @@ public class ChatTableDTO {
 	    "time": "2024-04-08-11-36-00",
 	    "writer": "user1",
 	    "text": "hello",
-	    "report": "n"
 	  },
 	 ]
 	 */
@@ -32,63 +31,30 @@ public class ChatTableDTO {
 	}
 
 
-	public ChatTableDTO(MessageType type, int id, int chatNum, String chatContent) {
+	public ChatTableDTO(int chatNum, String chatContent) {
 		super();
-		this.type = type;
-		this.id = id;
 		this.chatNum = chatNum;
 		this.chatContent = chatContent;
 	}
-
 
 	public ChatTableDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-
-	public int getId() {
-		return id;
-	}
-
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-
 	public int getChatNum() {
 		return chatNum;
 	}
-
 
 	public void setChatNum(int chatNum) {
 		this.chatNum = chatNum;
 	}
 
-
 	public String getChatContent() {
 		return chatContent;
 	}
 
-
 	public void setChatContent(String chatContent) {
 		this.chatContent = chatContent;
 	}
-
-
-	public MessageType getType() {
-		return type;
-	}
-
-
-	public void setType(MessageType type) {
-		this.type = type;
-	}
-	
-	
-	
-	
-	
-	
 }

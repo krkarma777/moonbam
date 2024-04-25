@@ -1,6 +1,8 @@
 package com.moonBam.controller.community.chat;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -13,7 +15,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.ChatTableDTO;
@@ -25,39 +26,50 @@ public class ChatMessageController_thread {
 	private ChatMessagesService chatMessagesService;
 
 	ChatTableDTO ctDto;
+	
 
+	File file;
 // 받고 주고
 	@MessageMapping("/chat/send_thead/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @DestinationVariable("chatNum") String chatNum,
+	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @DestinationVariable("chatNum") int chatNum,
 			@RequestParam String chatContent) {
 		// pathvariable @DestinationVariable 
 		// 합치기
-		File file = saveChatContentToFile(chatContent, chatNum);
-		//System.out.println(file.toString());
-		// this.jsonData = mergeMessage(this.jsonData, chatContent);
+		System.out.println("-----------------------------------------------");
+		this.file = saveChatContentToFile(chatContent, chatNum);
+		ctDto.setChatContent(chatContent);
+		ctDto.setChatNum(chatNum);
 		this.ctDto = ctDto;
-
-		String aa= "{\"type\":\"TALK\",\"userId\":\"acornjayk@gmail.com\",\"message\":\"hello\",\"serverTime\":\"2024. 4. 24. 오후 3:01:31\"}";
-		String bb= "{\"type\":\"enter\",\"userId\":\"acornjayk@gmail.com\",\"message\":\"hello\",\"serverTime\":\"2024. 4. 24. 오후 3:01:31\"}";
-		
-		String cc = mergeMessage(aa, bb);
-		System.out.println(cc);
+		System.out.println(ctDto.toString());
+		System.out.println("************************************************");
 		
 		
 		return ctDto; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 
-//	@Scheduled(fixedRate = 5000) // 1분(60,000밀리초)마다 실행
-//	public void saveMessagesToDatabase() { // chatData를 DB에 저장
-//		if (this.ctDto != null) {
-//			this.ctDto.setChatContent(jsonData);
-//			chatMessagesService.insert(this.ctDto);
-//			jsonData = "";
-//			// 데이터를 비움
-//
-//		}
-//	}
+	// 문제점
+	// 1. 서버 시작 부터 계속 실행됨
+	// 2. 소켓 해제 후 계속 실행
+//	@Scheduled(fixedRate = 10000) // 1분(60,000밀리초)마다 실행
+	public void saveMessagesToDatabase() { // chatData를 DB에 저장
+		System.out.println("scheduled");
+		if (this.ctDto != null) {
+		//	System.out.println("\t"+file.getName());
+		//	if(file.exists()) {
+			String fileString = readChatContentFromFile(file.getAbsolutePath());
+			System.out.println("\tread");
+			this.ctDto.setChatContent(fileString);
+			System.out.println(ctDto.toString());
+			chatMessagesService.insert(this.ctDto);
+			System.out.println("\tinsert");
+			deleteFile(file.getAbsolutePath());
+			System.out.println("\tdelete");
+			// 데이터를 비움
+			ctDto=null;
+			//}
+		}
+	}
 
 	public static String mergeMessage(String json1, String json2) {
 		try {
@@ -84,7 +96,7 @@ public class ChatMessageController_thread {
 	}
 
 	// chatContent를 파일에 저장하는 메서드
-	private File saveChatContentToFile(String chatContent, String chatNum) {
+	private File saveChatContentToFile(String chatContent, int chatNum) {
 	    String filePath = "src/main/resources/static/com/" + chatNum + ".txt";
 	    File file = new File(filePath);
 	    try {
@@ -101,4 +113,37 @@ public class ChatMessageController_thread {
 	    return file;
 	}
 
+	private String readChatContentFromFile(String filePath) {
+	    StringBuilder stringBuilder = new StringBuilder();
+	    try {
+	        File file = new File(filePath);
+	        if (!file.exists()) {
+	            System.err.println("File not found: " + filePath);
+	            return null;
+	        }
+
+	        BufferedReader reader = new BufferedReader(new FileReader(file));
+
+	        String line;
+	        while ((line = reader.readLine()) != null) {
+	            stringBuilder.append(line).append("\n");
+	        }
+
+	        reader.close();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    return stringBuilder.toString();
+	}
+	
+	private boolean deleteFile(String filePath) {
+	    File file = new File(filePath);
+	    if (file.exists()) {
+	        return file.delete();
+	    } else {
+	        System.err.println("File not found: " + filePath);
+	        return false;
+	    }
+	}
+	
 }
