@@ -48,6 +48,7 @@
 			<!-- bottom for close -->
 			<tr>
 				<td colspan="2" style="text-align: right;">
+					<input type="checkbox" value="closeToday" id='closeToday'>오늘 하루 않보기
 					<button type="button" id="close" class="btn"
 						style="float: right; background-color: #ff416c; color: white; margin-left: auto;">닫기</button>
 				</td>

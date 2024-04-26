@@ -21,6 +21,7 @@ ContentDataFormating cdf = new ContentDataFormating();
 List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTopList");
 
 List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList");
+
 %>
 <html>
 <head>
@@ -334,5 +335,53 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	});
 
 	</script>
+	
+	<script type="text/javascript">
+	var list = <%=request.getAttribute("list")%>;  
+console.log("list");
+console.log(list);
+$(function (){
+	// 팝업 창 위치 &크기 변수
+	let sLeft=0;
+	let sTop=0;
+	let width ;
+	let height ;
+	
+    for (var i = 0; i < list.length; i++) {
+	console.log("영화")
+    	let flag= true;	/*  false 시 팝업 안나옴 */
+    	if(flag){
+    		// 팝업 창의 위치 설정
+    		setPostion(i);
+    		// 팝업 창 띄위기
+    	/* 	console.log(sLeft);
+    		console.log(sTop);
+    		console.log(width);
+    		console.log(height); */
+    		console.log(list[i]);
+    		window.open("ViewPopupController/" + list[i]+"/movie", "popup" + i,
+ 			//window.open("ViewPopupController?num=" + list[i], "popup" + i,
+    				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
+    	}
+    }
+    
+    // 팝업 창의 위치 설정
+  
+function setPostion(i) {
+		let screenWidth = screen.width;
+		let screenHeight = screen.height;
+		// 창의 크기
+		width = (screenWidth / 4);
+		height = (screenHeight / 3);
+//		console.log("화면 크기: " , width);
+//		console.log("화면 높이: " ,height);
+		// 창의 시작점
+		sLeft = width * ((i % 4));
+		sTop = height * Math.floor(i / 4);
+//		console.log("팝업 크기: " , width);
+//		console.log("팝업 높이: " ,height);
+	}
+});
+</script>
 </body>
 </html>

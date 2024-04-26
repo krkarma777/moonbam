@@ -80,7 +80,7 @@ public class AnnouncementDTO {
 	public String toString() {
 		return "AnnouncementDTO [annoNum=" + annoNum + ", annoTitle=" + annoTitle + ", annoText=" + annoText
 				+ ", annoWriter=" + annoWriter + ", writeDate=" + writeDate + ", updateDate=" + updateDate
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", popup=" + popup + "]";
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", popup=" + popup + ",category=" + category + "]";
 	}
 
 	public int getAnnoNum() {

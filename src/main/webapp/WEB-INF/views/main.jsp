@@ -24,7 +24,6 @@ var list = <%= request.getAttribute("list") %>;
     	let height ;
     	
         for (var i = 0; i < list.length; i++) {
-
         	let flag= true;	/*  false 시 팝업 안나옴 */
         	if(flag){
         		// 팝업 창의 위치 설정
@@ -35,7 +34,7 @@ var list = <%= request.getAttribute("list") %>;
         		console.log(width);
         		console.log(height); */
         		console.log(list[i]);
-        		window.open("ViewPopupController/" + list[i]+"/전체", "popup" + i,
+        		window.open("ViewPopupController/" + list[i]+"/main", "popup" + i,
      			//window.open("ViewPopupController?num=" + list[i], "popup" + i,
         				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
         	}

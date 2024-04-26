@@ -82,9 +82,9 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 			<td>카테고리</td>
 			<td colspan="3">
 				<!-- select (option 전체, 영화, 소모임) --> <select name="category">
-					<option value="전체" >전체</option>
-					<option value="영화">영화</option>
-					<option value="소모임">소모임</option>
+					<option value="main" >전체</option>
+					<option value="movie">영화</option>
+					<option value="community">소모임</option>
 			</select>
 			</td>
 		</tr>
