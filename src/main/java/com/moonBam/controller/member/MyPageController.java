@@ -203,22 +203,30 @@ public class MyPageController {
         }
     }
 
-    @PostMapping("/postDel")
-    public String postDel(Principal principal,
-                          @RequestParam("postId") Long postId,
-                          RedirectAttributes redirectAttributes) {
-        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-        if (loginUser != null) {
-            // postId에 해당하는 게시물을 삭제합니다.
-            int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
-            System.out.println("postDel result: " + result);
-
-            return "redirect:/my-page/post";
-        } else {
-            redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
-        }
+    @PostMapping(value="/postDel", produces = "text/plain;charset=UTF-8")
+    public String postDel(
+            @RequestParam("postId") Long postId,
+            RedirectAttributes redirectAttributes) {
+        // 댓글 갯수 확인
+//        int commentCount = mserv.checkCommentsExist(postId);
+        
+        // 댓글 처리에 따른 게시글 처리
+//        if (commentCount > 0) {
+            // 댓글이 있는 경우 게시글을 업데이트
+            Map<String, String> map = new HashMap<>();
+            map.put("postId", String.valueOf(postId));
+            map.put("postText", "삭제된 글입니다.");
+            int updatedPostCount = mserv.updatedMyPost(map);
+            redirectAttributes.addFlashAttribute("message", updatedPostCount > 0 ? "게시글을 삭제했습니다." : "게시글 삭제에 실패했습니다.");
+//        } else {
+//            // 댓글이 없는 경우 게시글을 삭제
+//            int deletedPostCount = mserv.postDel(postId);
+//            redirectAttributes.addFlashAttribute("message", deletedPostCount > 0 ? "게시글을 삭제했습니다." : "게시글 삭제에 실패했습니다.");
+//        }
+        
+        return "redirect:/my-page/post";
     }
+
 
  //전체 글 삭제   
     @PostMapping("/delAllPosts")

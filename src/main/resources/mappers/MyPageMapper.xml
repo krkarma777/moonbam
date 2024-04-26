@@ -68,10 +68,32 @@ update commentDB
 set comtext = #{comText}
 where comid = #{comId}
 </update>
+
    <!-- 내리뷰 삭제 -->
-   <delete id="postDel" parameterType="Long">
-    delete
-    from postDB
-    where postId = #{postId}
-   </delete>
+   
+   <select id="getCommentCountByPostId" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM commentDB
+        WHERE postId = #{postId}
+    </select>
+    
+<select id="checkCommentsExist" parameterType="long" resultType="int">
+    SELECT COUNT(*)
+FROM commentDB
+WHERE postId = #{postId}
+</select>
+    
+<update id="updateMyPost" parameterType="hashmap">
+    UPDATE postDB
+    SET postTitle = #{postText},
+        postText = #{postText}
+    WHERE postId = #{postId}
+</update>
+
+     
+ <delete id="postDel" parameterType="Long">
+  delete
+  from postDB
+  where postId = #{postId}
+ </delete>
 </mapper>

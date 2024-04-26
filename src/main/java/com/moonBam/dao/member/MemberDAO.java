@@ -106,4 +106,14 @@ public MyScrapDTO findAllScrap(String curPage, String name) {
 private int  totalPostScrap(String name) {
 	return session.selectOne("countMyScraps",name);
 }
+
+public int updateMyPost(Map<String, String> map) {
+	int num = session.update("updateMyPost", map);
+	return num;
+}
+
+public int checkCommentsExist(Long postId) {
+	int num = session.selectOne("checkCommentsExist", postId);
+    return num;
+}
 }
