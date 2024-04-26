@@ -65,7 +65,8 @@ public class ChatRoomController {
 		String nextWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; //정상 진행jsp
 		
 		//일단 중복된 데이터가 없는지 확인 후 insert 진행하기 (중복 저장 방지를 위해~)
-		ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberInsertMap);
+		ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberInsertForOnlyOneSelect(chatMemberInsertMap);
+		//System.out.println("왜??"+chatMemberDto);
 		
 		///////////////////////////////////////////////
 		if(chatMemberDto != null) {
@@ -128,8 +129,8 @@ public class ChatRoomController {
 	@RequestMapping("/chatRoom/enter")
 	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum, HttpSession session, Model model ) {
 		String str = (String) session.getAttribute("userIdInSession");
+		
 		//chatNum과 userIdInSession을 조건으로 가진 select 결과가 있는지 없는지 ChatMemberDTO가져와서 null이 아닐 때만 링크 접속하게 하기
-		//나중에 여기에 "강퇴"칼럼의 Y,N 값을 확인해야함 (N만 입장 가능)
 		
 		String userIdInSession = principal.getName();
 		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
@@ -140,7 +141,7 @@ public class ChatRoomController {
 		Map<String, Object> chatMemberselectMap = new HashMap<>();
 		chatMemberselectMap.put("userId", userIdInSession);
 		chatMemberselectMap.put("chatNum", chatNum);
-		System.out.println("chatMemberInsertMap 확인 chatRoomSelect "+chatMemberselectMap);
+		System.out.println("chatMemberselectMap 확인 chatRoomSelect "+chatMemberselectMap);
 				
 		String returnWhere = "community/chatRoom/chatRoom";
 		
@@ -149,8 +150,9 @@ public class ChatRoomController {
 			ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberEnterSelect(chatMemberselectMap);
 			System.out.println("chatRoomSelect  "+chatMemberDto);
 			
-			
+			//이게 null이라면 강퇴된 거임
 			if(chatMemberDto == null ) {
+				session.setAttribute("mesg", "강퇴된 방에는 다시 입장할 수 없습니다.");
 				returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
 			}
 			
@@ -159,6 +161,7 @@ public class ChatRoomController {
 		}catch(Exception e){
 			
 			System.out.println("chatMember select 실패");
+			session.setAttribute("mesg", "문제가 발생하였습니다.");
 			returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
 		}
 		
