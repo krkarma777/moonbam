@@ -98,18 +98,25 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 				.failureHandler(loginfailureHandler)
 				);
 
-		//권한따라 허용되는 url 설정
-		security.authorizeHttpRequests(
+        //권한따라 허용되는 url 설정
+        security.authorizeHttpRequests(
                 (authorize) -> authorize
                 //"/memberList", "/AdminPage/**" 주소는 DB role 컬럼의 데이터값이 ROLE_ADMIN인 사람만 사용 가능
+        .requestMatchers(
+            "/board/write/**", "/board/delete/**", "/board/edit/**", "/board/note/**", "/board/postLike/**"
+            ).authenticated()
 				.requestMatchers(
 						"/memberList",
 						"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
 						"/Chatmore", "/Chatmore/ChatmoreReport"
-				).authenticated()
-				.requestMatchers("/AdminPage/**").hasRole("ADMIN")
-                //그외 모든 요청은 모든 유저가 사용 가능
-                .anyRequest().permitAll()
+				    ).authenticated()
+				    ).hasRole("MEMBER")
+				.requestMatchers(
+            "/AdminPage/**"
+            ).authenticated()
+            ).hasRole("ADMIN")
+        //그외 모든 요청은 모든 유저가 사용 가능
+        .anyRequest().permitAll()
 				);
 		
 		//세션관리
@@ -117,27 +124,27 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 		//*****************************************************************************************************************************************
 		security.sessionManagement((session) -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		
-		//페이지 접속할 때 해당 페이지에 대한 권한 없는 경우, 가는 페이지
-		security.exceptionHandling().accessDeniedPage("/NotAuthentic");
 
-		//로그아웃
-		security.logout((logoutConfig) -> logoutConfig
-				//jsp에서 로그아웃을 요청할 매핑주소
-		        .logoutUrl("/logout")
-		        //로그아웃 시 세션 삭제
-		        .invalidateHttpSession(true)
-		        //로그아웃 시 JWT인가가 저장된 쿠키 삭제
-		        .deleteCookies("AuthToken")
-				//로그아웃 시 가는 페이지 설정
-		        .logoutSuccessUrl("/")
-		        .permitAll());
-		
-		return security.build();
-	}
-	
+        //페이지 접속할 때 해당 페이지에 대한 권한 없는 경우, 가는 페이지
+        security.exceptionHandling().accessDeniedPage("/NotAuthentic");
+
+        //로그아웃
+        security.logout((logoutConfig) -> logoutConfig
+                //jsp에서 로그아웃을 요청할 매핑주소
+                .logoutUrl("/logout")
+                //로그아웃 시 세션 삭제
+                .invalidateHttpSession(true)
+                //로그아웃 시 JWT인가가 저장된 쿠키 삭제
+                .deleteCookies("AuthToken")
+                //로그아웃 시 가는 페이지 설정
+                .logoutSuccessUrl("/")
+                .permitAll());
+
+        return security.build();
+    }
+
     public void configure(WebSecurity web) throws Exception {
-    		web.ignoring().requestMatchers("/static/**");
+        web.ignoring().requestMatchers("/static/**");
     }
 }
 

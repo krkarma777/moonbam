@@ -7,7 +7,6 @@
             <select class="form-select" onchange="location = this.value;">
                 <option selected>통계 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toStatistics">접속자 통계</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toStatistics2">컨텐츠 통계</option>
             </select>
         </div>
 
@@ -16,7 +15,7 @@
             <select class="form-select" onchange="location = this.value;">
                 <option selected>게시물 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/AdminPostReported">신고글 관리</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/AdminPagePostRule">글 작성 규칙 관리</option>
+                <%-- <option value="<%=request.getContextPath()%>/AdminPage/AdminPagePostRule">글 작성 규칙 관리</option> --%>
                 <option value="<%=request.getContextPath()%>/AdminPage/AdminPageDeletedPost">삭제된 게시글 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/AdminPageDeletedComment">삭제된 댓글 관리</option>
             </select>
@@ -27,8 +26,7 @@
             <select class="form-select" onchange="location = this.value;">
                 <option selected>회원 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRprtedMem">신고회원 관리</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemGrade">회원등급 관리</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRule">등급 관리 규칙 설정</option>
+                <%-- <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRule">등급 관리 규칙 설정</option> --%>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRestricted">이용 제한 회원 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageDeletedMember">삭제된 회원 데이터 관리</option>
             </select>
@@ -38,10 +36,8 @@
             <select class="form-select" onchange="location = this.value;">
                 <option selected>공지 및 기타 관리</option>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageAnnounce">공지글</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageEvent">이벤트</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageAPI">API</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMonitoring">모니터링</option>
             </select>
         </div>
     </div>
 </div>
+

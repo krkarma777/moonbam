@@ -1,8 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>마이페이지</title>
+    <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -31,14 +34,9 @@
                                        value="${loginUser.userId}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label for="userPw" class="form-label">새 비밀번호</label>
-                                <input type="password" class="form-control" id="userPw" name="userPw"
-                                       placeholder="새 비밀번호 입력">
-                            </div>
-                            <div class="mb-3">
-                                <label for="nickname" class="form-label">닉네임</label>
+                                <label for="nickname" class="form-label">닉네임(읽기 전용)</label>
                                 <input type="text" class="form-control" id="nickname" name="nickname"
-                                       value="${loginUser.nickname}">
+                                       value="${loginUser.nickname}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="secretCode" class="form-label">비밀번호 복구 코드 (수정 불가)</label>
@@ -61,8 +59,14 @@
                                        name="kakaoConnected" ${loginUser.kakaoConnected == 1 ? 'checked' : ''} disabled>
                                 <label class="form-check-label" for="kakaoConnected">카카오 연동됨</label>
                             </div>
-                            <button type="submit" class="btn btn-primary">프로필 업데이트</button>
                         </form>
+                        
+                      <form action=<c:url value='/my-page/updatePwd'/> method="Post" >
+                       <input type="submit" class="btn btn-primary" value="비밀번호 변경">
+                       </form>
+                       <form action=<c:url value='/my-page/withdraw'/> method="Post" >
+                       <input type="submit" class="btn btn-primary" value="회원 탈퇴">
+                       </form>
                     </div>
                 </div>
             </div>

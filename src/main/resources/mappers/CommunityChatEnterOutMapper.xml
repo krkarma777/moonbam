@@ -6,7 +6,7 @@
 	<!-- 방 입장 시 insert 진행 -->
 	<insert id="chatMemberInsertMap" parameterType="hashmap">
 	
-		insert into chatmember values (#{chatNum},#{userId},sysdate)
+		insert into chatmember values (#{chatNum},#{userId},sysdate, 'f')
 	
 	</insert>
 	

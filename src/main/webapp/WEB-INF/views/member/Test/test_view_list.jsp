@@ -13,7 +13,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>회원 리스트(테스트용)</title>
+<title>문화인들의 밤</title>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <style>

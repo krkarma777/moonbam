@@ -1,115 +1,187 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Date"%>
 
 <!DOCTYPE html>
 <head>
 <meta charset="EUC-KR">
 <title>Chat Room</title>
-<!-- ¹æ »èÁ¦ ½Ã ½ÇÆĞÇßÀ» ¶§ ¶ç¿ï ¾Ë¸²Ã¢  -->
-<% String mesg = (String) session.getAttribute("mesg");
-	if(mesg != null ){	
-		
-		%>	
-		
-		<script>
-		alert("<%= mesg %>");
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+rel="stylesheet"
+integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+crossorigin="anonymous">
+<style type="text/css">
+
+
+/*ë‚´ê°€ ë³´ë‚¸ ì±„íŒ… ë§í’ì„   */
+.my-chat {
+    position:relative;
+    width:200px;
+    padding:20px;
+    background-color:#ffb2c4;
+    border-radius:4px;
+    color:black;
+    top: 200%; left: 75%; margin-left: -100px;
+ }
+ 
+ /*ë‚´ê°€ ë³´ë‚¸ ì±„íŒ… ë§í’ì„  ê¼¬ë¦¬  */
+.my-chat:after {
+	content:'';
+    position:absolute;
+    top:50%;
+    right:-10px;
+    border-left:16px solid #ffb2c4;
+    border-top:10px solid transparent;
+    border-bottom:10px solid transparent;
+    transform:translateY(-50%);
+}
+
+
+/*ë‚¨ì´ ë³´ë‚¸ ì±„íŒ… ë§í’ì„   */
+.target-chat{
+    position:relative;
+    width:200px;
+    padding:20px;
+    background-color:#FFE0E7;
+    border-radius:4px;
+    color:black;
+
+ }
+ 
+ /*ë‚¨ì´ ë³´ë‚¸ ì±„íŒ… ë§í’ì„  ê¼¬ë¦¬ */
+ .target-chat:after {
+	content:'';
+    position:absolute;
+    top:50%;
+    left:-10px;
+    border-right:16px solid #FFE0E7;
+    border-top:10px solid transparent;
+    border-bottom:10px solid transparent;
+    transform:translateY(-50%);
+}
+ 
+ /* ë§í’ì„  ë””ìì¸  */
+ .chat_box{
+ 	padding: 20px;
+ 	
+ }
+
+/*ìŠ¤í¬ë¡¤*/
+.chat_wrap{
+   padding-left:0;
+
+    margin:0;
+
+    list-style-type:none;
+
+    display:flex;
+
+    flex-direction: column-reverse;
+
+    overflow-y:scroll;
+
+    height:600px;
+
+}
+
+</style>
+
+
+
+<!-- ë°© ì‚­ì œ ì‹œ ì‹¤íŒ¨í–ˆì„ ë•Œ ë„ìš¸ ì•Œë¦¼ì°½  -->
+<%
+String mesg = (String) session.getAttribute("mesg");
+if (mesg != null) {
+%>
+
+<script>
+		alert("<%=mesg%>");
 		</script>
-	
-	<%} 
-	
-	session.removeAttribute("mesg");
-	
-	%>
+
+<%
+}
+
+session.removeAttribute("mesg");
+%>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	
+	
 </head>
-<body>
-	${ChatRoomDTO.chatNum} - ${userIdInSession}
-	<h1>chatRoom - ${ChatRoomDTO.roomText}</h1>
-	<form id="chatForm">
-		<button id="connect">Á¢¼Ó</button>
-		<table border="1" style="background: white; width: 500px">
-			<thead>
-				<tr>
-					<td>
-						<!-- Á¦¸ñ, Åä±Û ¹öÆ° --> <input type="checkbox" id="toggle" hidden>
-						<label for="toggle" class="toggleSwitch"> <span
-							id="toggleIcon" class="toggleButton">¢º
-								${ChatRoomDTO.roomTitle}</span>
+<body onload="connect()">
+	${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
+
+	<table style="background: white; width: 100%;">
+	 
+		<thead class="header">
+			<tr >
+				<td style="background-color: #ffb2c4; color:white;">
+					<!-- ì œëª©, í† ê¸€ ë²„íŠ¼ --> <input type="checkbox" id="toggle" hidden>
+					<label for="toggle" class="toggleSwitch"> <span 
+						id="toggleIcon" class="toggleButton">â–¶
+							${ChatRoomDTO.roomTitle}</span>
 					</label>
-					</td>
+				
+					<!-- ì„¤ì •ì´ ë”ë³´ê¸°, ë”ë³´ê¸°ë¡œ ê°€ëŠ” ì£¼ì†Œ ì‹¤í–‰ -->
+					<%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
+						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">ì„¤ì •</button> --%>
+					<span style="float:right; color:white; margin-left: auto;"
+						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">ë”ë³´ê¸°</span>
+				</td>
 
 
-					<td style="width: 20px;">
-						<!-- ¼³Á¤ÀÌ ´õº¸±â, ´õº¸±â·Î °¡´Â ÁÖ¼Ò ½ÇÇà -->
-						<button
-							onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">¼³Á¤</button>
-					</td>
+			</tr>
 
-
-				</tr>
-				<tr>
-					<!-- Ã¹ È­¸éºÎÅÍ °ø°£ Â÷ÁöÇÔ -->
-					<td class="text_align_c" id='toggle_state'><br> <c:if
-							test="${sen.lastCv==1}">
-						</c:if> <c:if test="${sen.lastCv==0}">
-						</c:if></td>
-				</tr>
-			</thead>
-			<tbody id="message">
-			
-			
 			<tr>
-					<td colspan="3" style="float: left; width: 50%;">
-						<table>
-							<tr>
-								<td ><span id="user" style="cursor: pointer;"
-									onclick="openMemberWindow()">user</span></td>
-								<td>yy/mm/dd/hh:mm</td>
-							</tr>
-							<tr>
-								<td><span id="msg" style="cursor: pointer;"
-									onclick="openReportWindow()">your msg</span></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" style="float: right; width: 50%;">
-						<table>
-							<tr>
-								<td>yy/mm/dd/hh:mm</td>
-							</tr>
-							<tr>
-								<td style="word-wrap: break-word">my msg</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				
-				
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="2"><input type="text" id="messageContent"
-						name="messageContent" style="width: 85%"> <input
-						type="button" id="send" value="Àü¼Û"></td>
-				</tr>
-			</tfoot>
-		</table>
-	</form>
+				<!-- ì²« í™”ë©´ë¶€í„° ê³µê°„ ì°¨ì§€í•¨ -->
+				<td colspan="2" class="text_align_c" id='toggle_state'><br>
+					<c:if test="${sen.lastCv==1}">
+					</c:if> <c:if test="${sen.lastCv==0}">
+					</c:if></td>
+			</tr>
+		
+		</thead>
+	
+		<tbody id="message1">
+			<tr>
+				<td>
+					<form id="chatForm">
+						<!-- new tag start -->
+						<div class="chat_wrap" >
+							<div id="chat" >
+								
+							</div>
+						</div>
+					</form>
+				</td>
+			</tr>
+			<!-- new tag end -->
+		</tbody>
+		<tfoot>
+			<tr>
+			<div>
+				<td colspan="2"><input type="text" id="messageContent"
+					name="messageContent" style="width: 86%"
+					onkeydown="if (event.keyCode === 13) { sendMessage(); }" class="form-control-sm">
+					<input type="button" id="send" value="ì „ì†¡" class="btn" onclick="sendMessage()" style="float:right; background-color: #ff416c; color:white; margin-left: auto;">
+				</td>
+			</div>	
+			</tr>
+		</tfoot>
+	</table>
+
 
 
 
 	<script>
 	
-		/* Åä±Û Ã³¸® */
+	
+		/* í† ê¸€ ì²˜ë¦¬ */
 		$('input[id="toggle"]')
 				.change(
 						function() {
@@ -117,119 +189,117 @@
 							var checked = $(this).prop('checked');
 							var toggle_state;
 							if (checked) {
-								document.getElementById('toggleIcon').innerHTML = "¡å ${ChatRoomDTO.roomTitle}";
+								document.getElementById('toggleIcon').innerHTML = "â–¼ ${ChatRoomDTO.roomTitle}";
 								document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
 								toggle_state = "on";
 							} else {
-								document.getElementById('toggleIcon').innerHTML = "¢º ${ChatRoomDTO.roomTitle}";
+								document.getElementById('toggleIcon').innerHTML = "â–¶ ${ChatRoomDTO.roomTitle}";
 								document.getElementById('toggle_state').innerHTML = "&nbsp;";
 								toggle_state = "off";
 							}
 						});
 
-		/* ½Å°íÇÏ±â */
+		/* ì‹ ê³ í•˜ê¸° */
 		function openReportWindow() {
 			var url = "reportWindow";
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
-		/* ¸â¹ö */
+		/* ë©¤ë²„ */
 		function openMemberWindow() {
 			var url = "memberWindow";
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
-		$(document).ready(function() {
-			$("#btnSubmit").click(function() {
-				submitMessage();
-			});
-		});
-
 		var stompClient = null;
 
-		// ¼ÒÄÏ ¿¬°á
+		// ì†Œì¼“ ì—°ê²°
 		function connect() {
 			var socket = new SockJS('/acorn/chat-socket');
 			stompClient = Stomp.over(socket);
+			var serverTime = new Date().toLocaleString();
 			stompClient.connect({}, function(frame) {
-				console.log('Connected: ' + frame);
-				// ¸Ş¼¼Áö ¹Ş´Â ÁÖ¼Ò
-				stompClient.subscribe('/topic/messages',
+				// ë©”ì„¸ì§€ ë°›ëŠ” ì£¼ì†Œ
+				stompClient.subscribe('/topic/messages/'+${ChatRoomDTO.chatNum},
+// ì•„ë˜ ì½”ë“œ ì•ˆë¨ ì™œ?? ChatMessageController.sendMessage()ì—  @SendTo("/topic/messages/2") ì§€ìš°ê³  @ResponseBody ì„ ì–¸
+//				stompClient.subscribe('/acorn/chat/send/'+${ChatRoomDTO.chatNum},
 						function(messageOutput) {
 				showMessageOutput(JSON.parse(messageOutput.body));
 						});
+				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+					'type':'ENTER',
+					'message' : `${nickNameInSession}` + ' ë‹˜ì´ ì…ì¥í–ˆìŠµë‹ˆë‹¤.	' + serverTime,
+					}));
 			});
 		}
 
-		// ¼ÒÄÏ ¿¬°á ÇØÁ¦
-		function disconnect() {
-			console.log("disconnect");
-			if (stompClient !== null) {
-				stompClient.disconnect();
-			}
-			console.log("Disconnected");
-		}
-
-		/* ¸Ş½ÃÁö Àü¼Û */
+		/* ë©”ì‹œì§€ ì „ì†¡ */
 		function sendMessage() {
-			var chatNum = `${ChatRoomDTO.chatNum}`; // ¹æ¹øÈ£    
-			var userId = `${userIdInSession}`; // »ç¿ëÀÚ id
-			var message = $("#messageContent").val(); // ¸Ş¼¼Áö */
-			var serverTime = '<%= new Date().toLocaleString() %>';
-			stompClient.send("/acorn/chat/send", {}, JSON.stringify({
-				'userId' : userId,
-				'message' : message,
-				'serverTime' : serverTime}));
+			// ì—¬ê¸°ì„œ "" ì²˜ë¦¬
+			 if(document.getElementById('messageContent').value.trim() != '') {
+				var chatNum = `${ChatRoomDTO.chatNum}`; // ë°©ë²ˆí˜¸  
+				var userId = `${userIdInSession}`; // ì‚¬ìš©ì ë‹‰ë„¤ì„
+				//console.log("ìœ ì €ì•„ì´ë”” ë¨¼ë°",userId)
+				var message = escapeHtml($("#messageContent").val()); // ë©”ì„¸ì§€ 
+				var serverTime = new Date().toLocaleString();
+				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
+					'type' : 'TALK',
+					'userId' : userId,
+					'message' : message,
+					'serverTime' : serverTime}));
+				document.getElementById('messageContent').value = ''; 
+			 }
 		}
 
-		// ¸Ş¼¼Áö Ãâ·Â
-		// ÃÖ½Å ¸Ş¼¼Áö Ãß°¡(À§Ä¡´Â ¸Ç µÚ)
-		// ÀÌÀü ¸Ş¼¼Áö Ãß°¡(À§Ä¡´Â ¸ÇÀ§)
+		// ë©”ì„¸ì§€ ì¶œë ¥
+		// ìµœì‹  ë©”ì„¸ì§€ ì¶”ê°€(ìœ„ì¹˜ëŠ” ë§¨ ë’¤)
+		// ì´ì „ ë©”ì„¸ì§€ ì¶”ê°€(ìœ„ì¹˜ëŠ” ë§¨ìœ„)
 		function showMessageOutput(body) {
 			let content = JSON.parse(body.chatContent);
-			console.log(`${userIdInSession}`)
-			console.log(content.userId)
-
-			let align;
-			let userTag;
-			let timeTag = `<span>` + content.serverTime + `</span>`;
-			let msgTag;
-			
-			if (`${userIdInSession}` == content.userId) {
-				console.log("my")
-				align = "right"
-				className = "my"
-				userTag = `<span>³ª<span>`;
-				msgTag = `<span>` + content.message + `</span>`;
-			}
-			// other's message
-			else {
-				className="other"
-				align = "left"
-				userTag = `<span id="user" style="cursor: pointer;" onclick="openMemberWindow()">` + content.userId + `</span>`
-				msgTag = `<span id="msg" style="cursor: pointer;" onclick="openReportWindow()">` + content.message + `</span>`;
-			}
-			console.log("add")
-			$("#message").append(
-					 `<tr><td class=`+ className +` colspan='3' style='float: '`+ align + `'; width: 50%;'><table><tr><td>` 
-					 + userTag + `</td><td>` + timeTag + `</td></tr>`+ 
-					 `<tr><td>` + msgTag + `</td></tr></table></td></tr>`);
+			createMsgTag(content)
 		}
+		
+	function createMsgTag(content) {
+	    let chatLi;
+	    let nickName = content.nickName;
+		let time = content.serverTime;
+	
+		let message = content.message;
+		
+	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+	   
+	    if (content.type == 'ENTER') {
+	        // ì…ì¥ ë©”ì‹œì§€ì¼ ê²½ìš°
+	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+	    
+	    } else {
+	    	console.log("talk")
+	        // ì¼ë°˜ ë©”ì‹œì§€ì¼ ê²½ìš°
+	      	let timeShort = time.substr(13); //ì£¼ê³ ë°›ëŠ” ëŒ€í™”ì—ì„œëŠ” ì‹œê°„ë§Œ ë³´ì´ê²Œ ì˜ëìŒ
+			//console.log("ì‹œê°„ ì˜ë¼ì„œ í™•ì¸í•˜ê¸° ì™„ë£Œ?",timeShort)
+	        chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>"; 
+	         
+	    }
+	    $("#chat").append(chatLi);
+	    
 
-		$(function() {
-			$("form").on('submit', function(e) {
-				e.preventDefault();
-			});
-			$("#connect").click(function() {
-				connect();
-			});
-			$("#disconnect").click(function() {
-				disconnect();
-			});
-			$("#send").click(function() {
-				sendMessage();
-			});
-		});
+	}
+
+		// ì·¨ì•¼ì  ë³´ì•ˆ
+		// ìŠ¤í¬ë¦½íŠ¸ ì½”ë“œ ì •ì§€
+		function escapeHtml(unsafe) {
+    		return unsafe.replace(/&/g, "&amp;")
+	        .replace(/</g, "&lt;")
+	        .replace(/>/g, "&gt;")
+	        .replace(/"/g, "&quot;")
+	        .replace(/'/g, "&#039;");
+		}
+		
+		
+		//
+		
+		
+		
 		
 	</script>
 </body>

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.Map;
@@ -19,8 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BoardDeleteController {
 	
-	PostService postService;
-	AuthUtils authUtils;
+	private final PostService postService;
+    private final AuthUtils authUtils;
 	
     String INVALID_REQUEST = ErrorMessage.INVALID_REQUEST.getMessage();
     String POST_NOT_FOUND = ErrorMessage.POST_NOT_FOUND.getMessage();
@@ -28,11 +29,11 @@ public class BoardDeleteController {
     String ERROR_PAGE = ErrorMessage.ERROR_PAGE.getMessage();
 
     @GetMapping("/board/delete")
-    public String process(Map<String, String> paramMap, Model model, Principal principal) {
+    public String process(@RequestParam Map<String, String> paramMap, Model model, Principal principal) {
 
         String postIdParam = paramMap.get("postId");
         String boardName = paramMap.get("bn");
-        String redirectURL = "/Acorn/board/" + boardName;
+        String redirectURL = "/board/" + boardName;
 
         try {
             Long postId = parsePostId(postIdParam);

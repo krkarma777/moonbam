@@ -18,13 +18,6 @@
 	}
 	
 %>
-<%	String mesg = (String)session.getAttribute("mesg");
-	if(null!=mesg){%>
-		<script type="text/javascript">
-			alert("<%=mesg %>");
-		</script>
-	<%}	
-	session.removeAttribute("mesg");%>
 <style>
 .top {
 	color: #ff416c;
@@ -41,24 +34,25 @@
 		</div>
 
 		<div style="width: 500px">
+		<%if(null!=category){ %>
 			<form class="d-flex " role="search" action="<%=searchFormAction%>" method="post">
-				<%if(null!=category){ %>
 				<select name="searchCategory" class="form-select" style="width: 130px;">
 					<%for(int i=0; i<categoryList.size(); i++){ 
 					%>
 						<option value="<%=categoryList.get(i) %>"><%=categoryList.get(i) %></option>
 					<%} %>
-				<%} %>
 				</select> 
-				<input name="searchValue" class="form-control me-1" type="search" placeholder="정보 입력" aria-label="Search">
+				<input name="searchValue" class="form-control me-1" type="search" 
+						placeholder="<%if("movie".equals(category)){ %>영화 제목 입력<%}else{ %>정보입력<%} %>" aria-label="Search">
 				<button class="btn" style="background-color: #ff416c; color:white; opacity: 0.8;" type="submit"><b>Search</b></button>
 			</form>
+		<%} %>
 		</div>
 		<div class="position-fixed top-0 end-0">
 
 			<!-- 비로그인 -->
 			<sec:authorize access="isAnonymous()">
-				<a href="mainLogin" class="top">로그인</a>
+				<a href="/acorn/mainLogin" class="top">로그인</a>
 			</sec:authorize>
       		
       		<!-- 로그인 -->

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>Insert title here</title>
+<title>문화인들의 밤</title>
 </head>
 <body>
 <h1>chatRoom_miji_test</h1>

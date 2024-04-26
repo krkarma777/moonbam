@@ -4,10 +4,11 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>Insert title here</title>
+<title>문화인들의 밤</title>
 </head>
 <body>
 	<form id="reportForm" action="chatReport" method="post">
+		<input type="button" onclick="newLeader('newLeader')" value="정보보기"> 
 		<input type="button" onclick="newLeader('newLeader')" value="방장위임"> 
 		<input type="button" onclick="memberRemove('memberRemove')" value="강퇴하기">
 	</form>

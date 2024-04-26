@@ -1,22 +1,41 @@
 package com.moonBam.controller.content;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.CreditDTO;
 import com.moonBam.dto.MemberDTO;
+import com.moonBam.dto.MoviePageDTO;
 import com.moonBam.dto.RateDTO;
 import com.moonBam.dto.ReviewDTO;
+import com.moonBam.service.MainService;
 import com.moonBam.service.ReviewService;
 import com.moonBam.service.TmdbApiService;
 
@@ -29,6 +48,23 @@ public class ShowContentController {
 	MemberLoginService memberLoginService;
 	@Autowired
 	TmdbApiService tmdbApiService;
+	@Autowired
+    MainService mService;
+	@Autowired
+	KoficAPI kofic;
+	//영화 진흥위원회 키
+	@Value("${kofic.key}")
+	private String key;
+	
+	
+	@RequestMapping("/saveMovie")
+	@ResponseBody
+	public String movieSave(int curPage) {
+		
+		kofic.saveMovie(curPage);
+		
+		return "success";
+	}
 	
 	// 컨텐츠아이디 받음
 	// 컨텐츠 데이터, 컨텐츠에 해당하는 리뷰들 얻어서 응답
@@ -70,7 +106,7 @@ public class ShowContentController {
 			// 별점 리스트 가져와서 전달 (평균별점 계산용)
 			List<RateDTO> rateList = service.selectRates(contId);
 			request.setAttribute("rateList", rateList);
-
+			
 			nextPage = "content/contentViewer";
 		}
 
@@ -78,18 +114,21 @@ public class ShowContentController {
 	}
 	
 	@RequestMapping("/showContent")
-	public String showContent(String contId, Model model, Principal principal) {
+	public String showContent(String contId, Model model, Principal principal, HttpServletRequest request) {
 		ContentDTO content = service.selectContent(contId);
 		model.addAttribute("content", content);
 
-		MemberDTO loginMember = memberLoginService.findByPrincipal(principal);
-
-		String likeUserId = loginMember.getUserId();;
+		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+		String likeUserId = null;
+		if(loginUser!=null) {
+			// 자신이 누른좋아요 정보 가져오기 위해 본인의 유저아이디 저장
+			likeUserId= loginUser.getUserId();
+			request.setAttribute("member", loginUser);
+		}
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("contId", contId);
 		map.put("likeUserId", likeUserId);
-
 		List<ReviewDTO> reviewList = service.selectReviews(map);
 		model.addAttribute("reviewList", reviewList);
 
@@ -104,6 +143,72 @@ public class ShowContentController {
 		}
 		model.addAttribute("creditList", creditList);
 		
+		// 별점 리스트 가져와서 전달 (평균별점 계산용)
+		List<RateDTO> rateList = service.selectRates(contId);
+		request.setAttribute("rateList", rateList);
+		
 		return "content/showContent";
 	}
+	
+	@RequestMapping("/movieSearch")
+	public String movieSearch(Model model, String curPage, String searchCategory, String searchValue) {
+		if(curPage==null) {
+			curPage="1";
+		}
+		
+		if(searchValue==null) {
+			searchValue="";
+		}
+		
+		if(searchCategory==null) {
+			searchCategory="";
+		}
+		
+		switch(searchCategory) {
+		    case "Drama" : searchCategory = "드라마";
+		         break;
+		    case "Comedy": searchCategory = "코미디";
+		         break;
+		    case "Thriller": searchCategory = "스릴러";
+	         	 break;
+		}
+		
+		MoviePageDTO mpDTO = mService.searchMovieList(curPage, searchCategory, searchValue);
+		
+		model.addAttribute("mpDTO", mpDTO);
+		
+		model.addAttribute("searchCategory", searchCategory);
+		model.addAttribute("searchValue", searchValue);
+		
+		List<String> categoryList = new ArrayList<>();;
+		String category = "movie";
+		model.addAttribute("category", category);
+		categoryList.add("전체");
+		categoryList.add("드라마");
+		categoryList.add("코미디");
+		categoryList.add("스릴러");
+		model.addAttribute("categoryList", categoryList);
+		
+		return "movie/allMovie";
+	}
+	
+	@RequestMapping("/genre")
+	public String genre(Model model, String genre, HttpSession session) {
+		if(genre==null) {genre="Drama";}
+		List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
+		session.setAttribute("genreMovieTopList", genreMovieTopList);
+		model.addAttribute("genre", genre);
+		
+		List<String> categoryList = new ArrayList<>();;
+		String category = "movie";
+		model.addAttribute("category", category);
+		categoryList.add("전체");
+		categoryList.add("드라마");
+		categoryList.add("코미디");
+		categoryList.add("스릴러");
+		model.addAttribute("categoryList", categoryList);
+		
+		return "movie/movieHome";
+	}
+	
 }

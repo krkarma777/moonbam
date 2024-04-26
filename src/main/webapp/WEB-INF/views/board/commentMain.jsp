@@ -12,9 +12,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-    window.onload = init;
+
+window.onload = init;
+
 
     function init() {
+
+    	
         function clock() { //작성시간을 실시간으로 보여주기 위한 함수
             var time = new Date();
 
@@ -51,14 +55,14 @@
                 url: "/acorn/Acorn/CommetInsert",
                 data: {
                     postId: $("#postidComment").val(),
-                    userId: '<sec:authentication property="name"/>',
+                    //userId: '<sec:authentication property="name"/>',
                     comDate: $("#comdate").text(),
                     comText: $("#comtext").val(),
-                    nickname: '<sec:authentication property="name"/>',
+                    //nickname: '<sec:authentication property="name"/>',
                     aboveComId: $("#abovecomidComment").val()
                 },
                 success: function (data, status, xhr) {
-
+					
                     CommentSelectAllServlet();
 
                 },
@@ -236,6 +240,11 @@
                 var mesg = "";
                 var length = data.length;
                 var comId = 0;
+              	//지금 로그인하고 있는 사용자 id에 @ . 이 html 인코딩 처리되어 유니코드로 나와서
+            	//이 부분을 디코드 해서 저장시킨 [현재 사용자의 id]임
+            	var enCodeUserId = '<sec:authentication property="name"/>'
+            	var deCodeUserId = enCodeUserId.replace("&#64;","@").replace("&#46;",".")
+            	////////////////////////////
                 // 댓글이 없는 경우
                 if (length == 0) {
                     mesg = "<div class='text-center'>댓글이 없습니다.</div>";
@@ -274,9 +283,14 @@
                             if (comText != "삭제된 댓글입니다.") { //삭제된 댓글이라 뜨는 댓글엔 답글 못 달게 했음
                                 mesg += "<br><a href='#'  onclick='replyComment(" + comId + ");return false;'>답글</a>";
                             }//if(comText!="삭제된 댓글입니다.") end
+                            
+                            
+                          	//지금 로그인하고 있는 사용자 id에 @ . 이 html 인코딩 처리되어 유니코드로 나와서
+                        	//이 부분을 디코드 해서 저장시킨 [현재 사용자의 id]임
+                        	var enCodeUserId = '<sec:authentication property="name"/>'
+                        	var deCodeUserId = enCodeUserId.replace("&#64;","@").replace("&#46;",".")
 
-
-                            if (userId == "<sec:authentication property="name"/>") {
+                            if (userId == deCodeUserId) {
 
                                 if (comText != "삭제된 댓글입니다.") {
                                     mesg += "<div class='comment-actions'>";
@@ -291,10 +305,10 @@
                             //답글 적는 란 start *평소엔 숨겨져있다가 [답글]버튼 누르면 활성화 되고, [답글 작성] 버튼 누르면 다시 사라짐
                             mesg += "<div style='display:none' id='replyCommentDIV" + comId + "'>";
                             mesg += "&nbsp;&nbsp;&nbsp;<input type='hidden' id='replyCommentId" + comId + "' name='replyuserId' value=" + userId2 + ">"
-                            mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong" + comId + "'>" + nickname2 + "</strong>";
+                           // mesg += "&nbsp;&nbsp;&nbsp;<strong id='strong" + comId + "'>" + nickname2 + "</strong>";
                             mesg += "<br>"
-                            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' name='replyCommentComtext'></textarea>"; //답글 다는 창
-                            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'>"
+                            mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea id='replyCommentComtext" + comId + "' class='form-control' style='width:500px' name='replyCommentComtext'></textarea>"; //답글 다는 창
+                            mesg += "&nbsp;&nbsp;&nbsp;<input type='button' id='replyButton' value='등록' onclick='replyCommentInsert(" + comId + ")' class='btn btn-secondary btn-sm btn-spacing' style='margin-top: 10px;'></div>"
                             mesg += "</div>";
                             //////////////
 
@@ -325,6 +339,7 @@
                                 comDate = replyJson[j].comDate;
                                 comText = replyJson[j].comText;
                                 nickname = replyJson[j].nickname;
+                                //console.log("닉네임",nickname)
                                 aboveComId = replyJson[j].aboveComId; //부모댓글번호
 
                                 mesg += "<li class='comment-item'>";
@@ -335,7 +350,7 @@
                                 mesg += "</div>";
                                 mesg += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' class='comment-content' style='border:none;outline:none' id='comText" + comId + "' readonly value='" + comText + "'>";
 
-                                if (userId == "<sec:authentication property="name"/>") {
+                                if (userId == deCodeUserId) {
 
                                     if (comText != "삭제된 댓글입니다.") {
                                         mesg += "<div class='comment-actions'>";
@@ -398,9 +413,9 @@
             data: {
                 aboveComId: aboveComId, //부모댓글id
                 postId: postId, //게시글
-                userId: userId2, //내 아이디, 부모댓글의 id가 아님
+                //userId: userId2, //내 아이디, 부모댓글의 id가 아님
                 comText: $("#replyCommentComtext" + comId).val(),
-                nickname: nickname2
+                //nickname: nickname2
                 //comdate는 어차피 날짜스탬프로 sql날릴 거라 안 넘어감
             },
             success: function (data, status, xhr) {

@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>문화인들의 밤</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -28,22 +28,21 @@
 
 </style>
 </head>
-<body class="bg-light" style="height:700px; width:500px; position: relative; border: 1px solid black;">
+<body class="bg-light" style="height:100%; width:100%; position: relative; border: 1px solid black;">
 
 	<div style="height: 30px; background-color: #ffb2c4; font-size: 19px; margin-bottom: 5px; color: white;">
 		<span onclick="history.back()"><b>뒤로가기</b></span>
-		<b>더보기</b>
 	</div>
 	<!-- 나중에 이거 새창이 띄워져야함  -->
-	<!-- 참여인원정보, 내정보보기, 방나가기, 방삭제하기(방장만 볼 수 있음) -->
+	<!-- 참여인원정보, 내정보보기, 방나가기, 방삭제하기(방장만 볼 수 있음), 강퇴 -->
 	
-	<div style="margin-bottom: 15px; height: 108px; width: 100%;">
+	<!-- <div style="margin-bottom: 15px; height: 108px; width: 100%;"> -->
 		<span class="title"><b>${chatroomDTO.roomTitle }</b></span><br>
 		&nbsp&nbsp${chatroomDTO.roomText }<br>
 		<b>&nbsp&nbsp모임 장소</b><br>
 		<span style="opacity: 0.7;">&nbsp&nbsp우편번호 ${chatroomDTO.post }</span>
 		<span style="opacity: 0.7;">&nbsp&nbsp${chatroomDTO.addr1 }</span>
-	</div>
+	<!-- </div> -->
 	
 	
 	<!-- 내 정보 -->
@@ -67,7 +66,8 @@
 	
 	<!-- 대화 상대 -->
 	<div style="margin-bottom: 15px; width:100%; height: 320px;">
-		<span class="title" style="height: 20px;"><b>대화 상대</b></span><br>
+		<span class="title" style="height: 20px;"><b>대화 상대</b></span>
+		<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="#"><b>초대하기</b></button><br>
 		<c:forEach items="${memberDtoList }" var="memberDtolist"><!-- 현재 채팅방 안에 있는 member들만 모였음 -->
 		
 			<c:if test="${memberDtolist.userId != memberDTO.userId }"> <!-- 근데 본인은 제외하고 출력 -->
@@ -77,14 +77,19 @@
 					<div>
 						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnReport('${memberDtolist.userId }')"><b>신고하기</b></button>
 					</div>
+					<c:if test="${leadermemberDto.userId == memberDTO.userId}">
+					<div>
+						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnKick('${memberDtolist.userId }')"><b>강퇴하기</b></button>
+					</div>
+					</c:if>
 				</div>
 			</c:if>		
 		</c:forEach>
 	</div>
 	
-	<div style="width:100%; height:112px; position: relative;">
+	<div style="width:100%; height:10px; position: relative;">
 		<form id="goOutForm" method="post" action="#">
-			<input type="hidden" name="userId" value="${memberDTO.userId}">
+			<%-- <input type="hidden" name="userId" value="${memberDTO.userId}"> --%>
 			<input type="hidden" name="chatNum" value="${chatroomDTO.chatNum}">
 		</form>	
 		<button type="button" class="btn" onclick="fnGoOut()" style="position: absolute; bottom:2px; right:0;"><b>방 나가기</b></button>
@@ -131,6 +136,12 @@
 			
 		}
 		
+		//채팅 멤버 강퇴
+		
+		function fnKick(userId) {
+			location.href = "/acorn/Chatmore/ChatKickUser?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
+		}
+		
 		
 		//방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
@@ -145,6 +156,7 @@
 		function fnRemove() {
 			console.log("fnRemove");
 			$("#goOutForm").attr("action","/acorn/chatRoom/remove").submit();
+			window.history.back();
 		}
 
 		//button기능에 팝업으로 자식창 띄우기 openUrl 변수에 controller 주소 달면 됨
