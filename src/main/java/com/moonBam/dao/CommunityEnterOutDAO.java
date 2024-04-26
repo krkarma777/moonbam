@@ -22,11 +22,16 @@ public class CommunityEnterOutDAO {
 		return session.insert("CommunityChatEnterOutMapper.chatMemberInsertMap", chatMemberInsertMap);
 	}
 
+	public ChatMemberDTO chatMemberInsertForOnlyOneSelect(Map<String, Object> chatMemberselectMap) {
+		// TODO Auto-generated method stub
+		return session.selectOne("CommunityChatEnterOutMapper.chatMemberInsertForOnlyOneSelect", chatMemberselectMap);
+	}
+
 	public ChatMemberDTO chatMemberEnterSelect(Map<String, Object> chatMemberselectMap) {
 		// TODO Auto-generated method stub
 		return session.selectOne("CommunityChatEnterOutMapper.chatMemberEnterSelect", chatMemberselectMap);
 	}
-
+	
 	public ChatRoomDTO chatRoomSelectById(int chatNum) {
 		// TODO Auto-generated method stub
 		return session.selectOne("CommunityChatEnterOutMapper.chatRoomSelectById", chatNum);

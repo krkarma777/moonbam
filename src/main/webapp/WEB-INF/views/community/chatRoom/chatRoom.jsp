@@ -95,7 +95,7 @@ String mesg = (String) session.getAttribute("mesg");
 if (mesg != null) {
 %>
 
-<script>
+		<script>
 		alert("<%=mesg%>");
 		</script>
 
@@ -132,6 +132,8 @@ session.removeAttribute("mesg");
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button> --%>
 					<span style="float:right; color:white; margin-left: auto;"
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
+					<span style="float:right; color:white; margin-left: auto;"
+						onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>	
 				</td>
 
 
@@ -211,13 +213,18 @@ session.removeAttribute("mesg");
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
+		
+////////////////////////		
 		var stompClient = null;
+		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
+		var serverTime = new Date().toLocaleString(); //서버 타임
 
 		// 소켓 연결
 		function connect() {
 			var socket = new SockJS('/acorn/chat-socket');
 			stompClient = Stomp.over(socket);
-			var serverTime = new Date().toLocaleString();
+			console.log("stompClient:::",stompClient)
+			
 			stompClient.connect({}, function(frame) {
 				// 메세지 받는 주소
 				stompClient.subscribe('/topic/messages/'+${ChatRoomDTO.chatNum},
@@ -229,9 +236,76 @@ session.removeAttribute("mesg");
 				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 					'type':'ENTER',
 					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
+					'userId' : userIdInSocket,
 					}));
 			});
+			
 		}
+		
+		 // 소켓 연결 끊기게 하는 함수
+		function disconnect() {
+			 
+			  if (stompClient !== null) {
+			        exit();
+			        stompClient.disconnect();
+			    }
+			    
+			    console.log("Disconnected");
+		 }
+		 
+		 //연결 끊겼을 때 퇴장 메세지 띄우는 함수
+		 function exit(){
+		    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+		    	'type':'EXIT',
+				'message' : `${nickNameInSession}` + ' 님이 퇴장했습니다.	' + serverTime,
+				'userId' : userIdInSocket,
+			}));
+		}
+	  
+		 
+		 
+		 
+		//방나가기 눌렀을 때 작동되는 fn
+		function fnGoOut() {
+			console.log("goOutForm");
+			
+			
+			$.ajax({
+
+                type: "post",
+                url: "/acorn/chatRoom/out",
+                data: {
+                  "chatNum" : ${ChatRoomDTO.chatNum}
+                },
+                success: function (data, status, xhr) {
+                	
+                	//console.log("하이",data)
+					
+					if(data == "successToOut"){
+						
+						disconnect(); ////소켓 연결 끊고 퇴장 메세지 뿌리기
+						alert("방을 나갔습니다.");
+						window.close(); ///내 창 닫기
+						
+					}else if(data == "failToOut"){
+						
+						location.reload(true); ///새로고침
+						
+					}
+                    
+
+                },
+                error: function (xhr, status, error) {
+						
+                	console.log("퇴장하기 error 발생",error)
+
+                }
+
+            })//ajax
+			
+			
+		}
+		
 
 		/* 메시지 전송 */
 		function sendMessage() {
@@ -265,6 +339,7 @@ session.removeAttribute("mesg");
 		let time = content.serverTime;
 	
 		let message = content.message;
+		let userId =  content.userId; 
 		
 	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
 	   
@@ -272,7 +347,11 @@ session.removeAttribute("mesg");
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 	    
-	    } else {
+	    }else if(content.type == 'EXIT') {
+	    	// 퇴장 메세지일 경우
+	    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+	   
+	    }else {
 	    	console.log("talk")
 	        // 일반 메시지일 경우
 	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음

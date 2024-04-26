@@ -127,13 +127,14 @@ public class ChatController {
 		return "";
 	}
 	
+	//강퇴하기 기능
 	@RequestMapping(value = "/Chatmore/ChatKickUser", method = RequestMethod.GET)
 	public String ChatKickUser (String userId, String chatNum) {
 		
 		int n = 0;
 		
 		System.out.println("ChatKickUser===================");
-		System.out.println("강퇴할 유저의 이름 확ㅇ인 후 서비스레이어 전달");
+		System.out.println("강퇴할 유저의 이름 확인 후 서비스레이어 전달");
 		System.out.println(userId);
 		System.out.println("=================================");
 		
@@ -147,6 +148,9 @@ public class ChatController {
 		
 		return "redirect:/chatRoom?chatNum="+chatNum;
 	}
+	
+	
+	
 	
 //	@RequestMapping()
 	
