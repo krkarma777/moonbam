@@ -359,29 +359,20 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	
 	<script type="text/javascript">
 	var list = <%=request.getAttribute("list")%>;  
-console.log("list");
-console.log(list);
 $(function (){
 	// 팝업 창 위치 &크기 변수
 	let sLeft=0;
 	let sTop=0;
 	let width ;
 	let height ;
-	
+
     for (var i = 0; i < list.length; i++) {
-	console.log("영화")
-    	let flag= true;	/*  false 시 팝업 안나옴 */
-    	if(flag){
+    	let cookie = getCookie("popup"+list[i])
+    	if(cookie != "check"){
     		// 팝업 창의 위치 설정
     		setPostion(i);
     		// 팝업 창 띄위기
-    	/* 	console.log(sLeft);
-    		console.log(sTop);
-    		console.log(width);
-    		console.log(height); */
-    		console.log(list[i]);
     		window.open("ViewPopupController/" + list[i]+"/movie", "popup" + i,
- 			//window.open("ViewPopupController?num=" + list[i], "popup" + i,
     				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
     	}
     }
@@ -403,6 +394,21 @@ function setPostion(i) {
 //		console.log("팝업 높이: " ,height);
 	}
 });
+
+// 쿠키에 있어 checked이면 return checked
+function getCookie(name) {
+       var decodedCookie = decodeURIComponent(document.cookie);
+       
+		var cookies = decodedCookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+           var cookie = cookies[i].trim();
+           if (cookie.indexOf(name) === 0) {
+console.log("return : " +cookie.substring(name.length + 1));
+               return cookie.substring(name.length + 1);
+           }
+       }
+       return "";
+   }
 </script>
 </body>
 </html>

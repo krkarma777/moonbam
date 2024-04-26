@@ -18,7 +18,7 @@
 	padding: 0;
 }
 
-#popupForm table {
+.popupForm table {
 	width: 100%;
 	height: 100vh; /* 테이블의 높이도 폼 요소와 동일하게 설정합니다. */
 }
@@ -30,7 +30,7 @@
 </style>
 </head>
 <body>
-	<form id="popup${dto.annoNum}">
+	<form id="popup${dto.annoNum }" class="popupForm">
 		<table border="1">
 			<!-- top for title -->
 			<tr>
@@ -68,21 +68,22 @@
         // "오늘 하루 보지 않기" 체크박스 클릭 시 쿠키 설정
         $("#closeToday").on("click", function() {
             if ($(this).prop("checked")) {
-                // 현재 날짜를 가져와서 24시간 뒤의 날짜를 계산
-                var expiresDate = new Date();
-                expiresDate.setDate(expiresDate.getDate() + 1);
-
-                // 쿠키 만료 날짜를 설정
-                var expires = "expires=" + expiresDate.toUTCString();
-
-                // 쿠키 설정
-                document.cookie = "popup"+${dto.annoNum}+"=true; " + expires + "; path=/";
+            	// 현재 날짜를 가져와서 24시간 뒤의 날짜를 계산
+            	setCookie("popup"+${dto.annoNum }, "check", 1 )
             } else {
                 // 체크 해제 시 쿠키 삭제
-                document.cookie = "popup"+${dto.annoNum}+"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "popup"+${dto.annoNum }+"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             }
         });
     });
+    
+		// set cookie
+	function setCookie( name, value, exDay ) {
+        var todayDate = new Date();
+        todayDate.setDate( todayDate.getDate() + exDay ); 
+        document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+    }
+		
 </script>
 </body>
 </html>
