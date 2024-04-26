@@ -386,12 +386,21 @@ public class MyPageController {
 		} catch (Exception e) {
 			return "member/Find_Info/emailErrorPage";
 		}
+		  if (!canLogin) {
+	  	        System.out.println("기존 비밀번호와 일치하지 않습니다.");
+	  	        return "member/Find_Info/emailErrorPage";
+	  	    }
+		
 		//delete 후 deletememberDB로 insert
 	//	String result = mserv.deleteUser(userId);
- 
-        serv.IDDelete(userId);
+		   Map<String, String> map = new HashMap<>();
+           map.put("userId", userId);
+           map.put("enabled", "False");
+          mserv.enabled(map);
+//		  mserv.enabled(userId);
+      //  serv.IDDelete(userId);
         
-        return "redirect:/";
+        return "redirect:/logout";
 
     }
 

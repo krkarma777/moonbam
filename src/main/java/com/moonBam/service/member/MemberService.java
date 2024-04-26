@@ -93,6 +93,11 @@ public class MemberService {
 		return n;
 	}
 
+	public int enabled(Map<String, String> map) {
+		
+		return dao.enabled(map);
+	}
+
 
 
 }

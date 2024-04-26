@@ -121,4 +121,9 @@ public int scrapDel(Long scrapId) {
 	int num = session.delete("ScrapMapper.delete",scrapId);
 	return num;
 }
+
+public int enabled(Map<String, String> map) {
+	int num = session.update("enabled", map);
+	return num;
+}
 }
