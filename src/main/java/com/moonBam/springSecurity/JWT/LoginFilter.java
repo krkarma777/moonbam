@@ -1,10 +1,13 @@
 package com.moonBam.springSecurity.JWT;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
 
 
+import com.moonBam.dto.member.RestoreRestrictedMember;
+import com.moonBam.service.member.LoginService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,19 +31,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
     private final Long expiredMs;
     private String userIdSave;
-    
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
     	userIdSave = request.getParameter("userIdSave");
     	System.out.println("LoginFilter: 아이디 저장: " + userIdSave);				//체크되면 on
-    	
+
 		//클라이언트 요청에서 username, password 추출
     	// String username = obtainUsername(request);
     	// String password = obtainPassword(request);
     	String username = request.getParameter("userId");
     	String password = request.getParameter("userPw");
-        //System.out.printf("LoginFilter: Username: "+ username+" Password: "+ password);
+        System.out.printf("LoginFilter: Username: "+ username+" Password: "+ password);
 
 		//스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
@@ -52,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	//로그인 성공시 실행하는 메소드 (여기서 JWT 발급)
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-				
+
 		//인증객체에서 사용자 정보 추출(springSecurityUser - 아이디 / 패스워드 / 역할 / 활성화)
     	SpringSecurityUser springSecurityUser = (SpringSecurityUser) authentication.getPrincipal();
 
@@ -112,6 +115,48 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	//로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-    	response.sendRedirect("/login?error=true"); // 기본 로그인 페이지로 리디렉션
+
+        String message = failed.getLocalizedMessage();
+        
+        //자진탈퇴복귀 유저일 경우:    messagejava.lang.Exception: myself설정 + 이메일
+        System.out.println("message" + message);
+        String[] messageArr = message.split("설정");
+
+        if (messageArr[0].equals("java.lang.Exception: myself")){
+            // 아이디 출력
+            System.out.println("userId=" + messageArr[1]);
+            // 복귀 여부 묻는 페이지로 이동
+            sendPostRequest(response, "/acorn/restoreUser", "userId=" + messageArr[1]);
+        } else {
+            response.sendRedirect("/acorn/badRequest");
+        }
     }
+
+    private void sendPostRequest(HttpServletResponse response, String url, String data) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<script type='text/javascript'>");
+        out.println("function submitForm() {");
+        out.println("var form = document.createElement('form');");
+        out.println("form.setAttribute('method', 'post');");
+        out.println("form.setAttribute('action', '" + url + "');");
+        out.println("var hiddenField = document.createElement('input');");
+        out.println("hiddenField.setAttribute('type', 'hidden');");
+        out.println("hiddenField.setAttribute('name', 'userId');");
+        out.println("hiddenField.setAttribute('value', '" + data + "');");
+        out.println("form.appendChild(hiddenField);");
+        out.println("document.body.appendChild(form);");
+        out.println("form.submit();");
+        out.println("}");
+        out.println("window.onload = submitForm;");
+        out.println("</script>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("</body>");
+        out.println("</html>");
+    }
+
+
 }

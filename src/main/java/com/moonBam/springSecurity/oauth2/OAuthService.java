@@ -2,6 +2,7 @@ package com.moonBam.springSecurity.oauth2;
 
 import java.net.http.HttpClient.Redirect;
 
+import com.moonBam.dto.member.RestoreRestrictedMember;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.ErrorPage;
@@ -63,7 +64,7 @@ public class OAuthService extends DefaultOAuth2UserService {
     	String registrationId = userRequest.getClientRegistration().getRegistrationId();
     	
     	//어디 소셜인지 확인
-    	//System.out.println("registrationId: " + registrationId);
+    	System.out.println("registrationId: " + registrationId);
     	
     	OAuth2Response oAuth2Response = null;
     	
@@ -119,34 +120,49 @@ public class OAuthService extends DefaultOAuth2UserService {
 			OAuth2Error oAuth2Error = new OAuth2Error("닉네임설정"+userId);
 				throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
         }
-        
-        //이미 가입한 유저일 경우
-        if(dto != null) {
-        	
-//        	System.out.println("OAuthService: 기존유저의 경우: "+dto);
-//        	System.out.println("OAuthService: 기존유저 등급: "+dto.getRole());
-        	if(dto.getRole().equals("ROLE_ADMIN")) {
-				OAuth2Error oAuth2Error = new OAuth2Error("관리자설정");
-				throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
-        	}
-        	
-        	// 소셜에 따라 추가 연동 체크
-    		if(registrationId.equals("naver")){
-    			oad.updateAPIMemberNaverConnected(dto.getUserId());
-            } else
-            
-            if(registrationId.equals("google")){
-            	oad.updateAPIMemberGoogleConnected(dto.getUserId());
-            } else
 
-            if(registrationId.equals("kakao")){
-            	oad.updateAPIMemberKakaoConnected(dto.getUserId());
-            }
-    		
-    		//기존 유저의 Role 전송
-    		role = dto.getRole();
+
+
+        //이미 가입한 유저일 경우
+		System.out.println("OAuthService: 기존유저의 경우: "+dto);
+		RestoreRestrictedMember restoreRestrictedMember = dao.restoreMember(dto.getUserId());
+		System.out.println(restoreRestrictedMember);
+		
+		//	자진탈퇴 복귀 유저일 경우
+		if(!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getState().equals("myself") ) {
+			OAuth2Error oAuth2Error = new OAuth2Error("복귀유저설정"+userId);
+			throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
+		}
+		
+		//	활동이 정지된 유저일 경우
+		if(!dto.isEnabled()) {
+			OAuth2Error oAuth2Error = new OAuth2Error("정지유저설정");
+			throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
+		}
+
+		//	관리자가 소셜 로그인한 경우
+		//  System.out.println("OAuthService: 기존유저 등급: "+dto.getRole());
+		if(dto.getRole().equals("ROLE_ADMIN")) {
+            OAuth2Error oAuth2Error = new OAuth2Error("관리자설정");
+            throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
         }
-    	
-    	return new OAuthUser(oAuth2Response, role);
+
+        // 소셜에 따라 추가 연동 체크
+        if(registrationId.equals("naver")){
+            oad.updateAPIMemberNaverConnected(dto.getUserId());
+		} else
+
+		if(registrationId.equals("google")){
+		oad.updateAPIMemberGoogleConnected(dto.getUserId());
+		} else
+
+		if(registrationId.equals("kakao")){
+		oad.updateAPIMemberKakaoConnected(dto.getUserId());
+		}
+
+        //기존 유저의 Role 전송
+        role = dto.getRole();
+
+        return new OAuthUser(oAuth2Response, role);
     }
 }
