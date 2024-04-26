@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -45,7 +46,7 @@ public class OAuthService extends DefaultOAuth2UserService {
 	
 	@Autowired
 	SecurityController sc;
-	
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     	
@@ -89,7 +90,8 @@ public class OAuthService extends DefaultOAuth2UserService {
 	    		register.setUserId(userId);
 	    		register.setUserPw("haveToGetNickname");
 	    		register.setNickname(oac.randomNickname());
-	    		register.setSecretCode(sc.encrypt(AnonymousBoardController.getNum(8)));
+				String secretCode = sc.encrypt(AnonymousBoardController.getNum(8));
+	    		register.setSecretCode(sc.encrypt(secretCode));
 	    		
 	    		// 소셜에 따라 연동 체크
 	    		if(registrationId.equals("naver")){
@@ -109,7 +111,7 @@ public class OAuthService extends DefaultOAuth2UserService {
 				
 	    		//회원가입 메일 송신
 	    		try {
-					mc.RegisterCompleteEmail(register.getUserId(), register.getNickname(), register.getSecretCode());
+					mc.RegisterCompleteEmail(register.getUserId(), register.getNickname(), secretCode);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

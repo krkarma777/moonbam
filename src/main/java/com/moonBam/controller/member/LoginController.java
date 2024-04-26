@@ -103,17 +103,9 @@ public class LoginController {
 	@PostMapping("/SearchID")
 	public String SearchID(Model model, String secretCode) {
 
-		List<String> list = serv.allSecretCode();
-		String realSecretCode = "";
-		for (int i = 0; i < list.size(); i++) {
-			boolean matchingCode = encoder.matches(secretCode, list.get(i));
-			System.out.println(list.get(i));
-			if (matchingCode) {
-				realSecretCode = list.get(i);
-				break;
-			}
-        }
-
+		System.out.println(secretCode);
+		String realSecretCode = sc.encrypt(secretCode);
+		System.out.println(realSecretCode);
 		MemberDTO dto = serv.findDTOBySecretCode(realSecretCode);
 		System.out.println(dto);
 		if (dto != null) {
@@ -129,17 +121,13 @@ public class LoginController {
 	@PostMapping("/MailingPW")
 	public String MailingPW(Model model, String secretCode, String userId) throws Exception {
 
-		//아이디를 통해 dto가 DB에 있는지 확인
-		MemberDTO dto= dao.userDetail(userId);
-		if(dto==null) {
-		//	System.out.println("회원 정보 없음");
-			return "member/Find_Info/cantFindUserdata";
-		}
-		
-		//matches를 통해 올바른 secretCode를 입력했는지 확인
-		boolean booleanSecretCode = encoder.matches(secretCode, dto.getSecretCode());
-		if(!booleanSecretCode){
-		//	System.out.println("잘못된 SecretCode입력");
+		Map<String, String> map = new HashMap<>();
+			map.put("userId", userId);
+			map.put("secretCode", sc.encrypt(secretCode));
+
+		MemberDTO dto = serv.mailingPW(map);
+
+		if(dto==null){
 			return "member/Find_Info/cantFindUserdata";
 		}
 
@@ -185,17 +173,39 @@ public class LoginController {
 	//비밀번호 변경을 위한 메일 송신
 	@PostMapping("/SocialMailingPW")
 	public String SocialMailingPW(Model model, String userId) throws Exception {
-		
+
+		//데이터 호출
 		MemberDTO dto = dao.userDetail(userId);
-		
+
 		if (dto != null) {
+
+			//임시 비밀번호 발급
+			String encodedPW = sc.encrypt(getNum(6));
+			dto.setUserPw(encodedPW);
+
+			//임시 비밀번호 암호화
+			String realPassword = encoder.encode(encodedPW);
+
+			//임시 비밀번호로 암호 변경
+			Map<String, String> map2 = new HashMap<>();
+			map2.put("userId", userId);
+			map2.put("userPw", realPassword);
+			serv.updatePassword(map2);
+
+			//변경된 데이터 호출
+			dto = dao.userDetail(userId);
+
+			//메일에 임시 비밀번호 전송을 위한 세팅
+			dto.setUserPw(encodedPW);
+
 			String[] emailparts = dto.getUserId().split("@");
 			model.addAttribute("userId", dto.getUserId());
 			model.addAttribute("nickname", dto.getNickname());
 			model.addAttribute("emailDomain", emailparts[1]);
 			mc.sendEmail(dto.getUserId(), dto);
 			return "member/Find_Info/viewAllPW";
-		} 
+		}
+
 		return "member/Find_Info/emailErrorPage";
 	}
 	
@@ -218,11 +228,27 @@ public class LoginController {
 //	@PostMapping("/UpdatePassword")
 //	public String UpdatePassword(String userId, String userPw) {
 //
+//		//userId
+//		//Mapper에서 DB의 정보를 찾기 위한 userId
+//
+//		//userPw
+//		//유저가 바꾸고 싶어서 입력한 비밀번호
+//
+//		//realPassword
+//		//비밀번호를 SpringSecurity 시스템에서 사용하기 위해 암호화
+//
+//		//비밀번호 암호화
 //		String realPassword = encoder.encode(userPw);
+//
+//		//비밀번호 변경을 위한 Map 생성
 //		Map<String, String> map = new HashMap<>();
 //			map.put("userId", userId);
 //			map.put("userPw", realPassword);
-//			serv.updatePassword(map);
+//
+//		//비밀번호 업데이트
+//		serv.updatePassword(map);
+//
+//		//비밀번호 변경 후 jsp 이동
 //		return "redirect:/UpdateComplete";
 //	}
 //

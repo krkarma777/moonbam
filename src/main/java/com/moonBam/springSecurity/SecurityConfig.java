@@ -34,87 +34,89 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterChain과 동시 사용 불가
 
-    private final OAuthService oAuthService;
-    private final AuthenticationConfiguration authenticationConfiguration;
-    private final JWTUtil jwtUtil;
-    private final LoginSuccessHandler loginSuccessHandler;
-    private final LoginfailureHandler loginfailureHandler;
+	private final OAuthService oAuthService;
+	private final AuthenticationConfiguration authenticationConfiguration;
+	private final JWTUtil jwtUtil;
+	private final LoginSuccessHandler loginSuccessHandler;
+	private final LoginfailureHandler loginfailureHandler;
+	
+	//더블 슬래시(//) 에러 방지를 위한 커스텀 방화벽
+	private final HttpFirewall customHttpFirewall;
+	
+	//기간 만료 설정
+	@Value("${jwt.expiredMs}") String expiredMs;
 
-    //더블 슬래시(//) 에러 방지를 위한 커스텀 방화벽
-    private final HttpFirewall customHttpFirewall;
+	//AuthenticationManager
+	@Bean
+		public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+		return configuration.getAuthenticationManager();
+	}
+	
+	//스프링시큐리티 단방향 암호화
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 
-    //기간 만료 설정
-    @Value("${jwt.expiredMs}")
-    String expiredMs;
+   //계층형 권한 부여
+   @Bean
+   public RoleHierarchy roleHierarchy() {						
+	   RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+	   	hierarchy.setHierarchy("ROLE_ADMIN > ROLE_MEMBER");		//ADMIN:	MEMBER의 모든 권한 + ADMIN 고유의 권한
+	   return hierarchy;
+   }
+		
+	@Bean  //configure는 Override의 기본값(SecurityFilterChain를 사용할 때는 메서드 명칭 변경)
+	public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
+		
+		//httpBasic 사용 중단
+		security.httpBasic(AbstractHttpConfigurer::disable);
+		
+		//csrt 사용 중단
+		security.csrf(AbstractHttpConfigurer::disable);
+		
+		//로그인 설정
+		//로그인 기본설정 사용중단
+		security.formLogin().loginPage("/acorn/mainLogin");
+		//로그인 커스텀 설정 사용
+		security.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+		security.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, Long.parseLong(expiredMs)), UsernamePasswordAuthenticationFilter.class);
+			//.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-    //AuthenticationManager
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
-
-    //스프링시큐리티 단방향 암호화
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    //계층형 권한 부여
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
-        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_MEMBER");        //ADMIN:	MEMBER의 모든 권한 + ADMIN 고유의 권한
-        return hierarchy;
-    }
-
-    @Bean  //configure는 Override의 기본값(SecurityFilterChain를 사용할 때는 메서드 명칭 변경)
-    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-
-        //httpBasic 사용 중단
-        security.httpBasic(AbstractHttpConfigurer::disable);
-
-        //csrt 사용 중단
-        security.csrf(AbstractHttpConfigurer::disable);
-
-        //로그인 설정
-        //로그인 기본설정 사용중단
-//        security.formLogin(AbstractHttpConfigurer::disable);
-        //로그인 커스텀 설정 사용
-        security.formLogin(login -> login
-                .loginPage("/mainLogin")  // 커스텀 로그인 페이지 설정
-                .permitAll());
-        security.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-        security.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, Long.parseLong(expiredMs)), UsernamePasswordAuthenticationFilter.class);
-        //.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-        //소셜 로그인 설정
-        //소셜 로그인 기본설정
-        // security.oauth2Login(Customizer.withDefaults());
-
-        //소셜 로그인 커스텀 설정
-        security.oauth2Login(oauth2 -> oauth2
-                .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/**"))
-                .userInfoEndpoint(endpoint -> endpoint.userService(oAuthService))
-                //기본 로그인 이동 설정 사용중단
-                //.loginPage("/mainLogin")
-                //JWT 사용을 위한 커스텀 로그인 성공/실패 설정 사용
-                .successHandler(loginSuccessHandler)
-                .failureHandler(loginfailureHandler)
-        );
+		//소셜 로그인 설정
+		//소셜 로그인 기본설정
+		// security.oauth2Login(Customizer.withDefaults());
+		
+		//소셜 로그인 커스텀 설정
+		security.oauth2Login(oauth2 -> oauth2
+				 .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/**"))
+                 .userInfoEndpoint(endpoint -> endpoint.userService(oAuthService))
+                 //기본 로그인 이동 설정 사용중단
+                 //.loginPage("/mainLogin")
+                 //JWT 사용을 위한 커스텀 로그인 성공/실패 설정 사용
+				.successHandler(loginSuccessHandler)
+				.failureHandler(loginfailureHandler)
+				);
 
         //권한따라 허용되는 url 설정
         security.authorizeHttpRequests(
                 (authorize) -> authorize
                 //"/memberList", "/AdminPage/**" 주소는 DB role 컬럼의 데이터값이 ROLE_ADMIN인 사람만 사용 가능
+        .requestMatchers(
+            "/board/write/**", "/board/delete/**", "/board/edit/**", "/board/note/**", "/board/postLike/**"
+            ).authenticated()
 				.requestMatchers(
 						"/memberList",
 						"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
 						"/Chatmore", "/Chatmore/ChatmoreReport"
-				).hasRole("MEMBER")
-        .requestMatchers("/board/write/**", "/board/delete/**", "/board/edit/**", "/board/note/**", "/board/postLike/**").authenticated()
-				.requestMatchers("/AdminPage/**").hasRole("ADMIN")
-                //그외 모든 요청은 모든 유저가 사용 가능
-                .anyRequest().permitAll()
+				    ).authenticated()
+				    ).hasRole("MEMBER")
+				.requestMatchers(
+            "/AdminPage/**"
+            ).authenticated()
+            ).hasRole("ADMIN")
+        //그외 모든 요청은 모든 유저가 사용 가능
+        .anyRequest().permitAll()
 				);
 		
 		//세션관리
