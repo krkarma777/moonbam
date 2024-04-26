@@ -92,7 +92,7 @@
 			<%-- <input type="hidden" name="userId" value="${memberDTO.userId}"> --%>
 			<input type="hidden" name="chatNum" value="${chatroomDTO.chatNum}">
 		</form>	
-		<button type="button" class="btn" onclick="fnGoOut()" style="position: absolute; bottom:2px; right:0;"><b>방 나가기</b></button>
+		<!-- <button type="button" class="btn" onclick="fnGoOut()" style="position: absolute; bottom:2px; right:0;"><b>방 나가기</b></button> -->
 		<c:if test="${leadermemberDto.userId == memberDTO.userId}">
 		<!-- 방 삭제하기는 방장만 보이게 처리했음  -->
 			<button type="button" class="btn" onclick="fnRemove()" style="position: absolute; bottom:2px; left:0;"><b>방 삭제하기</b></button>
@@ -118,6 +118,10 @@
 	
 	%>
 	
+	<%
+	
+	%>
+	
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
@@ -125,7 +129,7 @@
 <script type="text/javascript">
 	
 		var child; //자식팝업창 변수 선언
-		
+		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		
 		//회원 신고하기 눌렀을 때 작동되는 fn
 		function fnReport(userId) {
@@ -137,20 +141,18 @@
 		}
 		
 		//채팅 멤버 강퇴
-		
 		function fnKick(userId) {
 			location.href = "/acorn/Chatmore/ChatKickUser?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
+			
 		}
 		
 		
-		//방나가기 눌렀을 때 작동되는 fn
+	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)
 		function fnGoOut() {
 			console.log("goOutForm");
-			
 			$("#goOutForm").attr("action","/acorn/chatRoom/out").submit();
 			
-		}
-		
+		} */
 		
 		//방장이 방 삭제하기 눌렀을 때 작동되는 fn
 		function fnRemove() {
@@ -176,7 +178,6 @@
 			child.close();
 		}
 	
-
 	
 	
 	

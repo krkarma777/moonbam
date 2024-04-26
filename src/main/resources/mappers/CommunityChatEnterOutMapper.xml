@@ -11,13 +11,26 @@
 	</insert>
 	
 	
-	<!-- 방 입장 검증 하기 위해 select 진행 -->
-	<select id="chatMemberEnterSelect" parameterType="hashmap" resultType="ChatMemberDTO">
+	<!-- 중복 insert를 하지 않기 위해 select 진행 -->
+	<select id="chatMemberInsertForOnlyOneSelect" parameterType="hashmap" resultType="ChatMemberDTO">
 	
 		
 		select * from chatmember where chatnum = #{chatNum} and userid = #{userId}
 		
+		
 	</select>
+	
+	
+	<!-- 방에 입장하기 위해 강퇴 여부 판단하기  -->
+	<select id="chatMemberEnterSelect" parameterType="hashmap" resultType="ChatMemberDTO">
+	
+		
+		select * from chatmember where chatnum = #{chatNum} and userid = #{userId} and isKicked = 'f'
+		
+		
+	</select>
+	
+	
 	
 	
 	<!-- chatNum 으로 방정보 가져오기 (방 입장시) -->
