@@ -333,6 +333,7 @@
 						success: function(response) {
 							// 성공 시 페이지 새로고침
 							alert('임시저장글이 삭제되었습니다.');
+							saveModal();
 						},
 						error: function(xhr, status, error) {
 							console.error(xhr.responseText);
