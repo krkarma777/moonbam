@@ -62,9 +62,9 @@
 					<td>${dto.userid}</td>
 					<td>${dto.status}</td>
 					<td>${dto.cause}</td>
-					<td>${dto.action}</td>
 					<td>${dto.actionstart}</td>
 					<td>${dto.actionend}</td>
+					<td>${dto.action}</td>
 					<td>
 						<button type="button" class="btn btn-custom" id="suspendChecked" >해제</button>
 					</td>

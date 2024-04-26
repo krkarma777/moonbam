@@ -44,11 +44,36 @@ System.out.println("삭제된 게시글 관리 jsp페이지");
 			<td >${dto.userid}</td>
 			<td >${dto.cause}</td>
 			<td >${dto.expiredate}</td>
-			<td><input type="button" value="복원"></td>
+			<td>
+				<input type="button" value="복원" id = "restoreDeletedPost" class = "restoreDeletedPost" 
+					data-xxx=${dto.postid }>
+			</td>
 		</tr>
 		</c:forEach>
 	</table>
 </form>
 
+
+
+<script>
+
+$(".restoreDeletedPost").on("click", restoreDeletedPost);
+
+function restoreDeletedPost(){
+	
+	console.log($(this).attr("data-xxx"));
+	
+	let postid = $(this).attr("data-xxx")
+	
+	//디버깅용 확인
+	console.log("restoreDeletedPost");
+	
+	//전송
+	var target = "<%=request.getContextPath()%>" + "/AdminPage/restoreDeletedPost?postid="+postid;
+	console.log(restoreDeletedPost);
+	location.href = target;
+}//restorePost
+
+</script>
 </body>
 </html>
