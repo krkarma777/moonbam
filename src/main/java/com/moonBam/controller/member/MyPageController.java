@@ -236,7 +236,10 @@ public class MyPageController {
             for (Long postId : allPostIds) {
                 System.out.println("Deleting post with ID: " + postId);
                 // postId를 사용하여 해당 게시물 삭제 로직 수행
-                mserv.postDel(postId);
+                Map<String, String> map = new HashMap<>();
+                map.put("postId", String.valueOf(postId));
+                map.put("postText", "삭제된 글입니다.");
+                mserv.updatedMyPost(map);
             }
             return "redirect:/my-page/post"; // 모든 게시물 삭제 후에 리다이렉트
         } else {
