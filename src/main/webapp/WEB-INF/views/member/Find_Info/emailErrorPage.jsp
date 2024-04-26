@@ -14,6 +14,11 @@
 </head>
 
 <body>
+
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
     <div class="notFound">
         <h1>잘못된 접근입니다.</h1>
         <p class="mesg">

@@ -12,6 +12,11 @@
 </head>
 
 <body>
+
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
     <h2>찾은 유저 정보</h2>
 	<p>${nickname}님은 소셜 로그인 가입자이십니다.<br>
 	<c:if test="${googleRegister == true}">

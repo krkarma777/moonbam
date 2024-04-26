@@ -17,6 +17,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+<div class = "body">
 	<div class="container">
 		<h1>회원가입</h1>
 		<form id="registerForm" action="<c:url value='/InsertData'/>" method="post">
@@ -53,7 +57,7 @@
 			<button id="register_button" type="submit">가입</button>
 		</form>
 	</div>
-
+</div>
 
 	<script type="text/javascript">
 	

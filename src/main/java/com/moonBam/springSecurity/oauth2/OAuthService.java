@@ -54,7 +54,7 @@ public class OAuthService extends DefaultOAuth2UserService {
     	OAuth2User oAuth2User = super.loadUser(userRequest);
     	
     	//소셜에서 받아오는 JSON데이터 확인
-    	System.out.println("oAuth2User: " + oAuth2User.getAttributes());
+    	//System.out.println("oAuth2User: " + oAuth2User.getAttributes());
 
     	//등록을 대비하여 미리 선언
     	MemberDTO register = new MemberDTO();
@@ -123,7 +123,7 @@ public class OAuthService extends DefaultOAuth2UserService {
         //이미 가입한 유저일 경우
         if(dto != null) {
         	
-        	System.out.println("OAuthService: 기존유저의 경우: "+dto);
+//        	System.out.println("OAuthService: 기존유저의 경우: "+dto);
 //        	System.out.println("OAuthService: 기존유저 등급: "+dto.getRole());
         	if(dto.getRole().equals("ROLE_ADMIN")) {
 				OAuth2Error oAuth2Error = new OAuth2Error("관리자설정");

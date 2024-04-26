@@ -77,7 +77,9 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 		
 		//로그인 설정
 		//로그인 기본설정 사용중단
-		security.formLogin().loginPage("/acorn/mainLogin");
+		security
+			.formLogin(formLogin -> formLogin
+			.loginPage("/acorn/mainLogin"));
 		//로그인 커스텀 설정 사용
 		security.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 		security.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, Long.parseLong(expiredMs)), UsernamePasswordAuthenticationFilter.class);
@@ -105,28 +107,27 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
         .requestMatchers(
             "/board/write/**", "/board/delete/**", "/board/edit/**", "/board/note/**", "/board/postLike/**"
             ).authenticated()
-				.requestMatchers(
-						"/memberList",
-						"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
-						"/Chatmore", "/Chatmore/ChatmoreReport"
-				    ).authenticated()
-				    ).hasRole("MEMBER")
-				.requestMatchers(
+		.requestMatchers(
+			"/memberList",
+			"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
+			"/Chatmore", "/Chatmore/ChatmoreReport"
+			).hasRole("MEMBER")
+		.requestMatchers(
             "/AdminPage/**"
-            ).authenticated()
             ).hasRole("ADMIN")
         //그외 모든 요청은 모든 유저가 사용 가능
         .anyRequest().permitAll()
-				);
-		
-		//세션관리
+		);
+
+        //세션관리
 		//JWT를 통한 인증/인가를 위해서 세션을 STATELESS 상태로 설정
 		//*****************************************************************************************************************************************
 		security.sessionManagement((session) -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         //페이지 접속할 때 해당 페이지에 대한 권한 없는 경우, 가는 페이지
-        security.exceptionHandling().accessDeniedPage("/NotAuthentic");
+        security.exceptionHandling(authenticationManager -> authenticationManager
+				.accessDeniedPage("/NotAuthentic"));
 
         //로그아웃
         security.logout((logoutConfig) -> logoutConfig

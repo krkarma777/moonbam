@@ -13,6 +13,11 @@
 </head>
 
 <body>
+
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
     <div class="container mt-5">
         <div class="card">
             <div class="card-body">
