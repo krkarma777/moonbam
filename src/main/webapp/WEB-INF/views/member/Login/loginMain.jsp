@@ -15,7 +15,7 @@
 <body>
 
 <div id="header">
-    <jsp:include page="/WEB-INF/views/common/navibarForMember.jsp" flush="true"></jsp:include><br>
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
 </div>
 
 <div id="contentBody">

@@ -43,6 +43,10 @@
 
 <body>
 
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
 <h1>이메일 발송 성공!</h1>
 
     <p>${nickname}님!<br> 

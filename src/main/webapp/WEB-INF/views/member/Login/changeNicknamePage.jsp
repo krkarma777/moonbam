@@ -23,6 +23,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
 	<form id="register" action="<c:url value='/goToAPILoginPage'/>" method="POST">
 		<input type="hidden" name="userId" value="${userId}">
 	</form>

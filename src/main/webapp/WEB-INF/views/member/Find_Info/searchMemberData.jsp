@@ -47,6 +47,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
  <div class="row" id="rowBar">
   <div class="col">
 	<h2>아이디 찾기</h2>
