@@ -1,6 +1,7 @@
 package com.moonBam.service.adminpage.announcement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,19 +21,19 @@ public class AnnouncementService {
 	// pop
 
 	// get popup num list
-	public List<Integer> popupNnumList(String popup) {
+	public List<Integer> popupNnumList(HashMap<String, String> hashMap) {
 		System.out.println("AnnouncementService.popupList()");
-		List<Integer>list = dao.popupNumList(popup);
+		List<Integer>list = dao.popupNumList(hashMap);
 		return list;
 	}
 
 	// pop	
 
-	public List<AnnouncementDTO> popupList(String popup) {
-		System.out.println("AnnouncementService.popupList()");
-		List<AnnouncementDTO>list = dao.popupList(popup);
-		return list;
-	}
+	/*
+	 * public List<AnnouncementDTO> popupList(String popup) {
+	 * System.out.println("AnnouncementService.popupList()");
+	 * List<AnnouncementDTO>list = dao.popupList(popup); return list; }
+	 */
 
 	// pop
 	// last Page Number

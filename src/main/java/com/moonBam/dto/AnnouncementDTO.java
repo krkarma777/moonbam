@@ -14,7 +14,8 @@ public class AnnouncementDTO {
 	private String updateDate;
 	private String startDate;
 	private String endDate;
-	private String popup = "no";
+	private String popup;
+	private String category;
 
 	private String[] writeDateArr;
 	private String[] updateDateArr;
@@ -37,7 +38,7 @@ public class AnnouncementDTO {
 	}
 
 	public AnnouncementDTO(int annoNum, String annoTitle, String annoText, String annoWriter, String writeDate,
-			String updateDate, String startDate, String endDate, String popup) {
+			String updateDate, String startDate, String endDate, String popup, String category) {
 		super();
 		System.out.println("AnnouncementDTO.AnnouncementDTO()");
 		this.annoNum = annoNum;
@@ -48,6 +49,7 @@ public class AnnouncementDTO {
 		this.updateDate = updateDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.category = category;
 
 		TimeParsing tp = new TimeParsing();
 		this.writeDateArr = tp.db2Arr(this.writeDate);
@@ -55,17 +57,13 @@ public class AnnouncementDTO {
 		this.startDateArr = tp.db2Arr(this.startDate);
 		this.endDateArr = tp.db2Arr(this.endDate);
 
-		if ("popup".equals(popup)) {
-			this.popup = popup;
-		} else {
-			this.popup = "no";
-		}
+		this.popup = ("on".equals(popup)) ? popup : "no";
 
 	}
 
 	// insert constructor
 	public AnnouncementDTO(int annoNum, String annoTitle, String annoText, String annoWriter, String startDate,
-			String endDate, String popup) {
+			String endDate, String popup, String category) {
 		super();
 		this.annoNum = annoNum;
 		this.annoTitle = annoTitle;
@@ -73,20 +71,16 @@ public class AnnouncementDTO {
 		this.annoWriter = annoWriter;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.category = category;
 
-		if ("popup".equals(popup)) {
-			this.popup = popup;
-		} else {
-			this.popup = "no";
-		}
-
+		this.popup = ("on".equals(popup)) ? popup : "no";
 	}
 
 	@Override
 	public String toString() {
 		return "AnnouncementDTO [annoNum=" + annoNum + ", annoTitle=" + annoTitle + ", annoText=" + annoText
 				+ ", annoWriter=" + annoWriter + ", writeDate=" + writeDate + ", updateDate=" + updateDate
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", popup=" + popup + "]";
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", popup=" + popup + ",category=" + category + "]";
 	}
 
 	public int getAnnoNum() {
@@ -158,11 +152,7 @@ public class AnnouncementDTO {
 	}
 
 	public void setPopup(String popup) {
-		if ("popup".equals(popup)) {
-			this.popup = popup;
-		} else {
-			this.popup = "no";
-		}
+		this.popup = popup;
 	}
 	// new add
 
@@ -198,9 +188,18 @@ public class AnnouncementDTO {
 		this.endDateArr = endDateArr;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	public void setTimes() {
 		setTimes(this.writeDate, this.annoWriter, this.annoTitle, this.annoText);
 	}
+
 	public void setTimes(String writeDate, String updaString, String staString, String endString) {
 		TimeParsing tp = new TimeParsing();
 		this.writeDateArr = tp.db2Arr(writeDate);

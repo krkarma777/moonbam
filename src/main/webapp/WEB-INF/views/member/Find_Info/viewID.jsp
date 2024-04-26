@@ -17,6 +17,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
 	<h2>찾은 아이디 정보</h2>
 	<div>회원님의 아이디는
 		${dto.getUserId()}입니다.

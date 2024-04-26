@@ -212,6 +212,7 @@ session.removeAttribute("mesg");
 					}));
 			});
 		}
+		
 
 		/* 메시지 전송 */
 		function sendMessage() {
@@ -222,19 +223,25 @@ session.removeAttribute("mesg");
 				//console.log("유저아이디 먼데",userId)
 				var message = escapeHtml($("#messageContent").val()); // 메세지 
 				var serverTime = new Date().toLocaleString();
-				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
-					'type' : 'TALK',
-					'userId' : userId,
-					'message' : message,
-					'serverTime' : serverTime}));
+				sendChatMessage(chatNum, userId, message, serverTime);
 				document.getElementById('messageContent').value = ''; 
 			 }
 		}
-
+		
+		
+		function sendChatMessage(chatNum, userId, message, serverTime) {
+            stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
+				'type' : 'TALK',
+				'userId' : userId,
+				'message' : message,
+				'serverTime' : serverTime}));
+            document.getElementById('messageContent').value = ''; 
+        }
 		// 메세지 출력
 		// 최신 메세지 추가(위치는 맨 뒤)
 		// 이전 메세지 추가(위치는 맨위)
 		function createMsgTag(messageOutput) {
+
 			//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
 			let nickName = body.nickName;
@@ -245,10 +252,20 @@ session.removeAttribute("mesg");
 
 
 			let time = content.serverTime;
-	    let chatLi;
+	    	let chatLi;
 	    
 	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-	    console.log(content.type)
+	    
+	    
+	    if(message == "강퇴"){
+				console.log("강퇴");
+			 stompClient.disconnect();
+			 return "";
+		}
+	    
+	    
+	    
+	   
 	    if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";

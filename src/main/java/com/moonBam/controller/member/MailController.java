@@ -67,8 +67,8 @@ public class MailController {
 	    	
     		String EMAIL_SUBJECT = "[회원정보알림] 문화인의 밤을 이용해주셔서 감사합니다.";		
     		
-    		changeData.put("##유저_링크##", "http://localhost:8090/acorn/UpdatePasswordPage?userId=##유저_아이디##");
-			changeData.put("##유저_아이디##", dto.getUserId());
+    		changeData.put("##유저_링크##", "http://localhost:8090/acorn/mainLogin");
+			changeData.put("##유저_비밀번호##", dto.getUserPw());
     		changeData.put("##유저_닉네임##", dto.getNickname());
 
 	    	String innerImageName = "FindPW";

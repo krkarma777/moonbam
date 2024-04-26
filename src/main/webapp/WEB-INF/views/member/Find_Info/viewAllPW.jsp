@@ -43,10 +43,14 @@
 
 <body>
 
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
 <h1>이메일 발송 성공!</h1>
 
     <p>${nickname}님!<br> 
-    <a href="http://www.${emailDomain}" target="_blank">${userId}로 비밀번호 변경 메일이 전송되었습니다.</a>
+    <a href="http://www.${emailDomain}" target="_blank">${userId}로 임시 비밀번호 메일이 전송되었습니다.</a>
     <p>확인 후 로그인 부탁드립니다.</p>
 
 <div id="sitesShortCut">

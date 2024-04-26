@@ -63,6 +63,7 @@
 
     
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/translations/ko.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script>
@@ -99,14 +100,12 @@ $(function(){
 	<input type="hidden" id="content" name="content" value="">
 	<div class="mb-3">
 	    <label for="title" class="form-label">제목:</label>
-	    <input type="text" name="title" value="${dto.title}" class="form-control" required="required" maxlength="10" maxlength="35">
+	    <input type="text" name="title" value="${dto.title}" class="form-control" required="required">
 	</div>
 	<div class="row">
 	    <div class="col-md-6 mb-3">
 		    <label for="nickname" class="form-label">닉네임:</label>
-		    <input type="text" name="nickname" value="${dto.nickname}" class="form-control" required="required"
-			pattern="^[가-힣]{1,20}$|^[a-zA-Z0-9]{1,40}$" 
-			title="한글 20글자 또는 영어+숫자 40글자 이내로 입력해주세요.">
+		    <input type="text" name="nickname" value="${dto.nickname}" class="form-control" required="required" minlength="2">
 	    </div>
 	    <div class="col-md-6 mb-3">
 		    <label for="password" class="form-label">비밀번호:</label>

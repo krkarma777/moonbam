@@ -1,6 +1,7 @@
 package com.moonBam.controller.community;
 
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -57,8 +58,8 @@ public class ChatDeleteController {
 	
 	//////////방장이 방삭제하기 했을 때/////////////
 	@RequestMapping(value="/chatRoom/remove", method=RequestMethod.POST)
-	public String requestMethodName(@RequestParam("userId") String userId, @RequestParam("chatNum") int chatNum,HttpSession session) {
-		
+	public String requestMethodName(@RequestParam("chatNum") int chatNum,HttpSession session, Principal principal) {
+		String userId = principal.getName();
 		//userId는 내 id , chatNum은 chatNum
 		//1. chatNum으로 chatRoom select 했을 때 현재 인원 수가 1명만 있어야함 => 아닐시 삭제 실패. 방장에게 회원 강퇴 및 나가기 유도하라는 메세지 띄우기
 		//2. 처리 다 되면 chatRoom 정보 삭제하기
