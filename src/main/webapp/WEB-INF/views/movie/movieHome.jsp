@@ -47,10 +47,10 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	<div style="background-color: #ffb2c4; height: 30px; width:1200px; font-size: 19px; ">
 		<b>
 		<span style="float: left; color:white">
-			<a href="" style="color:white;">박스 오피스</a>
+			&nbsp;최신 영화
 		</span>
 		<span style="float: right; color:white">
-			<a href="movieSearch" style="color:white; float: rigth;">더보기</a>
+			<a href="movieSearch" style="color:white; float: rigth;">더보기</a>&nbsp;
 		</span>
 		</b>
 	</div>
@@ -131,10 +131,10 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	<!-- 아직 구현되지는 않음. 영화 데이터 가져오는 것 중에 장르가 없어서. -->
 	<div style="background-color: #ffb2c4; margin-top: 4px; height: 30px; width:1200px; font-size: 19px; color:white;">
 		<b>
-		#<a href="genre?genre=Drama" class="" style="color:white;">드라마</a>
+		&nbsp;#<a href="genre?genre=Drama" class="" style="color:white;">드라마</a>
 		#<a href="genre?genre=Comedy" class="" style="color:white;">코미디</a>
 		#<a href="genre?genre=Thriller" class="" style="color:white;">스릴러</a>
-		<a href="movieSearch?searchCategory=<%=genre %>" style="color:white; float:right;">더보기</a>
+		<a href="movieSearch?searchCategory=<%=genre %>" style="color:white; float:right;">더보기&nbsp;</a>
 		</b>
 	</div>
 	<div class="carousel-container2">
@@ -212,10 +212,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 			<table style="width: 1200px">
 				<tr style="background-color: #ffb2c4; height: 30px; width:1200px;">
 					<th colspan="2">
-						<a href="/acorn?cg=movie" style="color:white">&nbsp국내영화</a>
-						<span style="color:white">/</span>
-						<a href="/acorn/board/movie" style="color:white">해외영화</a>
-						<!-- 국내 영화 해외영화 나눠야함 -->
+						<span style="color:white">&nbsp;영화게시판</span>
 						<span style="float: right;"><a href="/acorn/board/movie" style="color:white;">더보기&nbsp</a></span>
 					</th>
 				</tr>
