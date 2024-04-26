@@ -1,6 +1,7 @@
 package com.moonBam.controller.adminpage.announcement.popup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,16 @@ public class PopupListController {
 		System.out.println("PopupListController.pupup()");
 
 		List<Integer> list = new ArrayList<Integer>();
-		list = service.popupNnumList("popup");
+		list = service.popupNnumList(
+			
+				new HashMap<String, String>() {
+		            {
+		                put("popup", "on");
+		                put("category", "전체");
+		            }
+		     });
+		
+		
 		System.out.println(list);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("list", list);

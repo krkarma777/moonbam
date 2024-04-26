@@ -47,6 +47,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
  <div class="row" id="rowBar">
   <div class="col">
 	<h2>아이디 찾기</h2>
@@ -54,7 +58,7 @@
 	 <table>
         <tr>
         	<td>
-				<input type="text" id="secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="40">
+				<input type="text" id="secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="50">
 			</td>
 		</tr>
 		<tr>
@@ -73,7 +77,7 @@
         <tr>
         	<td>
 				<input type="email" id="userId" name="userId" autofocus placeholder="아이디 이메일 입력" maxlength="40">
-				<input type="text" id="pw_secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="40">
+				<input type="text" id="pw_secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="50">
 			</td>
 		</tr>
 		<tr>

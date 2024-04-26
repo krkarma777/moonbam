@@ -67,4 +67,10 @@ public class LoginDAO {
 		String nickname = session.selectOne("nicknameByUserId", userId);
 		return nickname;
 	}
+
+	//아이디 찾기를 위한 전체 SecretCode 추출
+    public List<String> allSecretCode() {
+		List<String> list = session.selectList("allSecretCode");
+		return list;
+	}
 }

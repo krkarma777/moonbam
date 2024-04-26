@@ -9,42 +9,31 @@
 		// 글쓰기
 		$("#buttonAnnoWrite").on("click", buttonAnnoWrite);
 
+	
 		// 검색
 		$("#buttonAnnoWord").on("click", buttonAnnoWord);
 
 		// 글 보기
 		$(".classAnnotitle").on("click", classAnnotitle);
 
-		/* --------- */
-		/* 함수 구현 */
-
 		// 글쓰기
 		function buttonAnnoWrite() {
-			$("#formAnnoList").attr("action", "WriteAnnouncementController")
+			$("#formAnnoList").attr("action", "WriteAnnouncementController").attr("method", "post")
 					.submit();
 		}
+
 
 		// buttonAnnoWord 검색
 		function buttonAnnoWord() {
-			$("#formAnnoList").attr("action", "AdminPageAnnounce")
-					.submit();
+		    window.location.href ="<%=request.getContextPath()%>/AdminPage/AdminPageAnnounce?word=" + $("#word").val();
 		}
 
-		// 질문 왜 아래 코드 없으면 글쓰기로 이동하는가
-		// Enter 키 입력 시 검색
-		    $("#inputAnnoWord").keypress(function(event) {
-		       // Enter 키의 keyCode는 13입니다.
-		       if (event.keyCode === 13) {
-		           buttonAnnoWord();
-		       }
-		   });
-		
-
+ 
 		// classAnnotitle 검색
 		function classAnnotitle() {
 			$("#formAnnoList").submit();
 		}
-
+		
 	});
 </script>
 <style>
@@ -68,14 +57,13 @@
 	
 	
 </style>
-${word }
 <div class="container">
 	<h1 class="mt-5">관리자페이지 공지사항</h1>
 	<hr>
-	<form action="<%=request.getContextPath()%>/AdminPage/RestrictedMemberList" method="post" class="mb-3">
+	<form method="get" class="mb-3" id="formAnnoList">
 		<div class="input-group mb-3">
-			<input type="text" class="form-control" placeholder="검색조건 입력" id="SearchValue" name="SearchValue" value="${word}">
-			<button type="submit" class="btn btn-primary" id="buttonAnnoWord" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" >검색</button>
+			<input type="text" class="form-control" placeholder="검색조건 입력" id="word" name="word" value="${word}" onkeydown="if (event.keyCode === 13) { buttonAnnoWord(); }">
+			<button type="button" class="btn btn-primary" id="buttonAnnoWord" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" >검색</button>
 			<button type="button" class="btn" style="float:right; background-color: #ffb2c4; color:white; margin-left: auto;" id="buttonAnnoWrite" >글쓰기</button>
 		</div>
 	</form>
@@ -83,8 +71,10 @@ ${word }
 		<thead class="header-row">
 		<tr>
 			<th>글번호</th>
-			<th>제목</th>
-			<th>작성일</th>
+			<th >제목</th>
+			<th>시작일</th>
+			<th>종료일</th>
+			<!-- <th>작성일</th> -->
 			<th>작성자</th>
 		</tr>
 		</thead>
@@ -92,8 +82,10 @@ ${word }
 		<c:forEach var="dto" items="${list}">
 			<tr>
 				<td>${dto.annoNum}</td>
-				<td><a href="ViewAnnouncementController?annoNum=${dto.annoNum}">${dto.annoTitle}</a></td>
-				<td>${dto.writeDate}</td>
+				<td style="width: 50%;"><a href="ViewAnnouncementController?annoNum=${dto.annoNum}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${dto.annoTitle}</a></td>
+				<td>${dto.startDate}</td>
+				<td>${dto.endDate}</td>
+				<%-- <td>${dto.writeDate}</td> --%>
 				<td>${dto.annoWriter}</td>
 			</tr>
 		</c:forEach>

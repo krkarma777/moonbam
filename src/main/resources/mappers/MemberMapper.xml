@@ -287,7 +287,7 @@
 	</insert>
 	
 	<!-- API 회원가입된 유저 닉네임 변경 -->
-	<update id="updateAPIMemberNickname" parameterType="hashmap">
+	<update id="updateAPIMemberNickname" parameterType="map">
 		UPDATE 	memberDB
 		SET		nickname = #{nickname}
 		WHERE	userId = #{userId}
@@ -326,7 +326,12 @@
 			userId = #{userId}
 	</select>
 	
-	
+	<!-- 아이디 찾기를 위한 전체 SecretCode 추출 -->
+	<select id="allSecretCode" resultType="string">
+		SELECT secretCode
+		FROM memberDB
+	</select>
+
 	<!-- 아이디 찾기 -->
 	<select id="findDTOBySecretCode" resultType="MemberDTO" parameterType="String">
 		SELECT

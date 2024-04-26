@@ -51,4 +51,5 @@ public class RegisterService {
 	public MemberDTO findDTOByUserId(String userId) {
 		return dao.findDTOByUserId(userId);
 	}
+
 }

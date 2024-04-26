@@ -309,5 +309,54 @@
             }
         });
     </script>
+    
+    	
+<script type="text/javascript">
+var list = <%=request.getAttribute("list")%>;  
+$(function (){
+	// 팝업 창 위치 &크기 변수
+	let sLeft=0;
+	let sTop=0;
+	let width ;
+	let height ;
+	
+    for (var i = 0; i < list.length; i++) {
+    	let cookie = getCookie("popup"+list[i])
+    	if(cookie != "check"){
+    		// 팝업 창의 위치 설정
+    		setPostion(i);
+    		// 팝업 창 띄위기
+    		window.open("ViewPopupController/" + list[i]+"/community", "popup" + i,
+    				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
+    	}
+    }
+    
+    // 팝업 창의 위치 설정
+  
+function setPostion(i) {
+		let screenWidth = screen.width;
+		let screenHeight = screen.height;
+		// 창의 크기
+		width = (screenWidth / 4);
+		height = (screenHeight / 3);
+		// 창의 시작점
+		sLeft = width * ((i % 4));
+		sTop = height * Math.floor(i / 4);
+	}
+});
+    		
+// 쿠키에 있어 checked이면 return checked
+function getCookie(name) {
+       var decodedCookie = decodeURIComponent(document.cookie);
+		var cookies = decodedCookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+           var cookie = cookies[i].trim();
+           if (cookie.indexOf(name) === 0) {
+               return cookie.substring(name.length + 1);
+           }
+       }
+       return "";
+   }
+</script>
 </body>
 </html>

@@ -40,6 +40,13 @@ public class CommunityEnterOutService {
 	
 
 	///채팅방 입장하기 위해 한 번 더 검수하는 서비스
+	public ChatMemberDTO chatMemberInsertForOnlyOneSelect(Map<String, Object> chatMemberselectMap) {
+		// TODO Auto-generated method stub
+		return comEnterOutDAO.chatMemberInsertForOnlyOneSelect(chatMemberselectMap);
+	}
+	
+	
+	//강퇴여부까지 판단해서 진짜 방 입장하기
 	public ChatMemberDTO chatMemberEnterSelect(Map<String, Object> chatMemberselectMap) {
 		// TODO Auto-generated method stub
 		return comEnterOutDAO.chatMemberEnterSelect(chatMemberselectMap);
