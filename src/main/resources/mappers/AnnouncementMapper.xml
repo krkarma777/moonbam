@@ -29,15 +29,16 @@
 		delete from Announcement where annoNum = #{annoNum}
 	</delete>
 	
-	<!-- 팝업  번호 리스트 -->
-	<select id="popupNumList" resultType="int">
-	select annoNum from Announcement where (startDate <![CDATA[<]]> sysdate and endDate <![CDATA[>]]> sysdate)  and popup = #{popupList} order by annoNum desc
+	<!-- 팝업 번호 리스트 -->
+	<select id="popupNumList" parameterType="map" resultType="int">
+	select annoNum from Announcement where (startDate <![CDATA[<]]> sysdate and endDate <![CDATA[>]]> sysdate)  and popup = #{popup} and category = #{category} order by annoNum desc
+	
 	</select>
 	
 	<!-- 팝업 리스트 -->
-	<select id="popupList" resultType="AnnouncementDTO">
+	<select id="popupList" parameterType="map" resultType="AnnouncementDTO">
 	select annoNum, annoTitle, annoText, annoWriter, popup,  writeDate, updateDate, startDate,
-		endDate from Announcement where (startDate <![CDATA[<]]> sysdate and endDate <![CDATA[>]]> sysdate)  and popup = #{popupList} order by annoNum desc
+		endDate from Announcement where (startDate <![CDATA[<]]> sysdate and endDate <![CDATA[>]]> sysdate)  and popup = #{popup} order by annoNum desc
 	</select>
  
 	<!-- count column  -->

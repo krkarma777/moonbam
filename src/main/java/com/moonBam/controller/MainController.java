@@ -68,9 +68,14 @@ public class MainController {
             }
         });
 
-        // popup
-        List<Integer> list = annoService.popupNnumList("popup");
-      	
+        // popup get popup num list
+        List<Integer> list = annoService.popupNnumList(new HashMap<String, String>() {
+            {
+                put("popup", "on");
+                put("category", "전체");
+            }
+        });
+        
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
