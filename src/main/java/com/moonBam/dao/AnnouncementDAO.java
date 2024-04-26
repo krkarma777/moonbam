@@ -1,5 +1,6 @@
 package com.moonBam.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +16,9 @@ public class AnnouncementDAO {
 	@Autowired
 	public SqlSessionTemplate session;
 	
-	public List<Integer> popupNumList(String popup) {
+	public List<Integer> popupNumList(HashMap<String, String> hashMap) {
 		System.out.println("AnnouncementDAO.popupNumList()");
-		List<Integer> list = session.selectList("popupNumList", popup);
+		List<Integer> list = session.selectList("popupNumList", hashMap);
 		return list;
 	}
 

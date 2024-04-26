@@ -33,8 +33,9 @@ var list = <%= request.getAttribute("list") %>;
         		console.log(sTop);
         		console.log(width);
         		console.log(height); */
-        		
-        		window.open("ViewPopupController?num=" + list[i], "popup" + i,
+        		console.log(list[i]);
+        		window.open("ViewPopupController/" + list[i]+"/main", "popup" + i,
+     			//window.open("ViewPopupController?num=" + list[i], "popup" + i,
         				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
         	}
         }
