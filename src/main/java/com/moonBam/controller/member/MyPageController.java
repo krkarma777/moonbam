@@ -444,6 +444,11 @@ public class MyPageController {
   			return "member/Find_Info/emailErrorPage";
   		}
 
+  	  // 기존 비밀번호와 일치하지 않는 경우
+  	    if (!canLogin) {
+  	        System.out.println("기존 비밀번호와 일치하지 않습니다.");
+  	        return "member/Find_Info/emailErrorPage";
+  	    }
         //비밀번호 암호화
         String realPassword = encoder.encode(userPw);
 
