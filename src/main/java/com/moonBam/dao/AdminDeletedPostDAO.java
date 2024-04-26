@@ -79,13 +79,21 @@ public class AdminDeletedPostDAO {
 		return count;
 	}
 
-	public void cleanDeletedPost() {
-		session.delete("AdminDeletedPostMapper.cleanDeletedPost");
+	public void cleanDeletedPost(String postid) {
+		session.delete("AdminDeletedPostMapper.cleanDeletedPost", postid);
 	}
 
 	public AdminDeletedPostDTO getDeletedPost(String postId) {
+		System.out.println("in AdminDeletedPostDAO.getDeletedPost");
+		System.out.println(postId+"를 매퍼에 전달");
 		AdminDeletedPostDTO deletedPostDTO = session.selectOne("AdminDeletedPostMapper.getDeletedPost", postId);
+		System.out.println("deletedPostDTO");
 		return deletedPostDTO;
+	}
+
+	public void deleteDeletedPost(String postid) {
+		System.out.println("in AdminDeletedPostDAO.deleteDeletedPost");
+		session.delete("AdminDeletedPostMapper.deleteDeletedPost", postid);
 	}
 
 }

@@ -70,7 +70,7 @@
             <tr>
                 <td><input type="checkbox" class="chkPost" data-xxx="${dto.targetId}"></td>
                 <td>${fn:indexOf(list, dto)+1}</td> <!-- Displaying index as report number -->
-                <td><a href="#" class="showContent text-pink">${dto.targetId}</a></td>
+                <td><a href="<%=request.getContextPath() %>/board/content?postId=${dto.targetId}" class="showContent text-pink">${dto.targetId}</a></td>
                 <td>${dto.reporterId}</td>
                 <td>${dto.userId}</td>
                 <td>${dto.sexual}</td>

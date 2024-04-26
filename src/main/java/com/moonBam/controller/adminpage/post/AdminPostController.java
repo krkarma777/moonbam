@@ -95,9 +95,10 @@ public class AdminPostController {
 	
 	//삭제된 게시글에서 복원
 	@RequestMapping(value = "/AdminPage/restoreDeletedPost")
-	public ModelAndView restoreDeletedPost(ModelAndView mav, String postId) {
-		
-		int n = dpservice.restoreDeletedPost(postId);
+	public ModelAndView restoreDeletedPost(ModelAndView mav, String postid) {
+		System.out.println("in AdminPostController.restoreDeletedPost");
+		System.out.println(postid);
+		int n = dpservice.restoreDeletedPost(postid);
 		
 		if(n ==1) {
 			System.out.println("성공적으로 복원되었습니다");
