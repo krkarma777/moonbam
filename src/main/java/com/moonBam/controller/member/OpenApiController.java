@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,28 +17,42 @@ import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class OpenApiController {
 
 	@Autowired
 	OpenApiService serv;
-	
+
+	@GetMapping("/forChangeNickname")
+	public ModelAndView changeNickname(String userId){
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("userId", userId);
+		mav.setViewName("member/Login/changeNicknamePage");
+		return mav;
+	}
+
+	@PostMapping("/goToAPILoginPage")
+	public ModelAndView goToAPILoginPage(String userId){
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("userId", userId);
+		mav.setViewName("member/Login/APILogin");
+		return mav;
+	}
+
 	// 닉네임 변경
 	@PostMapping("/changeNickname")
-	public String changeNickname(HttpSession session, MemberDTO dto, String nickname, String clickType) {
-		if(clickType.equals("변경하기")) {
-			MemberDTO nDTO  = serv.selectOneAPIMember(dto.getUserId());
-	        
-	        Map<String, String> map = new HashMap<>();
-	        	map.put("userId", dto.getUserId());
-	        	map.put("nickname", nickname);
-	        
-	        serv.updateAPIMemberNickname(map);
-	        MemberDTO nnDTO  = serv.selectOneAPIMember(dto.getUserId());
-			session.setAttribute("loginUser", dto);
-		} 
-		
+	public String changeNickname(String userId, String nickname) {
+		System.out.println(userId);
+		System.out.println(nickname);
+
+		Map<String, String> map = new HashMap<>();
+			map.put("userId", userId);
+			map.put("nickname", nickname);
+
+		serv.updateAPIMemberNickname(map);
+
 		return "member/Login/apiRegisterSuccess";
 	}
 	

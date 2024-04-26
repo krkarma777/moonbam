@@ -79,5 +79,11 @@ public class QnADTO {
         this.answerdate = answerdate;
     }
 
+	@Override
+	public String toString() {
+		return "QnADTO [qnaid=" + qnaid + ", userid=" + userid + ", cat=" + cat + ", title=" + title + ", text=" + text
+				+ ", postdate=" + postdate + ", answer=" + answer + ", answerdate=" + answerdate + "]";
+	}
+
     
 }

@@ -18,6 +18,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
 	<h2>새로운 비밀번호를 입력하세요!</h2>
 	<form style="width: 300px; height: 300px" method="post" action="UpdatePassword">
 		<input type="hidden" name="userId" value="${userId}">

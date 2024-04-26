@@ -11,9 +11,12 @@
 		select * from scrap where userId =#{userId} and postId=#{postId}
 	</select>
 
-	<select id="findAll" resultType="ScrapDTO" parameterType="String">
-		select * from scrap where USERID = #{userId}
-	</select>
+<select id="findAll" resultType="ScrapDTO" parameterType="String">
+    SELECT s.scrapId, s.userId, s.postId, s.scrapDate, p.postTitle, p.postBoard
+    FROM scrap s
+    JOIN postDB p ON s.postId = p.postId
+    WHERE s.userId = #{userId}
+</select>
 
 	<select id="findById" resultType="ScrapDTO" parameterType="Long">
 		select * from scrap where SCRAPID = #{scrapId}

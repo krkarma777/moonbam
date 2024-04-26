@@ -8,322 +8,16 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%
-MemberDTO member = (MemberDTO) request.getAttribute("member");
-String userId = null;
-String nickname = null;
-if (member != null) {
-	userId = member.getUserId();
-	nickname = member.getNickname();
-}
-
-ContentDTO content = (ContentDTO) request.getAttribute("content");
-
-//예외처리: DB에 contid에 해당하는 데이터가 없을 경우 -> 이전화면으로
-Long contId = content.getContId();
-String contTitle = content.getContTitle();
-String description = content.getDescription();
-String contImg = content.getContImg();
-String releaseDate = content.getReleaseDate();
-if (description == null) {
-	description = "해당 컨텐츠에 대한 설명이 존재하지 않습니다.";
-}
-
-List<CreditDTO> creditList = (List<CreditDTO>) request.getAttribute("creditList");
-
-List<ReviewDTO> reviewList = (List<ReviewDTO>) request.getAttribute("reviewList");
-
-//avgRate 구하기, 별점범위당 갯수 구하기
-List<RateDTO> rateList = (List<RateDTO>) request.getAttribute("rateList");
-int rateAmount = 0;
-if (rateList != null) { //0이 아닐 경우
-	rateAmount = rateList.size();
-}
-//모든 별점 순회
-double sum = 0;
-double[] rateDistribution = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-for (int i = 0; i < rateAmount; i++) {
-	RateDTO rate = rateList.get(i);
-	double score = rate.getScore();
-	sum += score;
-	//별점(score)가 10이면 [9]에 +1증가
-	rateDistribution[(int) score - 1]++;
-}
-
-String avgRate = "리뷰가 존재하지 않습니다.";
-// 별점이 1개 이상일 때
-if (rateAmount > 0) {
-	avgRate = String.format("%.1f", sum / rateAmount / 2);
-}
-%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>문화인들의 밤</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-	crossorigin="anonymous">
-<link rel="stylesheet" href="resources/css/movieHome.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("#allReview").click(function(){
-			location.href="allReview?contId=<%=contId%>";
-		})
-	})
-	
-	//최대글자수
-	var max_length = 200;
+<link rel="stylesheet" href="resources/css/showContent.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 
-	//ready
-	$(document).ready(function(){
-		$("#show_length").text($("#postText").val().length+"/"+max_length); //글자수 표시
-		/* $("#writeReview").on("click", writeReview);  //리뷰작성 */
-		$("#postText").on("keyup", check_length); 	 //글자수 제한
-		$("#postText").on("keypress", check_enter);  //엔터키 제한
-		$(".rate input").on("change", rating)  		//별점 선택
-		$(".like_btn").on("click", likeToggle) 		// 공감버튼 클릭
-		
-		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
-		// console.log("tests")
-		// showCredits();
-		
-		// 별점 막대그래프 높이 설정 함수
-		setAvgGraph();
-		
-	});//ready
-	
-	// 별점 막대그래프 높이 설정 함수
-	function setAvgGraph(){
-		<%for (int i = 0; i < rateDistribution.length; i++) {
-	// 버전1
-	//전체높이 * 해당별점갯수/전체별점갯수
-	//문제: y축이 너무 높아짐
-	//double height = 70*rateDistribution[i]/rateAmount;
-
-	// 버전2
-	//y축 수치값을 (가장 많은 갯수 + 10%)로 설정
-	//전체높이 * 해당별점갯수/(가장 높은 갯수 + 10%)
-	double max = rateDistribution[0];
-	for (double num : rateDistribution) {
-		if (num > max) { //최대값 비교해서 구하기
-			max = num;
-		}
-	}
-	// 70px * (최대값+10%)
-	double height = 120 * rateDistribution[i] / (max * 1.1);
-
-	if (height > 120)
-		height = 120;
-	if (height == 0)
-		height = 2;%>
-			$("#score<%=i + 1%>").css("height", "<%=height%>px");
-			$("#score<%=i + 1%>").css("width", "20px");
-		<%}%>
-	}
-	
-	//화면 로딩시 내 리뷰 표시 함수 
-	function setMyReview(){
-<%-- 		<%
-		//로그인 정보 확인
-		if(login!=null){
-		%> --%>
-		// 화면 최초 생성시 로그인상태+작성했던 리뷰가 있다면 불러와서 표시
-		//내 리뷰 불러오기
-		$.ajax(
-			{
-				type: "get",
-				url:"my-review",
-				data: {
-					"userId": "<%=userId%>",
-					"contId": "<%=contId%>"
-				},
-				dataType: "text",
-				success: function(data, status, xhr){
-					//console.log("성공: " + data);
-					if(data.length>0){
-						var jsonData = JSON.parse(data);
-						$("#postText").text(jsonData.postText);
-						updateMyReview(jsonData)
-						$('#exampleModal').modal('hide');
-						$("#cont_myreview_container").show();
-						//console.log("별점: " + jsonData.score)
-						if(jsonData.score!=null){
-							$("#rating"+jsonData.score).attr("checked", "checked");
-						}
-						$("#reviewBtn").text("수정하기")
-					}else{
-						$("#reviewBtn").text("리뷰쓰기")
-					}
-				},
-				error: function(xhr, status, e){
-					console.log("실패: " + xhr.status);
-				}
-			}//ajax	
-		);//ajax
-<%-- 		<%}%>//if 종료 --%>
-	}
-	
-	// 공감버튼 토글
-	function likeToggle(){
-
-		// 버튼 누른 리뷰의 postId 가져오기
-		var postId = $(this).attr("data-postId");
-		
-		//버튼에 적혀있는 하트 공백제거해서 가져오기
-		var statement = $(this).text().trim();
-		var isLike = 0;
-		//console.log(statement)
-		
-		// 공백하트인지 꽉찬 하트인지 검사해서 반대로 바꾸기
-		if(statement == "♥"){
-			$(this).text("♡");
-			isLike = 0;
-		} else if(statement == "♡"){
-			$(this).text("♥");
-			isLike = 1;
-		}
-		
-		//로그인정보가 있을 때
-		//DB에 비동기 반영
-		<%if (userId != null) {%>
-		
-			$.ajax(
-				{
-					type: "post",
-					url:"like",
-					data: {
-						"userId": "<%=userId%>",
-						"postId": postId,
-						"isLike": isLike
-					},
-					success: function(data, status, xhr){
-						if(isLike==0)
-							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1);
-						else{
-							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1+2);
-						}
-					},
-					error: function(xhr, status, e){
-					}
-				}//json	
-			);//ajax
-		<%}%>//if
-	}
-	
-	// 별점 선택
-	function rating(){
-		$.ajax(
-			{
-				type: "post",
-				url:"score",
-				data: {
-					"userId": "<%=userId%>",
-					"contId": "<%=contId%>",
-					"score": this.value
-				},
-				success: function(data, status, xhr){
-					//console.log("성공: " + data);
-				},
-				error: function(xhr, status, e){
-					//console.log("실패: " + xhr.status);
-				}
-			}		
-		);
-	}
-	
-	// 글자수 제한
-	function check_length(){
-		//console.log(this.value.length);
-		var length = this.value.length;
-		if(length>max_length){
-			this.value = this.value.substr(0, max_length);
-			this.focus();
-		}
-		$("#show_length").text(length+"/"+max_length);
-	}
-	
-	// 엔터키 제한
-	function check_enter(){
-		if(event.keyCode==13){
-			event.returnValue=false;
-		}
-	}
-	
-	// 내 리뷰란 업데이트 함수
-	function updateMyReview(review){
-		$("#myreview_link").attr("href", "review?postId="+review.postId);
-		$("#myreview_user").text("<%=nickname%>");
-		if(review.postText.length>150){
-			$("#myreview_text").text(review.postText.substr(0, 145)+" ...");
-		}else{
-			$("#myreview_text").text(review.postText);
-		}
-		var length = $("#postText").val().length;
-		
-		// 모달창 글자수 처음 세팅
-		$("#show_length").text(length+"/"+max_length);
-	}
-	
-	// 리뷰 작성 완료
-	function writeReview(){
-
-<%-- 		//로그인 정보 확인
-		<%
-		if(login!=null){
-		%> --%>
-		
-		var contId = $("#contId").val();
-		var postText = $("#postText").val().substr(0, max_length);
-		<%-- console.log("리뷰쓰기 테스트 "+contId+" "+postText+" <%=userId%>"+" <%=nickname%>"); --%>
-		//내용이 있을 시만 저장작업 진행 && contId에 null값이 저장되지 않았을 경우에만 진행
-		if(postText.length!=0 && contId !="null"){
-			$.ajax(
-				{
-					type: "post",
-					url:"my-review",
-					data: {
-						"contId": contId,
-						"userId": "<%=userId%>",
-						"nickname": "<%=nickname%>",
-						"postText": postText
-					},
-					dataType: "text",
-					success: function(data, status, xhr){
-						//console.log("성공: " + data);
-						var jsonData = JSON.parse(data);  //text->json
-						updateMyReview(jsonData);         //리뷰 표시 업데이트 함수
-						$('#exampleModal').modal('hide');
-						$("#cont_myreview_container").show();
-						$("#reviewBtn").text("수정하기")
-					},
-					error: function(xhr, status, e){
-						console.log("실패: " + xhr.status);
-					}
-				}//json
-			);//ajax
-		}//내용검사if
-		<%-- <%}%> --%>
-	}//function
-	
-	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-	
-</script>
-<sec:authorize access="isAuthenticared()">
-	<script>
-		$(document).ready(function(){
-			$("#writeReview").on("click", writeReview);  //리뷰작성
-			
-			//화면 로딩시 내 리뷰 표시 함수 
-			setMyReview();
-		});//ready
-	</script>
-</sec:authorize>
 <style>
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
     .rate { display: inline-block;border: 0;margin-right: 15px;}
@@ -451,20 +145,361 @@ if (rateAmount > 0) {
 	user-select: none
 }
 
-#show_length {
-	color: gray;
-	text-align: right;
-}
-
 }
 .del_deco {
 	text-decoration: none;
 	color: black;
 }
 </style>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
+<%
+MemberDTO member = (MemberDTO) request.getAttribute("member");
+String userId = null;
+String nickname = null;
+if (member != null) {
+	userId = member.getUserId();
+	nickname = member.getNickname();
+}
+
+ContentDTO content = (ContentDTO) request.getAttribute("content");
+
+//예외처리: DB에 contid에 해당하는 데이터가 없을 경우 -> 이전화면으로
+Long contId = content.getContId();
+String contTitle = content.getContTitle();
+String description = content.getDescription();
+String contImg = content.getContImg();
+String releaseDate = content.getReleaseDate();
+if (description == null) {
+	description = "해당 컨텐츠에 대한 설명이 존재하지 않습니다.";
+}
+
+List<CreditDTO> creditList = (List<CreditDTO>) request.getAttribute("creditList");
+
+List<ReviewDTO> reviewList = (List<ReviewDTO>) request.getAttribute("reviewList");
+
+//avgRate 구하기, 별점범위당 갯수 구하기
+List<RateDTO> rateList = (List<RateDTO>) request.getAttribute("rateList");
+int rateAmount = 0;
+if (rateList != null) { //0이 아닐 경우
+	rateAmount = rateList.size();
+}
+//모든 별점 순회
+double sum = 0;
+double[] rateDistribution = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+for (int i = 0; i < rateAmount; i++) {
+	RateDTO rate = rateList.get(i);
+	double score = rate.getScore();
+	sum += score;
+	//별점(score)가 10이면 [9]에 +1증가
+	rateDistribution[(int) score - 1]++;
+}
+
+String avgRate = "평점이 존재하지 않습니다.";
+// 별점이 1개 이상일 때
+if (rateAmount > 0) {
+	avgRate = String.format("%.1f", sum / rateAmount / 2);
+}
+%>
+	
+	//최대글자수
+	var max_length = 200;
+
+	//ready
+	$(document).ready(function(){
+		$("#show_length").text($("#postText").val().length+"/"+max_length); //글자수 표시
+		/* $("#writeReview").on("click", writeReview);  //리뷰작성 */
+		$("#postText").on("keyup", check_length); 	 //글자수 제한
+		$("#postText").on("keypress", check_enter);  //엔터키 제한
+		$(".rate input").on("change", rating)  		//별점 선택
+		$(".like_btn").on("click", likeToggle) 		// 공감버튼 클릭
+		$("#allReview").click(function(){
+			location.href="allReview?contId=<%=contId%>";
+		})
+		
+		// ai 요청 이벤트
+		$("#aiForm").on("submit", aiRequest);
+		$("#sample-q1").on("click", aiRequest);
+		$("#sample-q2").on("click", aiRequest);
+		$("#sample-q3").on("click", aiRequest);
+		
+		// 화면 로딩시 배우 정보 로딩 및 뿌려주기
+		// console.log("tests")
+		// showCredits();
+		
+		// 별점 막대그래프 높이 설정 함수
+		setAvgGraph();
+		
+	});//ready
+	
+	
+	// AI 요청 및 응답 출력 함수
+	function aiRequest(e){
+		/* alert("test"); */
+		e.preventDefault();
+		if(this.type=="button"){
+			var prompt = this.innerText;
+		}else{
+			var prompt = $("#prompt").val();
+		}
+		if(prompt.length<=3){
+			alert("3글자 이상 입력해주세요.")
+		} else if (prompt.length>100){
+			alert("100자를 넘을 수 없습니다.")
+		} else{
+			//console.log(prompt);
+			
+			$("#ai-response-context").show();
+			$("#ai-response").text("AI가 요청을 처리중입니다...");
+			$.ajax(
+				{
+					type: "post",
+					url:"chatgpt",
+					data: {
+						"prompt": prompt,
+					},
+					dataType: "text",
+					success: function(data, status, xhr){
+						console.log(data);
+						$("#ai-response").text(data);
+					},
+					error: function(xhr, status, e){
+						console.log("실패: " + xhr.status);
+						$("#ai-response").text("AI가 응답에 실패하였습니다.");
+					}
+				}//ajax	
+			);//ajax
+		}
+	}
+	
+	// 별점 막대그래프 높이 설정 함수
+	function setAvgGraph(){
+		<%for (int i = 0; i < rateDistribution.length; i++) {
+	// 버전1
+	//전체높이 * 해당별점갯수/전체별점갯수
+	//문제: y축이 너무 높아짐
+	//double height = 70*rateDistribution[i]/rateAmount;
+
+	// 버전2
+	//y축 수치값을 (가장 많은 갯수 + 10%)로 설정
+	//전체높이 * 해당별점갯수/(가장 높은 갯수 + 10%)
+	double max = rateDistribution[0];
+	for (double num : rateDistribution) {
+		if (num > max) { //최대값 비교해서 구하기
+			max = num;
+		}
+	}
+	// 70px * (최대값+10%)
+	double height = 120 * rateDistribution[i] / (max * 1.1);
+
+	if (height > 120)
+		height = 120;
+	if (height == 0)
+		height = 2;%>
+			$("#score<%=i + 1%>").css("height", "<%=height%>px");
+			$("#score<%=i + 1%>").css("width", "20px");
+		<%}%>
+	}
+	
+	//화면 로딩시 내 리뷰 표시 함수 
+	function setMyReview(){
+<%-- 		<%
+		//로그인 정보 확인
+		if(login!=null){
+		%> --%>
+		// 화면 최초 생성시 로그인상태+작성했던 리뷰가 있다면 불러와서 표시
+		//내 리뷰 불러오기
+		$.ajax(
+			{
+				type: "get",
+				url:"my-review",
+				data: {
+					"userId": "<%=userId%>",
+					"contId": "<%=contId%>"
+				},
+				dataType: "text",
+				success: function(data, status, xhr){
+					//console.log("성공: " + data);
+					if(data.length>0){
+						var jsonData = JSON.parse(data);
+						$("#postText").html(jsonData.postText);
+						updateMyReview(jsonData)
+						$('#exampleModal').modal('hide');
+						$("#cont_myreview_container").show();
+						//console.log("별점: " + jsonData.score)
+						if(jsonData.score!=null){
+							$("#rating"+jsonData.score).attr("checked", "checked");
+						}
+						$("#reviewBtn").text("수정하기")
+					}else{
+						$("#reviewBtn").text("리뷰쓰기")
+					}
+				},
+				error: function(xhr, status, e){
+					console.log("실패: " + xhr.status);
+				}
+			}//ajax	
+		);//ajax
+<%-- 		<%}%>//if 종료 --%>
+	}
+	
+	// 공감버튼 토글
+	function likeToggle(){
+
+		// 버튼 누른 리뷰의 postId 가져오기
+		var postId = $(this).attr("data-postId");
+		
+		//버튼에 적혀있는 하트 공백제거해서 가져오기
+		var statement = $(this).text().trim();
+		var isLike = 0;
+		//console.log(statement)
+		
+		// 공백하트인지 꽉찬 하트인지 검사해서 반대로 바꾸기
+		if(statement == "♥"){
+			$(this).text("♡");
+			isLike = 0;
+		} else if(statement == "♡"){
+			$(this).text("♥");
+			isLike = 1;
+		}
+		
+		//로그인정보가 있을 때
+		//DB에 비동기 반영
+		<%if (userId != null) {%>
+		
+			$.ajax(
+				{
+					type: "post",
+					url:"like",
+					data: {
+						"userId": "<%=userId%>",
+						"postId": postId,
+						"isLike": isLike
+					},
+					success: function(data, status, xhr){
+						if(isLike==0)
+							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1);
+						else{
+							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1+2);
+						}
+					},
+					error: function(xhr, status, e){
+					}
+				}//json	
+			);//ajax
+		<%}%>//if
+	}
+	
+	// 별점 선택
+	function rating(){
+		$.ajax(
+			{
+				type: "post",
+				url:"score",
+				data: {
+					"userId": "<%=userId%>",
+					"contId": "<%=contId%>",
+					"score": this.value
+				},
+				success: function(data, status, xhr){
+					//console.log("성공: " + data);
+				},
+				error: function(xhr, status, e){
+					//console.log("실패: " + xhr.status);
+				}
+			}		
+		);
+	}
+	
+	// 글자수 제한
+	function check_length(){
+		//console.log(this.value.length);
+		var length = this.value.length;
+		if(length>max_length){
+			this.value = this.value.substr(0, max_length);
+			this.focus();
+		}
+		$("#show_length").text(length+"/"+max_length);
+	}
+	
+	// 엔터키 제한
+	function check_enter(){
+		if(event.keyCode==13){
+			event.returnValue=false;
+		}
+	}
+	
+	// 내 리뷰란 업데이트 함수
+	function updateMyReview(review){
+		$("#myreview_link").attr("href", "review?postId="+review.postId);
+		$("#myreview_user").text("<%=nickname%>");
+		if(review.postText.length>150){
+			$("#myreview_text").html(review.postText.substr(0, 145)+" ...");
+		}else{
+			$("#myreview_text").html(review.postText);
+		}
+		var length = $("#postText").val().length;
+		
+		// 모달창 글자수 처음 세팅
+		$("#show_length").text(length+"/"+max_length);
+	}
+	
+	// 리뷰 작성 완료
+	function writeReview(){
+
+<%-- 		//로그인 정보 확인
+		<%
+		if(login!=null){
+		%> --%>
+		
+		var contId = $("#contId").val();
+		var postText = $("#postText").val().substr(0, max_length);
+		<%-- console.log("리뷰쓰기 테스트 "+contId+" "+postText+" <%=userId%>"+" <%=nickname%>"); --%>
+		//내용이 있을 시만 저장작업 진행 && contId에 null값이 저장되지 않았을 경우에만 진행
+		if(postText.length!=0 && contId !="null"){
+			$.ajax(
+				{
+					type: "post",
+					url:"my-review",
+					data: {
+						"contId": contId,
+						"userId": "<%=userId%>",
+						"nickname": "<%=nickname%>",
+						"postText": postText
+					},
+					dataType: "text",
+					success: function(data, status, xhr){
+						//console.log("성공: " + data);
+						var jsonData = JSON.parse(data);  //text->json
+						updateMyReview(jsonData);         //리뷰 표시 업데이트 함수
+						$('#exampleModal').modal('hide');
+						$("#cont_myreview_container").show();
+						$("#reviewBtn").text("수정하기")
+					},
+					error: function(xhr, status, e){
+						console.log("실패: " + xhr.status);
+					}
+				}//json
+			);//ajax
+		}//내용검사if
+		<%-- <%}%> --%>
+	}//function
+	
+</script>
+<sec:authorize access="isAuthenticared()">
+	<script>
+		$(document).ready(function(){
+			$("#writeReview").on("click", writeReview);  //리뷰작성
+			
+			//화면 로딩시 내 리뷰 표시 함수 
+			setMyReview();
+		});//ready
+	</script>
+</sec:authorize>
 </head>
 
-<body class="bg-light" style="height: 100vh;">
+<body class="bg-light">
 
 	<!-- 네비게이션바 -->
 	<jsp:include page="../common/navBar.jsp"></jsp:include>
@@ -483,15 +518,12 @@ if (rateAmount > 0) {
 			<div style="width: 950px;">
 				<!-- 영화 제목, 개봉일 -->
 				<div style="font-size: 35px; background-color: #ffb2c4; color: white; height: 52px; width: 949px; position: relative;">
-					<b><span style="margin-left: 4px;"> <%
- if (content.getContTitle().length() > 40) {
- %>
-							<%=content.getContTitle().substring(0, 40)%> ... <%
-							} else {
-							%>
-							${content.getContTitle()} <%
- }
- %>
+					<b><span style="margin-left: 4px;"> 
+					<%if (content.getContTitle().length() > 40) { %>
+						<%=content.getContTitle().substring(0, 40)%> ... 
+					<%} else { %>
+						${content.getContTitle()}
+					<%} %>
 					</span></b> 
 					<span style="font-size: 20px; position: absolute; bottom: 0; right: 5px;">개봉일:
 						<%=releaseDate%></span>
@@ -552,6 +584,7 @@ if (rateAmount > 0) {
 							</div>
 						</div>
 						<div style="position: absolute; bottom: 0; right: 1px;">
+							<button type="button" class="btn btn-primary" onclick='$("#AI-CONTEXT").toggle()'>AI</button>
 							<button class="btn"
 								style="background-color: #ff416c; color: white;" id="allReview">리뷰++</button>
 							<button class="btn" id="reviewBtn"
@@ -561,7 +594,35 @@ if (rateAmount > 0) {
 					</div>
 				</div>
 			</div>
-
+		</div>
+		
+		<!-- AI -->
+		<div class="row" id="AI-CONTEXT" style="width:100%; display:none; margin-BOTTOM:15px; margin-TOP:15px; MARGIN-LEFT:10px">
+			<div class="card" style="width: 50rem;">
+			  <div class="card-body">
+			    <h5 class="card-title">AI에게 평가 부탁하기</h5>
+			    <p class="card-text">AI에게 해당 영화에 대해 질문하거나 평가를 부탁할 수 있습니다 !</p>
+			    
+			    <form action="chatgpt" method="post" id="aiForm">
+			    	<div class="input-group mb-3">
+					  <span class="input-group-text" id="inputGroup-sizing-default">요청입력</span>
+					  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="prompt" name="prompt">
+					</div>
+			    </form>
+			    
+			    <div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-bottom:15px">
+				  <button type="button" class="btn btn-outline-secondary" id="sample-q1">${content.contTitle}에 대한 주요 리뷰 요약해 줄 수 있어?</button>
+				  <button type="button" class="btn btn-outline-secondary" id="sample-q2">${content.contTitle} 영화의 재밌는 비하인드 스토리가 있으면 알려줘!</button>
+				  <button type="button" class="btn btn-outline-secondary" id="sample-q3">${content.contTitle} 같은 비슷한 영화 있을까?</button>
+				</div>
+			    
+			    <div class="card" id="ai-response-context" STYLE="display:none;" >
+				  <div class="card-body" id="ai-response">
+				    
+				  </div>
+				</div>
+			  </div>
+			</div>
 		</div>
 
 		<!-- 시놉시스 -->
@@ -573,6 +634,8 @@ if (rateAmount > 0) {
 			<div style="font-size: 15px; margin: 4px;">
 				${content.getDescription() }</div>
 		</div>
+		
+		
 
 		<!-- 배우정보 -->
 		<div style="width: 100%; height: 300px;">
@@ -580,86 +643,50 @@ if (rateAmount > 0) {
 			<div class="carousel-container">
 				<div class="carousel-slide">
 					<div class="inner" id="lastClone">
-						<%
-						for (int i = creditList.size() - 6; i < creditList.size(); i++) {
-						%>
+						<%for (int i = creditList.size() - 6; i < creditList.size(); i++) { %>
 						<div style="width: 201px; height: auto;">
-							<%
-							if (null == creditList.get(i)) {
-							%>
+							<%if (null == creditList.get(i)) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								width="197px">
-							<%
-							} else {
-							%>
+							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
 								width="197px" height="296px">
-							<%
-							}
-							%>
+							<%} %>
 						</div>
-						<%
-						}
-						%>
+						<%} %>
 					</div>
 
-					<%
-					int count = 0;
-					for (int i = 0; i < (creditList.size() / 6); i++) {
-					%>
-					<div class="inner">
-						<%
-						for (int j = 0; j < 6; j++) {
-						%>
-						<div style="width: 201px; height: auto;">
-							<%
-							if (null == creditList.get(count)) {
-							%>
+					<%int count = 0;
+					for (int i = 0; i < (creditList.size() / 6); i++) { %>
+						<div class="inner">
+						<%for (int j = 0; j < 6; j++) { %>
+							<div style="width: 201px; height: auto;">
+							<%if (null == creditList.get(count)) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								height="296px" width="197px" style="bottom: 0px;">
-							<%
-							} else {
-							%>
+							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(count).getProfile_path()%>"
 								width="197px" height="296px">
-							<%
-							}
-							%>
+							<%} %>
 						</div>
-						<%
-						count++;
-						}
-						%>
+						<%count++; }%>
 					</div>
-					<%
-					}
-					%>
-
+					<%} %>
 					<div class="inner" id="firstClone">
-						<%
-						for (int i = 0; i < 6; i++) {
-						%>
+						<%for (int i = 0; i < 6; i++) { %>
 						<div style="width: 201px; height: auto;">
-							<%
-							if (null == creditList.get(i)) {
-							%>
+							<%if (null == creditList.get(i)) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								width="197px">
-							<%
-							} else {
-							%>
+							<%} else { %>
 							<img class="innerImage" alt="resource/images/person-x.svg"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
 								width="197px" height="296px">
-							<%
-							}
-							%>
+							<%} %>
 						</div>
-						<%
-						}
-						%>
+						<%} %>
 					</div>
 				</div>
 				<button id="prevBtn">
@@ -698,19 +725,17 @@ if (rateAmount > 0) {
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">취소</button>
 					<!-- <button type="button" class="btn btn-primary" id="writeReview">Save changes</button> -->
-					<button type="button" class="btn" id="writeReview" style="background-color: #ff416c; color:white;"
-						data-bs-toggle="popover" data-bs-title="알림"
-						data-bs-content="로그인이 필요한 작업입니다">완료</button>
+					<button type="button" class="btn" style="background-color: #ff416c; color:white;" id="writeReview" data-bs-toggle="popover" data-bs-title="알림" data-bs-content="로그인이 필요한 작업입니다">완료</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-		crossorigin="anonymous"></script>
-	<script type="text/javascript">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script type="text/javascript">
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 //캐러셀
 const carouselSlide = document.querySelector('.carousel-slide');
 const carouselImages = document.querySelectorAll('.inner');
@@ -745,6 +770,7 @@ carouselSlide.addEventListener('transitionend', () => {
 		carouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
 	}
 });
+
 </script>
 </body>
 </html>

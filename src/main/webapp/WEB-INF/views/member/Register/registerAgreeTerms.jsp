@@ -16,6 +16,10 @@
 </head>
 <body>
 
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
     <div class="container">
     
         <h1>약관 동의 페이지</h1>

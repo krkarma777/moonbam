@@ -26,6 +26,7 @@ public class CommunityEnterOutService {
 		// TODO Auto-generated method stub
 		int num1 = 0;
 		int num2 = 0;
+		
 		//chatmember에 insert
 		num1 = comEnterOutDAO.chatMemberEnterInsert(chatMemberInsertMap);
 		System.out.println("chatMemberEnterInsert 정상 진행");

@@ -11,6 +11,7 @@ public class MovieResponseDTO {
         private int total_results;
         private List<MovieResultResponseDTO> results;
         
+        
 		public int getPage() {
 			return page;
 		}

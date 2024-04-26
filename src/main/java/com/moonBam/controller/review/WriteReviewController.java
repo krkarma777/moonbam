@@ -26,13 +26,14 @@ public class WriteReviewController {
 	@RequestMapping(value="my-review", method=RequestMethod.POST)
 	@ResponseBody
 	public String writeReview(ReviewDTO review, Principal principal, HttpSession session) {
-		
+		System.out.println("1111111111111111111");
 		// 세션에서 로그인 정보 파싱
 		MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 		
 		String jsonText = null;
 		//로그인 정보가 존재하지 않을 때
 		if(loginUser==null) {
+			System.out.println("Asdasdasdas");
 			session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
 			
 		// 로그인 정보가 존재할 때

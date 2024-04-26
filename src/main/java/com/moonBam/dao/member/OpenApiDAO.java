@@ -25,7 +25,6 @@ public class OpenApiDAO {
 
 	public void updateAPIMemberNickname(Map<String, String> map) {
 		session.update("updateAPIMemberNickname", map);
-		
 	}
 
 	public void updateAPIMemberGoogleConnected(String userId) {

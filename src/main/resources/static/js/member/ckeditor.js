@@ -1,16 +1,11 @@
 ClassicEditor 
 
-    .create( document.querySelector( '#txtContent' ) ) 
+    .create( document.querySelector( '#txtContent' ), {
 
-    .then( editor => { 
+        language: "ko",
+        ckfinder : {
 
-        console.log( editor ); 
-
-    } ) 
-
-    .catch( error => { 
-
-        console.error( error ); 
-
-    } );
-
+            uploadUrl: "/acorn/image/upload",
+            withCredentials: true
+        }
+    } )

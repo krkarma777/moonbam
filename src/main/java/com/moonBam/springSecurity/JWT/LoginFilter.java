@@ -33,7 +33,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
     	userIdSave = request.getParameter("userIdSave");
-    	
     	System.out.println("LoginFilter: 아이디 저장: " + userIdSave);				//체크되면 on
     	
 		//클라이언트 요청에서 username, password 추출
@@ -41,7 +40,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     	// String password = obtainPassword(request);
     	String username = request.getParameter("userId");
     	String password = request.getParameter("userPw");
-        System.out.printf("LoginFilter: Username: "+ username+" Password: "+ password);
+        //System.out.printf("LoginFilter: Username: "+ username+" Password: "+ password);
 
 		//스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);

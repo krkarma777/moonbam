@@ -26,21 +26,28 @@ order by REPORTID asc
     </select>
     
 <select id = "ReportedMemberList" resultType = "AdminReportDTO" parameterType = "HashMap">
-    	select userid, sum(lang) lang, sum(sexual) sexual, sum(abusing) abusing,
-    	 sum(ruleviolation) ruleviolation, sum(etc) etc from adminreported  
+    	SELECT 
+		    userid,
+		    SUM(CASE WHEN lang = 't' THEN 1 ELSE 0 END) AS lang,
+		    SUM(CASE WHEN sexual = 't' THEN 1 ELSE 0 END) AS sexual,
+		    SUM(CASE WHEN abusing = 't' THEN 1 ELSE 0 END) AS abusing,
+		    SUM(CASE WHEN ruleviolation = 't' THEN 1 ELSE 0 END) AS ruleviolation,
+		    SUM(CASE WHEN etc = 't' THEN 1 ELSE 0 END) AS etc
+		FROM 
+		    adminreported
 	<choose>
 	<when test = "criteria == 'userid'" >
 		where userid like '%'||#{SearchValue}||'%'
 	</when>
 	</choose>
 	group by userid
-
 </select>
+
 	
 <delete id = "delReportedPost" parameterType = "list">
  delete 
- from adminreported
- where targetId in
+ from postdb
+ where postid in
  <foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
  #{item}
  </foreach>
@@ -52,7 +59,7 @@ order by REPORTID asc
 	select *from POSTDB 
 	where postid in 
 	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
-		#{item}
+		'${item}'
 	</foreach>
 </select>
 
@@ -67,13 +74,25 @@ order by REPORTID asc
 </select>
 
 <!-- 신고 처리 후 신고처리됨 처리 -->
-<update id="reportDone">
-	update adminreported set action = "yes" where reportid in 
-	where reportid in 
+<update id="reportDone" parameterType = "list">
+	update adminreported set action = 'yes' 
+	where targetid in 
 	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
  	#{item}
  	</foreach>
 </update>
+
+<select id = "getUndone" resultType = "AdminReportDTO">
+	SELECT 
+	    SUM(CASE WHEN lang = 't' THEN 1 ELSE 0 END) AS lang,
+	    SUM(CASE WHEN sexual = 't' THEN 1 ELSE 0 END) AS sexual,
+	    SUM(CASE WHEN abusing = 't' THEN 1 ELSE 0 END) AS abusing,
+	    SUM(CASE WHEN ruleviolation = 't' THEN 1 ELSE 0 END) AS ruleviolation,
+	    SUM(CASE WHEN etc = 't' THEN 1 ELSE 0 END) AS etc
+	FROM 
+	    adminreported
+    where action = 'no'
+</select>
 	
 	
 </mapper>

@@ -14,6 +14,11 @@
 </head>
 
 <body>
+
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
     <div class="notFound">
         <h1>권한 없음</h1>
         <p class="mesg">해당 페이지는 제한된 페이지입니다. <br>

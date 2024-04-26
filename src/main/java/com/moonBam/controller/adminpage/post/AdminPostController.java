@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AdminDeletedPostDTO;
 import com.moonBam.dto.AdminReportDTO;
+import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.adminpage.AdminDeletedPostService;
 import com.moonBam.service.adminpage.AdminReportService;
 
@@ -23,6 +24,7 @@ public class AdminPostController {
 	
 	@Autowired
 	AdminDeletedPostService dpservice;
+	
 	
 	//신고글 리스트 조회
 	@RequestMapping(value = "/AdminPage/AdminPostReported")
@@ -51,6 +53,7 @@ public class AdminPostController {
 		System.out.println("in adminpage.post.DeletePost");
 		System.out.println("어드민 페이지 신고글 삭제 기능");
 		System.out.println("1. 삭제할 글의 id list로 출력");
+		
 		List<String> deletelist = Arrays.asList(postArr);
 		System.out.println(deletelist);
 		int n = rservice.delReportedPost(deletelist);
@@ -76,7 +79,7 @@ public class AdminPostController {
 			map.put("criteria", Criteria);
 			System.out.println("2. 서비스 레이어에 검색조건 전달");
 			List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
-			System.out.println("in controller");
+			System.out.println("jsp 페이지로 전달할 list");
 			System.out.println(list);
 			mav.addObject("list", list);
 		mav.setViewName("/AdminPage/AdminPageDeletedPost");
@@ -85,6 +88,24 @@ public class AdminPostController {
 	}
 	
 	//삭제된 게시글 완전삭제
+	//@Scheduled(cron = "0 0 0 1 1 *")
+	public void cleanDeletedPost() {
+		dpservice.cleanDeletedPost();
+	}
+	
+	//삭제된 게시글에서 복원
+	@RequestMapping(value = "/AdminPage/restoreDeletedPost")
+	public ModelAndView restoreDeletedPost(ModelAndView mav, String postId) {
+		
+		int n = dpservice.restoreDeletedPost(postId);
+		
+		if(n ==1) {
+			System.out.println("성공적으로 복원되었습니다");
+		}else {
+			System.out.println("복원실패");
+		}
+		return mav;
+	}
 	
 	//삭제된 댓글 조회
 	@RequestMapping(value = "/AdminPage/AdminPageDeletedComment")

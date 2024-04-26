@@ -13,12 +13,13 @@
 <%
 //1. 국내영화/해외영화 구분해서 가져와야함.(이건 api 바꿔야하긴 함)
 //2. 더보기 태그 국내 영화 해외영화 바꿔야함(1번이 되면 가능)
-List<PostPageDTO> movieList = (List<PostPageDTO>)request.getAttribute("movieList");
-System.out.println(movieList.size());
-List<PostPageDTO> movieMeetList = (List<PostPageDTO>) request.getAttribute("movieMeetList");
-List<PostPageDTO> movieInfoList = (List<PostPageDTO>) request.getAttribute("movieInfoList");
+List<PostPageDTO> movieList = (List<PostPageDTO>)session.getAttribute("movieList");
 ContentDataFormating cdf = new ContentDataFormating();
-List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTopList");
+List<ContentDTO> movieTopList = (List<ContentDTO>) session.getAttribute("movieTopList");
+List<ContentDTO> genreMovieTopList = (List<ContentDTO>) session.getAttribute("genreMovieTopList");
+
+String genre = (String)request.getAttribute("genre");
+System.out.println("in movieHome.jsp: "+genre);
 
 List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList");
 
@@ -44,63 +45,75 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 <div style="height: 910px; width: 1200px; margin: auto;">
 	
 	<!-- 신작 영화 순위 -->
-	<div style="background-color: #ffb2c4; height: 30px; width:1199px; font-size: 19px; ">
+	<div style="background-color: #ffb2c4; height: 30px; width:1200px; font-size: 19px; ">
 		<b>
 		<span style="float: left; color:white">
-			<a href="" style="color:white;">박스 오피스</a>
+			&nbsp;최신 영화
 		</span>
 		<span style="float: right; color:white">
-			<!-- <a href="movieSearch" style="color:white;" >더보기</a> -->
+			<a href="movieSearch" style="color:white; float: rigth;">더보기</a>&nbsp;
 		</span>
 		</b>
 	</div>
 	<div class="carousel-container">
 		<div class="carousel-slide">
 			<div class="inner" id="lastClone">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
+				<%for (int i = 6; i <= movieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
 					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner">
-				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
-				<div style="width: 201px; height:auto;">
+				<%for (int i = 1; i <= movieTopList.size() - 5; i++) { %>
+				<div style="height:auto;" class="poster">
 					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			
 			<div class="inner">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
+				<%for (int i = 6; i <= movieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
 					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			
 			<div class="inner" id="firstClone">
 				<%
-				for (int i = 1; i <= movieTopList.size() - 6; i++) {
+				for (int i = 1; i <= movieTopList.size() - 5; i++) {
 				%>
-				<div style="width: 201px; height:auto;">
+				<div style="height:auto;" class="poster">
 					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
 							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
@@ -117,56 +130,69 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 	
 	<!-- 영화 순위(태그) -->
 	<!-- 아직 구현되지는 않음. 영화 데이터 가져오는 것 중에 장르가 없어서. -->
-	<div style="background-color: #ffb2c4; margin-top: 4px; height: 30px; width:1199px; font-size: 19px;">
+	<div style="background-color: #ffb2c4; margin-top: 4px; height: 30px; width:1200px; font-size: 19px; color:white;">
 		<b>
-		<a href="" style="color:white;">#드라마</a>
-		<a href="" style="color:white;">#코미디</a>
-		<a href="" style="color:white;">#스릴러</a>
+		&nbsp;#<a href="genre?genre=Drama" class="" style="color:white;">드라마</a>
+		#<a href="genre?genre=Comedy" class="" style="color:white;">코미디</a>
+		#<a href="genre?genre=Thriller" class="" style="color:white;">스릴러</a>
+		<a href="movieSearch?searchCategory=<%=genre %>" style="color:white; float:right;">더보기&nbsp;</a>
 		</b>
 	</div>
 	<div class="carousel-container2">
 		<div class="carousel-slide2">
 			<div class="inner2" id="lastClone2">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 6; i <= genreMovieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner2">
-				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 1; i <= genreMovieTopList.size() - 5; i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner2">
-				<%for (int i = 7; i <= movieTopList.size(); i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 6; i <= genreMovieTopList.size(); i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
 			<div class="inner2" id="firstClone2">
-				<%for (int i = 1; i <= movieTopList.size() - 6; i++) { %>
-				<div style="width: 201px; height:auto;">
-					<a href="showContent?contId=<%=movieTopList.get(i - 1).getContId()%>">
+				<%for (int i = 1; i <= genreMovieTopList.size() - 5; i++) { %>
+				<div style="height:auto;" class="poster">
+					<a href="showContent?contId=<%=genreMovieTopList.get(i - 1).getContId()%>">
 						<img class="innerImage"
-							src="http://image.tmdb.org/t/p/w342<%=movieTopList.get(i - 1).getContImg()%>"
+							src="http://image.tmdb.org/t/p/w342<%=genreMovieTopList.get(i - 1).getContImg()%>"
 							width="197px" height="296px">
 					</a>
+					<div class="rank index-label">
+						<%=i %>
+					</div>
 				</div>
 				<%}	%>
 			</div>
@@ -187,13 +213,11 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 			<table style="width: 1200px">
 				<tr style="background-color: #ffb2c4; height: 30px; width:1200px;">
 					<th colspan="2">
-						<a href="/acorn?cg=movie" style="color:white">&nbsp국내영화</a>
-						<span style="color:white">/</span>
-						<a href="/acorn/board/movie" style="color:white">해외영화</a>
-						<!-- 국내 영화 해외영화 나눠야함 -->
+						<span style="color:white">&nbsp;영화게시판</span>
 						<span style="float: right;"><a href="/acorn/board/movie" style="color:white;">더보기&nbsp</a></span>
 					</th>
 				</tr>
+				<div id="genreList">
 				<tr>
 					<td>
 					<%int count = 0;
@@ -234,6 +258,7 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 					<%count++;} %>
 					</td>
 				</tr>
+				</div>
 			</table>
 		</div>
 	</div>
@@ -250,10 +275,8 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 <script type="text/javascript">
 	$(document).ready(function(){
 		
-		
-		
 	})
-		
+	
 	<!-- 신작 영화 순위 용 -->
 	const carouselSlide = document.querySelector('.carousel-slide');
 	const carouselImages = document.querySelectorAll('.inner');
@@ -282,7 +305,6 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 
 	// Jump to First/Last Slide
 	carouselSlide.addEventListener('transitionend', () => {
-		console.log(carouselImages[counter]);
 		if (carouselImages[counter].id === 'lastClone') {
 			carouselSlide.style.transition = 'none'; // 트랜지션 효과 없애기
 			counter = carouselImages.length - 2; // couter 초기화
@@ -322,7 +344,6 @@ List<JSONObject> dailyList = (List<JSONObject>)session.getAttribute("dailyList")
 
 	// Jump to First/Last Slide
 	carouselSlide2.addEventListener('transitionend', () => {
-		console.log(carouselImages2[counter]);
 		if (carouselImages2[counter2].id === 'lastClone2') {
 			carouselSlide2.style.transition = 'none'; // 트랜지션 효과 없애기
 			counter2 = carouselImages2.length - 2; // couter 초기화

@@ -30,7 +30,7 @@
 </style>
 </head>
 <body>
-	<form id="popupForm">
+	<form id="popup${dto.annoNum}">
 		<table border="1">
 			<!-- top for title -->
 			<tr>
@@ -59,12 +59,30 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			// "닫기" 버튼 클릭 시 창 닫기
-			$("#close").on("click", function() {
-				window.close();
-			});
-		});
-	</script>
+    $(document).ready(function() {
+        // "닫기" 버튼 클릭 시 창 닫기
+        $("#close").on("click", function() {
+            window.close();
+        });
+
+        // "오늘 하루 보지 않기" 체크박스 클릭 시 쿠키 설정
+        $("#closeToday").on("click", function() {
+            if ($(this).prop("checked")) {
+                // 현재 날짜를 가져와서 24시간 뒤의 날짜를 계산
+                var expiresDate = new Date();
+                expiresDate.setDate(expiresDate.getDate() + 1);
+
+                // 쿠키 만료 날짜를 설정
+                var expires = "expires=" + expiresDate.toUTCString();
+
+                // 쿠키 설정
+                document.cookie = "popup"+${dto.annoNum}+"=true; " + expires + "; path=/";
+            } else {
+                // 체크 해제 시 쿠키 삭제
+                document.cookie = "popup"+${dto.annoNum}+"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -41,14 +41,6 @@ public class AdminMemberDTO {
 		this.usersigndate = usersigndate;
 		this.usertype = usertype;
 	}
-	@Override
-	public String toString() {
-		return "MemberDTO [userid=" + userid + ", userpw=" + userpw + ", username=" + username + ", userssn=" + userssn
-				+ ", userssn2=" + userssn2 + ", usergender=" + usergender + ", nickname=" + nickname
-				+ ", userphonenum1=" + userphonenum1 + ", userphonenum2=" + userphonenum2 + ", userphonenum3="
-				+ userphonenum3 + ", usermailid=" + usermailid + ", usermaildomain=" + usermaildomain
-				+ ", usersigndate=" + usersigndate + ", usertype=" + usertype + "]";
-	}
 	public String getUserid() {
 		return userid;
 	}

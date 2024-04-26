@@ -17,6 +17,10 @@
 
 <body>
 
+<div id="header">
+	<jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+<div class = "body">
 	<div class="container">
 		<h1>회원가입</h1>
 		<form id="registerForm" action="<c:url value='/InsertData'/>" method="post">
@@ -53,7 +57,7 @@
 			<button id="register_button" type="submit">가입</button>
 		</form>
 	</div>
-
+</div>
 
 	<script type="text/javascript">
 	
@@ -257,11 +261,12 @@
 		$("#registerForm").submit(function(event) {
 			return validateForm(event);
 		});
-		
+
 		function validateForm(event) {
 			
 		    var errorMessage = ""; // 에러 메시지를 저장할 변수
 
+			//문구 출력 및 문구 확인
 		    switch(true) {
 			    case $("#confirmUserEmailError").text() != "" && $("#confirmRestoreUserEmailIdError").text() != "":
 		            errorMessage = "이메일 입력 오류입니다. 처음부터 다시 진행해주세요.";

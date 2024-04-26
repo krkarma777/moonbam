@@ -14,9 +14,20 @@
 </head>
 
 <body>
+
+<div id="header">
+    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
+</div>
+
     <div class="notFound">
         <h1>잘못된 접근입니다.</h1>
-        <p class="mesg">비정상적인 접근입니다. 회원정보를 다시 입력해주시기 바랍니다.</p>
+        <p class="mesg">
+            비정상적인 접근입니다. 회원정보를 다시 입력해주시기 바랍니다.<br>
+        </p>
+        <p>
+            모종의 이유로 정상적인 접근에도 해당 페이지가 출력될 수 있습니다.<br>
+            정상적인 사이트 이용에도 해당 페이지가 계속 출력된다면 관리자에게 문의 부탁드립니다.
+        </p>
         <div id="sitesShortCut">
 	        <a href="<%=request.getContextPath()%>/mainLogin" class="links">로그인</a>
             <a href="${pageContext.request.contextPath}/FindInfo" class="links">회원정보 찾기</a>
