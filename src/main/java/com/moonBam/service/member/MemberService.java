@@ -88,6 +88,11 @@ public class MemberService {
 	    return num;
 	}
 
+	public int scrapDel(Long scrapId) {
+		int n = dao.scrapDel(scrapId);
+		return n;
+	}
+
 
 
 }

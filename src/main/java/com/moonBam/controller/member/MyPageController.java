@@ -91,7 +91,37 @@ public class MyPageController {
         }
         return "redirect:/my-page/scrap";
     }
-
+    @PostMapping("/scrapDel")
+    public String scrapDel(Principal principal, @RequestParam("scrapId") Long scrapId,
+    		 RedirectAttributes redirectAttributes) {
+    	 MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+         if (loginUser != null) {
+             // postId에 해당하는 게시물을 삭제합니다.
+        	  int result =  mserv.scrapDel(scrapId);
+        	  System.out.println(result);
+              return "redirect:/my-page/scrap";
+         } else {
+             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
+             return "redirect:/Login";
+         }
+    }
+    
+    @PostMapping("/delAllScraps")
+    public String delAllScraps(Principal principal, @RequestBody List<Long> allScrapIds, RedirectAttributes redirectAttributes) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        if (loginUser != null) {
+            for (Long scrapId : allScrapIds) {
+                System.out.println("Deleting scrap with ID: " + scrapId);
+                // postId를 사용하여 해당 게시물 삭제 로직 수행
+                mserv.scrapDel(scrapId);
+            }
+            return "redirect:/my-page/scrap"; // 모든 게시물 삭제 후에 리다이렉트
+        } else {
+            redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+    }
+    
     @GetMapping
     public String myPage(Model model, Principal principal) {
         return "member/myPage/MyPageTemplate";

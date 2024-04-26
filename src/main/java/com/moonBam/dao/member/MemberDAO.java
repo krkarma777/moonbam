@@ -116,4 +116,9 @@ public int checkCommentsExist(Long postId) {
 	int num = session.selectOne("checkCommentsExist", postId);
     return num;
 }
+
+public int scrapDel(Long scrapId) {
+	int num = session.delete("ScrapMapper.delete",scrapId);
+	return num;
+}
 }

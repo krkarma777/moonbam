@@ -53,8 +53,11 @@
                        <td><a href="/acorn/board/content?postId=${scrap.postId}&bn=${scrap.postBoard}">${scrap.postTitle}</a></td>
                         <td><fmt:formatDate value="${scrap.scrapDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
-                                <a href="/acorn/my-page/scrap/${scrap.scrapId}" class="btn btn-danger">삭제</a>
-                        </td>
+                        <form action="<c:url value='/my-page/scrapDel'/>" method="post">
+                <input type="hidden" name="scrapId" value="${scrap.scrapId}">
+                <button type="submit" class="btn btn-danger delBtn">삭제</button>
+            </form>
+                </td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -80,10 +83,10 @@ $(document).ready(function() {
     // 선택 삭제 버튼 클릭 시 선택된 게시물 삭제
     $("#deleteSelectedBtn").click(function() {
         $(".scrapCheckbox:checked").each(function() {
-            var postId = $(this).val();
+            var scrapId  = $(this).val();
             // 선택된 게시물 삭제
             $.ajax({
-                url: "<c:url value='/my-page/scrap/{scrapId}'/>",
+                url: "<c:url value='/my-page/scrapDel'/>",
                 type: "POST",
                 data: { scrapId: scrapId },
                 success: function(response) {
@@ -107,10 +110,10 @@ $(document).ready(function() {
     // 전체 삭제 버튼 클릭 시 모든 게시물 삭제
     $("#deleteAllBtn").click(function() {
         // 모든 게시물의 postId를 담을 배열
-        var allPostIds = [];
+        var allScrapIds = [];
 
         // 각 게시물의 postId를 배열에 추가
-        $(".postCheckbox").each(function() {
+        $(".scrapCheckbox").each(function() {
             var scrapId = $(this).val();
             allScrapIds.push(scrapId);
         });
