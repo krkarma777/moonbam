@@ -75,16 +75,22 @@ public class MainController {
                 put("postCount", "5");
             }
         });
-
-        // popup
-        List<Integer> list = annoService.popupNnumList("popup");
-      	
+      
+        // popup get popup num list
+        String cate = (category == null) ? "main" : category;
+        List<Integer> list = annoService.popupNnumList(new HashMap<String, String>() {
+            {
+                put("popup", "on");
+                put("category", cate);
+            }
+        });
+        
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);
+      
         // popup
         model.addAttribute("list", list);
-        
         List<String> categoryList = new ArrayList<>();;
         
         if (category != null) {
@@ -95,7 +101,6 @@ public class MainController {
                 session.setAttribute("movieList", moviePostList);
                 session.setAttribute("movieMeetList", movieMeetList);
                 session.setAttribute("movieInfoList", movieInfoList);
-                model.addAttribute("list", annoService.popupNnumList("popup"));
 	    		List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
 	    		session.setAttribute("dailyList", dailyList);
 
@@ -141,6 +146,7 @@ public class MainController {
                 break;
             }
         }
+        
         return nextPage;
     }
 
