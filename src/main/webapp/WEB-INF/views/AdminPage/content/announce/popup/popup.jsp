@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
+	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 
 <html>
@@ -13,25 +13,25 @@
 	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
 	crossorigin="anonymous">
 <style>
-	 * {
-       margin: 0;
-       padding: 0;
-    }
+* {
+	margin: 0;
+	padding: 0;
+}
 
-    #popupForm table {
-    	width: 100%;
-        height: 100vh; /* 테이블의 높이도 폼 요소와 동일하게 설정합니다. */
-    }
-    #date {
-    	text-align: center;
-    	font-size: 11px;
-    }
-    
+#popupForm table {
+	width: 100%;
+	height: 100vh; /* 테이블의 높이도 폼 요소와 동일하게 설정합니다. */
+}
+
+#date {
+	text-align: center;
+	font-size: 11px;
+}
 </style>
 </head>
 <body>
-	<form id="popupForm">
-	<table border="1">
+	<form id="popup${dto.annoNum}">
+		<table border="1">
 			<!-- top for title -->
 			<tr>
 				<th colspan="2">${dto.annoTitle }</th>
@@ -44,42 +44,45 @@
 			<tr>
 				<td colspan="2" style="text-align: center; height: 50%;">${dto.annoText }</td>
 			</tr>
-			
+
 			<!-- bottom for close -->
 			<tr>
 				<td colspan="2" style="text-align: right;">
-					<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
-        onclick="window.open('', '_self', ''); window.close();">닫기</button></td>
+					<input type="checkbox" value="closeToday" id='closeToday'>오늘 하루 않보기
+					<button type="button" id="close" class="btn"
+						style="float: right; background-color: #ff416c; color: white; margin-left: auto;">닫기</button>
+				</td>
 			</tr>
 		</table>
 	</form>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-$(function (){
-	event.preventDefault();
-}
-$("#close").on("click", function() {
-	window.close();
-});
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script>
+    $(document).ready(function() {
+        // "닫기" 버튼 클릭 시 창 닫기
+        $("#close").on("click", function() {
+            window.close();
+        });
 
+        // "오늘 하루 보지 않기" 체크박스 클릭 시 쿠키 설정
+        $("#closeToday").on("click", function() {
+            if ($(this).prop("checked")) {
+                // 현재 날짜를 가져와서 24시간 뒤의 날짜를 계산
+                var expiresDate = new Date();
+                expiresDate.setDate(expiresDate.getDate() + 1);
 
-/* 능력밖ㄲㄲㄲㄲㄲㄲㄲㄲ */
-/* //창 크기를 고정하는 코드
-$(document).ready(function() {
-    var screenWidth = window.screen.availWidth;
-    var screenHeight = window.screen.availHeight;
-    
-    // 팝업 창 크기 설정
-    var popupWidth = screenWidth / 4; // 전체 화면 폭의 80%로 설정
-    var popupHeight = screenHeight / 3; // 전체 화면 높이의 80%로 설정
-    window.resizeTo(popupWidth, popupHeight);
-    
-    // 사용자가 창 크기를 변경하지 못하도록 설정
-    $(window).resize(function() {
-        window.resizeTo(popupWidth, popupHeight);
+                // 쿠키 만료 날짜를 설정
+                var expires = "expires=" + expiresDate.toUTCString();
+
+                // 쿠키 설정
+                document.cookie = "popup"+${dto.annoNum}+"=true; " + expires + "; path=/";
+            } else {
+                // 체크 해제 시 쿠키 삭제
+                document.cookie = "popup"+${dto.annoNum}+"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+        });
     });
-}); */
 </script>
 </body>
 </html>
