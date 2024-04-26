@@ -125,7 +125,7 @@ public class ChatRoomController {
 		
 	}
 	
-	//DB check 입장 승인할지 말지 결정 (chatNum, UserId 일치여부 확인)
+	//DB check 입장 승인할지 말지 결정 (chatNum, UserId, 강퇴여부f 일치여부 확인)
 	@RequestMapping("/chatRoom/enter")
 	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum, HttpSession session, Model model ) {
 		String str = (String) session.getAttribute("userIdInSession");
@@ -175,6 +175,7 @@ public class ChatRoomController {
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
+	@ResponseBody ///////ajax처리
 	public String chatRoomOut(@RequestParam("chatNum") int chatNum, HttpSession session, Principal principal) {
 	//form data로 받아온 값 2개로 chatMember table에서 delete 진행
 	
@@ -186,60 +187,60 @@ public class ChatRoomController {
 	chatMemberDeleteMap.put("chatNum", chatNum);
 	System.out.println("chatMemberDeleteMap   "+chatMemberDeleteMap);
 	
-	
-	String returnWhere = "";
+	String returnAjax = ""; 
 	
 	ChatRoomDTO cdto = chatRoomSelectBychatNum(chatNum);
 	System.out.println("리더id = "+cdto.getLeaderId());
 	
-	if(cdto.getLeaderId().equals(userId)) { //나가려는 사람의 id와 방의 리더id가 동일할경우 나가기 금지
+	if(cdto.getLeaderId().equals(userId)) { //나가려는 사람의 id와 방의 리더id가 동일할경우 나가기 금지 / 새로고침
 		 
 		session.setAttribute("mesg", "방장은 방을 나갈 수 없습니다. 방장 위임 후 다시 시도해주세요.");
-		returnWhere = "redirect:/Chatmore?chatNum="+chatNum;		
+		returnAjax = "failToOut";
 		
 	}else { //리더가 아닌 사람이 나갈 경우
-		
 		
 		
 		try {
 			
 			int currntNow = cdto.getCurrentNow(); //현재 인원수 table에서 가져옴 
+			int minusCurrntNow = currntNow-1;
 			
 			Map<String, Integer> chatRoomRecordNumMap = new HashMap<>();
-			chatRoomRecordNumMap.put("currntNow", (currntNow-1)); //현재 인원 수에서 -1 한 것을 map에 저장
+			chatRoomRecordNumMap.put("currntNow", minusCurrntNow); //현재 인원 수에서 -1 한 것을 map에 저장
 			chatRoomRecordNumMap.put("chatNum", chatNum);
-		
+			
+			if(minusCurrntNow > 0) { //현재 인원이 0 아래로 안 내려가게 유지.
+				
+				int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap,chatRoomRecordNumMap);
+				
+				returnAjax = "successToOut"	; //정상
+				
+				//System.out.println("확인:::::::::::"+deletNum);
+				
+				
+			}else {
+				
+				session.setAttribute("mesg", "방을 나갈 수 없습니다. 본인이 방의 마지막 인원이라면 방을 나갈 수 없습니다. 모임 날짜로부터 3일이 경과한 채팅방은 자동 삭제 됩니다.");
+				returnAjax = "failToOut";
+			
+			}//if(minusCurrntNow > 0)의 else종료
+			
+	
 			//chatMember에 delete 하고 chatRoom의 currntNow(현재 인원 수)에 -1 업데이트 tx묶여있음
-			int deletNum = comEnterOutService.chatMemberDeleteBychatNumAndUserId(chatMemberDeleteMap,chatRoomRecordNumMap);
 			
-			
-			//정상진행 시 커뮤니티 홈으로 진입 -> 그런데 잘 delete처리 돼서 목록에 없는지 확인하기 위해 /chatRoom/enter로 리다이렉트
-			//만약 잘 지워졌다면 검수 기능으로 인해 커뮤니티 홈으로 가게 될 것임	
-			session.setAttribute("mesg", "방을 나갔습니다.");
-			returnWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; 
-			
-		
-		//delete를 했는데 0이다? 그러면 chatmember table에 일치하는 정보가 없는거라, 커뮤니티 홈으로 이동시켜야함 
-		//혹시 모르니 이것도 enter를 먼저 거쳐서 검수 후 커뮤니티 홈으로 이동하게끔 함
-		if(deletNum==0) {
-			
-			returnWhere = "redirect:/chatRoom/enter?chatNum="+chatNum;
-			session.setAttribute("mesg", "방을 나갈 수 없습니다. 본인의 방이 맞는지 확인해주세요.");
-		
-		}
 		
 		}catch(Exception e) {
 		
 			//뭔가 알 수 없는 에러 발생 시
 			System.out.println("chatRoomOut delete 실패");
-			returnWhere = "redirect:/Chatmore?chatNum="+chatNum;
-			session.setAttribute("mesg", "문제가 발생하였습니다.");
+			session.setAttribute("mesg", "문제가 발생하여 방을 나갈 수 없습니다.");
+			returnAjax = "failToOut";
 			
 		}
 	
 	}//else종료
 	
-	return returnWhere;
+	return returnAjax;
 	
 	}
 	
