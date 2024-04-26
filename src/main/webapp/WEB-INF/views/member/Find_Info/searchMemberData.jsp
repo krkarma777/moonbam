@@ -54,7 +54,7 @@
 	 <table>
         <tr>
         	<td>
-				<input type="text" id="secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="40">
+				<input type="text" id="secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="50">
 			</td>
 		</tr>
 		<tr>
@@ -73,7 +73,7 @@
         <tr>
         	<td>
 				<input type="email" id="userId" name="userId" autofocus placeholder="아이디 이메일 입력" maxlength="40">
-				<input type="text" id="pw_secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="40">
+				<input type="text" id="pw_secretCode" name="secretCode" autofocus placeholder="보안코드 입력" maxlength="50">
 			</td>
 		</tr>
 		<tr>

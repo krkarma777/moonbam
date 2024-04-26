@@ -77,7 +77,7 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 		
 		//로그인 설정
 		//로그인 기본설정 사용중단
-		security.formLogin(AbstractHttpConfigurer::disable);
+		security.formLogin().loginPage("/acorn/mainLogin");
 		//로그인 커스텀 설정 사용
 		security.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 		security.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, Long.parseLong(expiredMs)), UsernamePasswordAuthenticationFilter.class);
@@ -106,7 +106,7 @@ public class SecurityConfig { // WebSecurityConfigurerAdapter는 securityFilterC
 						"/memberList",
 						"/chatRoom", "/chatRoom/enter", "/acorn/chatRoom/out",
 						"/Chatmore", "/Chatmore/ChatmoreReport"
-				).hasRole("MEMBER")
+				).authenticated()
 				.requestMatchers("/AdminPage/**").hasRole("ADMIN")
                 //그외 모든 요청은 모든 유저가 사용 가능
                 .anyRequest().permitAll()

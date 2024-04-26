@@ -257,11 +257,12 @@
 		$("#registerForm").submit(function(event) {
 			return validateForm(event);
 		});
-		
+
 		function validateForm(event) {
 			
 		    var errorMessage = ""; // 에러 메시지를 저장할 변수
 
+			//문구 출력 및 문구 확인
 		    switch(true) {
 			    case $("#confirmUserEmailError").text() != "" && $("#confirmRestoreUserEmailIdError").text() != "":
 		            errorMessage = "이메일 입력 오류입니다. 처음부터 다시 진행해주세요.";
