@@ -150,6 +150,21 @@
 	text-decoration: none;
 	color: black;
 }
+.poster{
+	position: relative;
+}
+
+.rank{
+	position: absolute;
+	bottom: 2px;
+	left: 1px;
+ 	padding: 0px 3px;
+    border-radius: 5px;
+    font-size: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+    color: #ffb2c4;
+    /*   -webkit-text-stroke: 1px #fff; */
+}
 </style>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
@@ -320,7 +335,8 @@ if (rateAmount > 0) {
 				},
 				dataType: "text",
 				success: function(data, status, xhr){
-					//console.log("성공: " + data);
+					//console.log("성공: " + data.length + data);
+					
 					if(data.length>0){
 						var jsonData = JSON.parse(data);
 						$("#postText").html(jsonData.postText);
@@ -338,6 +354,7 @@ if (rateAmount > 0) {
 				},
 				error: function(xhr, status, e){
 					console.log("실패: " + xhr.status);
+					$("#reviewBtn").text("리뷰쓰기")
 				}
 			}//ajax	
 		);//ajax
@@ -644,14 +661,17 @@ if (rateAmount > 0) {
 				<div class="carousel-slide">
 					<div class="inner" id="lastClone">
 						<%for (int i = creditList.size() - 6; i < creditList.size(); i++) { %>
-						<div style="width: 201px; height: auto;">
-							<%if (null == creditList.get(i)) { %>
+						<div style="width: 201px; height: auto;" class="poster">
+							<%if (null == creditList.get(i) || null == creditList.get(i).getProfile_path()) { %>
 							<img class="innerImage" src="resources/images/question.png"
-								width="197px">
+								width="197px" height="296px">
 							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
 								width="197px" height="296px">
+							<div class="rank index-label">
+								<%=creditList.get(i).getName() %>
+							</div>
 							<%} %>
 						</div>
 						<%} %>
@@ -661,14 +681,17 @@ if (rateAmount > 0) {
 					for (int i = 0; i < (creditList.size() / 6); i++) { %>
 						<div class="inner">
 						<%for (int j = 0; j < 6; j++) { %>
-							<div style="width: 201px; height: auto;">
-							<%if (null == creditList.get(count)) { %>
+							<div style="width: 201px; height: auto;" class="poster">
+							<%if (null == creditList.get(count) || null == creditList.get(count).getProfile_path()) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								height="296px" width="197px" style="bottom: 0px;">
 							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(count).getProfile_path()%>"
 								width="197px" height="296px">
+							<div class="rank index-label">
+								<%=creditList.get(count).getName() %>
+							</div>
 							<%} %>
 						</div>
 						<%count++; }%>
@@ -676,14 +699,17 @@ if (rateAmount > 0) {
 					<%} %>
 					<div class="inner" id="firstClone">
 						<%for (int i = 0; i < 6; i++) { %>
-						<div style="width: 201px; height: auto;">
-							<%if (null == creditList.get(i)) { %>
+						<div style="width: 201px; height: auto;" class="poster">
+							<%if (null == creditList.get(i) || null == creditList.get(i).getProfile_path()) { %>
 							<img class="innerImage" src="resources/images/question.png"
-								width="197px">
+								width="197px" height="296px">
 							<%} else { %>
 							<img class="innerImage" alt="resource/images/person-x.svg"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
 								width="197px" height="296px">
+							<div class="rank index-label">
+								<%=creditList.get(i).getName() %>
+							</div>
 							<%} %>
 						</div>
 						<%} %>

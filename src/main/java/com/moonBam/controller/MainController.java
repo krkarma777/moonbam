@@ -48,7 +48,7 @@ public class MainController {
     AdminCounter counter;
     @GetMapping("/")
     public String mainView(Model model, @RequestParam(value = "cg", required = false) String category, Principal principal,
-    						HttpSession session) {
+    						HttpSession session, String genre) {
         System.out.println("principal = " + principal);
 
         counter.init();//접속자 +1
@@ -58,7 +58,7 @@ public class MainController {
         List<PostPageDTO> moviePostList = service.selectAll(new HashMap<String, String>() {
             {
                 put("board", "movie");
-                put("postCount", "5");
+                put("postCount", "14");
             }
         });
 
@@ -97,18 +97,15 @@ public class MainController {
             switch (category) {
             case "movie":
 	    		List<ContentDTO> movieTopList = mService.selectTop();
-                session.setAttribute("movieTopList", movieTopList);
-                session.setAttribute("movieList", moviePostList);
-                session.setAttribute("movieMeetList", movieMeetList);
-                session.setAttribute("movieInfoList", movieInfoList);
-	    		List<JSONObject> dailyList = kofic.dailyBoxOfficeList();
-	    		session.setAttribute("dailyList", dailyList);
+                model.addAttribute("movieTopList", movieTopList);
 
                 //장르 인기순 가져오기
                 //처음엔 드라마로.
-                String genre = "Drama";
+                if(genre==null) {
+                	genre = "Drama";
+                }
                 List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
-                session.setAttribute("genreMovieTopList", genreMovieTopList);
+                model.addAttribute("genreMovieTopList", genreMovieTopList);
                 model.addAttribute("genre", genre);
 
 	    		model.addAttribute("category", category);

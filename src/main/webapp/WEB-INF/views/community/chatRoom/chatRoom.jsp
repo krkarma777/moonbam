@@ -7,84 +7,75 @@
 <head>
 <meta charset="EUC-KR">
 <title>Chat Room</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-rel="stylesheet"
-integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-crossorigin="anonymous">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+	crossorigin="anonymous">
 <style type="text/css">
-
 
 /*내가 보낸 채팅 말풍선  */
 .my-chat {
-    position:relative;
-    width:200px;
-    padding:20px;
-    background-color:#ffb2c4;
-    border-radius:4px;
-    color:black;
-    top: 200%; left: 75%; margin-left: -100px;
- }
- 
- /*내가 보낸 채팅 말풍선 꼬리  */
-.my-chat:after {
-	content:'';
-    position:absolute;
-    top:50%;
-    right:-10px;
-    border-left:16px solid #ffb2c4;
-    border-top:10px solid transparent;
-    border-bottom:10px solid transparent;
-    transform:translateY(-50%);
+	position: relative;
+	width: 200px;
+	padding: 20px;
+	background-color: #ffb2c4;
+	border-radius: 4px;
+	color: black;
+	top: 200%;
+	left: 75%;
+	margin-left: -100px;
 }
 
+/*내가 보낸 채팅 말풍선 꼬리  */
+.my-chat:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: -10px;
+	border-left: 16px solid #ffb2c4;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	transform: translateY(-50%);
+}
 
 /*남이 보낸 채팅 말풍선  */
-.target-chat{
-    position:relative;
-    width:200px;
-    padding:20px;
-    background-color:#FFE0E7;
-    border-radius:4px;
-    color:black;
-
- }
- 
- /*남이 보낸 채팅 말풍선 꼬리 */
- .target-chat:after {
-	content:'';
-    position:absolute;
-    top:50%;
-    left:-10px;
-    border-right:16px solid #FFE0E7;
-    border-top:10px solid transparent;
-    border-bottom:10px solid transparent;
-    transform:translateY(-50%);
+.target-chat {
+	position: relative;
+	width: 200px;
+	padding: 20px;
+	background-color: #FFE0E7;
+	border-radius: 4px;
+	color: black;
 }
- 
- /* 말풍선 디자인  */
- .chat_box{
- 	padding: 20px;
- 	
- }
+
+/*남이 보낸 채팅 말풍선 꼬리 */
+.target-chat:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: -10px;
+	border-right: 16px solid #FFE0E7;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	transform: translateY(-50%);
+}
+
+/* 말풍선 디자인  */
+.chat_box {
+	padding: 20px;
+}
 
 /*스크롤*/
-.chat_wrap{
-   padding-left:0;
-
-    margin:0;
-
-    list-style-type:none;
-
-    display:flex;
-
-    flex-direction: column-reverse;
-
-    overflow-y:scroll;
-
-    height:600px;
-
+.chat_wrap {
+	padding-left: 0;
+	margin: 0;
+	list-style-type: none;
+	display: flex;
+	flex-direction: column-reverse;
+	overflow-y: scroll;
+	height: 600px;
 }
-
 </style>
 
 
@@ -110,30 +101,27 @@ session.removeAttribute("mesg");
 	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-	
-	
+
+
 </head>
 <body onload="connect()">
-	${content.userId } - 2 - ${nickNameInSession } - 3 - {userIdInSession}
-
 	<table style="background: white; width: 100%;">
-	 
+
 		<thead class="header">
-			<tr >
-				<td style="background-color: #ffb2c4; color:white;">
+			<tr>
+				<td style="background-color: #ffb2c4; color: white;">
 					<!-- 제목, 토글 버튼 --> <input type="checkbox" id="toggle" hidden>
-					<label for="toggle" class="toggleSwitch"> <span 
+					<label for="toggle" class="toggleSwitch"> <span
 						id="toggleIcon" class="toggleButton">▶
 							${ChatRoomDTO.roomTitle}</span>
-					</label>
-				
-					<!-- 설정이 더보기, 더보기로 가는 주소 실행 -->
-					<%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
+				</label> <!-- 설정이 더보기, 더보기로 가는 주소 실행 --> <%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button> --%>
+
 					<span style="float:right; color:white; margin-left: auto;"
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
 					<span style="float:right; color:white; margin-left: auto;"
 						onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>	
+
 				</td>
 
 
@@ -146,18 +134,16 @@ session.removeAttribute("mesg");
 					</c:if> <c:if test="${sen.lastCv==0}">
 					</c:if></td>
 			</tr>
-		
+
 		</thead>
-	
+
 		<tbody id="message1">
 			<tr>
 				<td>
 					<form id="chatForm">
 						<!-- new tag start -->
-						<div class="chat_wrap" >
-							<div id="chat" >
-								
-							</div>
+						<div class="chat_wrap">
+							<div id="chat"></div>
 						</div>
 					</form>
 				</td>
@@ -166,13 +152,15 @@ session.removeAttribute("mesg");
 		</tbody>
 		<tfoot>
 			<tr>
-			<div>
-				<td colspan="2"><input type="text" id="messageContent"
-					name="messageContent" style="width: 86%"
-					onkeydown="if (event.keyCode === 13) { sendMessage(); }" class="form-control-sm">
-					<input type="button" id="send" value="전송" class="btn" onclick="sendMessage()" style="float:right; background-color: #ff416c; color:white; margin-left: auto;">
-				</td>
-			</div>	
+				<div>
+					<td colspan="2"><input type="text" id="messageContent"
+						name="messageContent" style="width: 86%"
+						onkeydown="if (event.keyCode === 13) { sendMessage(); }"
+						class="form-control-sm"> <input type="button" id="send"
+						value="전송" class="btn" onclick="sendMessage()"
+						style="float: right; background-color: #ff416c; color: white; margin-left: auto;">
+					</td>
+				</div>
 			</tr>
 		</tfoot>
 	</table>
@@ -207,14 +195,6 @@ session.removeAttribute("mesg");
 			window.open(url, "_blank", "width=600,height=400");
 		}
 
-		/* 멤버 */
-		function openMemberWindow() {
-			var url = "memberWindow";
-			window.open(url, "_blank", "width=600,height=400");
-		}
-
-		
-////////////////////////		
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
@@ -231,7 +211,7 @@ session.removeAttribute("mesg");
 // 아래 코드 안됨 왜?? ChatMessageController.sendMessage()에  @SendTo("/topic/messages/2") 지우고 @ResponseBody 선언
 //				stompClient.subscribe('/acorn/chat/send/'+${ChatRoomDTO.chatNum},
 						function(messageOutput) {
-				showMessageOutput(JSON.parse(messageOutput.body));
+							createMsgTag(messageOutput);
 						});
 				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 					'type':'ENTER',
@@ -328,21 +308,28 @@ session.removeAttribute("mesg");
 		// 메세지 출력
 		// 최신 메세지 추가(위치는 맨 뒤)
 		// 이전 메세지 추가(위치는 맨위)
-		function showMessageOutput(body) {
-			let content = JSON.parse(body.chatContent);
-			createMsgTag(content)
-		}
-		
-	function createMsgTag(content) {
+		function createMsgTag(messageOutput) {
+			//console.log("messageOutput : " + messageOutput.body)	
+			let body= JSON.parse(messageOutput.body);
+			let nickName = body.nickName;
+			console.log("nickName : " +nickName)
+			console.log("body : " +body.chatContent)
+		    let content = JSON.parse(body.chatContent);
+			let message = content.message;
+
+
+			let time = content.serverTime;
 	    let chatLi;
+
 	    let nickName = content.nickName;
 		let time = content.serverTime;
 	
 		let message = content.message;
 		let userId =  content.userId; 
 		
+
 	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-	   
+	    console.log(content.type)
 	    if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
@@ -356,12 +343,14 @@ session.removeAttribute("mesg");
 	        // 일반 메시지일 경우
 	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
 			//console.log("시간 잘라서 확인하기 완료?",timeShort)
-	        chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>"; 
-	         
+			if(whosMessage == "my-chat"){
+				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			}else{
+				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			}
+	       
 	    }
 	    $("#chat").append(chatLi);
-	    
-
 	}
 
 		// 취야점 보안
@@ -373,11 +362,6 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-		
-		
-		//
-		
-		
 		
 		
 	</script>
