@@ -208,7 +208,8 @@
 				},
 				dataType: "text",
 				success: function(data, status, xhr){
-					location.href = "content-page?contId=${review.contId}";
+					//location.href = "content-page?contId=${review.contId}";
+					location.href = "showContent?contId=${review.contId}";
 				},
 				error: function(xhr, status, e){
 					alert("로그인 정보가 없습니다.");

@@ -320,7 +320,8 @@ if (rateAmount > 0) {
 				},
 				dataType: "text",
 				success: function(data, status, xhr){
-					//console.log("성공: " + data);
+					//console.log("성공: " + data.length + data);
+					
 					if(data.length>0){
 						var jsonData = JSON.parse(data);
 						$("#postText").html(jsonData.postText);
@@ -338,6 +339,7 @@ if (rateAmount > 0) {
 				},
 				error: function(xhr, status, e){
 					console.log("실패: " + xhr.status);
+					$("#reviewBtn").text("리뷰쓰기")
 				}
 			}//ajax	
 		);//ajax
