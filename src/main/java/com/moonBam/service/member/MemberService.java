@@ -1,20 +1,14 @@
 package com.moonBam.service.member;
 
 import com.moonBam.dao.member.MemberDAO;
-import com.moonBam.dto.CommentDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.MyCommentDTO;
 import com.moonBam.dto.MyPageDTO;
 import com.moonBam.dto.MyScrapDTO;
-import com.moonBam.dto.board.PostDTO;
 import com.moonBam.dto.member.MemberCreateRequestDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -83,6 +77,32 @@ public class MemberService {
 		MyScrapDTO sDTO = dao.findAllScrap(curPage, name);
 		return sDTO;
 	}
+
+	public int updatedMyPost(Map<String, String> map) {
+		return dao.updateMyPost(map);
+	}
+
+	public int checkCommentsExist(Long postId) {
+	    int num = dao.checkCommentsExist(postId);
+	    System.out.println("commentExists: "+postId);
+	    return num;
+	}
+
+	public int scrapDel(Long scrapId) {
+		int n = dao.scrapDel(scrapId);
+		return n;
+	}
+
+	public int enabled(Map<String, String> map) {
+		
+		return dao.enabled(map);
+	}
+
+	public int insertAdminRestrictedMember(String userId) {
+		return dao.insertAdminRestrictedMember(userId);
+		
+	}
+
 
 
 }

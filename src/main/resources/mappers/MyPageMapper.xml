@@ -4,6 +4,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MyPageMapper">
 
+
+<!-- 회원탈퇴 -->
+	<update id="enabled" parameterType="hashmap">
+		 update memberDB
+     set 
+     enabled  = #{enabled}
+    where userId = #{userId}
+	</update>
+	
+	<insert id="insertAdminRestrictedMember" parameterType="AdminRestrictedMemberDTO">
+        INSERT INTO adminRestrictedMember (actno, userid, status, cause, action, actionstart, actionend)
+        VALUES ('', #{userid}, 'myself', 'withdraw', '', sysdate, SYSDATE+30)
+    </insert>
   
 <update id="updateNickname" parameterType="string">
      update memberDB
@@ -68,10 +81,32 @@ update commentDB
 set comtext = #{comText}
 where comid = #{comId}
 </update>
+
    <!-- 내리뷰 삭제 -->
-   <delete id="postDel" parameterType="Long">
-    delete
-    from postDB
-    where postId = #{postId}
-   </delete>
+   
+   <select id="getCommentCountByPostId" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM commentDB
+        WHERE postId = #{postId}
+    </select>
+    
+<select id="checkCommentsExist" parameterType="long" resultType="int">
+    SELECT COUNT(*)
+FROM commentDB
+WHERE postId = #{postId}
+</select>
+    
+<update id="updateMyPost" parameterType="hashmap">
+    UPDATE postDB
+    SET postTitle = #{postText},
+        postText = #{postText}
+    WHERE postId = #{postId}
+</update>
+
+     
+ <delete id="postDel" parameterType="Long">
+  delete
+  from postDB
+  where postId = #{postId}
+ </delete>
 </mapper>
