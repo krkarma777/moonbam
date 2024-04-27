@@ -35,7 +35,7 @@ public class SpringSecurityService  implements UserDetailsService {
 	        throw new UsernameNotFoundException(userId + " 사용자 없음");
 	    }
 
-		if (!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getState().equals("myself")){
+		if (!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getCause().equals("myself")){
 			System.out.println("자진탈퇴 회원 복구");
             try {
                 throw new Exception("myself설정"+userId);
@@ -44,6 +44,8 @@ public class SpringSecurityService  implements UserDetailsService {
             }
 		}
 	    
+
+
 	    if(!dto.isEnabled()) {
 	        throw new UsernameNotFoundException(userId + " 활동 정지");
 	    }

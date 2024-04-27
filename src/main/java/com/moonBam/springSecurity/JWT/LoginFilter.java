@@ -126,7 +126,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             // 아이디 출력
             System.out.println("userId=" + messageArr[1]);
             // 복귀 여부 묻는 페이지로 이동
-            sendPostRequest(response, "/acorn/restoreUser", "userId=" + messageArr[1]);
+            sendPostRequest(response, "/acorn/restoreUser", messageArr[1]);
         } else {
             response.sendRedirect("/acorn/badRequest");
         }

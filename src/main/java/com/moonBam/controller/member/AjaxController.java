@@ -127,7 +127,7 @@ public class AjaxController {
 		//	활동 정지 상태지만, 자진 탈퇴한 경우
 		RestoreRestrictedMember restoreRestrictedMember = lServ.restoreMember(userId);
 		System.out.println(restoreRestrictedMember);
-		if (!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getState().equals("myself")){
+		if (!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getCause().equals("myself")){
 			System.out.println("자진탈퇴 회원 복구");
 			return "loginSuccess";
 		}

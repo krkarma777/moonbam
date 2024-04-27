@@ -89,14 +89,19 @@ public class LoginDAO {
 	
 	//유저 복구를 위한 서칭
 	public RestoreRestrictedMember restoreMember(String userId) {
-		//return session.selectOne("restoreMember", userId);
-		RestoreRestrictedMember dto = new RestoreRestrictedMember("cjstkrhdfk96@gmail.com", false, "myself");
-		return dto;
+		return session.selectOne("getMemberStatusWithRestriction", userId);
+		//테스트용
+		//RestoreRestrictedMember dto = new RestoreRestrictedMember("cjstkrhdfk96@gmail.com", false, "myself");
+		//return dto;
 	}
 
 	//유저 복구
 	public void updateIsEnabled(String userId) {
-	//	session.update("com.config.MemberMapper.updateIsEnabled", userId);
+		System.out.println("복구 유저 아이디: "+userId);
+		int num = session.update("com.config.MemberMapper.memberEnabled", userId);
+		if (num > 0) {
+			session.delete("com.config.MemberMapper.RestrictionMember", userId);
+		}
 		System.out.println("복구 완료");
 	}
 }

@@ -9,12 +9,12 @@ public class RestoreRestrictedMember {
 
     private String userId;
     private boolean isEnabled;
-    private String state;
+    private String cause;
 
-    public RestoreRestrictedMember(String userId, boolean isEnabled, String state) {
+    public RestoreRestrictedMember(String userId, boolean isEnabled, String cause) {
         this.userId = userId;
         this.isEnabled = isEnabled;
-        this.state = state;
+        this.cause = cause;
     }
 
 }

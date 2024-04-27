@@ -35,7 +35,7 @@ public class LoginfailureHandler implements AuthenticationFailureHandler {
 			String[] mesg = messageArr[1].split("]");
 			String email = mesg[0];
 			// 로그인 실패 후 '정지된 유저의 소셜로그인 접속시도 탐지' 페이지로 리다이렉트
-			sendPostRequest(response, "/acorn/restoreUser", "userId=" + email);
+			sendPostRequest(response, "/acorn/restoreUser", email);
 		} else
 
 		if(messageArr[0].equals("[정지유저")){

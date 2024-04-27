@@ -129,7 +129,7 @@ public class OAuthService extends DefaultOAuth2UserService {
 		System.out.println(restoreRestrictedMember);
 		
 		//	자진탈퇴 복귀 유저일 경우
-		if(!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getState().equals("myself") ) {
+		if(!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getCause().equals("myself") ) {
 			OAuth2Error oAuth2Error = new OAuth2Error("복귀유저설정"+userId);
 			throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
 		}
