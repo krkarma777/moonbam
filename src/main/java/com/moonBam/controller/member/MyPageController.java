@@ -91,7 +91,37 @@ public class MyPageController {
         }
         return "redirect:/my-page/scrap";
     }
-
+    @PostMapping("/scrapDel")
+    public String scrapDel(Principal principal, @RequestParam("scrapId") Long scrapId,
+    		 RedirectAttributes redirectAttributes) {
+    	 MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+         if (loginUser != null) {
+             // postId에 해당하는 게시물을 삭제합니다.
+        	  int result =  mserv.scrapDel(scrapId);
+        	  System.out.println(result);
+              return "redirect:/my-page/scrap";
+         } else {
+             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
+             return "redirect:/Login";
+         }
+    }
+    
+    @PostMapping("/delAllScraps")
+    public String delAllScraps(Principal principal, @RequestBody List<Long> allScrapIds, RedirectAttributes redirectAttributes) {
+        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
+        if (loginUser != null) {
+            for (Long scrapId : allScrapIds) {
+                System.out.println("Deleting scrap with ID: " + scrapId);
+                // postId를 사용하여 해당 게시물 삭제 로직 수행
+                mserv.scrapDel(scrapId);
+            }
+            return "redirect:/my-page/scrap"; // 모든 게시물 삭제 후에 리다이렉트
+        } else {
+            redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
+            return "redirect:/Login";
+        }
+    }
+    
     @GetMapping
     public String myPage(Model model, Principal principal) {
         return "member/myPage/MyPageTemplate";
@@ -203,22 +233,30 @@ public class MyPageController {
         }
     }
 
-    @PostMapping("/postDel")
-    public String postDel(Principal principal,
-                          @RequestParam("postId") Long postId,
-                          RedirectAttributes redirectAttributes) {
-        MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
-        if (loginUser != null) {
-            // postId에 해당하는 게시물을 삭제합니다.
-            int result = mserv.postDel(postId); // MyPageService를 mserv로 변경
-            System.out.println("postDel result: " + result);
-
-            return "redirect:/my-page/post";
-        } else {
-            redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
-        }
+    @PostMapping(value="/postDel", produces = "text/plain;charset=UTF-8")
+    public String postDel(
+            @RequestParam("postId") Long postId,
+            RedirectAttributes redirectAttributes) {
+        // 댓글 갯수 확인
+//        int commentCount = mserv.checkCommentsExist(postId);
+        
+        // 댓글 처리에 따른 게시글 처리
+//        if (commentCount > 0) {
+            // 댓글이 있는 경우 게시글을 업데이트
+            Map<String, String> map = new HashMap<>();
+            map.put("postId", String.valueOf(postId));
+            map.put("postText", "삭제된 글입니다.");
+            int updatedPostCount = mserv.updatedMyPost(map);
+            redirectAttributes.addFlashAttribute("message", updatedPostCount > 0 ? "게시글을 삭제했습니다." : "게시글 삭제에 실패했습니다.");
+//        } else {
+//            // 댓글이 없는 경우 게시글을 삭제
+//            int deletedPostCount = mserv.postDel(postId);
+//            redirectAttributes.addFlashAttribute("message", deletedPostCount > 0 ? "게시글을 삭제했습니다." : "게시글 삭제에 실패했습니다.");
+//        }
+        
+        return "redirect:/my-page/post";
     }
+
 
  //전체 글 삭제   
     @PostMapping("/delAllPosts")
@@ -348,12 +386,22 @@ public class MyPageController {
 		} catch (Exception e) {
 			return "member/Find_Info/emailErrorPage";
 		}
+		  if (!canLogin) {
+	  	        System.out.println("기존 비밀번호와 일치하지 않습니다.");
+	  	        return "member/Find_Info/emailErrorPage";
+	  	    }
+		
 		//delete 후 deletememberDB로 insert
 	//	String result = mserv.deleteUser(userId);
- 
-        serv.IDDelete(userId);
+		   Map<String, String> map = new HashMap<>();
+           map.put("userId", userId);
+           map.put("enabled", "False");
+          mserv.enabled(map);
+
+          //AdminRestrictedMember db에 insert
+          mserv.insertAdminRestrictedMember(userId);
         
-        return "redirect:/";
+        return "redirect:/logout";
 
     }
 
@@ -406,6 +454,11 @@ public class MyPageController {
   			return "member/Find_Info/emailErrorPage";
   		}
 
+  	  // 기존 비밀번호와 일치하지 않는 경우
+  	    if (!canLogin) {
+  	        System.out.println("기존 비밀번호와 일치하지 않습니다.");
+  	        return "member/Find_Info/emailErrorPage";
+  	    }
         //비밀번호 암호화
         String realPassword = encoder.encode(userPw);
 
