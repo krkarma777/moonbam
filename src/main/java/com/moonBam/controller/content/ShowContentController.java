@@ -192,23 +192,23 @@ public class ShowContentController {
 		return "movie/allMovie";
 	}
 	
-	@RequestMapping("/genre")
-	public String genre(Model model, String genre, HttpSession session) {
-		if(genre==null) {genre="Drama";}
-		List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
-		session.setAttribute("genreMovieTopList", genreMovieTopList);
-		model.addAttribute("genre", genre);
-		
-		List<String> categoryList = new ArrayList<>();;
-		String category = "movie";
-		model.addAttribute("category", category);
-		categoryList.add("전체");
-		categoryList.add("드라마");
-		categoryList.add("코미디");
-		categoryList.add("스릴러");
-		model.addAttribute("categoryList", categoryList);
-		
-		return "movie/movieHome";
-	}
+//	@RequestMapping("/genre")
+//	public String genre(Model model, String genre, HttpSession session) {
+//		if(genre==null) {genre="Drama";}
+//		List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
+//		model.addAttribute("genreMovieTopList", genreMovieTopList);
+//		model.addAttribute("genre", genre);
+//		
+//		List<String> categoryList = new ArrayList<>();;
+//		String category = "movie";
+//		model.addAttribute("category", category);
+//		categoryList.add("전체");
+//		categoryList.add("드라마");
+//		categoryList.add("코미디");
+//		categoryList.add("스릴러");
+//		model.addAttribute("categoryList", categoryList);
+//		
+//		return "movie/movieHome";
+//	}
 	
 }

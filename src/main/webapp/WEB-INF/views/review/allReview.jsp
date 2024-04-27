@@ -5,32 +5,87 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <%
-	ReviewPageDTO rpDTO = (ReviewPageDTO)request.getAttribute("rpDTO");
-	List<ReviewDTO> reviewList = rpDTO.getList();
-	
-	MemberDTO member = (MemberDTO) request.getAttribute("member");
-	String userId = null;
-	String nickname = null;
-	if (member != null) {
-		userId = member.getUserId();
-		nickname = member.getNickname();
-	}
-	
-	String contId = (String)request.getAttribute("contId");
-	
-	ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
+ReviewPageDTO rpDTO = (ReviewPageDTO)request.getAttribute("rpDTO");
+List<ReviewDTO> reviewList = rpDTO.getList();
+
+MemberDTO member = (MemberDTO) request.getAttribute("member");
+String userId = null;
+String nickname = null;
+if (member != null) {
+	userId = member.getUserId();
+	nickname = member.getNickname();
+}
+
+String contId = (String)request.getAttribute("contId");
+
+ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
 %>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>문화인들의 밤</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-	crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<sec:authorize access="isAuthenticated()">
+	<script>
+		$(document).ready(function(){
+			$("#writeReview").on("click", writeReview);  //리뷰작성
+			
+		});//ready
+	</script>
+</sec:authorize>
+<script type="text/javascript">
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+	$(document).ready(function(){
+		$("#postText").on("keyup", check_length); 	 //글자수 제한
+		//$("#writeReview").click(writeReview); //리뷰 작성
+	})
 	
+	//최대글자수
+	var max_length = 200;
+	function check_length(){
+		//console.log(this.value.length);
+		var length = this.value.length;
+		if(length>max_length){
+			this.value = this.value.substr(0, max_length);
+			this.focus();
+		}
+		$("#show_length").text(length+"/"+max_length);
+	}
+	
+	function writeReview(){
+		var contId = $("#contId").val();
+		var postText = $("#postText").val().substr(0, max_length);
+		if(postText.length!=0 && contId !="null"){
+			$.ajax(
+				{
+					type: "post",
+					url:"my-review",
+					data: {
+						"contId": contId,
+						"userId": "<%=userId%>",
+						"nickname": "<%=nickname%>",
+						"postText": postText
+					},
+					dataType: "text",
+					success: function(data, status, xhr){
+						var jsonData = JSON.parse(data);
+						location.reload(true);
+					},
+					error: function(xhr, status, e){
+						console.log("실패: " + xhr.status);
+					}
+				}//json
+			);//ajax
+		}//내용검사if
+	}
+</script>
 <style type="text/css">
 * {
 	padding: 0px;
@@ -89,7 +144,7 @@ button {
 		<!-- 상단 버튼 -->
 		<div style="">
 			<!-- 개설 버튼 -->
-			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;" 
+			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto; margin-bottom: 5px;" 
 			id="createCommunity" data-bs-toggle="modal" data-bs-target="#exampleModal"><b>
 				<%if(myReview==null){ %>
 					리뷰쓰기
@@ -99,9 +154,9 @@ button {
 			</b></button>
 		</div>
 		<%if(reviewList==null){ %>
-			리뷰가 없습니다.
+			<span style="margin: auto;">리뷰가 존재하지 않습니다.</span>
 		<%}else { %>
-			<table style="margin-top: 5px; width:1200px; height:795px">
+			<table style="width:1200px; height:795px; border: #ffb2c4 solid 1px;">
 				<%int count = 0;
 				for(int i=1; i<=3; i++){ %>
 					<tr style="width: 1200px; height: 265px;">
@@ -148,88 +203,27 @@ button {
 	<!-- 푸터 -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 	
-	<div class="modal fade" id="exampleModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">간편 리뷰 작성</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<input type="hidden" value="<%=contId %>" id="contId">
-					<textarea cols="50" rows="12" id="postText"></textarea>
-					<p id="show_length">0/200</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">취소</button>
-					<!-- <button type="button" class="btn btn-primary" id="writeReview">Save changes</button> -->
-					<button type="button" class="btn" id="writeReview" style="background-color: #ff416c; color:white;"
-						data-bs-toggle="popover" data-bs-title="알림"
-						data-bs-content="로그인이 필요한 작업입니다">완료</button>
-				</div>
-			</div>
-		</div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">간편 리뷰 작성</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	      	<input type="hidden" value="<%=contId%>" id="contId">
+	        <textarea cols="50" rows="12" id="postText"></textarea>
+	        <p id="show_length">0/200</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	        <!-- <button type="button" class="btn btn-primary" id="writeReview">Save changes</button> -->
+	        <button type="button" class="btn" style="background-color: #ff416c; color:white;" id="writeReview" data-bs-toggle="popover" data-bs-title="알림" data-bs-content="로그인이 필요한 작업입니다">완료</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	
-<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-		crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<sec:authorize access="isAuthenticared()">
-<script type="text/javascript">
-const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-
-	$(document).ready(function(){
-		$("#postText").on("keyup", check_length); 	 //글자수 제한
-		$("#writeReview").click(writeReview); //리뷰 작성
-	})
-	
-	//최대글자수
-	var max_length = 200;
-	function check_length(){
-		//console.log(this.value.length);
-		var length = this.value.length;
-		if(length>max_length){
-			this.value = this.value.substr(0, max_length);
-			this.focus();
-		}
-		$("#show_length").text(length+"/"+max_length);
-	}
-	
-	function writeReview(){
-		var contId = $("#contId").val();
-		var postText = $("#postText").val().substr(0, max_length);
-		var userId = <%=userId%>
-		console.log(userId);
-		if(postText.length!=0 && contId !="null"){
-			$.ajax(
-				{
-					type: "post",
-					url:"my-review",
-					data: {
-						"contId": contId,
-						"userId": "<%=userId%>",
-						"nickname": "<%=nickname%>",
-						"postText": postText
-					},
-					dataType: "text",
-					success: function(data, status, xhr){
-						if(userid!=null){
-							location.reload(true);
-						}
-					},
-					error: function(xhr, status, e){
-						console.log("실패: " + xhr.status);
-					}
-				}//json
-			);//ajax
-		}//내용검사if
-	}
-</script>
-</sec:authorize>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
