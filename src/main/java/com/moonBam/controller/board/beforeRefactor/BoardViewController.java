@@ -1,8 +1,10 @@
 package com.moonBam.controller.board.beforeRefactor;
 
 
+import com.moonBam.dto.ContentDTO;
 import com.moonBam.dto.board.PageDTO;
 import com.moonBam.dto.board.PostPageDTO;
+import com.moonBam.service.MainService;
 import com.moonBam.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 // 게시판 뷰 컨트롤러 구현
 @Controller
@@ -23,6 +26,8 @@ public class BoardViewController {
 	
 	@Autowired
     PostService service;
+	@Autowired
+    MainService mService;
 	
 	@GetMapping("/board/{postBoard}")
 	public String postBoard(@PathVariable("postBoard") String postBoard,
@@ -89,6 +94,19 @@ public class BoardViewController {
 		model.addAttribute("hotList", hotList);
 		model.addAttribute("popularListCategory", popularListCategory);
 		model.addAttribute("popularListAll", popularListAll);
+		
+		List<ContentDTO> movieTopList = mService.selectTop();
+        model.addAttribute("movieTopList", movieTopList);
+        
+        String [] genreList = {"Drama", "Comedy", "Thriller"};
+        
+        Random random = new Random();
+        
+        String genre = genreList[random.nextInt(3)];
+        
+        List<ContentDTO> genreMovieTopList = mService.selectGenreTop(genre);
+        model.addAttribute("genreMovieTopList", genreMovieTopList);
+        model.addAttribute("genre", genre);
         
         
 		return "board/boardView";
