@@ -1,5 +1,6 @@
 package com.moonBam.dao.member;
 
+import com.moonBam.dto.member.RestoreRestrictedMember;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -72,5 +73,35 @@ public class LoginDAO {
     public List<String> allSecretCode() {
 		List<String> list = session.selectList("allSecretCode");
 		return list;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//유저 복구를 위한 서칭
+	public RestoreRestrictedMember restoreMember(String userId) {
+		return session.selectOne("getMemberStatusWithRestriction", userId);
+		//테스트용
+		//RestoreRestrictedMember dto = new RestoreRestrictedMember("cjstkrhdfk96@gmail.com", false, "myself");
+		//return dto;
+	}
+
+	//유저 복구
+	public void updateIsEnabled(String userId) {
+		System.out.println("복구 유저 아이디: "+userId);
+		int num = session.update("com.config.MemberMapper.memberEnabled", userId);
+		if (num > 0) {
+			session.delete("com.config.MemberMapper.RestrictionMember", userId);
+		}
+		System.out.println("복구 완료");
 	}
 }

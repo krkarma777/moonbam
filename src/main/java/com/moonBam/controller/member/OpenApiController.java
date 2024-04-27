@@ -7,16 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.moonBam.service.member.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.member.OpenApiService;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,7 +23,30 @@ public class OpenApiController {
 	@Autowired
 	OpenApiService serv;
 
-	@GetMapping("/forChangeNickname")
+	@Autowired
+	LoginService loginService;
+
+	@PostMapping("/restoreUser")
+	public ModelAndView restoreUser(String userId){
+	//	System.out.println("restore user" + userId);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("userId", userId);
+		mav.setViewName("member/Login/restoreUser");
+		return mav;
+	}
+
+	@PostMapping("/checkRestoreMember")
+	public String checkRestoreMember(String userId, String yesBtn, String noBtn){
+		System.out.println("userId = " + userId + " yesBtn = " + yesBtn + " noBtn = " + noBtn);
+		if (yesBtn != null){
+			loginService.updateIsEnabled(userId);
+			return "member/Login/RestoreSuccess";
+		} else {
+			return "member/Login/loginMain";
+		}
+	}
+
+	@PostMapping("/forChangeNickname")
 	public ModelAndView changeNickname(String userId){
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userId", userId);

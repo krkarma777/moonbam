@@ -91,6 +91,18 @@ public class LoginController {
 	@GetMapping("/OAuth2Error")
 	public String OAuth2Error() { return "member/Find_Info/emailErrorPage";
 	}
+	
+	//비정상적 접근
+	@GetMapping("/badRequest")
+	public String badRequest() {
+		return "member/Find_Info/emailErrorPage";
+	}
+
+	//정지된 유저의 접근
+	@GetMapping("/restrictedMember")
+	public String restrictedMember() {
+		return "member/Find_Info/restrictedMember";
+	}
 
 	//로그인
 //	SpringSecurity_SecurityConfig에서 처리
