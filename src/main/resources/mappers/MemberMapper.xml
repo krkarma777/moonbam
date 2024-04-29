@@ -11,6 +11,29 @@
 		WHERE userId = #{userId}
 	</select>
 
+	<!--자진탈퇴 유저 복구용-->
+	<!--현재 유저가 자진탈퇴한 유저인지 확인-->
+	<select id="getMemberStatusWithRestriction" resultType="RestoreRestrictedMember"  parameterType="String">
+		SELECT m.userId, m.enabled, arm.cause
+		FROM memberDB m
+		LEFT JOIN adminRestrictedMember arm ON m.userId = arm.userid
+		where m.userId = #{userId}
+	</select>
+
+	<!--자진탈퇴 유저 정지 해제-->
+	<update id="memberEnabled" parameterType="map">
+		update memberDB
+		set	enabled  = 'True'
+		where userId = #{userId}
+	</update>
+
+	<!--자진탈퇴 유저를 adminRestrictedMember Table에서 삭제-->
+	<delete id="RestrictionMember" parameterType="String">
+		delete
+		from adminRestrictedMember
+		where userId =#{userId}
+	</delete>
+
 	<!-- Spring Security용 -->
 	<select id="userDetail" resultType="MemberDTO" parameterType="String">
 	  select * from  memberDB

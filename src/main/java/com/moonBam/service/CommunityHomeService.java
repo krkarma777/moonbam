@@ -32,6 +32,7 @@ public class CommunityHomeService {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("searchCategory", searchCategory);
 		map.put("searchValue", searchValue);
+		map.put("userid", userid);
 		
 		CommunityPageDTO cpDTO = dao.myChatList(session, map, curPage, userid);
 		
