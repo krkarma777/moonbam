@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.moonBam.dto.member.RestoreRestrictedMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,8 +90,7 @@ public class AjaxController {
 	//메인에서 로그인 여부 확인 에이젝스
 	@PostMapping("AjaxCheckIDPW")
 	public String AjaxCheckIDPW(String userId, String userPw) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
-		String mesg = "loginSuccess";
-		
+
 		//	로그인 에이젝스 실행 시 입력한 아이디와 비밀번호 출력
 		//	System.out.println(userId);
 		//	System.out.println(userPw);
@@ -99,34 +99,48 @@ public class AjaxController {
 			MemberDTO dto= dao.userDetail(userId);
 
 		//	아이디가 없을 경우에는 바로 Ajax 종료
-			if(dto==null) {  
+			if(dto==null) {
+				System.out.println("가입되지 않은 아이디");
 				return "loginFail";
 			}
 		
 		//	아이디가 있을 경우	
 		//	DB에 입력된 비밀번호 출력
 		//	System.out.println("dto에 저장된 암호: "+dto.getUserPw());
-		
-		//	False면 활동 정지 상태
-			if (!dto.isEnabled()) {
-			    return "suspendedId";
-			}	
-			
+
+
 		//	입력한 비밀번호와 DB의 비밀번호가 match되는지 확인(인코딩되지 않은 입력 그대로의 비밀번호, DB의 비밀번호)
 			boolean canLogin = false;
 			try {
 				canLogin = encoder.matches(userPw, dto.getUserPw());
 			} catch (Exception e) {
+				System.out.println("소셜 회원가입자");
 				return "socialLogin";
 			}
 
 		//	False면 Ajax로 인한 메세지 출력	
 			if (!canLogin) {
-				mesg = "loginFail";                
+				System.out.println("비밀번호 오류");
+				return "loginFail";
 			}
 
+		//	활동 정지 상태지만, 자진 탈퇴한 경우
+		RestoreRestrictedMember restoreRestrictedMember = lServ.restoreMember(userId);
+		System.out.println(restoreRestrictedMember);
+		if (!restoreRestrictedMember.isEnabled() && restoreRestrictedMember.getCause().equals("myself")){
+			System.out.println("자진탈퇴 회원 복구");
+			return "loginSuccess";
+		}
+
+		//	False면 활동 정지 상태
+		if (!dto.isEnabled()) {
+			System.out.println("활동 정지 상태");
+			return "suspendedId";
+		}
+
 		//	True면 Submit 정상 진행
-		return mesg;
+		System.out.println("로그인 진행");
+		return "loginSuccess";
 	}
 	
 	//메인에서 이메일 중복 확인 에이젝스

@@ -10,14 +10,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>문화인들의 밤</title>
-	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/unfound.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='resources/css/member/doNotLoginByThisID.css'/>">
 </head>
 
 <body>
     <div class="notFound">
-        <h1>권한 없음</h1>
-        <p class="mesg">해당 페이지는 제한된 페이지입니다. <br>
-        권한이 있음에도 접속할 수 없다면 관리자에게 문의해주세요.</p>
+        <h2>정지된 유저의 소셜로그인 접속시도가 탐지되었습니다.</h2>
+        <p class="mesg">정지된 유저는 로그인을 할 수 없습니다.<br>
+        만일 정지된 유저가 아닐 경우, 고객센터로 문의바랍니다.</p>
         <div id="sitesShortCut">
 	        <a href="<%=request.getContextPath()%>/mainLogin" class="links">로그인</a>
         </div>

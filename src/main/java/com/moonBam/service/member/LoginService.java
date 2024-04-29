@@ -4,6 +4,7 @@ package com.moonBam.service.member;
 import com.moonBam.dao.member.LoginDAO;
 import com.moonBam.dto.MemberDTO;
 
+import com.moonBam.dto.member.RestoreRestrictedMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,15 @@ public class LoginService {
     public List<String> allSecretCode() {
     	List<String> list = dao.allSecretCode();
 		return list;
+	}
+
+	//자진 탈퇴 회원 복구
+	public RestoreRestrictedMember restoreMember(String userId) {
+		return dao.restoreMember(userId);
+	}
+
+	//자진 탈퇴 회원 복구 완료
+	public void updateIsEnabled(String userId) {
+		dao.updateIsEnabled(userId);
 	}
 }
