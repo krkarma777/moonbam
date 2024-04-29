@@ -20,6 +20,7 @@ import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 
@@ -129,13 +130,17 @@ public class ChatController {
 	
 	//강퇴하기 기능
 	@RequestMapping(value = "/Chatmore/ChatKickUser", method = RequestMethod.GET)
-	public String ChatKickUser (String userId, String chatNum) {
+	public String ChatKickUser (String userId, String chatNum, HttpSession session) {
 		
 		int n = 0;
 		
 		System.out.println("ChatKickUser===================");
 		System.out.println("강퇴할 유저의 이름 확인 후 서비스레이어 전달");
 		System.out.println(userId);
+		
+		//session.setAttribute("Kicked", "yes");
+		session.setAttribute("KickedUserId", userId);
+		
 		System.out.println("=================================");
 		
 		n = crService.ChatKickUser(userId, chatNum);
