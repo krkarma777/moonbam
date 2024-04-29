@@ -86,7 +86,7 @@ String mesg = (String) session.getAttribute("mesg");
 if (mesg != null) {
 %>
 
-<script>
+		<script>
 		alert("<%=mesg%>");
 		</script>
 
@@ -116,8 +116,12 @@ session.removeAttribute("mesg");
 							${ChatRoomDTO.roomTitle}</span>
 				</label> <!-- 설정이 더보기, 더보기로 가는 주소 실행 --> <%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button> --%>
-					<span style="float: right; color: white; margin-left: auto;"
-					onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
+
+					<span style="float:right; color:white; margin-left: auto;"
+						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
+					<span style="float:right; color:white; margin-left: auto;"
+						onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>	
+
 				</td>
 
 
@@ -192,12 +196,15 @@ session.removeAttribute("mesg");
 		}
 
 		var stompClient = null;
+		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
+		var serverTime = new Date().toLocaleString(); //서버 타임
 
 		// 소켓 연결
 		function connect() {
 			var socket = new SockJS('/acorn/chat-socket');
 			stompClient = Stomp.over(socket);
-			var serverTime = new Date().toLocaleString();
+			console.log("stompClient:::",stompClient)
+			
 			stompClient.connect({}, function(frame) {
 				// 메세지 받는 주소
 				stompClient.subscribe('/topic/messages/'+${ChatRoomDTO.chatNum},
@@ -209,8 +216,74 @@ session.removeAttribute("mesg");
 				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 					'type':'ENTER',
 					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
+					'userId' : userIdInSocket,
 					}));
 			});
+			
+		}
+		
+		 // 소켓 연결 끊기게 하는 함수
+		function disconnect() {
+			 
+			  if (stompClient !== null) {
+			        exit();
+			        stompClient.disconnect();
+			    }
+			    
+			    console.log("Disconnected");
+		 }
+		 
+		 //연결 끊겼을 때 퇴장 메세지 띄우는 함수
+		 function exit(){
+		    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+		    	'type':'EXIT',
+				'message' : `${nickNameInSession}` + ' 님이 퇴장했습니다.	' + serverTime,
+				'userId' : userIdInSocket,
+			}));
+		}
+	  
+		 
+		 
+		 
+		//방나가기 눌렀을 때 작동되는 fn
+		function fnGoOut() {
+			console.log("goOutForm");
+			
+			
+			$.ajax({
+
+                type: "post",
+                url: "/acorn/chatRoom/out",
+                data: {
+                  "chatNum" : ${ChatRoomDTO.chatNum}
+                },
+                success: function (data, status, xhr) {
+                	
+                	//console.log("하이",data)
+					
+					if(data == "successToOut"){
+						
+						disconnect(); ////소켓 연결 끊고 퇴장 메세지 뿌리기
+						alert("방을 나갔습니다.");
+						window.close(); ///내 창 닫기
+						
+					}else if(data == "failToOut"){
+						
+						location.reload(true); ///새로고침
+						
+					}
+                    
+
+                },
+                error: function (xhr, status, error) {
+						
+                	console.log("퇴장하기 error 발생",error)
+
+                }
+
+            })//ajax
+			
+			
 		}
 		
 
@@ -223,54 +296,38 @@ session.removeAttribute("mesg");
 				//console.log("유저아이디 먼데",userId)
 				var message = escapeHtml($("#messageContent").val()); // 메세지 
 				var serverTime = new Date().toLocaleString();
-				sendChatMessage(chatNum, userId, message, serverTime);
+				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
+					'type' : 'TALK',
+					'userId' : userId,
+					'message' : message,
+					'serverTime' : serverTime}));
 				document.getElementById('messageContent').value = ''; 
 			 }
 		}
-		
-		
-		function sendChatMessage(chatNum, userId, message, serverTime) {
-            stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
-				'type' : 'TALK',
-				'userId' : userId,
-				'message' : message,
-				'serverTime' : serverTime}));
-            document.getElementById('messageContent').value = ''; 
-        }
+
 		// 메세지 출력
 		// 최신 메세지 추가(위치는 맨 뒤)
 		// 이전 메세지 추가(위치는 맨위)
 		function createMsgTag(messageOutput) {
-
 			//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
 			let nickName = body.nickName;
-			console.log("nickName : " +nickName)
-			console.log("body : " +body.chatContent)
-		    let content = JSON.parse(body.chatContent);
+		    
+			let content = JSON.parse(body.chatContent);
 			let message = content.message;
-
-
 			let time = content.serverTime;
-	    	let chatLi;
-	    
-	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-	    
-	    
-	    if(message == "강퇴"){
-				console.log("강퇴");
-			 stompClient.disconnect();
-			 return "";
-		}
-	    
-	    
-	    
-	   
+			let userId =  content.userId; 
+		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+		    let chatLi;
 	    if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 	    
-	    } else {
+	    }else if(content.type == 'EXIT') {
+	    	// 퇴장 메세지일 경우
+	    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+	   
+	    }else {
 	    	console.log("talk")
 	        // 일반 메시지일 경우
 	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
@@ -294,7 +351,6 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-		
 		
 	</script>
 </body>

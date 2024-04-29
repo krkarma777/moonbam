@@ -84,7 +84,7 @@ public class MainController {
                 put("category", cate);
             }
         });
-        
+        	
         model.addAttribute("movieList", moviePostList);
         model.addAttribute("movieMeetList", movieMeetList);
         model.addAttribute("movieInfoList", movieInfoList);

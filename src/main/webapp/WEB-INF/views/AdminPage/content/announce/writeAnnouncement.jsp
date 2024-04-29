@@ -100,10 +100,6 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
        </td>
 		</tr>
 		<tr>
-			<td>자료</td>
-			<td><input type="file" name="img" accept="image/*"></td>
-		</tr>
-		<tr>
 			<td colspan="4"><input type="submit" value="저장">
 				<button id="close">취소</button></td>
 		</tr>

@@ -22,21 +22,16 @@ var list = <%= request.getAttribute("list") %>;
 		let sTop=0;
 		let width;
     	let height;
-    	
-        for (var i = 0; i < list.length; i++) {
-        	let flag= true;	/*  false 시 팝업 안나옴 */
-        	if(flag){
+
+    	for (var i = 0; i < list.length; i++) {
+        	let cookie = getCookie("popup"+list[i])
+        	if(cookie != "check"){
         		// 팝업 창의 위치 설정
         		setPostion(i);
         		// 팝업 창 띄위기
-        	/* 	console.log(sLeft);
-        		console.log(sTop);
-        		console.log(width);
-        		console.log(height); */
-        		console.log(list[i]);
         		window.open("ViewPopupController/" + list[i]+"/main", "popup" + i,
-     			//window.open("ViewPopupController?num=" + list[i], "popup" + i,
-        				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
+        	            "left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height + ", location=1");
+
         	}
         }
         
@@ -49,15 +44,26 @@ var list = <%= request.getAttribute("list") %>;
 			// 창의 크기
 			width = (screenWidth / 4);
 			height = (screenHeight / 3);
-//			console.log("화면 크기: " , width);
-	//		console.log("화면 높이: " ,height);
 			// 창의 시작점
 			sLeft = width * ((i % 4));
 			sTop = height * Math.floor(i / 4);
-	//		console.log("팝업 크기: " , width);
-	//		console.log("팝업 높이: " ,height);
 		}
 	});
+   
+        		
+	// 쿠키에 있어 checked이면 return checked
+	 function getCookie(name) {
+	        var decodedCookie = decodeURIComponent(document.cookie);
+	        
+			var cookies = decodedCookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+	            var cookie = cookies[i].trim();
+	            if (cookie.indexOf(name) === 0) {
+	                return cookie.substring(name.length + 1);
+	            }
+	        }
+	        return "";
+	    }
 </script>
 <!-- popup 종료 -->
 
@@ -68,6 +74,7 @@ var list = <%= request.getAttribute("list") %>;
 	
 	<!-- 바디 -->
 	<div class="container-fluid" style="height: 100%; width: 100%;">
+	
 		<div class="d-flex align-content-center justify-content-center"
 			style="height: 100%;">
 			<div class="align-self-center" style="background-color: transparent;">
@@ -87,6 +94,7 @@ var list = <%= request.getAttribute("list") %>;
 			</div>
 		</div>
 	</div>
+	
 	<!-- 푸터 -->
 	<jsp:include page="common/footer.jsp"></jsp:include>
 	
