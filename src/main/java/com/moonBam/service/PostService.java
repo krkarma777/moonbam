@@ -126,4 +126,11 @@ public class PostService {
 	public List<PostSaveDTO> postSaveSelect(String userId) {
 		return null;
 	}
+	
+	//임시저장글 일정 시간 지나면 자동 삭제
+	public void delectExpiredPostSave(String userId) {
+		dao.delectExpiredPostSave(userId);
+	}
+	
+
 }
