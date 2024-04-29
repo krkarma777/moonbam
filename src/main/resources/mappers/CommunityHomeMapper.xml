@@ -64,7 +64,7 @@
   	</select>
   	
   	<select id="myChatList" resultType="ChatRoomDTO" parameterType="HashMap">
-  		select * from chatroom where chatnum in ${myChatRoomList}
+  		select * from chatroom join chatmember using(chatnum) where chatnum in ${myChatRoomList}
   		<choose>
   			<when test="searchCategory == '전체'">
   				and ROOMTITLE like '%'||#{searchValue}||'%'
@@ -79,7 +79,7 @@
   				and category = 'music' and ROOMTITLE like '%'||#{searchValue}||'%'
   			</when>
   		</choose>
-  		
+  		and iskicked = 'f' and userid= #{userid}
 	</select>
 	
 	

@@ -14,10 +14,6 @@
 </head>
 
 <body>
-<div id="header">
-    <jsp:include page="/WEB-INF/views/common/navBar.jsp" flush="true"></jsp:include><br>
-</div>
-
     <div class="notFound">
         <h2>관리자 아이디의 소셜로그인 접속시도가 탐지되었습니다.</h2>
         <p class="mesg">관리자 아이디는 보안 상의 이유로 소셜로그인을 할 수 없습니다.<br>

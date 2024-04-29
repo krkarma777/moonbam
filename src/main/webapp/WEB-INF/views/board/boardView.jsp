@@ -42,8 +42,9 @@
         String link = service.linkMainCategory(postBoard);
         String boardType = service.linkDropDownCategory(postBoard);
 	
-        List<ContentDTO> movieTopList = (List<ContentDTO>) session.getAttribute("movieTopList");
-        List<ContentDTO> genreMovieTopList = (List<ContentDTO>) session.getAttribute("genreMovieTopList");
+        List<ContentDTO> movieTopList = (List<ContentDTO>) request.getAttribute("movieTopList");
+        List<ContentDTO> genreMovieTopList = (List<ContentDTO>) request.getAttribute("genreMovieTopList");
+        String genre = (String)request.getAttribute("genre");
     %>
 
 
@@ -1103,7 +1104,7 @@
 		
 		<!-- 전체 영화 순위 -->
 		<div style="width: 200px; height: 100%; text-align: center;">
-			<span style="color:#ff416c;"><b>💥장르 영화 랭킹💥</b></span>
+			<span style="color:#ff416c;"><b>💥<%=genre %> 영화 랭킹💥</b></span>
 			<div class="list-group slider-container slide2" style="border-radius: 0px;">
                 <!-- 영화 포스터 반복 구간 -->
                 <%-- 서버에서 가져온 최신 개봉 영화 데이터를 기반으로 반복 --%>
