@@ -151,4 +151,11 @@ public class PostDAO {
 	public void update(PostUpdateRequestDTO postUpdateRequestDTO) {
 		session.update("update", postUpdateRequestDTO);
 	}
+	
+	//임시저장글 일정 시간 지나면 자동 삭제
+	public void delectExpiredPostSave(String userId) {
+		session.delete("delectExpiredPostSave", userId);
+	}
+	
+	
 }// end class
