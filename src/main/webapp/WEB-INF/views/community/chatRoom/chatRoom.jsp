@@ -209,9 +209,15 @@ session.removeAttribute("Kicked");
 						});
 
 		/* 신고하기 */
-		function openReportWindow() {
-			var url = "reportWindow";
-			window.open(url, "_blank", "width=600,height=400");
+		function openReportWindow(userId, message) {
+			
+			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
+			localStorage.setItem('userId',  JSON.stringify(userId));
+			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
+			localStorage.setItem('message', JSON.stringify(message));
+			
+			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
+			window.open("reportWindow", "_blank", "width=400,height=400");
 		}
 
 		var stompClient = null;
@@ -374,7 +380,7 @@ session.removeAttribute("Kicked");
 				if(whosMessage == "my-chat"){
 					  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 				}else{
-					  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+					  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 				}
 		       
 		    }
