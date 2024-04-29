@@ -28,14 +28,16 @@ public class AdminDeletedPostService {
     }
 
 	public void cleanDeletedPost() {
-		dao.cleanDeletedPost();
+		dao.cleanDeletedPost("");
 		
 	}
 
-	public int restoreDeletedPost(String postId) {
+	public int restoreDeletedPost(String postid) {
 
 		System.out.println("삭제된 글 가져오기");
-		AdminDeletedPostDTO dpDTO = dao.getDeletedPost(postId);
+		AdminDeletedPostDTO dpDTO = dao.getDeletedPost(postid);
+		
+		System.out.println(dpDTO);
 		
 		PostDTO pdto = new PostDTO();
 		
@@ -47,13 +49,19 @@ public class AdminDeletedPostService {
 		pdto.setPostDate(dpDTO.getPostdate());
 		pdto.setPostEditDate(dpDTO.getPosteditdate());
 		pdto.setPostText(dpDTO.getPosttext());
-		pdto.setNickname("");
+		pdto.setNickname(dpDTO.getNickname());
 		pdto.setCategoryId(dpDTO.getCategoryid());
 		
-		int n = 0;
+		System.out.println("PostDAO전달 전의 postDTO");
+		System.out.println(pdto);
 		
+		System.out.println("post테이블 재저장");
 		pdao.insertContent(pdto);
-		n = 1;
+		
+		System.out.println("기존 deletedPost에서 삭제");
+		dao.cleanDeletedPost(postid);
+		
+		int n = 1;
 		
 		return n;
 	}

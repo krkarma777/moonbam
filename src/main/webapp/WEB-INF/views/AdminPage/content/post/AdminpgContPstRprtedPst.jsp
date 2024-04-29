@@ -4,6 +4,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <style>
+	.truncate {
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
 
     .text-pink {
         color: #ff416c; /* Bright pink text for emphasis */
@@ -70,16 +77,48 @@
             <tr>
                 <td><input type="checkbox" class="chkPost" data-xxx="${dto.targetId}"></td>
                 <td>${fn:indexOf(list, dto)+1}</td> <!-- Displaying index as report number -->
-                <td><a href="#" class="showContent text-pink">${dto.targetId}</a></td>
+                <td><a href="<%=request.getContextPath() %>/board/content?postId=${dto.targetId}" class="showContent text-pink">${dto.targetId}</a></td>
                 <td>${dto.reporterId}</td>
                 <td>${dto.userId}</td>
-                <td>${dto.sexual}</td>
-                <td>${dto.lang}</td>
-                <td>${dto.abusing}</td>
-                <td>${dto.ruleviolation}</td>
-                <td>${dto.etc}</td>
-                <td>${dto.cont}</td>
-                <td>${dto.action}</td>
+                <td>
+                <c:choose>
+                    <c:when test="${dto.sexual eq 't'}">&#10004;</c:when>
+                    <c:otherwise>&#10006;</c:otherwise>
+                </c:choose>
+	            </td>
+	            <td>
+	                <c:choose>
+	                    <c:when test="${dto.lang eq 't'}">&#10004;</c:when>
+	                    <c:otherwise>&#10006;</c:otherwise>
+	                </c:choose>
+	            </td>
+	            <td>
+	                <c:choose>
+	                    <c:when test="${dto.abusing eq 't'}">&#10004;</c:when>
+	                    <c:otherwise>&#10006;</c:otherwise>
+	                </c:choose>
+	            </td>
+	            <td>
+	                <c:choose>
+	                    <c:when test="${dto.ruleviolation eq 't'}">&#10004;</c:when>
+	                    <c:otherwise>&#10006;</c:otherwise>
+	                </c:choose>
+	            </td>
+	            <td>
+	                <c:choose>
+	                    <c:when test="${dto.etc eq 't'}">&#10004;</c:when>
+	                    <c:otherwise>&#10006;</c:otherwise>
+	                </c:choose>
+	            </td>
+                <td>
+                <div class="truncate" onclick="showFullContent('${dto.cont}')">${fn:substring(dto.cont, 0, 10)}${fn:length(dto.cont) > 10 ? '...' : ''}</div>
+            </td>
+                <td>
+	                <c:choose>
+	                    <c:when test="${dto.action eq 'yes'}">&#10004;</c:when>
+	                    <c:otherwise>&#10006;</c:otherwise>
+	                </c:choose>
+	            </td>
             </tr>
         </c:forEach>
         </tbody>
@@ -96,9 +135,9 @@
 		
 		$("#chkAll").on("click", chkArr);
 		$("#delChecked").on("click", delChecked);
-		$(".showContent").on("click", showContent);
 		
 		var flag = 1;
+		
 		function chkArr(){
 			//console.log("chkArr");
 			if (flag==1){
@@ -141,34 +180,12 @@
 			location.href = "<%=request.getContextPath()%>" + "/AdminPage/DeletePost?postArr="+postArr;
 		}//delChecked
 		
-		//해당 글 아이디 클릭시 자식창으로 글 내용 확인
-		function showContent(){
-			//글 아이디 파싱 확인
-			var postid = $(this).text()
-			console.log(postid);
-			
-			// 글 내용 보여줄 자식창을 변수에 저장
-			
-			
-			//ajax로 글 내용 받아서 자식창으로 전달
-			$.ajax({
-				type: "get",
-				url:"AdminShowPostContentServlet",
-				data:{postid:postid},
-				dataType:"json",
-				success:function(data, status, xhr){
-					
-					//childWin;
-					
-				},//success
-				error:function(xhr, status, error){
-					console.log(error);
-				}
-			})//ajax
-			
-			
-			
-		}//showContent
-		
 	});//document
+	
+	//해당 글 아이디 클릭시 자식창으로 글 내용 확인
+	function showFullContent(content) {
+		console.log("shiwFullContent")
+    	var win = window.open("", "MsgWindow", "width=200,height=100,left=100,top=100");
+    	win.document.write("<textarea readonly>" + content + "</textarea>");
+	}
 </script>

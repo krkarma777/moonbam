@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.AdminDeletedPostDTO;
 import com.moonBam.dto.AdminReportDTO;
-import com.moonBam.dto.board.PostDTO;
 import com.moonBam.service.adminpage.AdminDeletedPostService;
 import com.moonBam.service.adminpage.AdminReportService;
 
@@ -73,45 +73,44 @@ public class AdminPostController {
 	@RequestMapping(value = "/AdminPage/AdminPageDeletedPost")
 	public ModelAndView getDeletedPostList(String SearchValue, String Criteria, ModelAndView mav) {
 		
-			System.out.println("1. 검색조건 입력");
-			HashMap<String, String> map = new HashMap<>();
-			map.put("searchValue", SearchValue);
-			map.put("criteria", Criteria);
-			System.out.println("2. 서비스 레이어에 검색조건 전달");
-			List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
-			System.out.println("jsp 페이지로 전달할 list");
-			System.out.println(list);
-			mav.addObject("list", list);
+		System.out.println("1. 검색조건 입력");
+		HashMap<String, String> map = new HashMap<>();
+		map.put("searchValue", SearchValue);
+		map.put("criteria", Criteria);
+		
+		System.out.println("2. 서비스 레이어에 검색조건 전달");
+		List<AdminDeletedPostDTO> list = dpservice.getDeletedPostList(map);
+		System.out.println("jsp 페이지로 전달할 list");
+		System.out.println(list);
+		
+		mav.addObject("list", list);
 		mav.setViewName("/AdminPage/AdminPageDeletedPost");
 		
 		return mav;
 	}
 	
-	//삭제된 게시글 완전삭제
-	//@Scheduled(cron = "0 0 0 1 1 *")
+	//삭제대기 게시글 완전삭제
+	@Scheduled(cron = "0 0 0 1 * *")
 	public void cleanDeletedPost() {
 		dpservice.cleanDeletedPost();
 	}
 	
-	//삭제된 게시글에서 복원
+	//삭제대기 게시글에서 복원
 	@RequestMapping(value = "/AdminPage/restoreDeletedPost")
-	public ModelAndView restoreDeletedPost(ModelAndView mav, String postId) {
-		
-		int n = dpservice.restoreDeletedPost(postId);
+	public ModelAndView restoreDeletedPost(ModelAndView mav, String postid) {
+		System.out.println("in AdminPostController.restoreDeletedPost");
+		System.out.println(postid);
+		int n = dpservice.restoreDeletedPost(postid);
 		
 		if(n ==1) {
 			System.out.println("성공적으로 복원되었습니다");
 		}else {
 			System.out.println("복원실패");
 		}
+		
+		mav.setViewName("redirect:/AdminPage/AdminPageDeletedPost");
+		
 		return mav;
 	}
 	
-	//삭제된 댓글 조회
-	@RequestMapping(value = "/AdminPage/AdminPageDeletedComment")
-	public String getDeletedCommentList() {
-		return "/AdminPage/AdminPageDeletedComment";
-	}
-	
-	//삭제된 댓글 완전삭제
 }

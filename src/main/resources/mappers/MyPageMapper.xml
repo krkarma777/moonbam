@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insertAdminRestrictedMember" parameterType="AdminRestrictedMemberDTO">
         INSERT INTO adminRestrictedMember (actno, userid, status, cause, action, actionstart, actionend)
-        VALUES ('', #{userid}, 'myself', 'withdraw', '', sysdate, SYSDATE+30)
+        VALUES (restrictedmemberSEQ.nextval, #{userid}, 'myself', 'withdraw', '', sysdate, SYSDATE+30)
     </insert>
   
 <update id="updateNickname" parameterType="string">
