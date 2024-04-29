@@ -1,0 +1,2 @@
+{"type":"TALK","userId":"kmj3718@naver.com","message":"안녕하세요","serverTime":"2024. 4. 29. 오후 12:14:45"}
+{"type":"TALK","userId":"kmj102497@gmail.com","message":"반가워요","serverTime":"2024. 4. 29. 오후 12:14:49"}
