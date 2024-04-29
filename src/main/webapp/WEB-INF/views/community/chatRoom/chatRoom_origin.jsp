@@ -105,7 +105,6 @@ session.removeAttribute("mesg");
 
 </head>
 <body onload="connect()">
-	${ChatRoomDTO.chatNum}-${userIdInSession}
 	<table style="background: white; width: 100%;">
 
 		<thead class="header">
@@ -122,11 +121,7 @@ session.removeAttribute("mesg");
 					onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
 					<span style="float: right; color: white; margin-left: auto;"
 					onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<button type="button" class="btn btn-sm"
-						style="float: right; height: 30px;"
-						onClick="fnKick('${userIdInSession}')">
-						<b>강퇴하기</b>
-					</button>
+
 				</td>
 
 
@@ -326,10 +321,10 @@ session.removeAttribute("mesg");
 		    let chatLi;
 		    
 		if(content.type == "KICKED")   {
-			
-			// chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
-			 alert(chatLi);
-		}else if (content.type == 'ENTER') {
+			console.log("jfkdslfk")
+		}
+		    
+	    if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 	    
@@ -351,19 +346,6 @@ session.removeAttribute("mesg");
 	    }
 	    $("#chat").append(chatLi);
 	}
-		
-		// 강퇴
-		//채팅 멤버 강퇴
-		function fnKick(userId) {
-    console.log("Fdjfk");
-    var url = "/acorn/Chatmore/" + `${ChatRoomDTO.chatNum}` + "/ChatKickUser";
-    stompClient.send(url, {}, JSON.stringify({
-		'type' : 'kick',
-		'userId' : userId,
-		'message' : "강퇴",
-	}));
-}
-
 
 		// 취야점 보안
 		// 스크립트 코드 정지
@@ -374,7 +356,6 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-	
 		
 	</script>
 </body>

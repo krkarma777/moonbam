@@ -12,7 +12,9 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.ChatTableDTO;
@@ -34,13 +36,17 @@ public class ChatMessageController {
 	MemberService memberService;
 	
 	// 파일 이름 저장
-	Set<Integer> numbers = new HashSet<>();
+	Set<String> numbers = new HashSet<>();
 
 // 받고 주고
 	@MessageMapping("/chat/send/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @RequestParam String chatContent,
-			@DestinationVariable("chatNum") int chatNum, Principal principal) {
+	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @RequestParam(required = false) String chatContent,
+			@DestinationVariable("chatNum") String chatNum, Principal principal) {
+//		System.out.println("here");
+//		ChatTableDTO cto1 = (ChatTableDTO) req.getAttribute("test");
+//		System.out.println(cto1);
+		
 		ctDto.setChatNum(chatNum);
 		ctDto.setChatContent(chatContent);
 
@@ -109,7 +115,7 @@ public class ChatMessageController {
 			// set에서 num가져와서 file에 읽고 insert하고 delet하고
 			// 필요한거 set만
 			// for를 get(num)하고 read > insert > delete
-			for (int num : numbers) {
+			for (String num : numbers) {
 				// path file
 				String filePath = "src/main/resources/static/com/" + num + ".txt";
 				// read file
