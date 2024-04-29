@@ -87,10 +87,24 @@
 <script type="text/javascript">
 
 
+//메세지를 눌러서 신고할 경우 해당 메세지가 신고사유에 자동 기입되게 설정
+	const message = JSON.parse(localStorage.getItem('message'));
+	console.log("최종",message);
+	
+	if(message!=null){
+		$("#cont").val('[신고할 채팅 메세지] : ' + message);
+		window.localStorage.clear(); ///저장했던 localStorage값 삭제하기
+	}else{
+		$("#cont").val("");
+	}
+
 
 	function mywindow(){ //본인창닫기
 			close();
 	}
+	
+	
+
 				
 
 </script>

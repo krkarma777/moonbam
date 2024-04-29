@@ -51,8 +51,8 @@
 		<b>&nbsp&nbsp${memberDTO.nickname} ( ${memberDTO.userId} ) </b><br>
 		<span style="opacity: 0.7;">&nbsp&nbsp가입한 날짜 ${leadermemberDto.userSignDate }</span>
 		<div>
-			<form action="/acorn/userinfo">
-				<button type="button" class="btn btn-sm" style="float:right; height:30px;"><b>정보 수정하기</b></button>
+			<form action="/acorn/my-page/info">
+				<button class="btn btn-sm" style="float:right; height:30px;"><b>정보 수정하기</b></button>
 			</form>
 		</div>
 	</div>
