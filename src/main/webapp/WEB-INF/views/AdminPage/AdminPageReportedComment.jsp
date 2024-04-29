@@ -18,7 +18,7 @@
     <jsp:include page="common/AdminMenu.jsp" flush="true"/>
 
     <div class="shadow">
-        <jsp:include page="content/post/AdminPageDeletedComment.jsp" flush="true"/>
+        <jsp:include page="content/post/AdminPageReportedComment.jsp" flush="true"/>
     </div>
 </div>
 <!-- Bootstrap JS -->

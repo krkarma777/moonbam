@@ -242,4 +242,9 @@
 		where postSaveId = #{postSaveId}
 	</select>
 	
+	<!-- 임시저장글 일정 시간 지나면 자동 삭제 -->
+	<delete id="delectExpiredPostSave">
+		DELETE FROM postSaveDB WHERE userID = #{userId} AND postSaveDate &lt; SYSDATE - INTERVAL '7' DAY
+	</delete>
+	
 </mapper>

@@ -56,7 +56,7 @@
         text-align: center;
     }
 </style>
-<h1>삭제된 댓글 관리</h1>
+<h1>신고된 댓글 관리</h1>
 <form action="<%=request.getContextPath() %>/AdminPage/AdminPostDeleted">
     <select name="SearchCondition">
         <option value="" class="SearchStandard">글 아이디</option>
@@ -72,24 +72,24 @@
     <table border="1">
         <tr>
             <th>댓글번호</th>
-            <th>댓글내용</th>
             <th>작성자</th>
-            <th>삭제사유</th>
-            <th>처분여부</th>
-            <th>완전삭제예정일</th>
+            <th>성적인 댓글</th>
+            <th>언어</th>
+            <th>도배</th>
+            <th>규정위반</th>
+            <th>기타</th>
+            <th>처분</th>
         </tr>
-        <tr>
-            <td colspan="6" class="center">검색조건을 입력하세요.</td>
-        </tr>
+            <!-- <td colspan="8" class="center">검색조건을 입력하세요.</td> -->
         <tr>
             <td></td>
             <td><a href="#"></a></td>
             <td><a href="#"></a></td>
             <td></td>
-            <td>
-                <button class="DelBtn">삭제</button>
-            </td>
             <td></td>
+            <td></td>
+            <td></td>
+            <td><button class="DelBtn">삭제</button></td>
         </tr>
     </table>
 </form>

@@ -31,7 +31,6 @@
 </head>
 <body class="bg-light"
 	style="height: 100%; width: 100%; position: relative; border: 1px solid black;">
-
 	<div
 		style="height: 30px; background-color: #ffb2c4; font-size: 19px; margin-bottom: 5px; color: white;">
 		<span onclick="history.back()"><b>뒤로가기</b></span>
@@ -56,9 +55,8 @@
 			( ${memberDTO.userId} ) </b><br> <span style="opacity: 0.7;">&nbsp&nbsp가입한
 			날짜 ${leadermemberDto.userSignDate }</span>
 		<div>
-			<form action="/acorn/userinfo">
-				<button type="button" class="btn btn-sm"
-					style="float: right; height: 30px;">
+			<form action="/acorn/my-page/info">
+				<button class="btn btn-sm" style="float: right; height: 30px;">
 					<b>정보 수정하기</b>
 				</button>
 			</form>
@@ -154,6 +152,10 @@
 		crossorigin="anonymous"></script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 	<script type="text/javascript">
 	
 		var child; //자식팝업창 변수 선언
@@ -167,21 +169,7 @@
 			childOpen(openUrl);
 			
 		}
-		
-		//채팅 멤버 강퇴
-		function fnKick(userId) {
-			location.href = "/acorn/Chatmore/"+${chatroomDTO.chatNum}+"/ChatKickUser?userId="+userId
-			
-		}
-		
-		
-	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)
-		function fnGoOut() {
-			console.log("goOutForm");
-			$("#goOutForm").attr("action","/acorn/chatRoom/out").submit();
-			
-		} */
-		
+	
 		//방장이 방 삭제하기 눌렀을 때 작동되는 fn
 		function fnRemove() {
 			console.log("fnRemove");
@@ -207,8 +195,54 @@
 		}
 	
 	
-	
-	
+		
+		var stompClient = null;
+		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
+		var serverTime = new Date().toLocaleString(); //서버 타임
+
+		// 페이지 로드 시 초기화
+		$(document).ready(function() {
+		    connect(); // 소켓 연결
+		});
+
+		// 소켓 연결
+		function connect() {
+		
+		    var socket = new SockJS('/acorn/chat-socket');
+		    stompClient = Stomp.over(socket);
+		    
+		    stompClient.connect({}, function(frame) {
+		        console.log("Connected to WebSocket", frame.headers['user-name']);
+		        
+		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
+		        sendChatMessage('ENTER', `${nickNameInSession} 님이 입장 ${serverTime}`);
+		    });
+		}
+
+		function sendChatMessage(type, message, userIdInSocket) {
+		    stompClient.send(`/acorn/chat/send/${ChatRoomDTO.chatNum}`, {}, JSON.stringify({
+		        'type': type,
+		        'message': message,
+		        'userId': userIdInSocket
+		    }));
+		}
+
+		
+		
+		//채팅 멤버 강퇴
+		function fnKick(userId) {
+		    stompClient.send("/acorn/Chatmore/ChatKickUser/" + `${chatroomDTO.chatNum}`, {}, JSON.stringify({
+	        'type': "KICKED",
+	        'userId': userId,	  }));
+		}
+		
+	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)
+		function fnGoOut() {
+			console.log("goOutForm");
+			$("#goOutForm").attr("action","/acorn/chatRoom/out").submit();
+			
+		} */
+		
 </script>
 </body>
 </html>

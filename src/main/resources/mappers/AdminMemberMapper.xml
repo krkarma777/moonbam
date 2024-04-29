@@ -28,15 +28,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 이용제한 해제 -->
 	<update id = "releaseUser">
-	update memberdb set enabled = "True" where userid = #{userId}
+		update memberdb set enabled = 'True' where userid = #{userid}
 	</update>
-	<!-- 신고처리된 대상자 정지 처리시 비활성화 -->
-	
-	<!-- 신고처리된 대상자 이용제한 회원 테이블에 저장 -->
 	
 	<select id = "getDeletedMemberList" resultType = "AdminDeletedMemberDTO">
 		select * from admindeletedmember
 	</select>
 	
+	<update id = "suspendUser">
+		update memberdb set enabled = 'False' where userid= #{userid}
+	</update>
+	
+	<insert id = "insertSuspendedUserInRestrictedUser">
+		insert into adminrestrictedmember values(restrictedmemberSEQ.nextval, #{userid}, '정지됨', '규정위반', '정지', sysdate, sysdate+180)
+	</insert>
+	
+	<insert id = "insertKickedUserInRestrictedDB">
+		insert into adminrestrictedmember values(restrictedmemberSEQ.nextval, #{userid}, '삭제대기중', '규정위반', '강퇴', sysdate, sysdate+30)
+	</insert>
+	
+	<select id = "getDeleteList"> 
+		select userid 
+		from adminrestrictedMember
+		where cause in ('탈퇴', '강퇴') and actionend = sysdate
+	</select>
+	
+	<delete id = "cleanDeletedMember">
+		delete from memberdb where userid = #{userid} 
+	</delete>
+	
+	<delete id = "cleanRestrictedMember">
+		delete from adminrestrictedmember where actionend=sysdate
+	</delete>
+	
+	<delete id = "deleteFromRestrictedMember">
+		delete from adminrestrictedmember where userid = #{userid}
+	</delete>
 	
 </mapper>

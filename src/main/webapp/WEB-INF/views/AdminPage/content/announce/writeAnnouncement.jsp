@@ -16,7 +16,10 @@
 	src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+	crossorigin="anonymous"> 
 
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Date"%>
@@ -62,26 +65,27 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 		});
 	});
 </script>
-
-<hr>
+<div style="width: 457px; height: 100vh;">
+<div style=" background-color: #ffb2c4; color:white; margin-left: auto; ">
 공지 작성
+</div>
 <form id="formWrite" action="InsertAnnouncementController"
-	enctype="multipart/form-data">
-	<table border='1'>
+	enctype="multipart/form-data" style="">
+	<table>
 		<tr>
 			<td>제목</td>
 			<td colspan="3"><input type="text" style="width: 100%" value=""
-				name="annoTitle" maxlength="30"></td>
+				name="annoTitle" maxlength="30" class="form-control form-control-sm item"></td>
 		</tr>
 		<tr>
 			<td>내용</td>
 			<td colspan="3"><textarea style="width: 100%" rows="10"
-					name="annoText" maxlength="500"> </textarea></td>
+					name="annoText" maxlength="500" class="form-control form-control-sm item"> </textarea></td>
 		</tr>
 		<tr>
 			<td>카테고리</td>
 			<td colspan="3">
-				<!-- select (option 전체, 영화, 소모임) --> <select name="category">
+				<!-- select (option 전체, 영화, 소모임) --> <select name="category" class="form-select form-select-sm">
 					<option value="main" >전체</option>
 					<option value="movie">영화</option>
 					<option value="community">소모임</option>
@@ -90,18 +94,19 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 		</tr>
 		<tr>
 			<td>시작일 - 종료일</td>
-			<td><input type="text" id="datePicker" class="dateTimePicker"
+			<td><input type="text" id="datePicker" class="dateTimePicker form-control form-control-sm item"
 				name="dateTimePicker" style="width: 100%"></td>
 		</tr>
 		<tr>
 			<td>팝업 허용</td>
 			<td colspan="3">
-				<input type="checkbox" id="popup" name="popup" value="on">
+				<input type="checkbox" id="popup" name="popup" value="on" class="form-check">
        </td>
 		</tr>
 		<tr>
-			<td colspan="4"><input type="submit" value="저장">
-				<button id="close">취소</button></td>
+			<td colspan="4"><input type="submit" value="저장" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;">
+				<button id="close" class="btn" style="background-color: #ffb2c4; color:white; margin-left: auto;">취소</button></td>
 		</tr>
 	</table>
 </form>
+</div>

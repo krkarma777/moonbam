@@ -21,16 +21,22 @@
 	<!-- 자진삭제 -->
 	<insert id="insertDeletedPostsfromPost" parameterType = "AdminDeletedPostDTO">
 		insert into admindeletedpost values(
-		
+		XbXB
 		)
 	</insert>
 	
-	<delete id="cleanDeletedPost">
-		delete * from admindeletedpost
+	<delete id="cleanDeletedPost" parameterType = "String">
+		delete from admindeletedpost
+		<if test="postid != null">
+		    where postid = #{postid}
+	    </if>
 	</delete>
 	
-	<select id = "getDeletedPost" parameterType = "String">
-		select * from admindeletedpost where postid = #{postId}
+	<select id = "getDeletedPost" parameterType = "String" resultType = "AdminDeletedPostDTO">
+	SELECT adp.*, mdb.nickname AS nickname
+	FROM admindeletedpost adp
+	JOIN memberDB mdb ON adp.userid = mdb.userid
+	WHERE postId = #{postId}
 	</select>
 
 </mapper>

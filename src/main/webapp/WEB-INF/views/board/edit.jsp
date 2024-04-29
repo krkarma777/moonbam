@@ -218,28 +218,28 @@
 </div>
 <!-- 임시저장 모달창 -->
 <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold;">임시 저장 목록</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                <table class="table">
-                    <colgroup>
-                        <col style="width: 75%;">
-                        <col style="width: 25%;">
-                    </colgroup>
-                    <tbody> <!-- Make sure you have this tag to append the dynamic rows -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-            </div>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bold;">임시 저장 목록</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+        <table class="table">
+          <colgroup>
+            <col style="width: 75%;">
+            <col style="width: 25%;">
+          </colgroup>
+          <tbody> <!-- Make sure you have this tag to append the dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer d-flex justify-content-between align-items-center">
+        <span style="color: #ff416c;">※임시저장 글은 작성일로부터 7일 후 자동으로 삭제됩니다.</span>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
     </div>
+  </div>
 </div>
 <!-- 임시저장 모달창 끝-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -352,7 +352,8 @@
             } else {
                 postSaveList.forEach(function(postSave) {
                     var row = $('<tr></tr>');
-                    row.append(`<td><span style="font-size: 20px; cursor: pointer;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + postSave.postSaveTitle + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
+                    var title = postSave.postSaveTitle ? postSave.postSaveTitle : "제목없음";
+                    row.append(`<td><span style="font-size: 20px; cursor: pointer;" class="loadPostSave" data-id="` + postSave.postSaveId + `">` + title + `</span><br><span style="color: gray;">` + postSave.postSaveDate + `</span></td>`);
                     row.append('<td style="text-align: center; vertical-align: middle;"><button class="delete-btn" data-id="' + postSave.postSaveId + '" style="background: none; border: none;"><i class="fa-regular fa-trash-can" style="font-size: medium;"></i></button></td>');
                     modalBody.append(row);
                 });
@@ -376,8 +377,18 @@
                     // 모달 창을 숨김
 
                     // 성공 시 제목과 내용 입력란에 데이터를 채움
-                    $('#postTitle').val(response.postSaveTitle);
-                    editorInstance.setData(response.postSaveText);
+					if (response.postSaveTitle){
+						$('#postTitle').val(response.postSaveTitle);
+					} else {
+						$('#postTitle').val('').attr('placeholder', '제목을 입력하세요');
+					}
+					
+					if (response.postSaveText) {
+					    editorInstance.setData(response.postSaveText);
+					} else {
+						editorInstance.setData('');
+						$('#postText').attr('placeholder', '내용을 입력하세요');
+					}
                 },
                 error: function (xhr, status, error) {
                     console.log(error);
@@ -443,7 +454,7 @@
             }
 
             // 제목과 내용이 비어있는지 확인
-            if (title.trim() === '' || content.trim() === '') {
+            if (title.trim() === '' && content.trim() === '') {
                 alert('제목과 내용을 모두 입력하세요.');
                 event.preventDefault();
                 return;

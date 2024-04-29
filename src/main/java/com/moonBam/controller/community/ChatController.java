@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.text.AbstractDocument;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -16,22 +18,26 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.moonBam.controller.community.chat.ChatMessagesService;
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.ChatTableDTO;
+import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
+import com.moonBam.service.member.MemberService;
 
-import jakarta.servlet.http.HttpServletRequest;
+//github.com/krkarma777/moonbam.git
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,6 +54,11 @@ public class ChatController {
 
 	
 	 private final SimpMessagingTemplate template;
+	 
+	 @Autowired
+		private ChatMessagesService chatMessagesService;
+		@Autowired
+		MemberService memberService;
 	 
 	// 소모임 대문에서 개설버튼 누르면 소모임 만드는 폼으로 이동
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
@@ -135,21 +146,28 @@ public class ChatController {
 	}
 
 	// 강퇴하기 기능
-	@MessageMapping(value = "/Chatmore/{chatNum}/ChatKickUser")
-	//@RequestMapping(value = "/Chatmore/{chatNum}/ChatKickUser", method = RequestMethod.GET)
+	@MessageMapping(value = "/Chatmore/ChatKickUser/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO ChatKickUser(@RequestParam String userId, @PathVariable("chatNum") String chatNum) {
+	public ChatTableDTO ChatKickUser(@RequestParam String content, @DestinationVariable("chatNum") String chatNum) {
 	    System.out.println("ChatKickUser");
-	    // 현재 시간을 나타내는 Date 객체 생성
-	    Date currentDate = new Date();
 
-	    // 출력 형식을 지정하기 위한 SimpleDateFormat 생성
-	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	    // get userId
+	    JSONParser parser = new JSONParser();
+		Object obj = null;
+		try {
+			obj = parser.parse(content);
 
-	    // Date 객체를 원하는 형식의 문자열로 변환하여 출력
-	    String formattedDate = formatter.format(currentDate);
-	    System.out.println(formattedDate);
-
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
+		JSONObject jsonObj = (JSONObject) obj;
+		String userId = (String) jsonObj.get("userId");
+	    
+		
+		// insert db
 	    int n = 0;
 
 	    System.out.println("ChatKickUser===================");
@@ -162,15 +180,29 @@ public class ChatController {
 	    System.out.println("1이면 정상처리됨==========");
 	    System.out.println(n);
 	    System.out.println("====================");
+	    
+	    Date currentDate = new Date();
+
+	    // 출력 형식을 지정하기 위한 SimpleDateFormat 생성
+	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+	    // Date 객체를 원하는 형식의 문자열로 변환하여 출력
+	    String formattedDate = formatter.format(currentDate);
+	    System.out.println(formattedDate);
 
 	    ChatTableDTO ctDto = new ChatTableDTO();
 	    ctDto.setChatNum(chatNum);
-
-	    String test = "{\"type\":\"KICKED\",\"message\":\"" + userId
-	            + " 님이 강퇴되었습니다.\\t"+ formattedDate+ "\"}" ;
-	    ctDto.setChatContent(test);
-	    System.out.println("kicked");
-	    template.convertAndSend("/topic/messages/" + chatNum, ctDto);
+	    
+		MemberDTO memberDTO = memberService.findByUserId(userId);
+		String nickName = memberDTO.getNickname();
+		ctDto.setNickName(nickName);
+		
+		System.out.println(jsonObj);	
+		jsonObj.remove("userId");
+		String message = nickName + " 님이 퇴장되었습니다. "+ formattedDate;
+		jsonObj.appendField("message",message);
+		ctDto.setChatContent(jsonObj.toString());
+		System.out.println(ctDto);
 	   return ctDto;
 	}
 

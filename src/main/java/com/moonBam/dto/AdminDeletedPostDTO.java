@@ -27,6 +27,7 @@ public class AdminDeletedPostDTO {
     Long categoryid;
     String cause;
     String expiredate;
+    String nickname;
 	public AdminDeletedPostDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -36,7 +37,7 @@ public class AdminDeletedPostDTO {
 		return "AdminDeletedPostDTO [deletedate=" + deletedate + ", postid=" + postid + ", postboard=" + postboard
 				+ ", userid=" + userid + ", contid=" + contid + ", posttitle=" + posttitle + ", postdate=" + postdate
 				+ ", posteditdate=" + posteditdate + ", posttext=" + posttext + ", categoryid=" + categoryid
-				+ ", cause=" + cause + ", expiredate=" + expiredate + "]";
+				+ ", cause=" + cause + ", expiredate=" + expiredate + ", nickname=" + nickname + "]";
 	}
 	public String getDeletedate() {
 		return deletedate;
@@ -110,6 +111,14 @@ public class AdminDeletedPostDTO {
 	public void setExpiredate(String expiredate) {
 		this.expiredate = expiredate;
 	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+    
+	
     
     
 }

@@ -131,6 +131,12 @@ public class AdminMenubarController {
 		return "redirect:/AdminPage/AdminPageAnnounce";
 	}
 	
+	//신고된 댓글 조회
+	@RequestMapping(value = "/AdminPage/AdminPageReportedComment")
+	public String getDeletedCommentList() {
+		return "/AdminPage/AdminPageReportedComment";
+	}
+	
 //	@RequestMapping(value = "/AdminPage/toAdminPageEvent")
 //	public String AdmintoAdminPageEvent() {
 //		System.out.println("in adminpage.MainController : AdmintoAdminPageEvent()");
