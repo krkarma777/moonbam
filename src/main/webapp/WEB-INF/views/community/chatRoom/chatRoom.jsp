@@ -104,6 +104,25 @@ if (mesg != null) {
 
 session.removeAttribute("mesg");
 %>
+
+<%
+String KickedUserId = (String) session.getAttribute("KickedUserId");
+if (KickedUserId != null) {
+%>
+
+		<script>
+		kicked();
+		</script>
+
+<%
+}
+
+session.removeAttribute("Kicked");
+%>
+
+
+
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script
@@ -182,8 +201,7 @@ session.removeAttribute("mesg");
 
 	<script>
 	
-	
-		/* 토글 처리 */
+	/* 토글 처리 */
 		$('input[id="toggle"]')
 				.change(
 						function() {
@@ -218,29 +236,37 @@ session.removeAttribute("mesg");
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
-
+		
+		
 		// 소켓 연결
 		function connect() {
-			var socket = new SockJS('/acorn/chat-socket');
-			stompClient = Stomp.over(socket);
-			console.log("stompClient:::",stompClient)
 			
-			stompClient.connect({}, function(frame) {
-				// 메세지 받는 주소
-				stompClient.subscribe('/topic/messages/'+${ChatRoomDTO.chatNum},
-// 아래 코드 안됨 왜?? ChatMessageController.sendMessage()에  @SendTo("/topic/messages/2") 지우고 @ResponseBody 선언
-//				stompClient.subscribe('/acorn/chat/send/'+${ChatRoomDTO.chatNum},
-						function(messageOutput) {
-				showMessageOutput(JSON.parse(messageOutput.body));
-						});
-				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-					'type':'ENTER',
-					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
-					'userId' : userIdInSocket,
-					}));
-			});
-			
+		    var socket = new SockJS('/acorn/chat-socket');
+		    stompClient = Stomp.over(socket);
+		    
+		    stompClient.connect({}, function(frame) {
+		        console.log("Connected to WebSocket",frame.headers['user-name']);
+ 
+		        // 메시지 받는 주소
+		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        	showMessageOutput(JSON.parse(messageOutput.body));
+		        });
+	
+		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
+		        sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
+		        
+		    });
 		}
+
+		
+		function sendChatMessage(type, message, userIdInSocket) {
+		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+		        'type': type,
+		        'message': message,
+		        'userId': userIdInSocket
+		    }));
+		}
+		
 		
 		 // 소켓 연결 끊기게 하는 함수
 		function disconnect() {
@@ -262,7 +288,16 @@ session.removeAttribute("mesg");
 			}));
 		}
 	  
-		 
+		 //강퇴 되었을 때 띄우는 메세지 함수
+		 function kicked(){
+			 console.log("kicked실행됨")
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'type':'KICKED',
+					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
+					'userId' : userIdInSocket,
+				}));
+			}
+		  
 		 
 		 
 		//방나가기 눌렀을 때 작동되는 fn
@@ -375,10 +410,7 @@ session.removeAttribute("mesg");
 		}
 		
 		
-		//
-		
-		
-		
+	
 		
 	</script>
 </body>

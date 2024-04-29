@@ -97,7 +97,9 @@ public class ChatMessageController {
 
 		return ctDto; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
-
+	
+	
+	
 	// 문제점
 	// 1. 서버 시작 부터 계속 실행됨
 	// 2. 소켓 해제 후 계속 실행
