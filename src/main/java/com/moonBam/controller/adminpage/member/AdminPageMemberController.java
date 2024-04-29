@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,9 +46,9 @@ public class AdminPageMemberController {
 	//신고회원 정지
 	@RequestMapping("/AdminPage/SuspendUser")
 	public ModelAndView SuspendUser(@RequestParam String[] userArr, ModelAndView mav) {
-		System.out.println("in adminpage.post.DeletePost");
-		List<String> deletelist = Arrays.asList(userArr);
-		int n = rservice.delReportedPost(deletelist);
+		System.out.println("in adminpage.post.SuspendUser");
+		List<String> suspendList = Arrays.asList(userArr);
+		int n = mservice.suspendUser(suspendList);
 		
 		System.out.println(n+"개의 사용자 정지");
 		
@@ -80,7 +81,7 @@ public class AdminPageMemberController {
 		List<AdminReportDTO> list = rservice.SearchReport(null);
 		
 		mav.addObject("list",list);
-		mav.setViewName("/AdminPage/AdminMemberReported");
+		mav.setViewName("redirect:/AdminPage/AdminMemberReported");
 		
 		return mav;
 	}
@@ -105,14 +106,14 @@ public class AdminPageMemberController {
 	
 	//이용제한 사용자 이용제한 해제
 	@RequestMapping("/AdminPage/releaseUser")
-	public ModelAndView releaseUser(@RequestParam String[] userArr, ModelAndView mav) {
+	public ModelAndView releaseUser(@RequestParam String userid, ModelAndView mav) {
 		System.out.println("in adminpage.member.releaseUser");
 
 		int n = 0;
 		
-		for(String userId : userArr) {
-			mservice.releaseUser(userId);
-		}
+		
+		mservice.releaseUser(userid);
+		
 		
 		if(n == 0) {
 			System.out.println("정지 해제");
@@ -144,11 +145,19 @@ public class AdminPageMemberController {
 	}
 	
 	
-	//삭제된 회원 데이터 완전삭제
-	public void cleanDeletedMember() {
+	//삭제대기중인 데이터 완전삭제
+//	@Scheduled(cron = "0 0 0 1 * *")
+//	@Scheduled(cron = "0 1 * * * *")
+	public void cleanDeleteMember() {
 		int n = 0;
-		n = mservice.cleanDeletedMember();
+		List<String> list = mservice.getDeletelist();
+		
+		n = mservice.cleanDeletedMember(list);
 		System.out.println("완전삭제된 회원의 데이터 : " + n + "건");
+		
+		int n2 = 0;
+		n2 = mservice.cleanRestrictedMember();
+		System.out.println("이용제한 회원 테이블에서 "+n2+"개의 데이터 삭제");
 	}
 	
 	

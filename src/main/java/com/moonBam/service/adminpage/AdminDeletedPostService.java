@@ -61,10 +61,6 @@ public class AdminDeletedPostService {
 		System.out.println("기존 deletedPost에서 삭제");
 		dao.cleanDeletedPost(postid);
 		
-		
-		
-		
-		
 		int n = 1;
 		
 		return n;

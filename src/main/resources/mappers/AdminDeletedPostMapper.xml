@@ -27,7 +27,6 @@
 	
 	<delete id="cleanDeletedPost" parameterType = "String">
 		delete from admindeletedpost
-		
 		<if test="postid != null">
 		    where postid = #{postid}
 	    </if>
@@ -37,7 +36,7 @@
 	SELECT adp.*, mdb.nickname AS nickname
 	FROM admindeletedpost adp
 	JOIN memberDB mdb ON adp.userid = mdb.userid
-	WHERE postid = 1
+	WHERE postId = #{postId}
 	</select>
 
 </mapper>
