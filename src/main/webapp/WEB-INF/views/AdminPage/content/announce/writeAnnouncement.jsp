@@ -65,13 +65,12 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 		});
 	});
 </script>
-
-<hr>
+<div style="width: 457px; height: 100vh;">
 <div style=" background-color: #ffb2c4; color:white; margin-left: auto; ">
 공지 작성
 </div>
 <form id="formWrite" action="InsertAnnouncementController"
-	enctype="multipart/form-data">
+	enctype="multipart/form-data" style="">
 	<table>
 		<tr>
 			<td>제목</td>
@@ -114,3 +113,4 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 		</tr>
 	</table>
 </form>
+</div>
