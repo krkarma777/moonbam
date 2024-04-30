@@ -31,7 +31,7 @@ public class AnnouncementController {
 	
 	// write
 	// / 추가함
-	@PostMapping("AdminPage/WriteAnnouncementController")
+	@RequestMapping("AdminPage/WriteAnnouncementController")
 	public String WriteAnnouncement(@RequestParam(required = false) String word) {
 		System.out.println("WriteAnnouncementController.WriteAnnouncementController()");
 		String nextPage = "AdminPage/content/announce/writeAnnouncement";

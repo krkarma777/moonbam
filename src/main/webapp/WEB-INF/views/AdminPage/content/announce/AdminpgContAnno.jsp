@@ -18,8 +18,9 @@
 
 		// 글쓰기
 		function buttonAnnoWrite() {
-			$("#formAnnoList").attr("action", "WriteAnnouncementController").attr("method", "post")
-					.submit();
+			window.open("WriteAnnouncementController", 'annoWrite' ,"width= 410px, height=390px");
+			/* $("#formAnnoList").attr("action", "WriteAnnouncementController").attr("method", "post")
+					.submit(); */
 		}
 
 
