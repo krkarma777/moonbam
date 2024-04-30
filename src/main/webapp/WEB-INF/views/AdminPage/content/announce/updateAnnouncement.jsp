@@ -17,10 +17,38 @@
 	src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+	crossorigin="anonymous">	
+	
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<style>
+	h1 {
+		text-align: center;
+	}
+	
+	.btn {
+		background-color: #ff416c;
+		color: white;
+	}
+	
+	#formUpdate {
+		margin: 0 auto; /* 가운데 정렬 */
+		text-align: left; /* 내용물 왼쪽 정렬 */
+		width: 50%; /* 원하는 폭으로 조절 */
+	}
+	
+	#btnTd {
+    text-align: center;
+}
+</style>
+
 
 <script type="text/javascript">
 	$(function() {
@@ -48,7 +76,7 @@
 </script>
 
 
-글수정
+<h1>글수정</h1>
 <form id="formUpdate" action="UpdateAnnouncementController">
 	<input type="hidden" name="annoWriter" value="${dto.annoWriter}">
 	<input type="hidden" name="annoNum" value="${dto.annoNum}">
@@ -98,8 +126,8 @@
 </td>
 		</tr>
 		<tr>
-			<td colspan="4"><input type="submit" value="저장">
-				<button id="close">취소</button></td>
+			<td id="btnTd" colspan="4"><input type="submit" value="저장" style="float:right; background-color: #ff416c; color:white; margin-left: auto;">
+				<button id="close" style="float:right; background-color: #ffb2c4; color:white; margin-left: auto;">취소</button></td>
 		</tr>
 	</table>
 </form>

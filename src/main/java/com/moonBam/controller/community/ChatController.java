@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.text.AbstractDocument;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,8 +29,8 @@ import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
 import com.moonBam.service.member.MemberService;
+import com.moonBam.util.FileUtil;
 
-//github.com/krkarma777/moonbam.git
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
@@ -145,68 +143,6 @@ public class ChatController {
 		return "";
 	}
 
-	// 강퇴하기 기능
-	@MessageMapping(value = "/Chatmore/ChatKickUser/{chatNum}")
-	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO ChatKickUser(@RequestParam String content, @DestinationVariable("chatNum") String chatNum) {
-	    System.out.println("ChatKickUser");
-
-	    // get userId
-	    JSONParser parser = new JSONParser();
-		Object obj = null;
-		try {
-			obj = parser.parse(content);
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
-		JSONObject jsonObj = (JSONObject) obj;
-		String userId = (String) jsonObj.get("userId");
-	    
-		
-		// insert db
-	    int n = 0;
-
-	    System.out.println("ChatKickUser===================");
-	    System.out.println("강퇴할 유저의 이름 확인 후 서비스레이어 전달");
-	    System.out.println(userId);
-	    System.out.println("=================================");
-
-	    // n = crService.ChatKickUser(userId, chatNum);
-
-	    System.out.println("1이면 정상처리됨==========");
-	    System.out.println(n);
-	    System.out.println("====================");
-	    
-	    Date currentDate = new Date();
-
-	    // 출력 형식을 지정하기 위한 SimpleDateFormat 생성
-	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-	    // Date 객체를 원하는 형식의 문자열로 변환하여 출력
-	    String formattedDate = formatter.format(currentDate);
-	    System.out.println(formattedDate);
-
-	    ChatTableDTO ctDto = new ChatTableDTO();
-	    ctDto.setChatNum(chatNum);
-	    
-		MemberDTO memberDTO = memberService.findByUserId(userId);
-		String nickName = memberDTO.getNickname();
-		ctDto.setNickName(nickName);
-		
-		System.out.println(jsonObj);	
-		jsonObj.remove("userId");
-		String message = nickName + " 님이 퇴장되었습니다. "+ formattedDate;
-		jsonObj.appendField("message",message);
-		ctDto.setChatContent(jsonObj.toString());
-		System.out.println(ctDto);
-	   return ctDto;
-	}
-
-
-//	@RequestMapping()
+	
 
 }// end class
