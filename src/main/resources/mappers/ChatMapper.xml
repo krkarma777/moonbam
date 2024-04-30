@@ -46,7 +46,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<update id = "updateCurrentNow2">
-		update chatroom set currentnow = currentnow-1 where chatNum = #{chatNum}
+	UPDATE chatroom
+	SET currentnow =
+	CASE
+	WHEN currentnow > 0 THEN currentnow - 1
+	ELSE currentnow
+	END
+	where chatNum = #{chatNum}
 	</update>
 	
 	
