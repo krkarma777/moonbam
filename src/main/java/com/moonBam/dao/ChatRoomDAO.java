@@ -75,4 +75,9 @@ public class ChatRoomDAO {
 		return n;
 	}
 
+	public List<String> getPastMessages(String chatNum) {
+		List<String> list = session.selectList("pastMessage", chatNum);
+		return list;
+	}
+
 }

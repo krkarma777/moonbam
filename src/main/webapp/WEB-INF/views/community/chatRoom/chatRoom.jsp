@@ -247,14 +247,27 @@ session.removeAttribute("Kicked");
 		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
 		        	createMsgTag(messageOutput);
 		        });
-	
+				
+		     	// pre message, past message
+		      //  enterChatMessage('PAST');
 		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
-		        sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
+		        enterChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 		        
 		    });
 		
+		    
+		 
+		// send message
 		function sendChatMessage(type, message, userIdInSocket) {
 		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+		        'type': type,
+		        'message': message,
+		        'userId': userIdInSocket
+		    }));
+		}
+		
+		function enterChatMessage(type, message, userIdInSocket) {
+		    stompClient.send('/acorn/chat/enter/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 		        'type': type,
 		        'message': message,
 		        'userId': userIdInSocket
@@ -293,38 +306,25 @@ session.removeAttribute("Kicked");
 					'userId' : userIdInSocket,
 				}));
 			}
-		  
-		 
-		 
-		//방나가기 눌렀을 때 작동되는 fn
+
+		 //방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
 			console.log("goOutForm");
-			
-			
 			$.ajax({
-
                 type: "post",
                 url: "/acorn/chatRoom/out",
                 data: {
                   "chatNum" : ${ChatRoomDTO.chatNum}
                 },
                 success: function (data, status, xhr) {
-                	
                 	//console.log("하이",data)
-					
 					if(data == "successToOut"){
-						
 						disconnect(); ////소켓 연결 끊고 퇴장 메세지 뿌리기
 						alert("방을 나갔습니다.");
 						window.close(); ///내 창 닫기
-						
 					}else if(data == "failToOut"){
-						
 						location.reload(true); ///새로고침
-						
 					}
-                    
-
                 },
                 error: function (xhr, status, error) {
 						
@@ -364,6 +364,8 @@ session.removeAttribute("Kicked");
 			let userId =  content.userId; 
 		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
 		    let chatLi;
+		    
+		    
 		if(content.type == "KICKED")   {
 			if(nickName == `${nickNameInSession}`){
 				message = "방에서 퇴장되었습니다.";
