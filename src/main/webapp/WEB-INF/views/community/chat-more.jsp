@@ -73,10 +73,10 @@
 	<!-- 대화 상대 -->
 	<div style="margin-bottom: 15px; width: 100%; height: 320px;">
 		<span class="title" style="height: 20px;"><b>대화 상대</b></span>
-		<button type="button" class="btn btn-sm"
+		<!-- <button type="button" class="btn btn-sm"
 			style="float: right; height: 30px;" onClick="#">
 			<b>초대하기</b>
-		</button>
+		</button> -->
 		<br>
 		<c:forEach items="${memberDtoList }" var="memberDtolist">
 			<!-- 현재 채팅방 안에 있는 member들만 모였음 -->

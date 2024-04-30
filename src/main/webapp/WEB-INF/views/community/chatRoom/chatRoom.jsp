@@ -235,6 +235,7 @@ session.removeAttribute("newLeader");
 		/* 신고하기 */
 		function openReportWindow(userId, message) {
 			
+			
 			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
 			localStorage.setItem('userId',  JSON.stringify(userId));
 			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
@@ -413,7 +414,7 @@ session.removeAttribute("newLeader");
 			if(whosMessage == "my-chat"){
 				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}else{
-				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}
 	       
 	    }
