@@ -30,8 +30,8 @@ var list = <%= request.getAttribute("list") %>;
         		setPostion(i);
         		// 팝업 창 띄위기
         		window.open("ViewPopupController/" + list[i]+"/main", "popup" + i,
-     			//window.open("ViewPopupController?num=" + list[i], "popup" + i,
-        				"left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height);
+        	            "left=" + sLeft + ",top=" + sTop + ",width=" + width + ",height=" + height + ", location=1");
+
         	}
         }
         
@@ -59,7 +59,6 @@ var list = <%= request.getAttribute("list") %>;
 			for (var i = 0; i < cookies.length; i++) {
 	            var cookie = cookies[i].trim();
 	            if (cookie.indexOf(name) === 0) {
-console.log("return : " +cookie.substring(name.length + 1));
 	                return cookie.substring(name.length + 1);
 	            }
 	        }
@@ -75,6 +74,7 @@ console.log("return : " +cookie.substring(name.length + 1));
 	
 	<!-- 바디 -->
 	<div class="container-fluid" style="height: 100%; width: 100%;">
+	
 		<div class="d-flex align-content-center justify-content-center"
 			style="height: 100%;">
 			<div class="align-self-center" style="background-color: transparent;">
@@ -94,6 +94,7 @@ console.log("return : " +cookie.substring(name.length + 1));
 			</div>
 		</div>
 	</div>
+	
 	<!-- 푸터 -->
 	<jsp:include page="common/footer.jsp"></jsp:include>
 	

@@ -86,7 +86,7 @@ String mesg = (String) session.getAttribute("mesg");
 if (mesg != null) {
 %>
 
-		<script>
+<script>
 		alert("<%=mesg%>");
 		</script>
 
@@ -117,10 +117,10 @@ session.removeAttribute("mesg");
 				</label> <!-- 설정이 더보기, 더보기로 가는 주소 실행 --> <%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button> --%>
 
-					<span style="float:right; color:white; margin-left: auto;"
-						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
-					<span style="float:right; color:white; margin-left: auto;"
-						onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>	
+					<span style="float: right; color: white; margin-left: auto;"
+					onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
+					<span style="float: right; color: white; margin-left: auto;"
+					onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
 				</td>
 
@@ -312,24 +312,18 @@ session.removeAttribute("mesg");
 			//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
 			let nickName = body.nickName;
-			console.log("nickName : " +nickName)
-			console.log("body : " +body.chatContent)
-		    let content = JSON.parse(body.chatContent);
+		    
+			let content = JSON.parse(body.chatContent);
 			let message = content.message;
-
-
 			let time = content.serverTime;
-	    let chatLi;
-
-	    let nickName = content.nickName;
-		let time = content.serverTime;
-	
-		let message = content.message;
-		let userId =  content.userId; 
-		
-
-	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-	    console.log(content.type)
+			let userId =  content.userId; 
+		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+		    let chatLi;
+		    
+		if(content.type == "KICKED")   {
+			console.log("jfkdslfk")
+		}
+		    
 	    if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
@@ -362,7 +356,6 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-		
 		
 	</script>
 </body>

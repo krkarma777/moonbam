@@ -27,6 +27,10 @@
 	text-align: center;
 	font-size: 11px;
 }
+
+.title {
+	text-align: center;
+}
 </style>
 </head>
 <body>
@@ -34,7 +38,7 @@
 		<table border="1">
 			<!-- top for title -->
 			<tr>
-				<th colspan="2">${dto.annoTitle }</th>
+				<th class="title" colspan="2">${dto.annoTitle }</th>
 			</tr>
 			<!-- middle for text -->
 			<tr id="date">
@@ -47,8 +51,9 @@
 
 			<!-- bottom for close -->
 			<tr>
-				<td colspan="2" style="text-align: right;">
-					<input type="checkbox" value="closeToday" id='closeToday'>오늘 하루 않보기
+				<td colspan="2" style="text-align: right;"><input
+					type="checkbox" value="closeToday" id='closeToday'>오늘 하루
+					않보기
 					<button type="button" id="close" class="btn"
 						style="float: right; background-color: #ff416c; color: white; margin-left: auto;">닫기</button>
 				</td>

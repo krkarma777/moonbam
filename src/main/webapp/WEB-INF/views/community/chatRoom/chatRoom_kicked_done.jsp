@@ -86,7 +86,7 @@ String mesg = (String) session.getAttribute("mesg");
 if (mesg != null) {
 %>
 
-		<script>
+<script>
 		alert("<%=mesg%>");
 		</script>
 
@@ -95,6 +95,26 @@ if (mesg != null) {
 
 session.removeAttribute("mesg");
 %>
+
+<%
+String KickedUserId = (String) session.getAttribute("KickedUserId");
+if (KickedUserId != null) {
+%>
+
+		<script>
+		kicked();
+		</script>
+
+<%
+}
+
+session.removeAttribute("Kicked");
+%>
+
+
+
+
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script
@@ -105,6 +125,7 @@ session.removeAttribute("mesg");
 
 </head>
 <body onload="connect()">
+	${ChatRoomDTO.chatNum}-${userIdInSession}
 	<table style="background: white; width: 100%;">
 
 		<thead class="header">
@@ -117,11 +138,15 @@ session.removeAttribute("mesg");
 				</label> <!-- 설정이 더보기, 더보기로 가는 주소 실행 --> <%-- <button class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;"
 						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">설정</button> --%>
 
-					<span style="float:right; color:white; margin-left: auto;"
-						onclick="location.href='/acorn/Chatmore?chatNum=${ChatRoomDTO.chatNum}'">더보기</span>
-					<span style="float:right; color:white; margin-left: auto;"
-						onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>	
-
+					<span style="float: right; color: white; margin-left: auto;"
+					onclick="goChatMore()">더보기</span>
+					<span style="float: right; color: white; margin-left: auto;"
+					onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<button type="button" class="btn btn-sm"
+						style="float: right; height: 30px;"
+						onClick="fnKick('${userIdInSession}')">
+						<b>강퇴하기</b>
+					</button>
 				</td>
 
 
@@ -168,10 +193,9 @@ session.removeAttribute("mesg");
 
 
 
-	<script>
+<script>
 	
-	
-		/* 토글 처리 */
+	/* 토글 처리 */
 		$('input[id="toggle"]')
 				.change(
 						function() {
@@ -190,37 +214,52 @@ session.removeAttribute("mesg");
 						});
 
 		/* 신고하기 */
-		function openReportWindow() {
-			var url = "reportWindow";
-			window.open(url, "_blank", "width=600,height=400");
+		function openReportWindow(userId, message) {
+			
+			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
+			localStorage.setItem('userId',  JSON.stringify(userId));
+			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
+			localStorage.setItem('message', JSON.stringify(message));
+			
+			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
+			window.open("reportWindow", "_blank", "width=400,height=400");
 		}
 
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
-
+		
+		
 		// 소켓 연결
 		function connect() {
-			var socket = new SockJS('/acorn/chat-socket');
-			stompClient = Stomp.over(socket);
-			console.log("stompClient:::",stompClient)
 			
-			stompClient.connect({}, function(frame) {
-				// 메세지 받는 주소
-				stompClient.subscribe('/topic/messages/'+${ChatRoomDTO.chatNum},
-// 아래 코드 안됨 왜?? ChatMessageController.sendMessage()에  @SendTo("/topic/messages/2") 지우고 @ResponseBody 선언
-//				stompClient.subscribe('/acorn/chat/send/'+${ChatRoomDTO.chatNum},
-						function(messageOutput) {
-							createMsgTag(messageOutput);
-						});
-				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-					'type':'ENTER',
-					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
-					'userId' : userIdInSocket,
-					}));
-			});
-			
+
+		    var socket = new SockJS('/acorn/chat-socket');
+		    stompClient = Stomp.over(socket);
+		    
+		    stompClient.connect({}, function(frame) {
+		        console.log("Connected to WebSocket",frame.headers['user-name']);
+ 
+		        // 메시지 받는 주소
+		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        	createMsgTag(messageOutput);
+		        });
+	
+		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
+		        sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
+		        
+		    });
+		
+		function sendChatMessage(type, message, userIdInSocket) {
+		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+		        'type': type,
+		        'message': message,
+		        'userId': userIdInSocket
+		    }));
 		}
+		
+		}
+		
 		
 		 // 소켓 연결 끊기게 하는 함수
 		function disconnect() {
@@ -242,7 +281,16 @@ session.removeAttribute("mesg");
 			}));
 		}
 	  
-		 
+		 //강퇴 되었을 때 띄우는 메세지 함수
+		 function kicked(){
+			 console.log("kicked실행됨")
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'type':'KICKED',
+					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
+					'userId' : userIdInSocket,
+				}));
+			}
+		  
 		 
 		 
 		//방나가기 눌렀을 때 작동되는 fn
@@ -309,28 +357,21 @@ session.removeAttribute("mesg");
 		// 최신 메세지 추가(위치는 맨 뒤)
 		// 이전 메세지 추가(위치는 맨위)
 		function createMsgTag(messageOutput) {
-			//console.log("messageOutput : " + messageOutput.body)	
+				//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
 			let nickName = body.nickName;
-			console.log("nickName : " +nickName)
-			console.log("body : " +body.chatContent)
-		    let content = JSON.parse(body.chatContent);
+
+			let content = JSON.parse(body.chatContent);
 			let message = content.message;
-
-
 			let time = content.serverTime;
-	    let chatLi;
-
-	    let nickName = content.nickName;
-		let time = content.serverTime;
-	
-		let message = content.message;
-		let userId =  content.userId; 
-		
-
-	    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-	    console.log(content.type)
-	    if (content.type == 'ENTER') {
+			let userId =  content.userId; 
+		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+		    let chatLi;
+		if(content.type == "KICKED")   {
+			
+			 chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+			 alert(chatLi);
+		}else if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 	    
@@ -352,6 +393,29 @@ session.removeAttribute("mesg");
 	    }
 	    $("#chat").append(chatLi);
 	}
+		
+		// 강퇴
+		//채팅 멤버 강퇴
+		function fnKick(userId) {
+    var url = "/acorn/Chatmore/" + `${ChatRoomDTO.chatNum}` + "/ChatKickUser";
+    stompClient.send('/acorn/chat/send/1', {}, JSON.stringify({
+        'type': "KICKED",
+        'message': "KICKED",
+        'userId': "aujayk@gmail.com",	
+    }));
+}
+		
+		function goChatMore() {
+			alert("here");
+	//		location.href="/acorn/Chatmore?chatNum="+`${ChatRoomDTO.chatNum}`;
+			
+	//		var queryString = '/acorn/Chatmore?chatNum=' +`${ChatRoomDTO.chatNum}` + '&stompClient=' + stompClient;
+	//		location.href = queryString;
+			
+		var chatNum = encodeURIComponent(${ChatRoomDTO.chatNum});
+var queryString = '/acorn/Chatmore?chatNum=' + chatNum + '&stompClient=' + encodeURIComponent(stompClient);
+			location.href = queryString;
+		}
 
 		// 취야점 보안
 		// 스크립트 코드 정지
@@ -362,8 +426,7 @@ session.removeAttribute("mesg");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-		
-		
-	</script>
+	
+</script>
 </body>
 </html>

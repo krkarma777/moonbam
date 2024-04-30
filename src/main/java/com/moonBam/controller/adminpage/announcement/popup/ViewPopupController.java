@@ -14,6 +14,7 @@ public class ViewPopupController {
 
 	@Autowired
 	AnnouncementService service;
+	
 	@RequestMapping("/ViewPopupController/{num}/{category}")
 	public ModelAndView ViewPopup(@PathVariable("num") String num, @PathVariable("category") String category) {
 		System.out.println("ViewPopupController.ViewPopup()");
@@ -22,6 +23,14 @@ public class ViewPopupController {
 		String nextPage= "AdminPage/content/announce/popup/popup";
 		ModelAndView mav = new ModelAndView(nextPage);
 		mav.addObject("dto",dto);
+		return mav;
+	}
+	
+	@RequestMapping("/popupTest")
+	public ModelAndView popupTest() {
+		System.out.println("test");
+		String nextPage= "AdminPage/content/announce/popup/popTest";
+		ModelAndView mav = new ModelAndView(nextPage);
 		return mav;
 	}
 }

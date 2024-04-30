@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class FileUtil {
 	// chatContent를 파일에 저장하는 메서드
-	public File saveChatContentToFile(String chatContent, int chatNum) {
+	public File saveChatContentToFile(String chatContent, String chatNum) {
 		    String filePath = "src/main/resources/static/com/" + chatNum + ".txt";
 		    File file = new File(filePath);
 		    try {
