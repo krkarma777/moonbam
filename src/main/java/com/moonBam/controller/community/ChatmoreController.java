@@ -49,7 +49,7 @@ public class ChatmoreController {
 	
 	
 	@RequestMapping(value = "/Chatmore", method=RequestMethod.GET)
-	public String Chatmore(int chatNum, Model m, Principal principal,@RequestParam("stompClient") String stompClient) {
+	public String Chatmore(int chatNum, Model m, Principal principal) {
 		System.out.println("/Chatmore 호출");
 		//System.out.println("Chatmore에서의 "+chatNum);
 		
@@ -86,7 +86,7 @@ public class ChatmoreController {
 		m.addAttribute("memberDtoList", memberDtoList); ////////////대화방 참여하고 있는 멤버들
 		m.addAttribute("chatroomDTO",chatroomDTO); //////////chatRoomDTO
 		m.addAttribute("memberDTO", memberDTO); ////////////내 로그인 정보
-		m.addAttribute("stompClient", stompClient);
+		
 		return "/community/chat-more"; //jsp
 	}
 	
