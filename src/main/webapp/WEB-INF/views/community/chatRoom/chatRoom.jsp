@@ -111,6 +111,22 @@ if (KickedUserId != null) {
 session.removeAttribute("Kicked");
 %>
 
+<%
+String newLeader = (String) session.getAttribute("newLeader");
+if (newLeader != null) {
+%>
+
+		<script>
+		console.log("delegate");
+		delegate();
+		</script>
+
+<%
+}
+
+session.removeAttribute("newLeader");
+%>
+
 
 
 
@@ -284,7 +300,17 @@ session.removeAttribute("Kicked");
 					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
 					'userId' : userIdInSocket,
 				}));
-			}
+		}
+	  
+		 //방장이 변경되었을 때 띄우는 메세지 함수
+		 function delegate(){
+			 console.log("delegate실행됨");
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'type':'ANNOUNCE',
+					'message' : `${sessionScope.newLeader}` + ' 님으로 방장이 변경되었습니다.	' + serverTime,
+					'userId' : userIdInSocket,
+				}));
+		}
 		  
 		 
 		 

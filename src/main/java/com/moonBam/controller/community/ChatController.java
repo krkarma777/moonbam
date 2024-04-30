@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.service.ChatRoomService;
@@ -103,13 +103,15 @@ public class ChatController {
 	public String delegateMaster(
 			@RequestParam String chatNum, 
 			@RequestParam String userId,
-			Principal principal
+			Principal principal,
+			HttpSession session
 			) {
-		HashMap<String, String> map = new HashMap<>();
 		System.out.println("안녕 나는 chatController.delegateMaster야");
 		
 		
 		crService.delegateMaster(principal, chatNum, userId);
+		
+		session.setAttribute("newLeader", userId);
 		
 		return "redirect:/chatRoom?chatNum="+chatNum;
 	}
