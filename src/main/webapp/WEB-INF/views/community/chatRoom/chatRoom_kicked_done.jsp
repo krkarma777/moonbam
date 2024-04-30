@@ -122,8 +122,10 @@ session.removeAttribute("Kicked");
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
+
 </head>
 <body onload="connect()">
+	${ChatRoomDTO.chatNum}-${userIdInSession}
 	<table style="background: white; width: 100%;">
 
 		<thead class="header">
@@ -140,7 +142,13 @@ session.removeAttribute("Kicked");
 					onclick="goChatMore()">더보기</span>
 					<span style="float: right; color: white; margin-left: auto;"
 					onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<button type="button" class="btn btn-sm"
+						style="float: right; height: 30px;"
+						onClick="fnKick('${userIdInSession}')">
+						<b>강퇴하기</b>
+					</button>
 				</td>
+
 
 			</tr>
 
@@ -183,14 +191,7 @@ session.removeAttribute("Kicked");
 	</table>
 
 
-<!-- 모달 창 -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <p id="modalMessage"></p>
-        <button onclick="closeModal()">확인</button>
-    </div>
-</div>
+
 
 <script>
 	
@@ -325,9 +326,14 @@ session.removeAttribute("Kicked");
                 error: function (xhr, status, error) {
 						
                 	console.log("퇴장하기 error 발생",error)
+
                 }
+
             })//ajax
+			
+			
 		}
+		
 
 		/* 메시지 전송 */
 		function sendMessage() {
@@ -353,7 +359,8 @@ session.removeAttribute("Kicked");
 		function createMsgTag(messageOutput) {
 				//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
-				let nickName = body.nickName;
+			let nickName = body.nickName;
+
 			let content = JSON.parse(body.chatContent);
 			let message = content.message;
 			let time = content.serverTime;
@@ -361,12 +368,9 @@ session.removeAttribute("Kicked");
 		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
 		    let chatLi;
 		if(content.type == "KICKED")   {
-			if(nickName == `${nickNameInSession}`){
-				message = "방에서 퇴장되었습니다.";
-				kickUser(message);
-				return "";
-			}
-			chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+			
+			 chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+			 alert(chatLi);
 		}else if (content.type == 'ENTER') {
 	        // 입장 메시지일 경우
 	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
@@ -402,13 +406,14 @@ session.removeAttribute("Kicked");
 }
 		
 		function goChatMore() {
+			alert("here");
 	//		location.href="/acorn/Chatmore?chatNum="+`${ChatRoomDTO.chatNum}`;
 			
 	//		var queryString = '/acorn/Chatmore?chatNum=' +`${ChatRoomDTO.chatNum}` + '&stompClient=' + stompClient;
 	//		location.href = queryString;
 			
-			var chatNum = encodeURIComponent(${ChatRoomDTO.chatNum});
-			var queryString = '/acorn/Chatmore?chatNum=' + chatNum + '&stompClient=' + encodeURIComponent(stompClient);
+		var chatNum = encodeURIComponent(${ChatRoomDTO.chatNum});
+var queryString = '/acorn/Chatmore?chatNum=' + chatNum + '&stompClient=' + encodeURIComponent(stompClient);
 			location.href = queryString;
 		}
 
@@ -422,27 +427,6 @@ session.removeAttribute("Kicked");
 	        .replace(/'/g, "&#039;");
 		}
 	
-		// kickUser
-		function kickUser(message){
-			disconnect();
-			openModal(message);
-		}
-		
-		// modal
-		function openModal(message) {
-	        var modal = document.getElementById('myModal');
-	        var modalMessage = document.getElementById('modalMessage');
-	        modalMessage.textContent = message; // 메시지 설정
-	        modal.style.display = "block"; // 모달 열기
-	    }
-
-	    // 모달 닫기
-	    function closeModal() {
-	        var modal = document.getElementById('myModal');
-	        modal.style.display = "none"; // 모달 닫기
-	        window.close(); // 브라우저 닫기
-	    }
-
 </script>
 </body>
 </html>

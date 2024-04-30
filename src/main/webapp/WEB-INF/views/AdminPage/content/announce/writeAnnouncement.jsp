@@ -104,17 +104,8 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
        </td>
 		</tr>
 		<tr>
-<<<<<<< HEAD
-			<td colspan="4"><input type="submit" value="저장">
-				<button id="close">취소</button></td>
-=======
-			<td>자료</td>
-			<td><input type="file" name="img" accept="image/*"></td>
-		</tr>
-		<tr>
 			<td colspan="4"><input type="submit" value="저장" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;">
 				<button id="close" class="btn" style="background-color: #ffb2c4; color:white; margin-left: auto;">취소</button></td>
->>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 		</tr>
 	</table>
 </form>

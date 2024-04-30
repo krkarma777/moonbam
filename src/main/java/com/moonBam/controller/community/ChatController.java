@@ -16,26 +16,26 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.moonBam.controller.community.chat.ChatMessagesService;
 import com.moonBam.dto.ChatRoomDTO;
 import com.moonBam.dto.ChatTableDTO;
+import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityEnterOutService;
 import com.moonBam.service.member.MemberLoginService;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
+import com.moonBam.service.member.MemberService;
+import com.moonBam.util.FileUtil;
 
-<<<<<<< HEAD
-import jakarta.servlet.http.HttpServletRequest;
-=======
-import jakarta.servlet.http.HttpSession;
->>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,6 +52,11 @@ public class ChatController {
 
 	
 	 private final SimpMessagingTemplate template;
+	 
+	 @Autowired
+		private ChatMessagesService chatMessagesService;
+		@Autowired
+		MemberService memberService;
 	 
 	// 소모임 대문에서 개설버튼 누르면 소모임 만드는 폼으로 이동
 	@RequestMapping(value = "/createChat", method = RequestMethod.GET)
@@ -137,76 +142,7 @@ public class ChatController {
 
 		return "";
 	}
-<<<<<<< HEAD
 
-	// 강퇴하기 기능
-	@MessageMapping(value = "/Chatmore/{chatNum}/ChatKickUser")
-	//@RequestMapping(value = "/Chatmore/{chatNum}/ChatKickUser", method = RequestMethod.GET)
-	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO ChatKickUser(@RequestParam String userId, @PathVariable("chatNum") String chatNum) {
-	    System.out.println("ChatKickUser");
-	    // 현재 시간을 나타내는 Date 객체 생성
-	    Date currentDate = new Date();
-
-	    // 출력 형식을 지정하기 위한 SimpleDateFormat 생성
-	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-	    // Date 객체를 원하는 형식의 문자열로 변환하여 출력
-	    String formattedDate = formatter.format(currentDate);
-	    System.out.println(formattedDate);
-
-	    int n = 0;
-
-	    System.out.println("ChatKickUser===================");
-	    System.out.println("강퇴할 유저의 이름 확인 후 서비스레이어 전달");
-	    System.out.println(userId);
-	    System.out.println("=================================");
-
-	    // n = crService.ChatKickUser(userId, chatNum);
-
-	    System.out.println("1이면 정상처리됨==========");
-	    System.out.println(n);
-	    System.out.println("====================");
-
-	    ChatTableDTO ctDto = new ChatTableDTO();
-	    ctDto.setChatNum(chatNum);
-
-	    String test = "{\"type\":\"KICKED\",\"message\":\"" + userId
-	            + " 님이 강퇴되었습니다.\\t"+ formattedDate+ "\"}" ;
-	    ctDto.setChatContent(test);
-	    System.out.println("kicked");
-	    template.convertAndSend("/topic/messages/" + chatNum, ctDto);
-	   return ctDto;
-=======
 	
-	//강퇴하기 기능
-	@RequestMapping(value = "/Chatmore/ChatKickUser", method = RequestMethod.GET)
-	public String ChatKickUser (String userId, String chatNum, HttpSession session) {
-		
-		int n = 0;
-		
-		System.out.println("ChatKickUser===================");
-		System.out.println("강퇴할 유저의 이름 확인 후 서비스레이어 전달");
-		System.out.println(userId);
-		
-		//session.setAttribute("Kicked", "yes");
-		session.setAttribute("KickedUserId", userId);
-		
-		System.out.println("=================================");
-		
-		n = crService.ChatKickUser(userId, chatNum);
-		
-		System.out.println("1이면 정상처리됨==========");
-		System.out.println(n);
-		System.out.println("====================");
-		
-		
-		
-		return "redirect:/chatRoom?chatNum="+chatNum;
->>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
-	}
-
-
-//	@RequestMapping()
 
 }// end class
