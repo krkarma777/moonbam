@@ -41,7 +41,7 @@ public class AnnouncementController {
 	// insert
 	// / 추가함
 	@RequestMapping("AdminPage/InsertAnnouncementController")
-	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, String category, Principal principal, @RequestParam(required = false) MultipartFile img) {
+	public String InsertAnnouncementController(String annoTitle, String annoText, String dateTimePicker, String popup, String category, Principal principal) {
 		System.out.println("AnnouncementController.InsertAnnouncementController()");
 		String annoWriter =  memberLoginService.findByPrincipal(principal).getNickname(); 
 		TimeParsing tp = new TimeParsing();

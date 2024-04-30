@@ -22,7 +22,7 @@ public class ChatTableDTO {
 	}
 
 	private int id; //행 id
-	private int chatNum; //채팅방 번호 
+	private String chatNum; //채팅방 번호 
 	private String chatContent; //[ { } ] 형태로 저장될 예정 (아래 확인)
 	private String nickName;
 	/*[
@@ -41,7 +41,7 @@ public class ChatTableDTO {
 	}
 
 
-	public ChatTableDTO(int chatNum, String chatContent) {
+	public ChatTableDTO(String chatNum, String chatContent) {
 		super();
 		this.chatNum = chatNum;
 		this.chatContent = chatContent;
@@ -52,11 +52,11 @@ public class ChatTableDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getChatNum() {
+	public String getChatNum() {
 		return chatNum;
 	}
 
-	public void setChatNum(int chatNum) {
+	public void setChatNum(String chatNum) {
 		this.chatNum = chatNum;
 	}
 

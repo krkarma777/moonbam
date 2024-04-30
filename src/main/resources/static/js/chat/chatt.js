@@ -60,3 +60,4 @@ function send(){
 	msg.value ='';
 	
 }
+
