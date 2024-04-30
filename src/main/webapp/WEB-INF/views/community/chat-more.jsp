@@ -166,7 +166,7 @@
 			
 			var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
 			
-			childOpen(openUrl);
+			childOpen(openUrl)
 			
 		}
 	
@@ -193,8 +193,6 @@
 		function childClose(){ 
 			child.close();
 		}
-	
-	
 		
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;

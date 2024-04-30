@@ -206,8 +206,8 @@ public class ChatMessageController {
 
 	// 받고 주고
 	@MessageMapping("/chat/enter/{chatNum}")
-	@SendTo("/topic/messages/{chatNum}")
-	public List<ChatTableDTO> pastMessage(@Payload ChatTableDTO ctDto,
+	@SendTo("/topic/announce/{chatNum}")
+	public String pastMessage(@Payload ChatTableDTO ctDto,
 			@RequestParam(required = false) String chatContent, @DestinationVariable("chatNum") String chatNum,
 			Principal principal) {
 		List<String> list = crService.getPastMessages(chatNum);
@@ -215,12 +215,14 @@ public class ChatMessageController {
 		for (String content : list) {
 			temp +=content;
 		}
-			String str = temp.replaceAll("\\}\\n\\{","\\}@-#-$\\{");
-			System.out.println(str);
-			String[] strArr = str.split("@-#-$");
-			for(String s:strArr) {
-				System.out.println(s);
-			}
+			String str = temp.replaceAll("\\}\\n\\{","\\}---\\{");
+			
+//			System.out.println(str);
+//			String[] strArr = str.split("---");
+//			for(String s:strArr) {
+//				System.out.println(s);
+//			}
+			
 //			Object obj = null;
 //			System.out.println(content);
 //			if (content.contains("}\n{")) {
@@ -239,11 +241,15 @@ public class ChatMessageController {
 //			System.out.println("---------");
 //			System.out.println(jsonObj);
 	
-		System.out.println(temp);
-		List<ChatTableDTO> dtoList = new ArrayList<>();
-		ctDto.setChatContent(chatContent);
-		dtoList.add(ctDto);
-		return dtoList; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
+//		System.out.println(temp);
+//		List<ChatTableDTO> dtoList = new ArrayList<>();
+//		for(String s : strArr) {
+//			ChatTableDTO dto = new ChatTableDTO(s);
+//			dtoList.add(dto);
+//		}
+//		
+			System.out.println(str);
+		return str; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 
 	public Object parseStr2Json(String content) {

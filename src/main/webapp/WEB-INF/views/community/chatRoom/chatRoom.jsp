@@ -247,6 +247,10 @@ session.removeAttribute("Kicked");
 		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
 		        	createMsgTag(messageOutput);
 		        });
+		        
+		        stompClient.subscribe('/topic/announce/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        	createAnnoTag(messageOutput);
+		        });
 				
 		     	// pre message, past message
 		      //  enterChatMessage('PAST');
@@ -355,8 +359,8 @@ session.removeAttribute("Kicked");
 		// 최신 메세지 추가(위치는 맨 뒤)
 		// 이전 메세지 추가(위치는 맨위)
 		function createMsgTag(messageOutput) {
-				//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
+			console.log("body : " + body)
 				let nickName = body.nickName;
 			let content = JSON.parse(body.chatContent);
 			let message = content.message;
@@ -396,7 +400,87 @@ session.removeAttribute("Kicked");
 	    $("#chat").append(chatLi);
 	}
 		
-		// 강퇴
+		
+		// anno
+		function createAnnoTag(messageOutput) {
+			//console.log("messageOutput : " + messageOutput.body)	
+			let a = messageOutput.body;
+			let b = a.split("---");
+			for( var i = 0 ; i<b.length; i++){
+				let body= JSON.parse(b[i]); 
+				alert(body)
+	//			let nickName = body.nickName;
+		//		alert(nickName)
+				alert("here")
+				let message = body.message;
+				alert(message)
+				let time = body.serverTime;
+				alert(time)
+				let userId =  body.userId; 
+				alert(userId)
+			    let whosMessage = (body.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+				alert(whosMessage)
+				let chatLi;
+			    alert(nickName)
+			    console.log("nickName: " + nickName)
+			    console.log("content: " + content)
+			    console.log("message: " + message)
+			    console.log("time: " + time)
+			    console.log("userId: " + userId)
+			    console.log("whosMessage: " + whosMessage)
+			}
+			
+		/* 	for(var i=0 ; a.length; i++){
+				alert(a[i]);
+			} */
+			console.log("a : "+ a);
+			
+			console.log("body : " + body)
+			
+alert("here")
+alert("here2")	
+				let nickName = body.nickName;
+			let content = JSON.parse(body.chatContent);
+			let message = content.message;
+			let time = content.serverTime;
+			let userId =  content.userId; 
+		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+		    let chatLi;
+		    
+		    
+		if(content.type == "KICKED")   {
+			if(nickName == `${nickNameInSession}`){
+				message = "방에서 퇴장되었습니다.";
+				kickUser(message);
+				return "";
+			}
+			chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+		}else if (content.type == 'ENTER') {
+	        // 입장 메시지일 경우
+	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+	    
+	    }else if(content.type == 'EXIT') {
+	    	// 퇴장 메세지일 경우
+	    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+	   
+	    }else {
+	    	console.log("talk")
+	        // 일반 메시지일 경우
+	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
+			//console.log("시간 잘라서 확인하기 완료?",timeShort)
+			if(whosMessage == "my-chat"){
+				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			}else{
+				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			}
+	       
+	    }
+	    $("#chat").append(chatLi);
+	}
+		
+		
+		
+		// 강퇴 삭제 예정
 		//채팅 멤버 강퇴
 		function fnKick(userId) {
     var url = "/acorn/Chatmore/" + `${ChatRoomDTO.chatNum}` + "/ChatKickUser";
