@@ -47,7 +47,7 @@
         <!-- 비밀번호와 비밀번호 재입력이 상이할 경우, 문구 출력 -->
         <span id="pwMismatch" style="color: red;"></span> 
      </div>    
-        <input type="submit" class="btn btn-primary" id="submitbutton" value="탈퇴">
+        <input type="submit" class="btn btn-primary" id="submitbutton" value="변경">
     </form>
     </div>
      </div>
