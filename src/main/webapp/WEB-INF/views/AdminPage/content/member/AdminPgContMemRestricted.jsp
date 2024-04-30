@@ -62,11 +62,12 @@
 					<td>${dto.userid}</td>
 					<td>${dto.status}</td>
 					<td>${dto.cause}</td>
-					<td>${dto.action}</td>
 					<td>${dto.actionstart}</td>
 					<td>${dto.actionend}</td>
+					<td>${dto.action}</td>
 					<td>
-						<button type="button" class="btn btn-custom" id="suspendChecked" >해제</button>
+						<button type="button" class="btn btn-custom" id="restoreUser" 
+						data-xxx = ${dto.userid }>해제</button>
 					</td>
 				</tr>
 			</c:forEach>
@@ -79,3 +80,23 @@
 		</tbody>
 	</table>
 </div>
+
+<script>
+
+$("#restoreUser").on("click", restoreUser);
+
+function restoreUser(){
+	
+	console.log($(this).attr("data-xxx"));
+	
+	let userid = $(this).attr("data-xxx")
+	
+	//디버깅용 확인
+	console.log("restoreUser");
+	
+	//전송
+	var target = "<%=request.getContextPath()%>" + "/AdminPage/releaseUser?userid="+userid;
+	location.href = target;
+}//restorePost
+
+</script>

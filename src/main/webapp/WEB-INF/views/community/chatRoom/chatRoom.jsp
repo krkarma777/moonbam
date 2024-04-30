@@ -95,6 +95,26 @@ if (mesg != null) {
 
 session.removeAttribute("mesg");
 %>
+
+<%
+String KickedUserId = (String) session.getAttribute("KickedUserId");
+if (KickedUserId != null) {
+%>
+
+		<script>
+		kicked();
+		</script>
+
+<%
+}
+
+session.removeAttribute("Kicked");
+%>
+
+
+
+
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script
@@ -173,10 +193,9 @@ session.removeAttribute("mesg");
 
 
 
-	<script>
+<script>
 	
-	
-		/* 토글 처리 */
+	/* 토글 처리 */
 		$('input[id="toggle"]')
 				.change(
 						function() {
@@ -195,37 +214,52 @@ session.removeAttribute("mesg");
 						});
 
 		/* 신고하기 */
-		function openReportWindow() {
-			var url = "reportWindow";
-			window.open(url, "_blank", "width=600,height=400");
+		function openReportWindow(userId, message) {
+			
+			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
+			localStorage.setItem('userId',  JSON.stringify(userId));
+			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
+			localStorage.setItem('message', JSON.stringify(message));
+			
+			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
+			window.open("reportWindow", "_blank", "width=400,height=400");
 		}
 
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
-
+		
+		
 		// 소켓 연결
 		function connect() {
-			var socket = new SockJS('/acorn/chat-socket');
-			stompClient = Stomp.over(socket);
-			console.log("stompClient:::",stompClient)
 			
-			stompClient.connect({}, function(frame) {
-				// 메세지 받는 주소
-				stompClient.subscribe('/topic/messages/'+${ChatRoomDTO.chatNum},
-// 아래 코드 안됨 왜?? ChatMessageController.sendMessage()에  @SendTo("/topic/messages/2") 지우고 @ResponseBody 선언
-//				stompClient.subscribe('/acorn/chat/send/'+${ChatRoomDTO.chatNum},
-						function(messageOutput) {
-							createMsgTag(messageOutput);
-						});
-				stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-					'type':'ENTER',
-					'message' : `${nickNameInSession}` + ' 님이 입장했습니다.	' + serverTime,
-					'userId' : userIdInSocket,
-					}));
-			});
-			
+
+		    var socket = new SockJS('/acorn/chat-socket');
+		    stompClient = Stomp.over(socket);
+		    
+		    stompClient.connect({}, function(frame) {
+		        console.log("Connected to WebSocket",frame.headers['user-name']);
+ 
+		        // 메시지 받는 주소
+		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        	createMsgTag(messageOutput);
+		        });
+	
+		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
+		        sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
+		        
+		    });
+		
+		function sendChatMessage(type, message, userIdInSocket) {
+		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+		        'type': type,
+		        'message': message,
+		        'userId': userIdInSocket
+		    }));
 		}
+		
+		}
+		
 		
 		 // 소켓 연결 끊기게 하는 함수
 		function disconnect() {
@@ -247,7 +281,16 @@ session.removeAttribute("mesg");
 			}));
 		}
 	  
-		 
+		 //강퇴 되었을 때 띄우는 메세지 함수
+		 function kicked(){
+			 console.log("kicked실행됨")
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'type':'KICKED',
+					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
+					'userId' : userIdInSocket,
+				}));
+			}
+		  
 		 
 		 
 		//방나가기 눌렀을 때 작동되는 fn
@@ -317,11 +360,17 @@ session.removeAttribute("mesg");
 			//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
 			let nickName = body.nickName;
+<<<<<<< HEAD
 		    
 			let content = JSON.parse(body.chatContent);
+=======
+			
+		    let content = JSON.parse(body.chatContent);
+>>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 			let message = content.message;
 			let time = content.serverTime;
 			let userId =  content.userId; 
+<<<<<<< HEAD
 		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
 		    let chatLi;
 		    
@@ -364,6 +413,34 @@ session.removeAttribute("mesg");
 	}));
 }
 
+=======
+			let chatLi;
+
+		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+		    console.log(content.type)
+		    if (content.type == 'ENTER') {
+		        // 입장 메시지일 경우
+		        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+		    
+		    }else if(content.type == 'EXIT') {
+		    	// 퇴장 메세지일 경우
+		    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+		   
+		    }else {
+		    	console.log("talk")
+		        // 일반 메시지일 경우
+		      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
+				//console.log("시간 잘라서 확인하기 완료?",timeShort)
+				if(whosMessage == "my-chat"){
+					  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+				}else{
+					  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+				}
+		       
+		    }
+		    $("#chat").append(chatLi);
+		}
+>>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 
 		// 취야점 보안
 		// 스크립트 코드 정지
@@ -375,7 +452,11 @@ session.removeAttribute("mesg");
 	        .replace(/'/g, "&#039;");
 		}
 	
+<<<<<<< HEAD
 		
 	</script>
+=======
+</script>
+>>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 </body>
 </html>

@@ -50,36 +50,27 @@ public class AdminMemberService {
 		System.out.println(deletelist);
 		System.out.println("==============================");
 		
-		System.out.println("강퇴 대상자 정보 요청하여 리스트로 만들기");
-		
-		List<MemberDTO> mlist = new ArrayList<>();
-		for(String target : deletelist) {
-			MemberDTO mdto = memberDAO.findByUserId(target);
-			mlist.add(mdto);
-		}
-		
 		System.out.println("강퇴 대상자 정보 확인");
-		for(MemberDTO member : mlist) {
-			System.out.println(member);
-		}
+		System.out.println(deletelist);
 		System.out.println("==================");
 		
-		System.out.println("강퇴 대상자를 삭제된 회원 데이터로 insert");
+		System.out.println("강퇴 대상자 계정 비활성화");
 		System.out.println("강퇴 대상자를 dao로 전달");
 		int n1 = 0;
-		n1 = mdao.saveInDeletedlist(mlist);
-		System.out.println(n1 + "명 삭제된 데이터에 insert");
-
-		System.out.println("대상자를 기존 memberDB에서 삭제");
-		System.out.println("dao에 대상자 전달");
+		for(String userid : deletelist) {
+			mdao.suspendUser(userid);
+			n1 +=1;
+		}
+		System.out.println("대상자를 이용제한된 사용자 테이블에 insert");
+		System.out.println("dao에 전달");
 		int n2 = 0;
 
-		for(String target : deletelist) {
-			int result = mdao.deleteFromMemberDB(target);
-			n2+=result;
+		for(String userid:deletelist) {
+			mdao.insertDeletedUserInRestrictedDB(userid);
+			n2+=1;
 		}
 		
-		System.out.println(n2 + "개의 행 기존 회원DB에서 삭제");
+		System.out.println(n2 + "개의 행 이용제한 테이블에 insert");
 		
 		return n1;
 	}
@@ -90,16 +81,45 @@ public class AdminMemberService {
 		return list;
 	}
 
-	public int cleanDeletedMember() {
+	public int cleanDeletedMember(List<String> list) {
 		System.out.println("in adminmemberservice.cleandeletedmember");
 		int n = 0;
-		n = mdao.cleanDeletedMember();
+		for(String userid : list) {
+			n = mdao.cleanDeletedMember(userid);
+		}	
 		return n;
 	}
 
+	@Transactional
 	public int releaseUser(String userId) {
 		System.out.println("in adminmemberservice.releaseUser");
 		int n = mdao.releaseUser(userId);
+		System.out.println(n + "명의 사용자 이용제한 해제");
+		
+		int n2 = mdao.deleteFromRestrictedMember(userId);
+		System.out.println(n2 + "명의 사용자 이용제한 목록에서 삭제");
+		return n;
+	}
+
+	@Transactional
+	public int suspendUser(List<String> suspendList) {
+		System.out.println("in adminmemberservice.suspenduser");
+		int n = 0;
+		for(String user : suspendList) {
+			mdao.insertInRestrictedUser(user);
+			mdao.suspendUser(user);
+			n +=1;
+		}
+		return n;
+	}
+
+	public List<String> getDeletelist() {
+		List<String> list = mdao.getDeleteList();
+		return list;
+	}
+
+	public int cleanRestrictedMember() {
+		int n = mdao.cleanRestrictedMember();
 		return n;
 	}
 	

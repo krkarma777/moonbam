@@ -56,11 +56,16 @@
 			( ${memberDTO.userId} ) </b><br> <span style="opacity: 0.7;">&nbsp&nbsp가입한
 			날짜 ${leadermemberDto.userSignDate }</span>
 		<div>
+<<<<<<< HEAD
 			<form action="/acorn/userinfo">
 				<button type="button" class="btn btn-sm"
 					style="float: right; height: 30px;">
 					<b>정보 수정하기</b>
 				</button>
+=======
+			<form action="/acorn/my-page/info">
+				<button class="btn btn-sm" style="float:right; height:30px;"><b>정보 수정하기</b></button>
+>>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 			</form>
 		</div>
 	</div>
@@ -75,6 +80,7 @@
 	<!-- 대화 상대 -->
 	<div style="margin-bottom: 15px; width: 100%; height: 320px;">
 		<span class="title" style="height: 20px;"><b>대화 상대</b></span>
+<<<<<<< HEAD
 		<button type="button" class="btn btn-sm"
 			style="float: right; height: 30px;" onClick="#">
 			<b>초대하기</b>
@@ -85,6 +91,12 @@
 
 			<c:if test="${memberDtolist.userId != memberDTO.userId }">
 				<!-- 근데 본인은 제외하고 출력 -->
+=======
+		<!-- <button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="#"><b>초대하기</b></button><br> -->
+		<c:forEach items="${memberDtoList }" var="memberDtolist"><!-- 현재 채팅방 안에 있는 member들만 모였음 -->
+		
+			<c:if test="${memberDtolist.userId != memberDTO.userId }"> <!-- 근데 본인은 제외하고 출력 -->
+>>>>>>> branch 'master' of https://github.com/krkarma777/moonbam.git
 				<div style="height: 80px; width: 100%;">
 					<b>&nbsp&nbsp${memberDtolist.nickname } (
 						${memberDtolist.userId } )</b><br> <span style="opacity: 0.7;">&nbsp&nbsp가입한

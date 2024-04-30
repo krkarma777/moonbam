@@ -6,8 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
  
      <select id="SearchPost" resultType="AdminReportDTO" parameterType="HashMap">
-select * from adminreported
-<choose>
+	select * from adminreported
+	<choose>
 
 	<when test = "criteria == 'TARGETID'" >
 		where targetid like '%'||#{SearchValue}||'%'

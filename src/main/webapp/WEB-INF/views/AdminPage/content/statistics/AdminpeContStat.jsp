@@ -37,13 +37,6 @@
     </style>
 </head>
 <body>
-<%
-List<AdminCounterDTO> list1 = (List<AdminCounterDTO>)request.getAttribute("list1");
-System.out.println(list1);
-AdminReportDTO rDTO = (AdminReportDTO)request.getAttribute("rDTO");
-System.out.println(rDTO);
-System.out.println("=======");
-%>
 <script>
  var xValues = [];
  var yValues = [];

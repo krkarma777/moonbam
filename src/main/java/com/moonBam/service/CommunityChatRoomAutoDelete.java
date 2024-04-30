@@ -16,15 +16,15 @@ import com.moonBam.dto.ChatRoomDTO;
 @Component
 public class CommunityChatRoomAutoDelete {
 	
-	////////////////방 자동 폭파되는 기능 바로 실행 . 서비스도 dao도 딱히 아님//////////
+	////////////////방 자동 폭파되는 기능 바로 실행 . //////////
 	
 	
 	@Autowired
 	SqlSessionTemplate session;
 	
 	
-	@Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
-	//@Scheduled(cron = "0 */1 * * * *") ///////////테스트 1분마다 실행////////////// 테스트 완료
+	//@Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
+	@Scheduled(cron = "0 */1 * * * *") ///////////테스트 1분마다 실행////////////// 테스트 완료
 	@Transactional
     public void chatRoomAutoDelete() {
         // 데이터베이스에서 특정 레코드 삭제 로직 구현

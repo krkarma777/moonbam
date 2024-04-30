@@ -65,13 +65,50 @@ public class AdminMemberDAO {
 		return list;
 	}
 
-	public int cleanDeletedMember() {
-		int n = session.delete("AdminMemberMapper.cleanDeletedMember");
+	public int cleanDeletedMember(String userid) {
+		int n = session.delete("AdminMemberMapper.cleanDeletedMember", userid);
 		return n;
 	}
 
-	public int releaseUser(String userId) {
-		int n = session.update("AdminMemberMapper.releaseUser", userId);
+	public int releaseUser(String userid) {
+		System.out.println("userid : " + userid);
+		int n = session.update("AdminMemberMapper.releaseUser", userid);
+		return n;
+	}
+
+	public void suspendUser(String userid) {
+		session.update("AdminMemberMapper.suspendUser", userid);
+		
+	}
+
+	public void insertInRestrictedUser(String user) {
+		session.insert("AdminMemberMapper.insertSuspendedUserInRestrictedUser", user);
+		
+	}
+
+	public int setFalseMemberDB(List<MemberDTO> mlist) {
+		session.update("AdminMemberMapper.insertSuspendedUserInRestrictedUser");
+		return 0;
+	}
+
+	public void insertDeletedUserInRestrictedDB(String userid) {
+		System.out.println(userid);
+		session.insert("AdminMemberMapper.insertKickedUserInRestrictedDB", userid);
+		
+	}
+
+	public List<String> getDeleteList() {
+		List<String> list = session.selectList("AdminMemberMapper.getDeleteList");
+		return list;
+	}
+
+	public int cleanRestrictedMember() {
+		int n = session.delete("AdminMemberMapper.cleanRestrictedMember");
+		return n;
+	}
+
+	public int deleteFromRestrictedMember(String userId) {
+		int n = session.delete("AdminMemberMapper.deleteFromRestrictedMember", userId);
 		return n;
 	}
 
