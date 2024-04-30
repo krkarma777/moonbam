@@ -252,6 +252,7 @@ session.removeAttribute("Kicked");
 		        	createMsgTag(messageOutput);
 		        });
 	
+		        // 이전글 가져오기
 		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
 		        sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 		        
