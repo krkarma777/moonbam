@@ -80,6 +80,7 @@
 					<c:if test="${leadermemberDto.userId == memberDTO.userId}">
 					<div>
 						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnKick('${memberDtolist.userId }')"><b>강퇴하기</b></button>
+						<button type="button" class="btn btn-sm" style="float:right; height:30px;" onClick="fnDelegate('${memberDtolist.userId }')"><b>방장 넘기기</b></button>
 					</div>
 					</c:if>
 				</div>
@@ -118,10 +119,6 @@
 	
 	%>
 	
-	<%
-	
-	%>
-	
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
@@ -143,7 +140,10 @@
 		//채팅 멤버 강퇴
 		function fnKick(userId) {
 			location.href = "/acorn/Chatmore/ChatKickUser?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
-			
+		}
+		//방장 위임하기
+		function fnDelegate(userId) {
+			location.href = "/acorn/delegateMaster?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
 		}
 		
 		

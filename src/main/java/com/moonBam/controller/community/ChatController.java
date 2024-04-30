@@ -100,32 +100,18 @@ public class ChatController {
 	}
 
 	@RequestMapping(value = "/delegateMaster")
-	@ResponseBody
 	public String delegateMaster(
 			@RequestParam String chatNum, 
-			@RequestParam String newMaster,
+			@RequestParam String userId,
 			Principal principal
 			) {
 		HashMap<String, String> map = new HashMap<>();
-		map.put("chatNum", chatNum);
-		map.put("to", newMaster);
-		int n = crService.delegateMaster(map);
+		System.out.println("안녕 나는 chatController.delegateMaster야");
 		
-		//////////////////권한위임 기존 방장이 하는지 검사
 		
-		String formerMaster = principal.getName();
+		crService.delegateMaster(principal, chatNum, userId);
 		
-		Boolean checkMaster = (formerMaster == crService.checkMaster(chatNum));
-		
-		if(!checkMaster) {
-			System.out.println("너 방장 아니지");
-		}else {
-			String mesg = (n==1)? "권한 위임 정상 처리": "권한 위임 실패";
-			System.out.println(mesg);
-		}
-		//////////////////
-		
-		return "";
+		return "redirect:/chatRoom?chatNum="+chatNum;
 	}
 	
 	//강퇴하기 기능

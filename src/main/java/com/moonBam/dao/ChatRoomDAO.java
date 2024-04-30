@@ -27,16 +27,23 @@ public class ChatRoomDAO {
 		return n;
 	}
 	
-	public int delegateMaster(HashMap<String, String> map) {
+	public int delegateMaster(String chatNum, String userId) {
 		int n = 0;
 		System.out.println("in dao");
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("chatNum", chatNum);
+		map.put("userId", userId);
+		
 		System.out.println(map);
-		n = session.update("ChatMapper", map);
+		
+		n = session.update("ChatMapper.delegateMaster", map);
 		return n;
 	}
 
 	public String checkMaster(String chatNum) {
-		String master = session.selectOne("ChatMapper", chatNum);
+		String master = session.selectOne("ChatMapper.checkMaster", chatNum);
+		System.out.println("master : " + master);
 		return master;
 	}
 
