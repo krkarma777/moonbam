@@ -76,6 +76,11 @@
 	overflow-y: scroll;
 	height: 600px;
 }
+
+.btn {
+	background-color: #ff416c;
+	color: white;
+}
 </style>
 
 
@@ -184,11 +189,10 @@ session.removeAttribute("Kicked");
 
 
 <!-- 모달 창 -->
-<div id="myModal" class="modal">
+<div id="myModal" class="modal" >
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
         <p id="modalMessage"></p>
-        <button onclick="closeModal()">확인</button>
+        <button class="btn" onclick="closeModal()">확인</button>
     </div>
 </div>
 
@@ -433,6 +437,7 @@ session.removeAttribute("Kicked");
 	        var modal = document.getElementById('myModal');
 	        var modalMessage = document.getElementById('modalMessage');
 	        modalMessage.textContent = message; // 메시지 설정
+	        modalMessage.style.textAlign = "center"; // 텍스트 가운데 정렬
 	        modal.style.display = "block"; // 모달 열기
 	    }
 
