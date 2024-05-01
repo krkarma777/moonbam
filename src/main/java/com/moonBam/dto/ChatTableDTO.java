@@ -52,6 +52,11 @@ public class ChatTableDTO {
 		// TODO Auto-generated constructor stub
 	}
 
+	public ChatTableDTO(String content) {
+		this.chatContent = content;
+	}
+
+
 	public String getChatNum() {
 		return chatNum;
 	}
