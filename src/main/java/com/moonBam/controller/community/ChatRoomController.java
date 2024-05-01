@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,8 +50,15 @@ public class ChatRoomController {
 	}
 	
 	
+
+	
+	
+	
+	
 	/////방 입장을 위해 방 클릭하면 이렇게 먼저 중복제외하고 insert 진행
 	@RequestMapping(value="/chatRoom",  method = RequestMethod.GET)
+	@ResponseBody //ajax
+	@CrossOrigin
 	public String chatRoomGet(@Param("chatNum") int chatNum, HttpSession session, Principal principal) {
 
 		String userIdInSession = principal.getName();//현재 나의 Id
@@ -62,7 +70,9 @@ public class ChatRoomController {
 		chatMemberInsertMap.put("chatNum", chatNum);
 //		System.out.println("chatMemberInsertMap 확인 chatRoomInsert "+chatMemberInsertMap);
 		
-		String nextWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; //정상 진행jsp
+		//String nextWhere = "redirect:/chatRoom/enter?chatNum="+chatNum; //정상 진행jsp
+		String nextWhere = "successToInsert"; //정상 진행jsp
+		
 		
 		//일단 중복된 데이터가 없는지 확인 후 insert 진행하기 (중복 저장 방지를 위해~)
 		ChatMemberDTO chatMemberDto = comEnterOutService.chatMemberInsertForOnlyOneSelect(chatMemberInsertMap);
@@ -98,22 +108,22 @@ public class ChatRoomController {
 						
 						
 						if(chatMemberANDroomRecordNum == 0 ) { //tx 에서 무언가 꼬인 것임
-							session.setAttribute("mesg", "문제가 발생하였습니다.");
-							nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+							//session.setAttribute("mesg", "문제가 발생하였습니다.");
+							nextWhere = "failToInsert"; //커뮤니티홈으로 이동
 						}
 						
 					}catch(Exception e){
 						//모종의 이유로 Insert 실패 시 error임
-						session.setAttribute("mesg", "문제가 발생하였습니다.");
+						//session.setAttribute("mesg", "문제가 발생하였습니다.");
 						System.out.println("chatMember insert 실패");
-						nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+						nextWhere = "failToInsert"; //커뮤니티홈으로 이동
 					}
 					
 			
 			}else { //제한 인원수에 초과 됨. (입장 불가, 커뮤니티 홈으로 이동)
 				
 				session.setAttribute("mesg", "입장 가능한 인원이 초과하였습니다.");
-				nextWhere = "redirect:/?cg=community"; //커뮤니티홈으로 이동
+				nextWhere = "failToInsertCount"; //커뮤니티홈으로 이동
 			}
 			
 			
@@ -127,6 +137,8 @@ public class ChatRoomController {
 	
 	//DB check 입장 승인할지 말지 결정 (chatNum, UserId, 강퇴여부f 일치여부 확인)
 	@RequestMapping("/chatRoom/enter")
+	@ResponseBody //ajax
+	@CrossOrigin
 	public String chatMemberSelect(HttpServletRequest request, Principal principal, @Param("chatNum") int chatNum, HttpSession session, Model model ) {
 		String str = (String) session.getAttribute("userIdInSession");
 		
@@ -134,16 +146,17 @@ public class ChatRoomController {
 		
 		String userIdInSession = principal.getName();
 		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
-		String nickNameInSession = memberDTO.getNickname();
-		request.setAttribute("userIdInSession", userIdInSession); ////////////// 형이 필요해서 저장해둔거, userId
-		request.setAttribute("nickNameInSession", nickNameInSession); //////////////형이 필요해서 저장해둔거, nickName
+		//String nickNameInSession = memberDTO.getNickname();
+		
 		
 		Map<String, Object> chatMemberselectMap = new HashMap<>();
 		chatMemberselectMap.put("userId", userIdInSession);
 		chatMemberselectMap.put("chatNum", chatNum);
 		System.out.println("chatMemberselectMap 확인 chatRoomSelect "+chatMemberselectMap);
 				
-		String returnWhere = "community/chatRoom/chatRoom";
+		//String returnWhere = "community/chatRoom/chatRoom";
+		String returnWhere = "successToEnter";
+		
 		
 		try {
 			
@@ -152,26 +165,44 @@ public class ChatRoomController {
 			
 			//이게 null이라면 강퇴된 거임
 			if(chatMemberDto == null ) {
-				session.setAttribute("mesg", "강퇴된 방에는 다시 입장할 수 없습니다.");
-				returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
+				//session.setAttribute("mesg", "강퇴된 방에는 다시 입장할 수 없습니다.");
+				//returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
+				returnWhere = "failToEnterKicked"; //커뮤니티목록으로 다시 리턴
 			}
-			
 			
 			
 		}catch(Exception e){
 			
 			System.out.println("chatMember select 실패");
-			session.setAttribute("mesg", "문제가 발생하였습니다.");
-			returnWhere = "redirect:/?cg=community"; //커뮤니티목록으로 다시 리턴
+			//session.setAttribute("mesg", "문제가 발생하였습니다.");
+			returnWhere = "failToEnter"; //커뮤니티목록으로 다시 리턴
 		}
 		
-		/////////request에 저장하여 jsp로 chatNum 전달함 (더보기에서 사용할 예정)
-		request.setAttribute("ChatRoomDTO", this.chatRoomSelectBychatNum( (int) chatMemberselectMap.get("chatNum")));
 		
-		// 
+		//정상 실행 됐을 때 이 함수 호출 (바로 아래에 있음)
+		//enterFinal(request, this.chatRoomSelectBychatNum( (int) chatMemberselectMap.get("chatNum")), principal );
+		
 		
 		return returnWhere;
 	}
+	
+	//문제 없이 방 입장됐을 때 열릴 주소
+	@RequestMapping("/chatRoom/enterFinal")
+	public String enterFinal(@Param("chatNum") int chatNum, HttpServletRequest request, Principal principal) {
+		
+		String userIdInSession = principal.getName();
+		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
+		String nickNameInSession = memberDTO.getNickname();
+		ChatRoomDTO chatRoomDTO = chatRoomSelectBychatNum(chatNum);
+		
+		request.setAttribute("userIdInSession", userIdInSession); ////////////// 형이 필요해서 저장해둔거, userId
+		request.setAttribute("nickNameInSession", nickNameInSession); //////////////형이 필요해서 저장해둔거, nickName
+		request.setAttribute("ChatRoomDTO",chatRoomDTO);
+		
+		return "community/chatRoom/chatRoom";
+	}
+	
+	
 	
 	////////////////////방 나가기 눌렀을 때///////////////////////////////
 	@RequestMapping("/chatRoom/out")
