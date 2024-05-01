@@ -44,8 +44,11 @@ public class ChatMessageController {
 // 받고 주고
 	@MessageMapping("/chat/send/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @RequestParam(required = false) String chatContent,
+	public ChatTableDTO sendMessage( @RequestParam(required = false) String chatContent,
 			@DestinationVariable("chatNum") String chatNum, Principal principal) {
+		// 기존 @payload ChatTableDTO ctDto 를 객체 생성으로 변경
+		// 넘어오는 ctDto의 값이 없음
+		ChatTableDTO ctDto = new ChatTableDTO(); 
 		ctDto.setChatNum(chatNum);
 		ctDto.setChatContent(chatContent);
 

@@ -18,9 +18,9 @@
 
 		// 글쓰기
 		function buttonAnnoWrite() {
-			window.open("WriteAnnouncementController", 'annoWrite' ,"width= 410px, height=390px");
-			/* $("#formAnnoList").attr("action", "WriteAnnouncementController").attr("method", "post")
-					.submit(); */
+			//window.open("WriteAnnouncementController", 'annoWrite' ,"width= 410px, height=390px");
+			 $("#formAnnoList").attr("action", "WriteAnnouncementController").attr("method", "post")
+					.submit();
 		}
 
 
@@ -59,7 +59,7 @@
 	
 </style>
 <div class="container">
-	<h1 class="mt-5">관리자페이지 공지사항</h1>
+	<h1 class="mt-5">공지사항</h1>
 	<hr>
 	<form method="get" class="mb-3" id="formAnnoList">
 		<div class="input-group mb-3">
@@ -83,7 +83,7 @@
 		<c:forEach var="dto" items="${list}">
 			<tr>
 				<td>${dto.annoNum}</td>
-				<td style="width: 50%;"><a href="ViewAnnouncementController?annoNum=${dto.annoNum}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${dto.annoTitle}</a></td>
+				<td style="width: 50%;"><a href="ViewAnnouncementController?annoNum=${dto.annoNum}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> [${dto.category}] ${dto.annoTitle}</a></td>
 				<td>${dto.startDate}</td>
 				<td>${dto.endDate}</td>
 				<%-- <td>${dto.writeDate}</td> --%>
