@@ -247,12 +247,19 @@ session.removeAttribute("Kicked");
 		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
 		        	createMsgTag(messageOutput);
 		        });
-	
-		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
-		        sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
+		        
+		        // 이전 글 및 공지 메세지
+		        stompClient.subscribe('/topic/announce/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        	createAnnoTag(messageOutput);
+		        });
+				
+		     	// pre message, past message
+		     	 pastChatMessage();
 		        
 		    });
+		}
 		
+		// send message
 		function sendChatMessage(type, message, userIdInSocket) {
 		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
 		        'type': type,
@@ -261,6 +268,8 @@ session.removeAttribute("Kicked");
 		    }));
 		}
 		
+		function pastChatMessage() {
+		    stompClient.send('/acorn/chat/past/' + ${ChatRoomDTO.chatNum}, {}, );
 		}
 		
 		
@@ -293,38 +302,25 @@ session.removeAttribute("Kicked");
 					'userId' : userIdInSocket,
 				}));
 			}
-		  
-		 
-		 
-		//방나가기 눌렀을 때 작동되는 fn
+
+		 //방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
 			console.log("goOutForm");
-			
-			
 			$.ajax({
-
                 type: "post",
                 url: "/acorn/chatRoom/out",
                 data: {
                   "chatNum" : ${ChatRoomDTO.chatNum}
                 },
                 success: function (data, status, xhr) {
-                	
                 	//console.log("하이",data)
-					
 					if(data == "successToOut"){
-						
 						disconnect(); ////소켓 연결 끊고 퇴장 메세지 뿌리기
 						alert("방을 나갔습니다.");
 						window.close(); ///내 창 닫기
-						
 					}else if(data == "failToOut"){
-						
 						location.reload(true); ///새로고침
-						
 					}
-                    
-
                 },
                 error: function (xhr, status, error) {
 						
@@ -355,8 +351,8 @@ session.removeAttribute("Kicked");
 		// 최신 메세지 추가(위치는 맨 뒤)
 		// 이전 메세지 추가(위치는 맨위)
 		function createMsgTag(messageOutput) {
-				//console.log("messageOutput : " + messageOutput.body)	
 			let body= JSON.parse(messageOutput.body);
+			console.log("body : " + body)
 				let nickName = body.nickName;
 			let content = JSON.parse(body.chatContent);
 			let message = content.message;
@@ -364,6 +360,8 @@ session.removeAttribute("Kicked");
 			let userId =  content.userId; 
 		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
 		    let chatLi;
+		    
+		    
 		if(content.type == "KICKED")   {
 			if(nickName == `${nickNameInSession}`){
 				message = "방에서 퇴장되었습니다.";
@@ -387,14 +385,81 @@ session.removeAttribute("Kicked");
 			if(whosMessage == "my-chat"){
 				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}else{
-				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}
 	       
 	    }
 	    $("#chat").append(chatLi);
 	}
 		
-		// 강퇴
+		let flag = true;
+		// anno
+		function createAnnoTag(messageOutput) {
+			if(flag){
+				alert(flag);
+			//console.log("messageOutput : " + messageOutput.body)	
+			let a = messageOutput.body;
+			let b = a.split("---");
+			for( var i = 0 ; i<b.length; i++){
+				let body= JSON.parse(b[i]); 
+	//			let nickName = body.nickName; 
+		//		alert(nickName)
+				let type = body.type;
+				let message = body.message;
+				
+				let chatLi;
+				// type == TALK
+				if("TALK"==type) {
+				
+					let userId =  body.userId; 
+				    let whosMessage = (body.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
+				    let time = body.serverTime;
+				    let nickName = body.nickName;
+				    
+				    console.log("nickName: " + nickName)
+				    console.log("message: " + message)
+				    console.log("time: " + time)
+				    console.log("userId: " + userId)
+				    console.log("whosMessage: " + whosMessage)
+				    
+			        // 일반 메시지일 경우
+			      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
+					//console.log("시간 잘라서 확인하기 완료?",timeShort)
+					if(whosMessage == "my-chat"){
+						  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+					}else{
+						  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+					}
+				}else{
+					// type == ENTER , EXIT, KICKED
+					
+					// kicked
+					if(type == "KICKED")   {
+						if(nickName == `${nickNameInSession}`){
+							message = "방에서 퇴장되었습니다.";
+							kickUser(message);
+							return "";
+						}
+					}
+					
+					chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+				}
+				$("#chat").append(chatLi);
+				
+		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
+		        
+			}
+			
+			alert("send")
+			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
+			flag=false;
+			alert(flag)
+			}
+	}
+		
+		
+		
+		// 강퇴 삭제 예정
 		//채팅 멤버 강퇴
 		function fnKick(userId) {
     var url = "/acorn/Chatmore/" + `${ChatRoomDTO.chatNum}` + "/ChatKickUser";

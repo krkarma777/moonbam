@@ -78,6 +78,10 @@ public class ChatRoomService {
 		return dao.chatRoomNowSelect(chatRoomSelect);
 	}
 
+	public List<String> getPastMessages(String chatNum) {
+		return dao.getPastMessages(chatNum);
+	}
+
 	
 	
 	

@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	UPDATE chatroom
 	SET currentnow =
 	CASE
-	WHEN currentnow > 0 THEN currentnow - 1
+	WHEN currentnow > 1 THEN currentnow - 1
 	ELSE currentnow
 	END
 	where chatNum = #{chatNum}

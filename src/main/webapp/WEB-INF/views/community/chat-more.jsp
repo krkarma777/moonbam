@@ -171,7 +171,7 @@
 			
 			var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+${chatroomDTO.chatNum}
 			
-			childOpen(openUrl);
+			childOpen(openUrl)
 			
 		}
 	
@@ -198,8 +198,6 @@
 		function childClose(){ 
 			child.close();
 		}
-	
-	
 		
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
@@ -242,7 +240,11 @@
 		}
 		
 		function delegate(userId){
-			location.href = "/acorn/delegateMaster?chatNum="+${chatroomDTO.chatNum}+"&userId="+userId;
+			//location.href = "/acorn/delegateMaster?chatNum="+${chatroomDTO.chatNum}+"&userId="+userId;
+			
+			stompClient.send("/acorn/delegateMaster/" + `${chatroomDTO.chatNum}`, {}, JSON.stringify({
+		        'type': "ANNOUNCE",
+		        'userId': userId,	  }));
 		}
 		
 	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)

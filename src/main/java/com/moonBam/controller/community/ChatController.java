@@ -99,22 +99,22 @@ public class ChatController {
 		
 	}
 
-	@RequestMapping(value = "/delegateMaster")
-	public String delegateMaster(
-			@RequestParam String chatNum, 
-			@RequestParam String userId,
-			Principal principal,
-			HttpSession session
-			) {
-		System.out.println("안녕 나는 chatController.delegateMaster야");
-		
-		
-		crService.delegateMaster(principal, chatNum, userId);
-		
-		session.setAttribute("newLeader", userId);
-		
-		return "redirect:/chatRoom?chatNum="+chatNum;
-	}
+//	@RequestMapping(value = "/delegateMaster")
+//	public String delegateMaster(
+//			@RequestParam String chatNum, 
+//			@RequestParam String userId,
+//			Principal principal,
+//			HttpSession session
+//			) {
+//		System.out.println("안녕 나는 chatController.delegateMaster야");
+//		
+//		
+//		crService.delegateMaster(principal, chatNum, userId);
+//		
+//		session.setAttribute("newLeader", userId);
+//		
+//		return "redirect:/chatRoom?chatNum="+chatNum;
+//	}
 	
 	//강퇴하기 기능
 	@RequestMapping(value = "/Chatmore/ChatKickUser", method = RequestMethod.GET)
