@@ -75,10 +75,10 @@ public class MyPageController {
    // List<ScrapDTO> scrapDTOS = scrapService.findAll(memberDTO.getUserId());
         model.addAttribute("sDTO", sDTO);
         model.addAttribute("curPage", curPage);
-        return "member/myPage/scrapManagement";
+        return "member/MyPage/scrapManagement";
         } else {
 
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
     }
 
@@ -102,7 +102,7 @@ public class MyPageController {
               return "redirect:/my-page/scrap";
          } else {
              redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
-             return "redirect:/Login";
+             return "redirect:/mainLogin";
          }
     }
     
@@ -118,13 +118,13 @@ public class MyPageController {
             return "redirect:/my-page/scrap"; // 모든 게시물 삭제 후에 리다이렉트
         } else {
             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
     }
     
     @GetMapping
     public String myPage(Model model, Principal principal) {
-        return "member/myPage/MyPageTemplate";
+        return "member/MyPage/MyPageTemplate";
     }
 
     @GetMapping("/info")
@@ -139,7 +139,7 @@ public class MyPageController {
         ModelAndView mav = new ModelAndView();
         mav.addObject("loginUser", loginUser);
 
-        mav.setViewName("member/myPage/nicknameChange");
+        mav.setViewName("member/MyPage/nicknameChange");
         return mav;
     }
 
@@ -151,10 +151,10 @@ public class MyPageController {
         // 만약 loginUser가 null이면 로그인되지 않은 상태이므로 로그인 페이지로 리다이렉트 또는 예외 처리할 수 있음
         if (loginUser == null) {
             // 로그인되지 않은 상태일 때 로그인 페이지로 이동하거나 다른 처리를 하도록 설정
-            return ("redirect:/Login"); // 로그인 페이지 경로로 리다이렉트
+            return ("redirect:/mainLogin"); // 로그인 페이지 경로로 리다이렉트
         }
         model.addAttribute("loginUser", loginUser);
-        return "member/myPage/infoManagement"; // 회원 정보 수정 폼의 JSP 파일 경로
+        return "member/MyPage/infoManagement"; // 회원 정보 수정 폼의 JSP 파일 경로
     }
 
     //회원정보 수정
@@ -166,7 +166,7 @@ public class MyPageController {
         // 만약 loginUser가 null이면 로그인되지 않은 상태이므로 로그인 페이지로 리다이렉트 또는 예외 처리할 수 있음
         if (loginUser == null) {
             // 로그인되지 않은 상태일 때 로그인 페이지로 이동하거나 다른 처리를 하도록 설정
-            return "redirect:/Login"; // 로그인 페이지 경로로 리다이렉트
+            return "redirect:/mainLogin"; // 로그인 페이지 경로로 리다이렉트
         }
 
         // 닉네임 검증
@@ -206,10 +206,10 @@ public class MyPageController {
             model.addAttribute("curPage", curPage); // 현재 페이지 정보를 모델에 추가합니다.
 
             // ModelAndView 객체를 사용하여 뷰를 반환합니다.
-            return "member/myPage/postManagement";
+            return "member/MyPage/postManagement";
         } else {
 
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
     }
 
@@ -226,10 +226,10 @@ public class MyPageController {
             MyCommentDTO cDTO = mserv.selectmyComm(curPage, name);
             model.addAttribute("cDTO", cDTO);
             model.addAttribute("curPage", curPage); // 현재 페이지 정보를 모델에 추가합니다.
-            return "member/myPage/commentManagement";
+            return "member/MyPage/commentManagement";
         } else {
             session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
     }
 
@@ -271,7 +271,7 @@ public class MyPageController {
             return "redirect:/my-page/post"; // 모든 게시물 삭제 후에 리다이렉트
         } else {
             redirectAttributes.addFlashAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
     }
 
@@ -355,14 +355,14 @@ public class MyPageController {
         //비로그인 상태일 때 진행
         if(loginUser == null) {
         	session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
         
         if(loginUser.getKakaoConnected()==1 || loginUser.getGoogleConnected()==1 || loginUser.getNaverConnected()==1) {
-            return "member/myPage/withdrawSocial";
+            return "member/MyPage/withdraw";
         }
             model.addAttribute("loginUser", loginUser);
-            return "member/myPage/withdraw";
+            return "member/MyPage/withdraw";
         
     }
 
@@ -416,14 +416,14 @@ public class MyPageController {
         //비로그인 상태일 때 진행
         if(loginUser == null) {
         	session.setAttribute("mesg", "로그인이 필요한 작업입니다.");
-            return "redirect:/Login";
+            return "redirect:/mainLogin";
         }
         
         if(loginUser.getKakaoConnected()==1 || loginUser.getGoogleConnected()==1 || loginUser.getNaverConnected()==1) {
         	return "member/Find_Info/emailErrorPage";
         }
             model.addAttribute("loginUser", loginUser);
-            return "member/myPage/updatePwd";       
+            return "member/MyPage/updatePwd";       
     }
     
     //비밀번호 업데이트
