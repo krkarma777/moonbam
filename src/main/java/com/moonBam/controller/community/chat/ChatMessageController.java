@@ -2,7 +2,6 @@ package com.moonBam.controller.community.chat;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +14,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.ChatTableDTO;
@@ -26,7 +22,6 @@ import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.member.MemberService;
 import com.moonBam.util.FileUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -209,6 +204,8 @@ public class ChatMessageController {
 	@SendTo("/topic/announce/{chatNum}")
 	public String pastMessage(@DestinationVariable("chatNum") String chatNum,	Principal principal) {
 		List<String> list = crService.getPastMessages(chatNum);
+		String group="";
+		if(list.size()>0) {
 		String temp = "" ;
 		for (String content : list) {
 			temp +=content;
@@ -216,7 +213,7 @@ public class ChatMessageController {
 			String str = temp.replaceAll("\\}\\n\\{","\\}---\\{");
 			String[] strArr = str.split("---");
 		
-			String group="";
+			
 			
 			for(String content : strArr) {
 				// json
@@ -272,13 +269,11 @@ public class ChatMessageController {
 				
 				group+=jsonObj + "---";
 			}
+		}
 			System.out.println(group);
 		return group; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 
-	
-	
-	
 	public Object parseStr2Json(String content) {
 		JSONParser parser = new JSONParser();
 		Object obj = null;

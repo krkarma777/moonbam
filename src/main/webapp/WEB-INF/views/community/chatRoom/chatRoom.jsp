@@ -192,7 +192,7 @@ session.removeAttribute("Kicked");
 <div id="myModal" class="modal" >
     <div class="modal-content">
         <p id="modalMessage"></p>
-        <button class="btn" onclick="closeModal()">확인</button>
+        <button class="btn" onclick="closeModal()" style="float:center; background-color: #ff416c; color:white; margin-left: auto;">확인</button>
     </div>
 </div>
 
@@ -398,8 +398,10 @@ session.removeAttribute("Kicked");
 			if(flag){
 			//console.log("messageOutput : " + messageOutput.body)	
 			let a = messageOutput.body;
+			
 			let b = a.split("---");
 			for( var i = 0 ; i<b.length-1; i++){
+				console.log(b[i])
 				let body= JSON.parse(b[i]); 
 				let type = body.type;
 				let message = body.message;
@@ -441,7 +443,7 @@ session.removeAttribute("Kicked");
 		        
 			}
 			
-			alert("send")
+			//alert("send")
 			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 			flag=false;
 			}
