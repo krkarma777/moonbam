@@ -13,6 +13,8 @@
 	CommunityPageDTO cpDTO = (CommunityPageDTO)request.getAttribute("cpDTO");
 	List<ChatRoomDTO> chatRoomList = cpDTO.getList();
 	
+	String communityCategory = (String)request.getAttribute("communityCategory");
+  	System.out.println("in communityHome.jsp: "+ communityCategory);
 %>
 <html>
 <head>
@@ -110,12 +112,19 @@
         color: white;
     }
     .pagination .page-item.active .page-link{
-        color:black; 
-        background-color: #ff416c;
-        opacity:0.8; 
-        color: black;
-        border: none;
-    }
+	color:white; 
+	background-color: #ff416c;
+	opacity:0.8; 
+	color: white;
+	border: none;
+}
+/* 활성화된 페이지 번호 스타일 */
+.pagination .page-item.active .page-link {
+    background-color: #FF285A;
+    background-image: linear-gradient(180deg, #FF285A, #FF174D);
+    /* 그라디언트 효과 */
+    border: none; /* 테두리 제거 */
+}
 </style>
 </head>
 <body class="bg-light" style="height: 100vh;">
