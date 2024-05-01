@@ -190,9 +190,9 @@ session.removeAttribute("Kicked");
 
 <!-- 모달 창 -->
 <div id="myModal" class="modal" >
-    <div class="modal-content">
+    <div class="modal-content" style="text-align: center;">
         <p id="modalMessage"></p>
-        <button class="btn" onclick="closeModal()">확인</button>
+        <button class="btn" onclick="closeModal()" style="background-color: #ff416c; color:white;">확인</button>
     </div>
 </div>
 
@@ -442,7 +442,7 @@ session.removeAttribute("Kicked");
 		        
 			}
 			
-			alert("send")
+			//alert("send")
 			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 			flag=false;
 			}
