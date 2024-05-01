@@ -87,8 +87,6 @@
             <div class="text-end">
                 <!-- 선택 삭제 버튼 -->
                 <button type="button" class="btn btn-danger" id="deleteSelectedBtn">선택 삭제</button>
-                <!-- 전체 선택 및 전체 삭제 버튼 -->
-                <button type="button" class="btn btn-danger" id="deleteAllBtn">전체 삭제</button>
             </div>
         </div>
         <!-- 메인 컨텐츠 끝 -->
