@@ -15,6 +15,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -65,8 +66,9 @@ public class ChatController {
 	}
 
 	@RequestMapping(value = "/saveChat", method = RequestMethod.POST)
-	// @ResponseBody//////////////////////////////////
-	public String saveChatRoom(@Valid @ModelAttribute ChatRoomDTO chatRoom, BindingResult bindingResult,
+	@ResponseBody//////////////////////////////////
+	@CrossOrigin
+	public int saveChatRoom(@Valid @ModelAttribute ChatRoomDTO chatRoom, BindingResult bindingResult,
 			Principal principal) {
 
 		String userId = principal.getName();
@@ -86,6 +88,7 @@ public class ChatController {
 		// leaderId 설정
 		chatRoom.setLeaderId(userId);
 
+		System.out.println("chatRoom 인서트 확인 "+chatRoom);
 		int n = crService.saveChatRoom(chatRoom);
 		System.out.println("채팅방이" + n + "개 생성되었습니다.");
 
@@ -114,8 +117,10 @@ public class ChatController {
 		int n2 = comEnterOutService.chatMemberEnterInsert(chatMemberInsertMap, chatRoomUpdateMap);
 		System.out.println("chatMember에" + n2 + "개가 추가되고 현재 채팅방 인원수가 " + (currntNow + 1) + "로 변경되었습니다.");
 
-		return "redirect:/chatRoom?chatNum=" + chatNum;
-
+		
+		
+		//return "redirect:/chatRoom?chatNum=" + chatNum;
+		return chatNum;
 	}
 
 	@RequestMapping(value = "/delegateMaster")

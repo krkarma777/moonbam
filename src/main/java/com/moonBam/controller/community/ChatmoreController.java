@@ -12,9 +12,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.messaging.simp.stomp.StompClientSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.moonBam.dto.AdminReportDTO;
 import com.moonBam.dto.ChatMemberDTO;
@@ -107,6 +109,8 @@ public class ChatmoreController {
 	}
 	
 	@RequestMapping(value = "/Chatmore/ChatmoreReport", method=RequestMethod.POST)
+	@ResponseBody///////////
+	@CrossOrigin
 	public String ChatmoreReportPost(AdminReportDTO adminReportDTO,  @RequestParam("chatNum") int chatNum,  HttpSession session, Principal principal) {
 		//@RequestParam("targetId") String targetId, 내가 이걸 왜?
 		
@@ -118,9 +122,9 @@ public class ChatmoreController {
 		
 		chatmoreService.ChatmoreReportPostInsert(adminReportDTO);
 		
-		session.setAttribute("mesg", "신고 접수가 완료되었습니다.");
+		//session.setAttribute("mesg", "신고 접수가 완료되었습니다.");
 		
-		return "redirect:/Chatmore?chatNum="+chatNum;
+		return "successToReport";
 	}
 	
 
