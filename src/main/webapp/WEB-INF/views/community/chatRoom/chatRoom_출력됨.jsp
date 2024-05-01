@@ -219,7 +219,6 @@ session.removeAttribute("Kicked");
 		/* 신고하기 */
 		function openReportWindow(userId, message) {
 			
-			
 			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
 			localStorage.setItem('userId',  JSON.stringify(userId));
 			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
@@ -249,7 +248,7 @@ session.removeAttribute("Kicked");
 		        	createMsgTag(messageOutput);
 		        });
 		        
-		        // 이전 글 및 공지 메세지 받는 주소
+		        // 이전 글 및 공지 메세지
 		        stompClient.subscribe('/topic/announce/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
 		        	createAnnoTag(messageOutput);
 		        });
@@ -386,22 +385,25 @@ session.removeAttribute("Kicked");
 			if(whosMessage == "my-chat"){
 				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}else{
-				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}
 	       
 	    }
 	    $("#chat").append(chatLi);
 	}
-		// 필수, 이전 메세지를 한번만 가져오게 함
+		
 		let flag = true;
 		// anno
 		function createAnnoTag(messageOutput) {
 			if(flag){
+				alert(flag);
 			//console.log("messageOutput : " + messageOutput.body)	
 			let a = messageOutput.body;
 			let b = a.split("---");
-			for( var i = 0 ; i<b.length-1; i++){
+			for( var i = 0 ; i<b.length; i++){
 				let body= JSON.parse(b[i]); 
+	//			let nickName = body.nickName; 
+		//		alert(nickName)
 				let type = body.type;
 				let message = body.message;
 				
@@ -413,6 +415,12 @@ session.removeAttribute("Kicked");
 				    let whosMessage = (body.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
 				    let time = body.serverTime;
 				    let nickName = body.nickName;
+				    
+				    console.log("nickName: " + nickName)
+				    console.log("message: " + message)
+				    console.log("time: " + time)
+				    console.log("userId: " + userId)
+				    console.log("whosMessage: " + whosMessage)
 				    
 			        // 일반 메시지일 경우
 			      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
@@ -445,6 +453,7 @@ session.removeAttribute("Kicked");
 			alert("send")
 			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 			flag=false;
+			alert(flag)
 			}
 	}
 		

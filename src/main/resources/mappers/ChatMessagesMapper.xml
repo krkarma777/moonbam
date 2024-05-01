@@ -19,6 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from chattable where id= '1'
     </select>
     
+    <select id="pastMessage" resultType="String">
+        select chatContent from chattable where chatNum= #{chatNum} order by id asc
+    </select>
     
     <!-- 금칙어 목록 가져오는 쿼리 -->
     <select id="badWordsSelectAll" resultType="String">
