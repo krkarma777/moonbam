@@ -133,6 +133,10 @@ public class MainController {
 	    		categoryList.add("독서");
 	    		categoryList.add("음악");
 	    		model.addAttribute("categoryList", categoryList);
+	    		
+	    		String communityCategory = "communitySearch";
+	    		model.addAttribute("communityCategory", communityCategory);
+	    		
                 nextPage = "community/communityHome";
                 break;
             case "tv":
