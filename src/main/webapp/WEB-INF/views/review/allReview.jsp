@@ -272,7 +272,7 @@ button {
 	      </div>
 	      <div class="modal-body">
 	      	<input type="hidden" value="<%=contId%>" id="contId">
-	        <textarea cols="50" rows="12" id="postText"></textarea>
+	        <textarea cols="50" rows="12" id="postText"><%=myReview.getPostText() %></textarea>
 	        <p id="show_length">0/200</p>
 	      </div>
 	      <div class="modal-footer">
