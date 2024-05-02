@@ -31,7 +31,6 @@ crossorigin="anonymous">
 	//회원 신고하기 눌렀을 때 작동되는 fn
 	function fnReport() {
 
-		
 		const userId = JSON.parse(localStorage.getItem('userId'));
 		const chatNum = JSON.parse(localStorage.getItem('chatNum'));
 		//console.log(":::",userId,":::",chatNum,":::",message);
@@ -39,6 +38,7 @@ crossorigin="anonymous">
 		var openUrl = "/acorn/Chatmore/ChatmoreReport?userId="+userId+"&chatNum="+chatNum
 		
 		childOpen(openUrl);
+		window.close(); ///
 		
 	}
 	
