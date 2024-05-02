@@ -114,10 +114,10 @@
 	</div>
 
 	<div style="width: 100%; height: 10px; position: relative;">
-		<form id="goOutForm" method="post" action="#">
-			<%-- <input type="hidden" name="userId" value="${memberDTO.userId}"> --%>
+		<%-- <form id="goOutForm" method="post" action="#">
+			<input type="hidden" name="userId" value="${memberDTO.userId}">
 			<input type="hidden" name="chatNum" value="${chatroomDTO.chatNum}">
-		</form>
+		</form> --%>
 		<!-- <button type="button" class="btn" onclick="fnGoOut()" style="position: absolute; bottom:2px; right:0;"><b>방 나가기</b></button> -->
 		<c:if test="${leadermemberDto.userId == memberDTO.userId}">
 			<!-- 방 삭제하기는 방장만 보이게 처리했음  -->
@@ -178,8 +178,47 @@
 		//방장이 방 삭제하기 눌렀을 때 작동되는 fn
 		function fnRemove() {
 			console.log("fnRemove");
-			$("#goOutForm").attr("action","/acorn/chatRoom/remove").submit();
-			window.history.back();
+			//$("#goOutForm").attr("action","/acorn/chatRoom/remove").submit();
+			//window.history.back();
+			
+			$.ajax({
+
+                type: "post",
+                url: "/acorn/chatRoom/remove",
+                data: {
+                  "chatNum" : ${chatroomDTO.chatNum}
+                },
+                success: function (data, status, xhr) {
+                
+					
+					if(data == "successToDelete"){
+						
+						
+						alert("방을 삭제하였습니다.");
+						window.close(); ///내 창 닫기
+						opener.location.reload(); //내 창 닫고 부모창 새로고침하기
+						
+					}else if(data == "failToDelete"){
+						
+						alert("방을 삭제에 실패하였습니다. 다시 시도해주세요.");
+						location.reload(true); ///새로고침
+						
+					}else if(data == "failToDeleteToCurrentNow"){
+						alert("방장 제외 인원이 남아있다면 강퇴 및 나가기 안내 후 다시 시도해주세요.");
+						location.reload(true); ///새로고침
+						
+					}
+                    
+
+                },
+                error: function (xhr, status, error) {
+						
+                	console.log("퇴장하기 error 발생",error)
+                }
+            })//ajax
+			
+			
+			
 		}
 
 		//button기능에 팝업으로 자식창 띄우기 openUrl 변수에 controller 주소 달면 됨

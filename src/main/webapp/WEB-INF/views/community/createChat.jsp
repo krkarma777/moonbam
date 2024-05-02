@@ -149,10 +149,11 @@
  				window.opener.location.reload();
 			}
 	 	});//
-      
+	 	
       
 	});//end doc
   </script>
+
 </head>
 <body class="bg-light" style="height:700px; width:100%; position: relative; border: 0px solid black;">
 
@@ -160,7 +161,8 @@
     <div style="height: 30px; background-color: #ffb2c4; font-size: 19px; margin-bottom: 5px; color: white;">
       <b>모임 만들기</b>
     </div>
-    <form action="/acorn/saveChat" method="post" id="createChat">
+   <!--  <form action="/acorn/saveChat" method="post" id="createChat"> -->
+
       <%-- <input type="hidden" name="leaderId" value="<%=request.getAttribute("userId")%>"> --%>
       
       <span>카테고리</span>
@@ -174,11 +176,11 @@
       <input class="form-control form-control-sm item" type="text" placeholder="카테고리를 선택하세요" id="roomTitle" name="roomTitle">
     
       <span>인원수</span>
-      <select name="amount" class="form-select form-select-sm item" style="width: 100px;">
-        <option value=2>2</option>
-        <option value=3>3</option>
-        <option value=4>4</option>
-        <option value=5>5</option>
+      <select name="amount" id="amount" class="form-select form-select-sm item" style="width: 100px;">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
       </select>
     
       <span>모임 장소</span>
@@ -202,15 +204,27 @@
       </div>
       <div style="position: absolute; width:490px; margin-left: 4px;">
         <input class="btn" type="reset" value="초기화" style="background-color: #ff416c; color:white; float: left;">
-        <input class="btn" type="submit" value="만들기" style="background-color: #ff416c; color:white; float: right;">
+        <input class="btn" type="submit" value="만들기" style="background-color: #ff416c; color:white; float: right;" onclick="saveForm()">
       </div>
-    </form>
-  </div>
 
+  </div>
+	  <!-- 모달 창 -->
+	<div id="myModal" class="modal" >
+	    <div class="modal-content" style="text-align: center;">
+	        <p id="modalMessage"></p>
+	        <button class="btn" style="background-color: #ff416c; color:white;" onclick="closeModal()">확인</button>
+	    </div>
+	</div>
+	  
+
+   <!-- 방 입장 ajax 실행 함수가 있는 js파일 import  -->   	
+<script src="${pageContext.request.contextPath}/resources/js/chat/communityEnter.js" type="text/javascript"></script>   	
 <!-- 다음 주소 -->
   <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+  
   <script>
-
+  
+  
     function sample4_execDaumPostcode() {
       new daum.Postcode({
         oncomplete: function(data) {
@@ -248,6 +262,70 @@
         }
       }).open();
     }
+    
+
+
+	function saveForm() {
+		
+		//var ChatNumSaveForm = null;
+		//console.log("saveForm 도착");
+		
+		$.ajax({
+
+          type: "post",
+          url: "/acorn/saveChat",
+          data: {
+        	  
+          		category : $("#category").val(),
+				roomTitle : $("#roomTitle").val(),
+				amount : $("#amount").val(),
+				mDate : $("#mDate").val(),
+				roomText : $("#myTextarea").val(),
+				post : $("#sample4_postcode").val(),
+				addr1 : $("#sample4_roadAddress").val(),
+				addr2 : $("#sample4_jibunAddress").val(),
+           
+          },
+          success: function (data, status, xhr) {
+        	  
+        	
+        	//ChatNumSaveForm = data;
+        	//console.log("성공이라면?",ChatNumSaveForm);
+        	chatRoomEnter(data); //방 생성해서 새창 띄워서 입장까지 해버리는 함수 -외부js파일
+        	openModal("방이 생성되었습니다.");
+        	window.opener.location.reload();
+        	
+          },
+          error: function (xhr, status, error) {
+					
+          	console.log("채팅방 만들기 error 발생",error)
+          }
+          
+      })//ajax
+			
+	}
+	
+	
+	// modal
+    function openModal(message) {
+        var modal = document.getElementById('myModal');
+        var modalMessage = document.getElementById('modalMessage');
+        modalMessage.textContent = message; // 메시지 설정
+        modalMessage.style.textAlign = "center"; // 텍스트 가운데 정렬
+        modal.style.display = "block"; // 모달 열기
+    }
+
+    // 모달 닫기
+    function closeModal() {
+        var modal = document.getElementById('myModal');
+        modal.style.display = "none"; // 모달 닫기
+        window.close(); // 브라우저 닫기
+    }
+	
+	
+	
+    
+    
   </script>
   <!-- 다음 주소 -->
 

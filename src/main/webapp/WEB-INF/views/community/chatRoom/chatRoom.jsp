@@ -206,9 +206,9 @@ session.removeAttribute("newLeader");
 
 <!-- 모달 창 -->
 <div id="myModal" class="modal" >
-    <div class="modal-content">
+    <div class="modal-content" style="text-align: center;">
         <p id="modalMessage"></p>
-        <button class="btn" onclick="closeModal()">확인</button>
+        <button class="btn" onclick="closeModal()" style="background-color: #ff416c; color:white;">확인</button>
     </div>
 </div>
 
@@ -243,6 +243,7 @@ session.removeAttribute("newLeader");
 			
 			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
 			window.open("reportWindow", "_blank", "width=400,height=400");
+			
 		}
 
 		var stompClient = null;
@@ -447,7 +448,7 @@ session.removeAttribute("newLeader");
 					if(whosMessage == "my-chat"){
 						  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 					}else{
-						  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+						  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 					}
 				}else{
 					// type == ENTER , EXIT, KICKED
@@ -514,7 +515,7 @@ session.removeAttribute("newLeader");
 			disconnect();
 			openModal(message);
 		}
-		
+		 
 		// modal
 		function openModal(message) {
 	        var modal = document.getElementById('myModal');

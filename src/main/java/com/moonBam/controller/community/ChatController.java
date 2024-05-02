@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +48,7 @@ public class ChatController {
 	//@ResponseBody//////////////////////////////////
 	public String saveChatRoom(@Valid @ModelAttribute ChatRoomDTO chatRoom, BindingResult bindingResult, Principal principal) {
 
-		
+
 		String userId = principal.getName();
 		
 		/////////////////////////////////소모임방(chatRoom) 개설 insert
@@ -64,7 +65,7 @@ public class ChatController {
 		chatRoom.setcDate(LocalDate.now());
 		//leaderId 설정
 		chatRoom.setLeaderId(userId);
-		
+
 		int n = crService.saveChatRoom(chatRoom);
 		System.out.println("채팅방이"+n+"개 생성되었습니다.");
 		
@@ -96,7 +97,6 @@ public class ChatController {
 		
 		return "redirect:/chatRoom?chatNum="+chatNum;
 
-		
 	}
 
 //	@RequestMapping(value = "/delegateMaster")

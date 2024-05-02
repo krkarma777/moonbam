@@ -3,6 +3,7 @@
 <%@page import="com.moonBam.dto.board.PageDTO"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -12,6 +13,8 @@
 	CommunityPageDTO cpDTO = (CommunityPageDTO)request.getAttribute("cpDTO");
 	List<ChatRoomDTO> chatRoomList = cpDTO.getList();
 	
+	String communityCategory = (String)request.getAttribute("communityCategory");
+  	System.out.println("in communityHome.jsp: "+ communityCategory);
 %>
 <html>
 <head>
@@ -74,6 +77,8 @@
                 newWindow.moveTo(left, top);
                 
                 newWindow.location.href = 'http://localhost:8090/acorn/createChat';
+                
+                
             }
         })//
         
@@ -107,12 +112,19 @@
         color: white;
     }
     .pagination .page-item.active .page-link{
-        color:black; 
-        background-color: #ff416c;
-        opacity:0.8; 
-        color: black;
-        border: none;
-    }
+	color:white; 
+	background-color: #ff416c;
+	opacity:0.8; 
+	color: white;
+	border: none;
+}
+/* 활성화된 페이지 번호 스타일 */
+.pagination .page-item.active .page-link {
+    background-color: #FF285A;
+    background-image: linear-gradient(180deg, #FF285A, #FF174D);
+    /* 그라디언트 효과 */
+    border: none; /* 테두리 제거 */
+}
 </style>
 </head>
 <body class="bg-light" style="height: 100vh;">
@@ -161,7 +173,7 @@
                     <td id="<%=count%>" style="width: 300px; height: 265px; float: left">
                         <div class="border" style="width: 300px; height: 265px;">
                             <div class="border-bottom" style="height: 40px; width: 300px; background-color: #ffb2c4; align-content: center;">
-                                <a href="chatRoom?chatNum=<%=chatNum%>" style="color:black; font-size: 16px;" onclick="window.open(this.href, '_blank', 'width=500, height=700'); return false;">[<%=category %>] <%=roomTitle %></a>
+                                <a style="color:black; font-size: 16px;" onclick="chatRoomEnter('<%=chatNum%>')">[<%=category %>] <%=roomTitle %></a>
                             </div>
                             <div class="border-top" style="height: 225px; width: 299px;">
                                 <div style=" font-size: 18px; height: 175px;">
@@ -197,7 +209,7 @@
         %>
     
         <!-- 지도 보기 버튼 -->
-        <button id="showMapBtn">지도 보기</button>
+        <button id="showMapBtn" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto;">지도 보기</button>
     
     </section>
     
@@ -310,8 +322,12 @@
         });
     </script>
     
-    	
+ <!-- 방 입장 ajax 실행 함수가 있는 js파일 import  -->   	
+<script src="${pageContext.request.contextPath}/resources/js/chat/communityEnter.js" type="text/javascript"></script>   	
+
+   	
 <script type="text/javascript">
+
 var list = <%=request.getAttribute("list")%>;  
 $(function (){
 	// 팝업 창 위치 &크기 변수

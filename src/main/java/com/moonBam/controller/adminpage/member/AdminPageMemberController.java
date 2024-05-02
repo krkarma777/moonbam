@@ -55,7 +55,7 @@ public class AdminPageMemberController {
 		List<AdminReportDTO> list = rservice.SearchReport(null);
 		
 		mav.addObject("list",list);
-		mav.setViewName("/AdminPage/AdminPageReportedPost");
+		mav.setViewName("redirect:/AdminPage/AdminMemberReported");
 		
 		return mav;
 	}
