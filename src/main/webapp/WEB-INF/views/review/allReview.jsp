@@ -18,6 +18,7 @@ if (member != null) {
 }
 
 String contId = (String)request.getAttribute("contId");
+String contTitle = (String)request.getAttribute("contTitle");
 
 ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
 %>
@@ -45,6 +46,7 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 	$(document).ready(function(){
 		$("#postText").on("keyup", check_length); 	 //글자수 제한
 		//$("#writeReview").click(writeReview); //리뷰 작성
+		$(".like_btn").on("click", likeToggle); 	// 공감버튼 클릭
 	})
 	
 	//최대글자수
@@ -71,7 +73,8 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 						"contId": contId,
 						"userId": "<%=userId%>",
 						"nickname": "<%=nickname%>",
-						"postText": postText
+						"postText": postText,
+						"contTitle": "<%=contTitle%>"
 					},
 					dataType: "text",
 					success: function(data, status, xhr){
@@ -85,6 +88,54 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 			);//ajax
 		}//내용검사if
 	}
+	
+	// 공감버튼 토글
+	function likeToggle(){
+
+		// 버튼 누른 리뷰의 postId 가져오기
+		var postId = $(this).attr("data-postId");
+		
+		//버튼에 적혀있는 하트 공백제거해서 가져오기
+		var statement = $(this).text().trim();
+		var isLike = 0;
+		//console.log(statement)
+		
+		// 공백하트인지 꽉찬 하트인지 검사해서 반대로 바꾸기
+		if(statement == "♥"){
+			$(this).text("♡");
+			isLike = 0;
+		} else if(statement == "♡"){
+			$(this).text("♥");
+			isLike = 1;
+		}
+		
+		//로그인정보가 있을 때
+		//DB에 비동기 반영
+		<%if(userId!=null){%>
+		
+			$.ajax(
+				{
+					type: "post",
+					url:"like",
+					data: {
+						"userId": "<%=userId%>",
+						"postId": postId,
+						"isLike": isLike
+					},
+					success: function(data, status, xhr){
+						if(isLike==0)
+							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1);
+						else{
+							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1+2);
+						}
+					},
+					error: function(xhr, status, e){
+					}
+				}//json	
+			);//ajax
+		<%}%>//if
+	}
+	
 </script>
 <style type="text/css">
 * {
@@ -153,10 +204,13 @@ button {
 				<%} %>
 			</b></button>
 		</div>
+		
+		<!-- 리뷰목록 -->
+		<div style="width:1200px; height:795px; border: #ffb2c4 solid 1px;">
 		<%if(reviewList==null){ %>
 			<span style="margin: auto;">리뷰가 존재하지 않습니다.</span>
 		<%}else { %>
-			<table style="width:1200px; height:795px; border: #ffb2c4 solid 1px;">
+			<table style="width:100%; height:100%;">
 				<%int count = 0;
 				for(int i=1; i<=3; i++){ %>
 					<tr style="width: 1200px; height: 265px;">
@@ -199,6 +253,8 @@ button {
 			<jsp:include page="reviewPage.jsp"></jsp:include>
 		</div>
 		<%} %>
+		</div>
+		
 	</div>
 	<!-- 푸터 -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>

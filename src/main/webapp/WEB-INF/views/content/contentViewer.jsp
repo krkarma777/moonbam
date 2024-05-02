@@ -790,7 +790,7 @@
 						</a>
 						<div id="review_score">
 							<span>☆ <%=Double.parseDouble(score)/2 %></span>
-							<span class="like_btn" style="color:red" data-postId="<%=reviewList.get(index).getPostId() %>">
+							<span class="like_btn" style="color:#ff416c;" data-postId="<%=reviewList.get(index).getPostId() %>">
 							<%if("1".equals(reviewList.get(index).getIsLike())){
 								//System.out.println("♥"+reviewList.get(index).getIsLike());
 							%>♥ 
