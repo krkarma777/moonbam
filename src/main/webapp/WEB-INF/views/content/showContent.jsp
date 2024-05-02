@@ -483,7 +483,8 @@ if (rateAmount > 0) {
 						"contId": contId,
 						"userId": "<%=userId%>",
 						"nickname": "<%=nickname%>",
-						"postText": postText
+						"postText": postText,
+						"contTitle": "<%=contTitle%>"
 					},
 					dataType: "text",
 					success: function(data, status, xhr){
