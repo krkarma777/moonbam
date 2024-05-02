@@ -114,8 +114,9 @@ public class ChatMessageController {
 		return ctDto; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 
-	@Scheduled(fixedRate = 60000) // 1분(60,000밀리초)마다 실행
+//	@Scheduled(fixedRate = 6000) // 1분(60,000밀리초)마다 실행
 	public void saveMessagesToDatabase() { // chatData를 DB에 저장
+		System.out.println("scheduled");
 		if (!(numbers.isEmpty())) {
 			// set에서 num가져와서 file에 읽고 insert하고 delet하고
 			// 필요한거 set만
@@ -204,9 +205,10 @@ public class ChatMessageController {
 		return ctDto;
 	}
 
-	@MessageMapping("/chat/past/{chatNum}")
-	@SendTo("/topic/announce/{chatNum}")
-	public String pastMessage(@DestinationVariable("chatNum") String chatNum, Principal principal, @Payload String aa) {
+//	@MessageMapping("/chat/past/{chatNum}")
+//	@SendTo("/topic/announce/{chatNum}")
+	
+	public String pastMessage(String chatNum, Principal principal) {
 		System.out.println("here");
 		List<String> list = crService.getPastMessages(chatNum);
 		String group="";
@@ -276,15 +278,153 @@ public class ChatMessageController {
 	
 	private final SimpMessagingTemplate  sendingOperations;
 		
-	@MessageMapping("/chat/send/test/{chatNum}")
-	public void test(@DestinationVariable("chatNum") String chatNum, Principal principal) {
-		//sendingOperations.convertAndSend("/acorn/chat/past/1", "fjsdlkfj");
-		sendingOperations.convertAndSend("/acorn/post", "fjsdlkfj");
+	@MessageMapping("/chat/test/{chatNum}")
+	@SendTo("/topic/messages/{chatNum}")
+	public String test(@DestinationVariable("chatNum") String chatNum, Principal principal, @Payload String body) {
+		
+		System.out.println(body);
+		
+		// chat
+		ChatTableDTO atDto = new ChatTableDTO();
+		
+		//
+		JSONObject jsonObject = str2Json(body);
+		String type  = (String) jsonObject.get("TYPE");
+		
+		// id to nickName
+		String userIdInSession = principal.getName();
+		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
+		String nickName= memberDTO.getNickname();
+		
+System.out.println(type);
+		System.out.println("fkdd");
+		String returnStr = "";
+		
+		// add file
+		FileUtil fu = new FileUtil();
+		switch (type) {
+
+		/*		  통합
+		 case "PAST": case "ENTER":{
+				// ONLY PAST
+				String pastMessages = "";
+				if("PAST".equals(type)) {
+					pastMessages = pastMessage(chatNum, principal);
+					returnStr = pastMessage(chatNum, principal);
+					System.out.println(pastMessages);
+				}
+				
+				// BOTH
+				String message = "님이 입장했습니다.";
+				jsonObject.replace("MESSAGE", message);
+				returnStr = jsonObject.toJSONString();
+				fu.saveChatContentToFile(returnStr, chatNum);
+				pastMessages += returnStr;
+				System.out.println(returnStr);
+				
+				break;	
+		 
+		  */
+		 
+		
+			case "PAST":  {
+				String pastMessages = pastMessage(chatNum, principal);
+				returnStr = pastMessage(chatNum, principal);
+				System.out.println(pastMessages);
+				break;
+			}
+			
+			case "ENTER": {
+				String message = " 님이 입장했습니다.";
+				
+				jsonObject.replace("MESSAGE", message);
+				jsonObject.replace("NICKNAME", nickName);
+				returnStr = jsonObject.toJSONString();
+				fu.saveChatContentToFile(returnStr, chatNum);
+			
+				message = nickName + message;
+				jsonObject.replace("MESSAGE", message);
+				
+				returnStr = jsonObject.toJSONString();
+				System.out.println(returnStr);
+				break;
+				
+			}case "EXIT": {
+				String message = "님이 퇴장했습니다.";
+				jsonObject.replace("MESSAGE", message);
+				jsonObject.replace("NICKNAME", nickName);
+				returnStr = jsonObject.toJSONString();
+				fu.saveChatContentToFile(returnStr, chatNum);
+			
+				message = nickName + message;
+				jsonObject.replace("MESSAGE", message);
+				
+				returnStr = jsonObject.toJSONString();
+				System.out.println(returnStr);
+				break;
+				
+			}case "KICKED": {
+				String message = "님이 추방되었습니다.";
+				jsonObject.replace("MESSAGE", message);
+				jsonObject.replace("NICKNAME", nickName);
+				returnStr = jsonObject.toJSONString();
+				fu.saveChatContentToFile(returnStr, chatNum);
+			
+				message = nickName + message;
+				jsonObject.replace("MESSAGE", message);
+				
+				returnStr = jsonObject.toJSONString();
+				System.out.println(returnStr);
+				break;
+				
+			}case "DELEGAET": {
+				String message = "님이 방장이 되었습니다.";
+				jsonObject.replace("MESSAGE", message);
+				jsonObject.replace("NICKNAME", nickName);
+				returnStr = jsonObject.toJSONString();
+				fu.saveChatContentToFile(returnStr, chatNum);
+			
+				message = nickName + message;
+				jsonObject.replace("MESSAGE", message);
+				
+				returnStr = jsonObject.toJSONString();
+				System.out.println(returnStr);
+				break;
+			}
+			case "TALK": {
+				fu.saveChatContentToFile(jsonObject.toJSONString(), chatNum);
+				jsonObject.appendField("NICKNAME", nickName);
+				returnStr = jsonObject.toJSONString();
+				System.out.println(returnStr);
+			}
+			default:
+		}
+		
+	return returnStr;
 	}
 	
 	@MessageMapping("/post")
 	public void post() {
 		sendingOperations.convertAndSend("/topic/messages/1", "fjsdlkfj");
+	}
+	
+	
+	
+	// 반복 함수
+	public JSONObject str2Json(String str) {
+		JSONParser parser = new JSONParser();
+		Object obj = null;
+		try {
+			obj = parser.parse(str);
+			System.out.println(obj);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
+		JSONObject jsonObj = (JSONObject) obj;
+		return jsonObj;
 	}
 }
 	

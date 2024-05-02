@@ -145,6 +145,8 @@ session.removeAttribute("Kicked");
 					onclick="goChatMore()">더보기</span>
 					<span style="float: right; color: white; margin-left: auto;"
 					onclick="fnGoOut()">퇴장하기&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span style="float: right; color: white; margin-left: auto;"
+					onclick="sendTest()">test&nbsp;&nbsp;&nbsp;&nbsp;</span>
 				</td>
 
 			</tr>
@@ -177,9 +179,9 @@ session.removeAttribute("Kicked");
 				<div>
 					<td colspan="2"><input type="text" id="messageContent"
 						name="messageContent" style="width: 86%"
-						onkeydown="if (event.keyCode === 13) { sendMessage(); }"
+						onkeydown="if (event.keyCode === 13) { sendMessage('TALK'); }"
 						class="form-control-sm"> <input type="button" id="send"
-						value="전송" class="btn" onclick="sendMessage()"
+						value="전송" class="btn" onclick="sendMessage('TALK')"
 						style="float: right; background-color: #ff416c; color: white; margin-left: auto;">
 					</td>
 				</div>
@@ -197,41 +199,17 @@ session.removeAttribute("Kicked");
 </div>
 
 <script>
-	
-	/* 토글 처리 */
-	$('input[id="toggle"]')
-	.change(
-			function() {
-				var value = $(this).val();
-				var checked = $(this).prop('checked');
-				var toggle_state;
-				if (checked) {
-					document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
-					document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
-					toggle_state = "on";
-				} else {
-					document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
-					document.getElementById('toggle_state').innerHTML = "&nbsp;";
-					toggle_state = "off";
-				}
-			});
-
-		/* 신고하기 */
-		function openReportWindow(userId, message) {
-			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
-			localStorage.setItem('userId',  JSON.stringify(userId));
-			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
-			localStorage.setItem('message', JSON.stringify(message));
-			
-			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
-			window.open("reportWindow", "_blank", "width=400,height=400");
-		}
+	/*
+		목표 단일 pub / sub
 		
-		// 소켓 통신
+	*/
+
+		
+// 소켓 통신
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
-		// 소켓 연결
+// 소켓 연결
 		function connect() {
 		    var socket = new SockJS('/acorn/chat-socket');
 		    stompClient = Stomp.over(socket);
@@ -240,65 +218,192 @@ session.removeAttribute("Kicked");
  
 		        // 메시지 받는 주소
 		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
-		        	createMsgTag(messageOutput);
+		            createMsgTag(messageOutput);
 		        });
+		        let first = `<%= session.getAttribute("ENTER") %>`;
+		        <% session.removeAttribute("ENTER"); %>;
 		        
-		        // 이전 글 및 공지 메세지 받는 주소
-		        stompClient.subscribe('/topic/announce/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
-		        	createAnnoTag(messageOutput);
-		        });
-				
-		     	// pre message, past message
-		     	 pastChatMessage();
-		        
+		        // pre message, past message
+		        sendMessage("PAST");
 		    });
+		}	
+		
+		/* 메시지 전송 */
+		
+		function sendMessage(type) {
+			sendMessage(type, `${userIdInSession}`);
 		}
 		
-		// send message
-		function sendChatMessage(type, message, userIdInSocket) {
-		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-		        'type': type,
-		        'message': message,
-		        'userId': userIdInSocket
-		    }));
+		function sendMessage(type, userId) {
+			let message;
+			if(type == "TALK"){
+				// 여기서 "" 처리
+				if(document.getElementById('messageContent').value.trim() != '') {
+					message = escapeHtml($("#messageContent").val()); // 대화 내용 
+				}
+			}else{
+				message="";
+			}
+			
+			var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
+			var serverTime = new Date().toLocaleString();
+			var nickName = "";
+				userId = (userId == null) ? `${userIdInSession}` : userId;
+			stompClient.send("/acorn/chat/test/"+chatNum, {}, JSON.stringify({
+				'TYPE' : type,
+				'USERID' : userId,
+				'MESSAGE' : message,
+				'NICKNAME' : nickName,
+				'SERVERTIME' : serverTime}));
+			document.getElementById('messageContent').value = ''; 
+		}	
+	
+		
+		// 출력
+		// 필수, 이전 메세지를 한번만 가져오게 함
+		// print anno(past, enter, exit)
+		let flag = true;
+		function createMsgTag(messageOutput) {
+			if(flag){
+			//console.log("messageOutput : " + messageOutput.body)	
+			let body = messageOutput.body;
+			
+			flag = body.includes("---");
+			let list = body.split("---");
+			
+			var num = list.length > 1 ? list.length-1 : list.length;
+			for( var i = 0 ; i<num; i++){
+				let content = JSON.parse(list[i]);
+				let type = content.TYPE;
+				switch (type) {
+				case "TALK":
+					createTalkTag(content)
+					break;
+				default:
+					createAnnoTag(type, content)
+					break;
+				}
+			}
+			if(flag){
+				sendMessage("ENTER", `${userIdInSession}`);
+				flag= false;
+			}
+			}
 		}
 		
-		function pastChatMessage() {
-		    stompClient.send('/acorn/chat/past/' + ${ChatRoomDTO.chatNum}, {}, );
+		// anno
+		function createAnnoTag(type, content) {
+
+			if(`${userIdInSession}` == content.USERID){
+			//	kickUser()
+			}
+			let nickName = content.NICKNAME;
+			let message = content.MESSAGE;
+			let time = content.SERVERTIME;
+			chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
+			$("#chat").append(chatLi);
+		}
+		
+		// talk
+		function createTalkTag(content) {
+				let nickName = content.NICKNAME;
+			let message = content.MESSAGE;
+			let time = content.SERVERTIME;
+			let userId =  content.USERID;
+		    let whosMessage = (content.USERID == `${userIdInSession}`) ? "my-chat" : "target-chat";
+		    let chatLi;
+		    
+		    let timeShort = time.substr(12); //주고받는 대화에서는 시간만 보이게 잘랐음
+			if(whosMessage == "my-chat"){
+				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+				  
+			}else{
+				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			}
+		    $("#chat").append(chatLi);
 		}
 		
 		
-		 // 소켓 연결 끊기게 하는 함수
+	
+		
+		
+
+	
+	
+
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------
+	
+		// ENTER
+		function enter(){
+				 sendMessage("ENTER", `${userIdInSession}`);	
+		}
+		
+		//연결 끊겼을 때 퇴장 메세지 띄우는 함수
+		function exit(){
+			sendMessage("EXIT", `${userIdInSession}`);	
+		}
+		
+		
+	  
+//강퇴 되었을 때 띄우는 메세지 함수
+		 function kicked(){
+			 console.log("kicked실행됨")
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'TYPE':'KICKED',
+					'MESSAGE' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
+					'USERID' : userIdInSocket,
+				}));
+			}	
+			// 소켓 연결 끊기게 하는 함수
 		function disconnect() {
 			 
 			  if (stompClient !== null) {
 			        exit();
 			        stompClient.disconnect();
 			    }
-			    
-			    console.log("Disconnected");
+			  console.log("Disconnected");
+			  sendMessage("EXIT", `${userIdInSession}`);	
 		 }
-		 
-		 //연결 끊겼을 때 퇴장 메세지 띄우는 함수
-		 function exit(){
-		    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-		    	'type':'EXIT',
-				'message' : `${nickNameInSession}` + ' 님이 퇴장했습니다.	' + serverTime,
-				'userId' : userIdInSocket,
-			}));
+	
+// kickUser
+		function kickUser(message){
+			disconnect();
+			openModal(message);
 		}
-	  
-		 //강퇴 되었을 때 띄우는 메세지 함수
-		 function kicked(){
-			 console.log("kicked실행됨")
-			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-			    	'type':'KICKED',
-					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
-					'userId' : userIdInSocket,
-				}));
-			}
+		
+		
+		
+		//----------****************************************************
+		
+		
+		
+		/* 토글 처리 */
+		$('input[id="toggle"]')
+		.change(
+				function() {
+					var value = $(this).val();
+					var checked = $(this).prop('checked');
+					var toggle_state;
+					if (checked) {
+						document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
+						document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
+						toggle_state = "on";
+					} else {
+						document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
+						document.getElementById('toggle_state').innerHTML = "&nbsp;";
+						toggle_state = "off";
+					}
+				});
 
-		 //방나가기 눌렀을 때 작동되는 fn
+		//방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
 			console.log("goOutForm");
 			$.ajax({
@@ -323,122 +428,17 @@ session.removeAttribute("Kicked");
                 }
             })//ajax
 		}
-
-		/* 메시지 전송 */
-		function sendMessage() {
-			// 여기서 "" 처리
-			 if(document.getElementById('messageContent').value.trim() != '') {
-				var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
-				var userId = `${userIdInSession}`; // 사용자 닉네임
-				//console.log("유저아이디 먼데",userId)
-				var message = escapeHtml($("#messageContent").val()); // 메세지 
-				var serverTime = new Date().toLocaleString();
-				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
-					'type' : 'TALK',
-					'userId' : userId,
-					'message' : message,
-					'serverTime' : serverTime}));
-				document.getElementById('messageContent').value = ''; 
-			 }
-		}
-
-		// 메세지 출력
-		// 최신 메세지 추가(위치는 맨 뒤)
-		// 이전 메세지 추가(위치는 맨위)
-		function createMsgTag(messageOutput) {
-			let body= JSON.parse(messageOutput.body);
-			console.log("body : " + body)
-				let nickName = body.nickName;
-			let content = JSON.parse(body.chatContent);
-			let message = content.message;
-			let time = content.serverTime;
-			let userId =  content.userId; 
-		    let whosMessage = (content.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-		    let chatLi;
-		    
-		    
-		if(content.type == "KICKED")   {
-			if(nickName == `${nickNameInSession}`){
-				message = "방에서 퇴장되었습니다.";
-				kickUser(message);
-				return "";
-			}
-			chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
-		}else if (content.type == 'ENTER') {
-	        // 입장 메시지일 경우
-	        chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
-	    
-	    }else if(content.type == 'EXIT') {
-	    	// 퇴장 메세지일 경우
-	    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
-	   
-	    }else {
-	    	console.log("talk")
-	        // 일반 메시지일 경우
-	      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
-			//console.log("시간 잘라서 확인하기 완료?",timeShort)
-			if(whosMessage == "my-chat"){
-				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
-			}else{
-				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
-			}
-	       
-	    }
-	    $("#chat").append(chatLi);
-	}
-		// 필수, 이전 메세지를 한번만 가져오게 함
-		let flag = true;
-		// anno
-		function createAnnoTag(messageOutput) {
-			if(flag){
-			//console.log("messageOutput : " + messageOutput.body)	
-			let a = messageOutput.body;
-			
-			let b = a.split("---");
-			for( var i = 0 ; i<b.length-1; i++){
-				console.log(b[i])
-				let body= JSON.parse(b[i]); 
-				let type = body.type;
-				let message = body.message;
+		
+	/* 신고하기 */
+			function openReportWindow(userId, message) {
+				////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
+				localStorage.setItem('userId',  JSON.stringify(userId));
+				localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
+				localStorage.setItem('message', JSON.stringify(message));
 				
-				let chatLi;
-				// type == TALK
-				if("TALK"==type) {
-				
-					let userId =  body.userId; 
-				    let whosMessage = (body.userId == `${userIdInSession}`) ? "my-chat" : "target-chat";
-				    let time = body.serverTime;
-				    let nickName = body.nickName;
-				    
-			        // 일반 메시지일 경우
-			      	let timeShort = time.substr(13); //주고받는 대화에서는 시간만 보이게 잘랐음
-					//console.log("시간 잘라서 확인하기 완료?",timeShort)
-					if(whosMessage == "my-chat"){
-						  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
-					}else{
-						  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
-					}
-				}else{
-					// type == ENTER , EXIT, KICKED
-					
-					// kicked
-					if(type == "KICKED")   {
-						if(nickName == `${nickNameInSession}`){
-							message = "방에서 퇴장되었습니다.";
-							kickUser(message);
-							return "";
-						}
-					}
-					
-					chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
-				}
-				$("#chat").append(chatLi);
+				//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
+				window.open("reportWindow", "_blank", "width=400,height=400");
 			}
-			// 이전 글 출력 시 입장 메세지 전송
-			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
-			flag=false;
-			}
-	}
 		
 		// go to chatMore
 		function goChatMore() {
@@ -446,7 +446,7 @@ session.removeAttribute("Kicked");
 			var queryString = '/acorn/Chatmore?chatNum=' + chatNum + '&stompClient=' + encodeURIComponent(stompClient);
 			location.href = queryString;
 		}
-
+		
 		// 스크립트 코드 정지
 		function escapeHtml(unsafe) {
     		return unsafe.replace(/&/g, "&amp;")
@@ -455,18 +455,12 @@ session.removeAttribute("Kicked");
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
 		}
-	
-		// kickUser
-		function kickUser(message){
-			disconnect();
-			openModal(message);
-		}
 		
 		// open modal
-		function openModal(message) {
+		function openModal() {
 	        var modal = document.getElementById('myModal');
 	        var modalMessage = document.getElementById('modalMessage');
-	        modalMessage.textContent = message; // 메시지 설정
+	        modalMessage.textContent = "방에서 추방되었습니다."; // 메시지 설정
 	        modalMessage.style.textAlign = "center"; // 텍스트 가운데 정렬
 	        modal.style.display = "block"; // 모달 열기
 	    }
