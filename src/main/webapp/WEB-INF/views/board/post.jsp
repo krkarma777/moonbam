@@ -20,7 +20,7 @@
 
 	<!-- Bootstrap JS (optional) -->
 	<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+			href="https://fastly.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 			rel="stylesheet"
 			integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
 			crossorigin="anonymous">
@@ -114,7 +114,7 @@
 		@font-face {
 			font-family: 'ChosunGu';
 			src:
-					url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff')
+					url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff')
 					format('woff');
 			font-weight: normal;
 			font-style: normal;
@@ -160,7 +160,7 @@
 		@font-face {
 			font-family: 'Pretendard-Regular';
 			src:
-					url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
+					url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
 					format('woff');
 			font-weight: 400;
 			font-style: normal;
@@ -192,7 +192,7 @@
 		}
 
 	</style>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		// jQuery를 사용한 입력란 이벤트 처리
 		$(document).ready(function () {

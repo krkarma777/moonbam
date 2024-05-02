@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://fastly.jsdelivr.net/npm/hls.js@latest"></script>
     <title>문화인들의 밤</title>
     <style>
         video {
