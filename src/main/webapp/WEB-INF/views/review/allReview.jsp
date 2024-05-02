@@ -21,6 +21,7 @@ String contId = (String)request.getAttribute("contId");
 String contTitle = (String)request.getAttribute("contTitle");
 
 ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -36,6 +37,7 @@ ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
 		$(document).ready(function(){
 			$("#writeReview").on("click", writeReview);  //리뷰작성
 			
+			$("#postText").html(<%=myReview.getPostText() %>);
 		});//ready
 	</script>
 </sec:authorize>
@@ -196,7 +198,7 @@ button {
 		<div style="">
 			<!-- 개설 버튼 -->
 			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto; margin-bottom: 5px;" 
-			id="createCommunity" data-bs-toggle="modal" data-bs-target="#exampleModal"><b>
+			data-bs-toggle="modal" data-bs-target="#exampleModal"><b>
 				<%if(myReview==null){ %>
 					리뷰쓰기
 				<%}else{ %>
@@ -226,9 +228,11 @@ button {
 									<div class="border-bottom" style="height: 40px; width: 299px; background-color: #ffb2c4; align-content: center; font-size: 19px;">
 										&nbsp;<%=reviewList.get(count).getNickname() %>
 									</div>
-									<div class="border-top" style="height: 195px; width: 299px; font-size: 18px;">
-										<a href="review?postId=<%=reviewList.get(count).getPostId() %>" style="color:black;">&nbsp;<%=reviewList.get(count).getPostText() %></a>
-									</div>
+									<a href="review?postId=<%=reviewList.get(count).getPostId() %>" style="color:black;">
+										<div class="border-top" style="height: 195px; width: 299px; font-size: 18px;">
+										&nbsp;<%=reviewList.get(count).getPostText() %>
+										</div>
+									</a>
 									<div id="review_score">
 										<span>&nbsp;☆ <%=Double.parseDouble(score)/2 %></span>
 										<span class="like_btn" style="color:red" data-postId="<%=reviewList.get(count).getPostId() %>">
