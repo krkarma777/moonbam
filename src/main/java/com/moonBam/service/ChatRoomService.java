@@ -1,14 +1,15 @@
 package com.moonBam.service;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moonBam.dao.ChatRoomDAO;
-import com.moonBam.dto.ChatMemberDTO;
 import com.moonBam.dto.ChatRoomDTO;
 
 @Service
@@ -25,12 +26,24 @@ public class ChatRoomService {
 		int n = dao.saveChatRoom(chatRoom);
 		return n;
 	}
-
-	public int delegateMaster(HashMap<String, String> map) {
+	
+	@Transactional
+	public void delegateMaster(Principal principal, String chatNum, String userId) {
 		
-		int n = dao.delegateMaster(map);
+		System.out.println("ChatRoomService.delegateMaster");
+		//////////////////권한위임 기존 방장이 하는지 검사
+			
+		String formerMaster = principal.getName();
+		System.out.println(formerMaster);
 		
-		return n;
+		Boolean checkMaster = (formerMaster.equals(dao.checkMaster(chatNum)));
+		if(checkMaster) {
+			System.out.println("방장맞음");
+			dao.delegateMaster(chatNum, userId);
+		}else {
+			System.out.println("방장아님");
+		}
+		
 	}
 
 	public String checkMaster(String chatNum) {

@@ -101,6 +101,11 @@
 								onClick="fnKick('${memberDtolist.userId }')">
 								<b>강퇴하기</b>
 							</button>
+							<button type="button" class="btn btn-sm"
+							style="float: right; height: 30px;"
+							onClick="delegate('${memberDtolist.userId }')">
+							<b>방장 넘기기</b>
+							</button>
 						</div>
 					</c:if>
 				</div>
@@ -271,6 +276,14 @@
 		    stompClient.send("/acorn/Chatmore/ChatKickUser/" + `${chatroomDTO.chatNum}`, {}, JSON.stringify({
 	        'type': "KICKED",
 	        'userId': userId,	  }));
+		}
+		
+		function delegate(userId){
+			//location.href = "/acorn/delegateMaster?chatNum="+${chatroomDTO.chatNum}+"&userId="+userId;
+			
+			stompClient.send("/acorn/delegateMaster/" + `${chatroomDTO.chatNum}`, {}, JSON.stringify({
+		        'type': "ANNOUNCE",
+		        'userId': userId,	  }));
 		}
 		
 	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)

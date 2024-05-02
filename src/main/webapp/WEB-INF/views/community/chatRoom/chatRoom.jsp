@@ -116,6 +116,22 @@ if (KickedUserId != null) {
 session.removeAttribute("Kicked");
 %>
 
+<%
+String newLeader = (String) session.getAttribute("newLeader");
+if (newLeader != null) {
+%>
+
+		<script>
+		console.log("delegate");
+		delegate();
+		</script>
+
+<%
+}
+
+session.removeAttribute("newLeader");
+%>
+
 
 
 
@@ -296,9 +312,18 @@ session.removeAttribute("Kicked");
 					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
 					'userId' : userIdInSocket,
 				}));
-			}
-
-		 //방나가기 눌렀을 때 작동되는 fn
+		}
+	  
+		 //방장이 변경되었을 때 띄우는 메세지 함수
+		 function delegate(){
+			 console.log("delegate실행됨");
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'type':'ANNOUNCE',
+					'message' : `${sessionScope.newLeader}` + ' 님으로 방장이 변경되었습니다.	' + serverTime,
+					'userId' : userIdInSocket,
+				}));
+		}
+		  
 		function fnGoOut() {
 			console.log("goOutForm");
 			$.ajax({
@@ -372,6 +397,8 @@ session.removeAttribute("Kicked");
 	    	// 퇴장 메세지일 경우
 	    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 	   
+	    }else if(content.type == 'ANNOUNCE'){
+	    	chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 	    }else {
 	    	console.log("talk")
 	        // 일반 메시지일 경우
@@ -434,7 +461,7 @@ session.removeAttribute("Kicked");
 				}
 				$("#chat").append(chatLi);
 			}
-			// 이전 글 출력 시 입장 메세지 전송
+
 			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 			flag=false;
 			}

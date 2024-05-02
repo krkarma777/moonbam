@@ -16,7 +16,7 @@
     List<PostDTO> selectMyPostPaged = mDTO.getList();
 %>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"><!--  -->
 <head>
     <title>문화인들의 밤</title>
     <!-- Bootstrap CSS -->
