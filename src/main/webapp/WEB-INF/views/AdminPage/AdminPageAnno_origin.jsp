@@ -16,6 +16,7 @@
 <jsp:include page="/WEB-INF/views/common/navBar.jsp"/>
 <div class="moonBam-container">
     <jsp:include page="common/AdminMenu.jsp" flush="true"/>
+
     <div class="shadow">
         <jsp:include page="content/announce/AdminpgContAnno.jsp" flush="true"/>
     </div>

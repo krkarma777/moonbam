@@ -16,7 +16,7 @@
 
 	<insert id="writeReview" parameterType="ReviewDTO">
 		INSERT INTO postdb VALUES 
-		(POSTIDSEQ.NEXTVAL, 'review', #{userId}, #{contId}, 'r~!@#', sysdate, null, #{postText}, #{nickname}, null)
+		(POSTIDSEQ.NEXTVAL, 'review', #{userId}, #{contId}, #{postTitle}, sysdate, null, #{postText}, #{nickname}, null)
 		
 		<selectKey keyProperty="postId" resultType="Long" order="AFTER"> 
 			select POSTIDSEQ.CURRVAL from dual 

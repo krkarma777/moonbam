@@ -3,7 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -58,54 +58,53 @@
 	let dates = [ '년', '월', '일', '시', '분', '초' ];
 </script>
 
-<h1>공지 글</h1>
+<div style="background-color: #ffb2c4; color: white; margin-left: auto;"> 공지상항</div>
 
-<form id="formView" style="text-align: center;">
+<form id="formView" style=" width: 100%">
 	<input type="hidden" name="annoNum" value="${dto.annoNum}"> <input
 		type="hidden" name="annoTitle" value="${dto.annoTitle}"> <input
 		type="hidden" name="annoText" value="${dto.annoText}"> <input
 		type="hidden" name="annoWriter" value="${dto.annoWriter}"> <input
 		type="hidden" name="popup" value="${dto.popup}">
 	<%-- <input type="hidden" name="map" value="${dto.getMap()}"> --%>
-	<table border='1'>
+	<table border='1' style="width: 100%">
 		<tr>
-			<td>제목</td>
-			<td colspan="3"><span>${dto.annoTitle}</span></td>
+			<th style="width: 150px">제목</th>
+			<td colspan="3"><span><h5>${dto.annoTitle}</h5></span></td>
 		</tr>
 		<tr>
-			<td>내용</td>
-			<td colspan="3"><span>${dto.annoText}</span></td>
+			<th>내용</th>
+			<td colspan="3" style="text-align: left;"><span>${dto.annoText}</span></td>
 		</tr>
 		<tr>
-			<td>카테고리</td>
+			<th>카테고리</th>
 			<td colspan="3"><span>${dto.category}</span></td>
 		</tr>
 		<tr>
-			<td>작성일</td>
+			<th>작성일</th>
 			<td><c:forEach var="times" items="${dto.writeDateArr}"
 					varStatus="status">
 					<span style="width: 25px">${times}</span> ${dto.dateName[status.index] }
 			</c:forEach></td>
-			<td>수정일</td>
+			<th>수정일</th>
 			<td><c:forEach var="times" items="${dto.updateDateArr}"
 					varStatus="status">
 					<span style="width: 25px">${times}</span> ${dto.dateName[status.index] }
 			</c:forEach></td>
 		</tr>
 		<tr>
-			<td>시작일</td>
+			<th>시작일</th>
 			<td><c:forEach var="times" items="${dto.startDateArr}"
 					varStatus="status">
 					<span style="width: 25px">${times}</span> ${dto.dateName[status.index] }
 			</c:forEach></td>
-			<td>종료일</td>
-			<td><c:forEach var="times" items="${dto.endDateArr}"
-					varStatus="status">
+			<th>종료일</th>
+			<td><c:forEach var="times" items="${dto.endDateArr}" varStatus="status">
 					<span style="width: 25px">${times}</span> ${dto.dateName[status.index] }
 			</c:forEach></td>
 		</tr>
 		<tr>
-			<td>팝업 허용</td>
+			<th>팝업 허용</th>
 			<td colspan="3"><input type="checkbox" id="popup" name="popup"
 				<c:if test="${dto.popup == 'on'}">
        checked="checked" 
@@ -113,12 +112,12 @@
 				disabled="disabled"></td>
 		</tr>
 		<tr>
-			<td id=btnTd colspan="4"><button id="buttonBack"
-					style="float: right; background-color: #ffb2c4; color: white; margin-left: auto;">확인</button>
+			<td id=btnTd colspan="4" style="align-content: center"><button id="buttonBack"
+					style="float: right; background-color: #ffb2c4; color: white; ">확인</button>
 				<button id="buttonUpdate"
-					style="float: right; background-color: #ff416c; color: white; margin-left: auto;">수정</button>
+					style="float: right; background-color: #ff416c; color: white; ">수정</button>
 				<button id="buttonDelete"
-					style="float: right; background-color: #ffb2c4; color: white; margin-left: auto;">삭제</button></td>
+					style="float: right; background-color: #ffb2c4; color: white; ">삭제</button></td>
 		</tr>
 	</table>
 </form>

@@ -12,8 +12,11 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.ChatTableDTO;
@@ -22,11 +25,13 @@ import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.member.MemberService;
 import com.moonBam.util.FileUtil;
 
+import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
 @Controller
+@RequiredArgsConstructor
 public class ChatMessageController {
 
 	@Autowired
@@ -44,8 +49,11 @@ public class ChatMessageController {
 // 받고 주고
 	@MessageMapping("/chat/send/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
-	public ChatTableDTO sendMessage(@Payload ChatTableDTO ctDto, @RequestParam(required = false) String chatContent,
+	public ChatTableDTO sendMessage( @RequestParam(required = false) String chatContent,
 			@DestinationVariable("chatNum") String chatNum, Principal principal) {
+		// 기존 @payload ChatTableDTO ctDto 를 객체 생성으로 변경
+		// 넘어오는 ctDto의 값이 없음
+		ChatTableDTO ctDto = new ChatTableDTO(); 
 		ctDto.setChatNum(chatNum);
 		ctDto.setChatContent(chatContent);
 
@@ -106,10 +114,7 @@ public class ChatMessageController {
 		return ctDto; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 
-	// 문제점
-	// 1. 서버 시작 부터 계속 실행됨
-	// 2. 소켓 해제 후 계속 실행
-	@Scheduled(fixedRate = 6000) // 1분(60,000밀리초)마다 실행
+	@Scheduled(fixedRate = 60000) // 1분(60,000밀리초)마다 실행
 	public void saveMessagesToDatabase() { // chatData를 DB에 저장
 		if (!(numbers.isEmpty())) {
 			// set에서 num가져와서 file에 읽고 insert하고 delet하고
@@ -198,79 +203,20 @@ public class ChatMessageController {
 
 		return ctDto;
 	}
-	
-	// 방장넘기기 기능
-		@MessageMapping(value = "/delegateMaster/{chatNum}")
-		@SendTo("/topic/messages/{chatNum}")
-		public ChatTableDTO delegateMaster(Principal principal, @RequestParam String content, @DestinationVariable("chatNum") String chatNum) {
-			System.out.println("delegateMaster");
 
-			// get userId
-			JSONParser parser = new JSONParser();
-			Object obj = null;
-			try {
-				obj = parser.parse(content);
-
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
-			JSONObject jsonObj = (JSONObject) obj;
-			String userId = (String) jsonObj.get("userId");
-
-			Date currentDate = new Date();
-
-			// 출력 형식을 지정하기 위한 SimpleDateFormat 생성
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-			// Date 객체를 원하는 형식의 문자열로 변환하여 출력
-			String formattedDate = formatter.format(currentDate);
-			System.out.println(formattedDate);
-
-			ChatTableDTO ctDto = new ChatTableDTO();
-			ctDto.setChatNum(chatNum);
-
-			MemberDTO memberDTO = memberService.findByUserId(userId);
-			String nickName = memberDTO.getNickname();
-			ctDto.setNickName(nickName);
-
-			System.out.println(jsonObj);
-			jsonObj.remove("userId");
-			String message = nickName + " 님이 방장으로 변경되었습니다. " + formattedDate;
-			jsonObj.appendField("message", message);
-			ctDto.setChatContent(jsonObj.toString());
-			System.out.println(ctDto);
-
-			// insert db
-			int n = 0;
-
-			System.out.println("delegateMaster===================");
-			crService.delegateMaster(principal, chatNum, userId);
-			System.out.println("=================================");
-
-			// set add, save file
-			FileUtil fu = new FileUtil();
-			numbers.add(chatNum);
-			fu.saveChatContentToFile(ctDto.getChatContent(), chatNum);
-
-			return ctDto;
-		}
-
-	// 받고 주고
 	@MessageMapping("/chat/past/{chatNum}")
 	@SendTo("/topic/announce/{chatNum}")
-	public String pastMessage(@DestinationVariable("chatNum") String chatNum,	Principal principal) {
+	public String pastMessage(@DestinationVariable("chatNum") String chatNum, Principal principal, @Payload String aa) {
+		System.out.println("here");
 		List<String> list = crService.getPastMessages(chatNum);
+		String group="";
+		if(list.size()>0) {
 		String temp = "" ;
 		for (String content : list) {
 			temp +=content;
 		}
 			String str = temp.replaceAll("\\}\\n\\{","\\}---\\{");
 			String[] strArr = str.split("---");
-		
-			String group="";
 			
 			for(String content : strArr) {
 				// json
@@ -284,7 +230,6 @@ public class ChatMessageController {
 					e.printStackTrace();
 				}
 
-				
 				// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
 				JSONObject jsonObj = (JSONObject) obj;
 				System.out.println(jsonObj);
@@ -319,30 +264,27 @@ public class ChatMessageController {
 							jsonObj.appendField("message", message.replace(BadWord, "**"));
 							System.out.println(jsonObj);
 						}
-
 					}
-				
 				}
-				
 				group+=jsonObj + "---";
 			}
+		}
 			System.out.println(group);
 		return group; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
-
 	
 	
+	private final SimpMessagingTemplate  sendingOperations;
+		
+	@MessageMapping("/chat/send/test/{chatNum}")
+	public void test(@DestinationVariable("chatNum") String chatNum, Principal principal) {
+		//sendingOperations.convertAndSend("/acorn/chat/past/1", "fjsdlkfj");
+		sendingOperations.convertAndSend("/acorn/post", "fjsdlkfj");
+	}
 	
-	public Object parseStr2Json(String content) {
-		JSONParser parser = new JSONParser();
-		Object obj = null;
-		try {
-			obj = parser.parse(content);
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return obj;
+	@MessageMapping("/post")
+	public void post() {
+		sendingOperations.convertAndSend("/topic/messages/1", "fjsdlkfj");
 	}
 }
+	

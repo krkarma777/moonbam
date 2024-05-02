@@ -14,10 +14,15 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/navBar.jsp"/>
-<div class="moonBam-container">
+    <div> </div>
+    <div> </div>
+    <div> </div>
+    <div> </div>
+<div class="moonBam-container" style="margin-top: 200px">
     <jsp:include page="common/AdminMenu.jsp" flush="true"/>
+
     <div class="shadow">
-        <jsp:include page="content/announce/AdminpgContAnno.jsp" flush="true"/>
+        <jsp:include page="content/announce/writeAnnouncement.jsp" flush="true"/>
     </div>
 </div>
 <!-- Bootstrap JS -->

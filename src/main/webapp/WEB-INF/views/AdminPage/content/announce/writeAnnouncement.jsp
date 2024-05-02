@@ -16,27 +16,48 @@
 	src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-	crossorigin="anonymous"> 
+	crossorigin="anonymous">
 
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<script type="text/javascript">
-	<%Date toDate = new Date();
-toDate.setSeconds(00); // second : 00
-SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-String today = dateFormat.format(toDate);
 
-Date nextWeekDate = new Date();
-nextWeekDate.setSeconds(00); // second : 00
-nextWeekDate.setDate(toDate.getDate() + 7);
-SimpleDateFormat nWDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
+<style>
+.btn {
+	background-color: #ff416c;
+	color: white;
+}
+
+#formWrite {
+	margin: 0 auto; /* 가운데 정렬 */
+	text-align: left; /* 내용물 왼쪽 정렬 */
+	width: 100%; /* 원하는 폭으로 조절 */
+}
+
+#btnTd {
+	text-align: center;
+}
+</style>
+
+<script type="text/javascript">
+	<%
+		Date toDate = new Date();
+		toDate.setSeconds(00); // second : 00
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String today = dateFormat.format(toDate);
+		
+		Date nextWeekDate = new Date();
+		nextWeekDate.setSeconds(00); // second : 00
+		nextWeekDate.setDate(toDate.getDate() + 7);
+		SimpleDateFormat nWDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String nextWeekDay = nWDateFormat.format(nextWeekDate);
+	%>
 	
 	
 	$(function (){
@@ -60,33 +81,35 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 			"startDate": "<%=today%>",
 			"endDate": "<%=nextWeekDay%>",
 			locale : {
-				format : 'YYYY/MM/DD HH:mm'
+				format : 'YYYY/MM/DD HH:mm:ss'
 			}
-		});
+		}).attr('readonly', 'readonly'); // read only
 	});
 </script>
-<div style="width: 457px; height: 100vh;">
-<div style=" background-color: #ffb2c4; color:white; margin-left: auto; ">
-공지 작성
-</div>
-<form id="formWrite" action="InsertAnnouncementController"
-	enctype="multipart/form-data" style="">
-	<table>
+
+<form id="formWrite" action="InsertAnnouncementController"	enctype="multipart/form-data">
+	<table style="width: 100%;">
 		<tr>
-			<td>제목</td>
-			<td colspan="3"><input type="text" style="width: 100%" value=""
-				name="annoTitle" maxlength="30" class="form-control form-control-sm item"></td>
+			<td colspan="2">
+				<div style="background-color: #ffb2c4; color: white; margin-left: auto;"> 공지 작성</div>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 150px">제목</td>
+			<td ><input type="text" value="" name="annoTitle" placeholder="제목을 입력하세요."
+				maxlength="30" class="form-control form-control-sm item" ></td>
 		</tr>
 		<tr>
 			<td>내용</td>
-			<td colspan="3"><textarea style="width: 100%" rows="10"
-					name="annoText" maxlength="500" class="form-control form-control-sm item"> </textarea></td>
+			<td ><textarea rows="10" name="annoText" placeholder="내용을 입력하세요"
+					maxlength="500" class="form-control form-control-sm item" ></textarea></td>
 		</tr>
 		<tr>
 			<td>카테고리</td>
-			<td colspan="3">
-				<!-- select (option 전체, 영화, 소모임) --> <select name="category" class="form-select form-select-sm">
-					<option value="main" >전체</option>
+			<td >
+				<!-- select (option 전체, 영화, 소모임) --> <select name="category"
+				class="form-select form-select-sm">
+					<option value="main">전체</option>
 					<option value="movie">영화</option>
 					<option value="community">소모임</option>
 			</select>
@@ -94,19 +117,19 @@ String nextWeekDay = nWDateFormat.format(nextWeekDate);%>
 		</tr>
 		<tr>
 			<td>시작일 - 종료일</td>
-			<td><input type="text" id="datePicker" class="dateTimePicker form-control form-control-sm item"
-				name="dateTimePicker" style="width: 100%"></td>
+			<td><input type="text" id="datePicker"
+				class="dateTimePicker form-control form-control-sm item"
+				name="dateTimePicker"></td>
 		</tr>
 		<tr>
 			<td>팝업 허용</td>
-			<td colspan="3">
-				<input type="checkbox" id="popup" name="popup" value="on" class="form-check">
-       </td>
+			<td ><input type="checkbox" id="popup" name="popup" value="on" class="form-check"></td>
 		</tr>
 		<tr>
-			<td colspan="4"><input type="submit" value="저장" class="btn" style="background-color: #ff416c; color:white; margin-left: auto;">
-				<button id="close" class="btn" style="background-color: #ffb2c4; color:white; margin-left: auto;">취소</button></td>
+			<td colspan="3"><input id="btnTd" type="submit" value="저장" class="btn"
+				style="float: right; align-content: center; background-color: #ff416c; color: white; ">
+				<button id="close" class="btn"
+					style="float: right; background-color: #ffb2c4; color: white; ">취소</button></td>
 		</tr>
 	</table>
 </form>
-</div>
