@@ -190,36 +190,34 @@ session.removeAttribute("Kicked");
 
 <!-- 모달 창 -->
 <div id="myModal" class="modal" >
-    <div class="modal-content" style="text-align: center;">
+    <div class="modal-content">
         <p id="modalMessage"></p>
-        <button class="btn" onclick="closeModal()" style="background-color: #ff416c; color:white;">확인</button>
+        <button class="btn" onclick="closeModal()" style="float:center; background-color: #ff416c; color:white; margin-left: auto;">확인</button>
     </div>
 </div>
 
 <script>
 	
 	/* 토글 처리 */
-		$('input[id="toggle"]')
-				.change(
-						function() {
-							var value = $(this).val();
-							var checked = $(this).prop('checked');
-							var toggle_state;
-							if (checked) {
-								document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
-								document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
-								toggle_state = "on";
-							} else {
-								document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
-								document.getElementById('toggle_state').innerHTML = "&nbsp;";
-								toggle_state = "off";
-							}
-						});
+	$('input[id="toggle"]')
+	.change(
+			function() {
+				var value = $(this).val();
+				var checked = $(this).prop('checked');
+				var toggle_state;
+				if (checked) {
+					document.getElementById('toggleIcon').innerHTML = "▼ ${ChatRoomDTO.roomTitle}";
+					document.getElementById('toggle_state').innerHTML = "${ChatRoomDTO.roomText}";
+					toggle_state = "on";
+				} else {
+					document.getElementById('toggleIcon').innerHTML = "▶ ${ChatRoomDTO.roomTitle}";
+					document.getElementById('toggle_state').innerHTML = "&nbsp;";
+					toggle_state = "off";
+				}
+			});
 
 		/* 신고하기 */
 		function openReportWindow(userId, message) {
-			
-			
 			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
 			localStorage.setItem('userId',  JSON.stringify(userId));
 			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
@@ -227,21 +225,16 @@ session.removeAttribute("Kicked");
 			
 			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
 			window.open("reportWindow", "_blank", "width=400,height=400");
-			
 		}
-
+		
+		// 소켓 통신
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
-		
-		
 		// 소켓 연결
 		function connect() {
-			
-
 		    var socket = new SockJS('/acorn/chat-socket');
 		    stompClient = Stomp.over(socket);
-		    
 		    stompClient.connect({}, function(frame) {
 		        console.log("Connected to WebSocket",frame.headers['user-name']);
  
@@ -400,8 +393,10 @@ session.removeAttribute("Kicked");
 			if(flag){
 			//console.log("messageOutput : " + messageOutput.body)	
 			let a = messageOutput.body;
+			
 			let b = a.split("---");
 			for( var i = 0 ; i<b.length-1; i++){
+				console.log(b[i])
 				let body= JSON.parse(b[i]); 
 				let type = body.type;
 				let message = body.message;
@@ -421,7 +416,7 @@ session.removeAttribute("Kicked");
 					if(whosMessage == "my-chat"){
 						  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 					}else{
-						  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+						  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 					}
 				}else{
 					// type == ENTER , EXIT, KICKED
@@ -438,42 +433,20 @@ session.removeAttribute("Kicked");
 					chatLi = "<li class='enter' style='list-style: none; text-align:center; background-color:#ffdee9; color:black; border-radius: 2em;'><div class='message'><span>"+message+"</span></div></li><br>";
 				}
 				$("#chat").append(chatLi);
-				
-		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
-		        
 			}
-			
-			alert("send")
+			// 이전 글 출력 시 입장 메세지 전송
 			sendChatMessage('ENTER', `${nickNameInSession}` + ' 님이 입장했습니다. ' + serverTime);
 			flag=false;
 			}
 	}
 		
-		
-		
-		// 강퇴 삭제 예정
-		//채팅 멤버 강퇴
-		function fnKick(userId) {
-    var url = "/acorn/Chatmore/" + `${ChatRoomDTO.chatNum}` + "/ChatKickUser";
-    stompClient.send('/acorn/chat/send/1', {}, JSON.stringify({
-        'type': "KICKED",
-        'message': "KICKED",
-        'userId': "aujayk@gmail.com",	
-    }));
-}
-		
+		// go to chatMore
 		function goChatMore() {
-	//		location.href="/acorn/Chatmore?chatNum="+`${ChatRoomDTO.chatNum}`;
-			
-	//		var queryString = '/acorn/Chatmore?chatNum=' +`${ChatRoomDTO.chatNum}` + '&stompClient=' + stompClient;
-	//		location.href = queryString;
-			
 			var chatNum = encodeURIComponent(${ChatRoomDTO.chatNum});
 			var queryString = '/acorn/Chatmore?chatNum=' + chatNum + '&stompClient=' + encodeURIComponent(stompClient);
 			location.href = queryString;
 		}
 
-		// 취야점 보안
 		// 스크립트 코드 정지
 		function escapeHtml(unsafe) {
     		return unsafe.replace(/&/g, "&amp;")
@@ -488,8 +461,8 @@ session.removeAttribute("Kicked");
 			disconnect();
 			openModal(message);
 		}
-		 
-		// modal
+		
+		// open modal
 		function openModal(message) {
 	        var modal = document.getElementById('myModal');
 	        var modalMessage = document.getElementById('modalMessage');
@@ -498,7 +471,7 @@ session.removeAttribute("Kicked");
 	        modal.style.display = "block"; // 모달 열기
 	    }
 
-	    // 모달 닫기
+	    // close modal
 	    function closeModal() {
 	        var modal = document.getElementById('myModal');
 	        modal.style.display = "none"; // 모달 닫기

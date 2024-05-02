@@ -34,7 +34,8 @@ public class AnnouncementController {
 	@RequestMapping("AdminPage/WriteAnnouncementController")
 	public String WriteAnnouncement(@RequestParam(required = false) String word) {
 		System.out.println("WriteAnnouncementController.WriteAnnouncementController()");
-		String nextPage = "AdminPage/content/announce/writeAnnouncement";
+		//String nextPage = "AdminPage/content/announce/writeAnnouncement";
+		String nextPage = "AdminPage/AdminPageAnno_write";
 		return nextPage;
 	}
 
@@ -61,11 +62,11 @@ public class AnnouncementController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("dto", dto);
-		mav.setViewName("AdminPage/content/announce/viewAnnouncement");
+		mav.setViewName("AdminPage/AdminPageAnno_view");
 		return mav;
 	}
 
-	// update
+	// Retrieve
 	@RequestMapping("AdminPage/RetrieveAnnouncementController")
 	public ModelAndView Retrieve(String annoNum, Model m) {
 		System.out.println("AnnouncementController.RetrieveAnnouncementController()");
@@ -74,10 +75,11 @@ public class AnnouncementController {
 		// 날짜 설정
 		dto.setTimes();
 		mav.addObject("dto", dto);
-		mav.setViewName("AdminPage/content/announce/updateAnnouncement");
+		mav.setViewName("AdminPage/AdminPageAnno_update");
 		return mav;
 	}
 
+	// update
 	@RequestMapping("AdminPage/UpdateAnnouncementController")
 	public String update(int annoNum, String annoTitle, String annoText, String annoWriter, String popup, String category,
 			@RequestParam String dateTimePicker) {
