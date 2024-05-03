@@ -116,6 +116,22 @@ if (KickedUserId != null) {
 session.removeAttribute("Kicked");
 %>
 
+<%
+String newLeader = (String) session.getAttribute("newLeader");
+if (newLeader != null) {
+%>
+
+		<script>
+		console.log("delegate");
+		delegate();
+		</script>
+
+<%
+}
+
+session.removeAttribute("newLeader");
+%>
+
 
 
 
@@ -202,11 +218,15 @@ session.removeAttribute("Kicked");
 	*/
 
 		
-// 소켓 통신
+		
+	
+	
+	
+		// 소켓 통신
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
 		var serverTime = new Date().toLocaleString(); //서버 타임
-// 소켓 연결
+		// 소켓 연결
 		function connect() {
 		    var socket = new SockJS('/acorn/chat-socket');
 		    stompClient = Stomp.over(socket);
@@ -324,9 +344,18 @@ console.log("body.length : " + body.length)
 		// anno
 		function createAnnoTag(type, content) {
 
-			if(`${userIdInSession}` == content.USERID){
-			//	kickUser()
+			switch (type) {
+			case "KICKED":{
+				if(`${userIdInSession}` == content.USERID){
+					kickUser();
+				}
+				break;
 			}
+					
+			default:
+				break;
+			}
+			
 			let nickName = content.NICKNAME;
 			let message = content.MESSAGE;
 			let time = content.SERVERTIME;
@@ -349,6 +378,7 @@ console.log("body.length : " + body.length)
 				  
 			}else{
 				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
+			//	  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow()'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}
 		    $("#chat").append(chatLi);
 		}
@@ -383,16 +413,8 @@ console.log("body.length : " + body.length)
 		
 		
 	  
-//강퇴 되었을 때 띄우는 메세지 함수
-		 function kicked(){
-			 console.log("kicked실행됨")
-			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-			    	'TYPE':'KICKED',
-					'MESSAGE' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
-					'USERID' : userIdInSocket,
-				}));
-			}	
-			// 소켓 연결 끊기게 하는 함수
+		
+			// 소켓 연결 끊기게 하는 함수, kicked 전용
 		function disconnect() {
 			 
 			  if (stompClient !== null) {
@@ -402,17 +424,8 @@ console.log("body.length : " + body.length)
 			  console.log("Disconnected");
 			  sendMessage("EXIT", `${userIdInSession}`);	
 		 }
-	
-// kickUser
-		function kickUser(message){
-			disconnect();
-			openModal(message);
-		}
-		
-		
-		
-		//----------****************************************************
-		
+
+			//----------****************************************************
 		
 		
 		/* 토글 처리 */
@@ -433,6 +446,16 @@ console.log("body.length : " + body.length)
 					}
 				});
 
+		//방장이 변경되었을 때 띄우는 메세지 함수
+		 function delegate(){
+			 console.log("delegate실행됨");
+			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
+			    	'type':'ANNOUNCE',
+					'message' : `${sessionScope.newLeader}` + ' 님으로 방장이 변경되었습니다.	' + serverTime,
+					'userId' : userIdInSocket,
+				}));
+		}
+		
 		//방나가기 눌렀을 때 작동되는 fn
 		function fnGoOut() {
 			console.log("goOutForm");
@@ -459,17 +482,6 @@ console.log("body.length : " + body.length)
             })//ajax
 		}
 		
-	/* 신고하기 */
-			function openReportWindow(userId, message) {
-				////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
-				localStorage.setItem('userId',  JSON.stringify(userId));
-				localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
-				localStorage.setItem('message', JSON.stringify(message));
-				
-				//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
-				window.open("reportWindow", "_blank", "width=400,height=400");
-			}
-		
 		// go to chatMore
 		function goChatMore() {
 			var chatNum = encodeURIComponent(${ChatRoomDTO.chatNum});
@@ -484,6 +496,12 @@ console.log("body.length : " + body.length)
 	        .replace(/>/g, "&gt;")
 	        .replace(/"/g, "&quot;")
 	        .replace(/'/g, "&#039;");
+		}
+	
+		// kickUser
+		function kickUser(message){
+			disconnect();
+			openModal(message);
 		}
 		
 		// open modal
@@ -501,6 +519,17 @@ console.log("body.length : " + body.length)
 	        modal.style.display = "none"; // 모달 닫기
 	        window.close(); // 브라우저 닫기
 	    }
+	    
+	    /* 신고하기 */
+		function openReportWindow(userId, message) {
+			////window.open으로 필요 데이터를 넘겨주기 위해 localStorage 사용
+			localStorage.setItem('userId',  JSON.stringify(userId));
+			localStorage.setItem('chatNum', JSON.stringify(${ChatRoomDTO.chatNum}));
+			localStorage.setItem('message', JSON.stringify(message));
+			
+			//var url = "reportWindow?userId="+userId+"&chatNum="+${ChatRoomDTO.chatNum}; //신고할 사람 id 그리고 방번호 갖고 넘어감
+			window.open("reportWindow", "_blank", "width=400,height=400");
+		}
 
 </script>
 </body>

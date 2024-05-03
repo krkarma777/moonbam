@@ -17,7 +17,7 @@
                 <option value="<%=request.getContextPath()%>/AdminPage/AdminPostReported">신고글 관리</option>
                 <%-- <option value="<%=request.getContextPath()%>/AdminPage/AdminPagePostRule">글 작성 규칙 관리</option> --%>
                 <option value="<%=request.getContextPath()%>/AdminPage/AdminPageDeletedPost">삭제된 게시글 관리</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/AdminPageReportedComment">신고된 댓글 관리</option>
+                <%-- <option value="<%=request.getContextPath()%>/AdminPage/AdminPageReportedComment">신고된 댓글 관리</option> --%>
             </select>
         </div>
 

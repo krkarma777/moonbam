@@ -94,7 +94,13 @@
     <hr>
     <h2>미처리 신고</h2>
     <p>신고된 게시글/댓글</p>
-    <p>음란물 ${rDTO.sexual }건 , 언어규정위반 ${rDTO.lang }건, 도배 ${rDTO.abusing }건, 규정위반 ${rDTO.ruleviolation }건, 기타 ${rDTO.etc }건</p>
+    <p>
+    음란물 ${rDTO.sexual }건 , 
+    언어규정위반 ${rDTO.lang }건, 
+    도배 ${rDTO.abusing }건, 
+    규정위반 ${rDTO.ruleviolation }건, 
+    기타 ${rDTO.etc }건
+    </p>
 </div>
 </body>
 </html>

@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <title>문화인들의 밤</title>
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+	href="https://fastly.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
 	crossorigin="anonymous">
@@ -101,6 +101,11 @@
 								onClick="fnKick('${memberDtolist.userId }')">
 								<b>강퇴하기</b>
 							</button>
+							<button type="button" class="btn btn-sm"
+							style="float: right; height: 30px;"
+							onClick="delegate('${memberDtolist.userId }')">
+							<b>방장 넘기기</b>
+							</button>
 						</div>
 					</c:if>
 				</div>
@@ -147,7 +152,7 @@
 	%>
 
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		src="https://fastly.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
 	<script
@@ -250,7 +255,7 @@
 		        console.log("Connected to WebSocket",frame.headers['user-name']);
  
 		        // 메시지 받는 주소
-		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        stompClient.subscribe('/topic/messages/'+ `${chatroomDTO.chatNum}`, function(messageOutput) {
 		            createMsgTag(messageOutput);
 		        });
 		    });
@@ -258,7 +263,7 @@
 
 		function sendMessage(type, userId) {
 			console.log("sendMessage(t,u)")
-			let chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
+			let chatNum = `${chatroomDTO.chatNum}`; // 방번호
 			let serverTime = new Date().toLocaleString();
 			userId = (userId == null) ? `${userIdInSession}` : userId;
 			stompClient.send("/acorn/chat/test/"+chatNum, {}, JSON.stringify({
@@ -267,12 +272,7 @@
 				'MESSAGE' : "",
 				'NICKNAME' : "",
 				'SERVERTIME' : serverTime}));
-			document.getElementById('messageContent').value = ''; 
 		}	
-		
-		
-		
-		
 		
 		//채팅 멤버 강퇴
 		function fnKick(userId) {
@@ -280,18 +280,12 @@
 
 		}
 		
+		// 방장 위임
 		function delegate(userId) {
 			sendMessage("DELEGATE", userId);
-
 		}
 		
-	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)
-		function fnGoOut() {
-			console.log("goOutForm");
-			$("#goOutForm").attr("action","/acorn/chatRoom/out").submit();
-			
-		} */
-		
+				
 </script>
 </body>
 </html>

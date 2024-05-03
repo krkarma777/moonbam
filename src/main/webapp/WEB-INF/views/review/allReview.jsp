@@ -18,15 +18,17 @@ if (member != null) {
 }
 
 String contId = (String)request.getAttribute("contId");
+String contTitle = (String)request.getAttribute("contTitle");
 
 ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
+
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>문화인들의 밤</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link href="https://fastly.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -35,6 +37,7 @@ ReviewDTO myReview = (ReviewDTO)request.getAttribute("myreview");
 		$(document).ready(function(){
 			$("#writeReview").on("click", writeReview);  //리뷰작성
 			
+			$("#postText").html(<%=myReview.getPostText() %>);
 		});//ready
 	</script>
 </sec:authorize>
@@ -45,6 +48,7 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 	$(document).ready(function(){
 		$("#postText").on("keyup", check_length); 	 //글자수 제한
 		//$("#writeReview").click(writeReview); //리뷰 작성
+		$(".like_btn").on("click", likeToggle); 	// 공감버튼 클릭
 	})
 	
 	//최대글자수
@@ -71,7 +75,8 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 						"contId": contId,
 						"userId": "<%=userId%>",
 						"nickname": "<%=nickname%>",
-						"postText": postText
+						"postText": postText,
+						"contTitle": "<%=contTitle%>"
 					},
 					dataType: "text",
 					success: function(data, status, xhr){
@@ -85,6 +90,54 @@ const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstra
 			);//ajax
 		}//내용검사if
 	}
+	
+	// 공감버튼 토글
+	function likeToggle(){
+
+		// 버튼 누른 리뷰의 postId 가져오기
+		var postId = $(this).attr("data-postId");
+		
+		//버튼에 적혀있는 하트 공백제거해서 가져오기
+		var statement = $(this).text().trim();
+		var isLike = 0;
+		//console.log(statement)
+		
+		// 공백하트인지 꽉찬 하트인지 검사해서 반대로 바꾸기
+		if(statement == "♥"){
+			$(this).text("♡");
+			isLike = 0;
+		} else if(statement == "♡"){
+			$(this).text("♥");
+			isLike = 1;
+		}
+		
+		//로그인정보가 있을 때
+		//DB에 비동기 반영
+		<%if(userId!=null){%>
+		
+			$.ajax(
+				{
+					type: "post",
+					url:"like",
+					data: {
+						"userId": "<%=userId%>",
+						"postId": postId,
+						"isLike": isLike
+					},
+					success: function(data, status, xhr){
+						if(isLike==0)
+							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1);
+						else{
+							$("#likeNum"+postId).text($("#likeNum"+postId).text()-1+2);
+						}
+					},
+					error: function(xhr, status, e){
+					}
+				}//json	
+			);//ajax
+		<%}%>//if
+	}
+	
 </script>
 <style type="text/css">
 * {
@@ -145,7 +198,7 @@ button {
 		<div style="">
 			<!-- 개설 버튼 -->
 			<button type="button" class="btn" style="float:right; background-color: #ff416c; color:white; margin-left: auto; margin-bottom: 5px;" 
-			id="createCommunity" data-bs-toggle="modal" data-bs-target="#exampleModal"><b>
+			data-bs-toggle="modal" data-bs-target="#exampleModal"><b>
 				<%if(myReview==null){ %>
 					리뷰쓰기
 				<%}else{ %>
@@ -153,10 +206,13 @@ button {
 				<%} %>
 			</b></button>
 		</div>
+		
+		<!-- 리뷰목록 -->
+		<div style="width:1200px; height:795px; border: #ffb2c4 solid 1px;">
 		<%if(reviewList==null){ %>
 			<span style="margin: auto;">리뷰가 존재하지 않습니다.</span>
 		<%}else { %>
-			<table style="width:1200px; height:795px; border: #ffb2c4 solid 1px;">
+			<table style="width:100%; height:100%;">
 				<%int count = 0;
 				for(int i=1; i<=3; i++){ %>
 					<tr style="width: 1200px; height: 265px;">
@@ -172,9 +228,11 @@ button {
 									<div class="border-bottom" style="height: 40px; width: 299px; background-color: #ffb2c4; align-content: center; font-size: 19px;">
 										&nbsp;<%=reviewList.get(count).getNickname() %>
 									</div>
-									<div class="border-top" style="height: 195px; width: 299px; font-size: 18px;">
-										<a href="review?postId=<%=reviewList.get(count).getPostId() %>" style="color:black;">&nbsp;<%=reviewList.get(count).getPostText() %></a>
-									</div>
+									<a href="review?postId=<%=reviewList.get(count).getPostId() %>" style="color:black;">
+										<div class="border-top" style="height: 195px; width: 299px; font-size: 18px;">
+										&nbsp;<%=reviewList.get(count).getPostText() %>
+										</div>
+									</a>
 									<div id="review_score">
 										<span>&nbsp;☆ <%=Double.parseDouble(score)/2 %></span>
 										<span class="like_btn" style="color:red" data-postId="<%=reviewList.get(count).getPostId() %>">
@@ -199,6 +257,8 @@ button {
 			<jsp:include page="reviewPage.jsp"></jsp:include>
 		</div>
 		<%} %>
+		</div>
+		
 	</div>
 	<!-- 푸터 -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
@@ -212,7 +272,7 @@ button {
 	      </div>
 	      <div class="modal-body">
 	      	<input type="hidden" value="<%=contId%>" id="contId">
-	        <textarea cols="50" rows="12" id="postText"></textarea>
+	        <textarea cols="50" rows="12" id="postText"><%=myReview.getPostText() %></textarea>
 	        <p id="show_length">0/200</p>
 	      </div>
 	      <div class="modal-footer">
@@ -224,6 +284,6 @@ button {
 	  </div>
 	</div>
 	
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

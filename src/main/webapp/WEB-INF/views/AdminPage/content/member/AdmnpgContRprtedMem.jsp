@@ -96,7 +96,7 @@
 	$(document).ready(function(){
 		
 		$("#delChecked").on("click", delChecked);
-		$("suspendChecked").on("click", suspendChecked);
+		$("#suspendChecked").on("click", suspendChecked);
 		
 		function delChecked(){
 			
@@ -153,9 +153,7 @@
 			console.log("userArr: " + userArr);
 	
 			//전송
-			var target = "<%=request.getContextPath()%>" + "/AdminPage/suspendUser?userArr="+userArr;
-			console.log(target);
-			location.href = "<%=request.getContextPath()%>" + "/AdminPage/suspendUser?userArr="+userArr;
+			location.href = "<%=request.getContextPath()%>" + "/AdminPage/SuspendUser?userArr="+userArr;
 		}//delChecked
 		
 	});//document

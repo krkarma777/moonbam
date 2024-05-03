@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +55,7 @@ public class AdminPageMemberController {
 		List<AdminReportDTO> list = rservice.SearchReport(null);
 		
 		mav.addObject("list",list);
-		mav.setViewName("/AdminPage/AdminPageReportedPost");
+		mav.setViewName("redirect:/AdminPage/AdminMemberReported");
 		
 		return mav;
 	}

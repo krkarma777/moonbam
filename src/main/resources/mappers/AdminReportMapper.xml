@@ -54,14 +54,14 @@ order by REPORTID asc
 
 </delete>
 
-<!-- 신고번호에 해당하는 PostDTO 리스트 반환 -->
-<select id = "getPostList" parameterType = "list" resultType="PostDTO">
-	select *from POSTDB 
-	where postid in 
-	<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
-		'${item}'
-	</foreach>
-</select>
+	<!-- 신고번호에 해당하는 PostDTO 리스트 반환 -->
+	<select id = "getPostList" parameterType = "list" resultType="PostDTO">
+		select *from POSTDB 
+		where postid in 
+		<foreach item = "item" index = "index" collection = "list" open = "(" separator = "," close = ")" >
+			'${item}'
+		</foreach>
+	</select>
 
 <!-- 신고글 리스트 반환 -->
 <select id = "getReportList" parameterType = "list" resultType = "AdminReportDTO">

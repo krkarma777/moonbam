@@ -1,10 +1,12 @@
 package com.moonBam.controller.review;
 
 import com.moonBam.dto.ContentDTO;
+import com.moonBam.dto.CreditDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.dto.ReviewDTO;
 import com.moonBam.dto.ReviewPageDTO;
 import com.moonBam.service.ReviewService;
+import com.moonBam.service.TmdbApiService;
 import com.moonBam.service.member.MemberLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,12 +23,12 @@ import java.util.List;
 
 @Controller
 public class ShowReviewController {
-
 	@Autowired
 	ReviewService service;
-
 	@Autowired
 	MemberLoginService memberLoginService;
+	@Autowired
+	TmdbApiService tmdbApiService;
 	
 	@RequestMapping(value="/review", method=RequestMethod.GET)
 	public String ShowReview(String postId, Principal principal, HttpServletRequest request) {
@@ -90,8 +92,12 @@ public class ShowReviewController {
 		map.put("curPage", curPage);
 		ReviewPageDTO rpDTO = service.allReview(map);
 		
+		ContentDTO content = service.selectContent(contId);
+		String contTitle = content.getContTitle();
+		
 		model.addAttribute("rpDTO", rpDTO);
 		model.addAttribute("contId", contId);
+		model.addAttribute("contTitle", contTitle);
 		
 		return "review/allReview";
 	}
