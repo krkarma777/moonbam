@@ -18,7 +18,7 @@ public class AnnouncementDAO {
 	
 	public List<Integer> popupNumList(HashMap<String, String> hashMap) {
 		System.out.println("AnnouncementDAO.popupNumList()");
-		List<Integer> list = session.selectList("popupNumList", hashMap);
+		List<Integer> list = session.selectList("popupNumListdhdhdhdhdhdhd", hashMap);
 		return list;
 	}
 

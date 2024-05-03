@@ -109,9 +109,9 @@
 			<td >
 				<!-- select (option 전체, 영화, 소모임) --> <select name="category"
 				class="form-select form-select-sm">
-					<option value="main">전체</option>
-					<option value="movie">영화</option>
-					<option value="community">소모임</option>
+					<option value="전체">전체</option>
+					<option value="영화">영화</option>
+					<option value="소모임">소모임</option>
 			</select>
 			</td>
 		</tr>

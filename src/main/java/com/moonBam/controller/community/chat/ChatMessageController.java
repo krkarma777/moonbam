@@ -9,14 +9,14 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.moonBam.dto.ChatTableDTO;
@@ -114,7 +114,7 @@ public class ChatMessageController {
 		return ctDto; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 
-//	@Scheduled(fixedRate = 6000) // 1분(60,000밀리초)마다 실행
+//	@Scheduled(fixedRate = 30000) // 1분(60,000밀리초)마다 실행
 	public void saveMessagesToDatabase() { // chatData를 DB에 저장
 		System.out.println("scheduled");
 		if (!(numbers.isEmpty())) {
@@ -140,8 +140,8 @@ public class ChatMessageController {
 	}
 
 	// 강퇴하기 기능
-	@MessageMapping(value = "/Chatmore/ChatKickUser/{chatNum}")
-	@SendTo("/topic/messages/{chatNum}")
+//	@MessageMapping(value = "/Chatmore/ChatKickUser/{chatNum}")
+//	@SendTo("/topic/messages/{chatNum}")
 	public ChatTableDTO ChatKickUser(@RequestParam String content, @DestinationVariable("chatNum") String chatNum) {
 		System.out.println("ChatKickUser");
 
@@ -199,7 +199,6 @@ public class ChatMessageController {
 
 		// set add, save file
 		FileUtil fu = new FileUtil();
-		numbers.add(chatNum);
 		fu.saveChatContentToFile(ctDto.getChatContent(), chatNum);
 
 		return ctDto;
@@ -210,13 +209,20 @@ public class ChatMessageController {
 	
 	public String pastMessage(String chatNum, Principal principal) {
 		System.out.println("here");
+		// read local file
+		FileUtil fu = new  FileUtil();
+		String localFile = fu.readChatContentFromFile(chatNum);
+		System.out.println(localFile);
+		// get db
 		List<String> list = crService.getPastMessages(chatNum);
 		String group="";
+		String temp = "";
 		if(list.size()>0) {
-		String temp = "" ;
+		
 		for (String content : list) {
 			temp +=content;
 		}
+		temp += localFile;
 			String str = temp.replaceAll("\\}\\n\\{","\\}---\\{");
 			String[] strArr = str.split("---");
 			
@@ -296,44 +302,14 @@ public class ChatMessageController {
 		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
 		String nickName= memberDTO.getNickname();
 		
-System.out.println(type);
 		System.out.println("fkdd");
 		String returnStr = "";
 		
 		// add file
 		FileUtil fu = new FileUtil();
-		switch (type) {
-
-		/*		  통합
-		 case "PAST": case "ENTER":{
-				// ONLY PAST
-				String pastMessages = "";
-				if("PAST".equals(type)) {
-					pastMessages = pastMessage(chatNum, principal);
-					returnStr = pastMessage(chatNum, principal);
-					System.out.println(pastMessages);
-				}
-				
-				// BOTH
-				String message = "님이 입장했습니다.";
-				jsonObject.replace("MESSAGE", message);
-				returnStr = jsonObject.toJSONString();
-				fu.saveChatContentToFile(returnStr, chatNum);
-				pastMessages += returnStr;
-				System.out.println(returnStr);
-				
-				break;	
-		 
-		  */
-		 
 		
-			case "PAST":  {
-				String pastMessages = pastMessage(chatNum, principal);
-				returnStr = pastMessage(chatNum, principal);
-				System.out.println(pastMessages);
-				break;
-			}
-			
+		switch (type) {
+	 
 			case "ENTER": {
 				String message = " 님이 입장했습니다.";
 				
@@ -364,6 +340,8 @@ System.out.println(type);
 				break;
 				
 			}case "KICKED": {
+				ChatKickUser(body, chatNum);
+				
 				String message = "님이 추방되었습니다.";
 				jsonObject.replace("MESSAGE", message);
 				jsonObject.replace("NICKNAME", nickName);
@@ -377,7 +355,7 @@ System.out.println(type);
 				System.out.println(returnStr);
 				break;
 				
-			}case "DELEGAET": {
+			}case "DELEGATE": {
 				String message = "님이 방장이 되었습니다.";
 				jsonObject.replace("MESSAGE", message);
 				jsonObject.replace("NICKNAME", nickName);
@@ -397,7 +375,7 @@ System.out.println(type);
 				returnStr = jsonObject.toJSONString();
 				System.out.println(returnStr);
 			}
-			default:
+			numbers.add(chatNum);
 		}
 		
 	return returnStr;
@@ -426,5 +404,16 @@ System.out.println(type);
 		JSONObject jsonObj = (JSONObject) obj;
 		return jsonObj;
 	}
+
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+	
+	@MessageMapping("/chat/past/{chatNum}")
+	@SendToUser("/queue/past")
+	public String testPast(@DestinationVariable("chatNum") String chatNum, @Header("userId") String userId, Principal principal, @Payload String body) {
+	    String pastMessages = pastMessage(chatNum, principal);
+	    return pastMessages;
+	}
+
 }
 	

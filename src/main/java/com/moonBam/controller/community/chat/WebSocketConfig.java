@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
 		registry.setApplicationDestinationPrefixes("/acorn");
-		registry.enableSimpleBroker("/topic/");
+		 registry.enableSimpleBroker("/queue","/topic");
         
     }
 }
