@@ -124,7 +124,7 @@ public class MyPageController {
     
     @GetMapping
     public String myPage(Model model, Principal principal) {
-        return "member/MyPage/MyPageTemplate";
+        return "redirect:/my-page/post";
     }
 
     @GetMapping("/info")
@@ -133,7 +133,7 @@ public class MyPageController {
         MemberDTO loginUser = memberLoginService.findByPrincipal(principal);
 
         if (loginUser == null) {
-            return new ModelAndView("redirect:/Login");
+            return new ModelAndView("redirect:/mainLogin");
         }
 
         ModelAndView mav = new ModelAndView();
