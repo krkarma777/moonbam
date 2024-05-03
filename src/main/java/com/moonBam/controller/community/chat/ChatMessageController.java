@@ -116,12 +116,13 @@ public class ChatMessageController {
 
 	@Scheduled(fixedRate = 600000) // 1분(60,000밀리초)마다 실행
 	public void saveMessagesToDatabase() { // chatData를 DB에 저장
-		System.out.println("scheduled");
+		System.out.print("scheduled");
 		if (!(numbers.isEmpty())) {
 			// set에서 num가져와서 file에 읽고 insert하고 delet하고
 			// 필요한거 set만
 			// for를 get(num)하고 read > insert > delete
 			for (String num : numbers) {
+				System.out.println(" - "+ num);
 				// path file
 				String filePath = "src/main/resources/static/com/" + num + ".txt";
 				// read file
@@ -201,25 +202,23 @@ public class ChatMessageController {
 		return ctDto;
 	}
 
-//	@MessageMapping("/chat/past/{chatNum}")
-//	@SendTo("/topic/announce/{chatNum}")
-	
 	public String pastMessage(String chatNum, Principal principal) {
-		System.out.println("here");
 		// read local file
 		FileUtil fu = new  FileUtil();
 		String localFile = fu.readChatContentFromFile(chatNum);
-		System.out.println(localFile);
 		// get db
 		List<String> list = crService.getPastMessages(chatNum);
-		String group="";
+		
 		String temp = "";
 		if(list.size()>0) {
-		
-		for (String content : list) {
-			temp +=content;
+			for (String content : list) {
+				temp +=content;
+			}
 		}
 		temp += localFile;
+		
+		String result="";
+		if(!(temp.equals(""))) {
 			String str = temp.replaceAll("\\}\\n\\{","\\}---\\{");
 			String[] strArr = str.split("---");
 			
@@ -234,28 +233,26 @@ public class ChatMessageController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 				// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
 				JSONObject jsonObj = (JSONObject) obj;
-				System.out.println(jsonObj);
+				
 				String type = (String) jsonObj.get("TYPE");
+				
+				// add nickName
+				// principal 
+				String userIdInSession = principal.getName();
+				MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
+				String nickName= memberDTO.getNickname();
+				jsonObj.replace("NICKNAME", nickName);
+				
+				// check, inspection badword, forbiddenword
+				String message = (String) jsonObj.get("MESSAGE");
+				System.out.println(message);
 				
 				// talk 만 nickName 필요함
 				if("TALK".equals(type)) {
-					// add nickName
-					// principal 
-					String userIdInSession = principal.getName();
-					MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
-					String nickName= memberDTO.getNickname();
-					jsonObj.appendField("nickName", nickName);
-					
-					// check, inspection badword, forbiddenword
-					String message = (String) jsonObj.get("MESSAGE");
-					System.out.println(message);
-					
 					/// 금칙어 스캔 후 위 message와 비교 후 ** 처리하여 리턴하여 보내주기 (DB엔 쌩으로 저장됨, 보여지기만 대체하여 보냄)
 					List<String> badWordsList = chatMessagesService.badWordsSelectAll();
-
 					boolean noBadWords = false;
 					for (String BadWord : badWordsList) { ////////
 						// System.out.println("먼데 "+ BadWord);
@@ -270,17 +267,17 @@ public class ChatMessageController {
 							System.out.println(jsonObj);
 						}
 					}
+				}else{
+					message = nickName + jsonObj.getAsString("MESSAGE") + " "+ jsonObj.getAsString("SERVERTIME"); 
+					jsonObj.replace("MESSAGE", message);
 				}
-				group+=jsonObj + "---";
+				result+=jsonObj + "---";
 			}
+			System.out.println(result);
 		}
-			System.out.println(group);
-		return group; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
+		return result; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 	}
 	
-	
-	private final SimpMessagingTemplate  sendingOperations;
-		
 	@MessageMapping("/chat/test/{chatNum}")
 	@SendTo("/topic/messages/{chatNum}")
 	public String test(@DestinationVariable("chatNum") String chatNum, Principal principal, @Payload String body) {
@@ -289,8 +286,7 @@ public class ChatMessageController {
 		String type  = (String) jsonObject.get("TYPE");
 		
 		// id to nickName
-		String userIdInSession = principal.getName();
-		MemberDTO memberDTO = memberService.findByUserId(userIdInSession);
+		MemberDTO memberDTO = memberService.findByUserId(jsonObject.getAsString("USERID"));
 		String nickName= memberDTO.getNickname();
 		
 		String returnStr = "";

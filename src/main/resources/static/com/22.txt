@@ -53,7 +53,7 @@
 {"MESSAGE":"EWQE","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 12:12:05","USERID":"aujayk@gmail.com","TYPE":"TALK"}
 {"MESSAGE":"EWQE","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 12:12:06","USERID":"h@a","TYPE":"TALK"}
 {"MESSAGE":"EQWE","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 12:12:13","USERID":"h@a","TYPE":"TALK"}
-{"MESSAGE":"12행복한_재국_6 님이 퇴장되었습니다. 2024-05-03 12:30","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 12:29:15","TYPE":"KICKED"}
+{"MESSAGE":" 님이 퇴장되었습니다. 2024-05-03 12:30","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 12:29:15","TYPE":"KICKED"}
 {"MESSAGE":"님이 추방되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 12:29:15","USERID":"h@a","TYPE":"KICKED"}
 {"MESSAGE":"FDSF","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 12:30:38","USERID":"h@a","TYPE":"TALK"}
 {"MESSAGE":"FDSF","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 12:30:42","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
@@ -91,3 +91,23 @@
 {"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 2:38:02","USERID":"e@a","TYPE":"DELEGATE"}
 {"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"9행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 2:42:40","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
 {"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 2:43:17","USERID":"e@a","TYPE":"DELEGATE"}
+{"MESSAGE":"1","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:44:51","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"fsdfsd","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:44:54","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:44:57","USERID":"aujayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:45:07","USERID":"e@a","TYPE":"TALK"}
+{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:45:09","USERID":"aujayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:45:12","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"rewr","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:46:33","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"rewr","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:46:35","USERID":"aujayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"rewr","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 2:46:36","USERID":"e@a","TYPE":"TALK"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"9행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 2:46:40","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 2:47:19","USERID":"e@a","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"9행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 2:48:37","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":" 님이 방장이 되었습니다.","NICKNAME":"e@a","SERVERTIME":"2024. 5. 3. 오후 2:50:17","USERID":"e@a","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 2:51:35","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"FSDF","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 3:08:00","USERID":"aujayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"FSDFSD","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 3:08:04","USERID":"e@a","TYPE":"TALK"}
+{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:13:17","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"ㄹㄴㅇㄹ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:37:42","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"ㄹㄴㅇㄹㄴ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:37:45","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"1312ㅣㅏㅓㅣㅏ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:37:53","USERID":"acornjayk@gmail.com","TYPE":"TALK"}

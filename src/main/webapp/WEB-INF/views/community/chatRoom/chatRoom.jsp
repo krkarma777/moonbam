@@ -264,9 +264,10 @@ session.removeAttribute("newLeader");
 				
 				if(type == "TALK"){
 					// 여기서 "" 처리
-					if(document.getElementById('messageContent').value.trim() != '') {
-						message = escapeHtml($("#messageContent").val()); // 대화 내용 
-					}
+					if (document.getElementById('messageContent').value.trim().length === 0) {
+               			return false; // 대화 내용이 비어 있으면 함수 종료
+           			}
+            		message = escapeHtml($("#messageContent").val()); // 대화 내용
 				}else{
 					message="";
 				}

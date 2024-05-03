@@ -1,10 +1,1 @@
-{"MESSAGE":"이것도 나오나??????","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오전 4:02:00","USERID":"aujayk@gmail.com","TYPE":"TALK"}
-{"MESSAGE":"ㄹㄴㅇㄹ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오전 4:19:57","USERID":"aujayk@gmail.com","TYPE":"TALK"}
-{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오전 4:20:00","USERID":"mangojellyproject@gmail.com","TYPE":"TALK"}
-{"MESSAGE":"님이 퇴장했습니다.","NICKNAME":"배고픈_광래_33","SERVERTIME":"2024. 5. 3. 오전 4:20:02","USERID":"mangojellyproject@gmail.com","TYPE":"EXIT"}
-{"MESSAGE":"ㅂㄷㅂㅈ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오전 4:23:55","USERID":"aujayk@gmail.com","TYPE":"TALK"}
-{"MESSAGE":"님이 퇴장했습니다.","NICKNAME":"배고픈_광래_33","SERVERTIME":"2024. 5. 3. 오전 4:24:12","USERID":"mangojellyproject@gmail.com","TYPE":"EXIT"}
-{"MESSAGE":" 님이 입장했습니다.","NICKNAME":"배고픈_광래_33","SERVERTIME":"2024. 5. 3. 오전 4:24:23","USERID":"mangojellyproject@gmail.com","TYPE":"ENTER"}
-{"MESSAGE":" 님이 입장했습니다.","NICKNAME":"섹시한_현희_62","SERVERTIME":"2024. 5. 3. 오전 4:24:35","USERID":"leejaystwo@gmail.com","TYPE":"ENTER"}
-{"type":"KICKED","message":"섹시한_현희_62 님이 퇴장되었습니다. 2024-05-03 04:24"}
 {"type":"KICKED","message":"배고픈_광래_33 님이 퇴장되었습니다. 2024-05-03 04:25"}
