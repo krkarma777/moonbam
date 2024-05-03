@@ -1,0 +1,1 @@
+{"MESSAGE":"11","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오전 9:16:09","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
