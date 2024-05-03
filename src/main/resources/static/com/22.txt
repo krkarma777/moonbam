@@ -111,3 +111,24 @@
 {"MESSAGE":"ㄹㄴㅇㄹ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:37:42","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
 {"MESSAGE":"ㄹㄴㅇㄹㄴ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:37:45","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
 {"MESSAGE":"1312ㅣㅏㅓㅣㅏ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 4:37:53","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 4:55:09","USERID":"aujayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 4:55:31","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_5","SERVERTIME":"2024. 5. 3. 오후 4:56:24","USERID":"a@a","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 4:57:58","USERID":"aujayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 4:58:56","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_5","SERVERTIME":"2024. 5. 3. 오후 4:59:04","USERID":"a@a","TYPE":"DELEGATE"}
+{"MESSAGE":"행복한_재국_5 님이 퇴장되었습니다. 2024-05-03 16:59","NICKNAME":"행복한_재국_5","SERVERTIME":"2024. 5. 3. 오후 4:59:46","USERID":"a@a","TYPE":"KICKED"}
+{"MESSAGE":"님이 추방되었습니다.","NICKNAME":"행복한_재국_5","SERVERTIME":"2024. 5. 3. 오후 4:59:46","USERID":"a@a","TYPE":"KICKED"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 5:01:39","USERID":"aujayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 5:02:18","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 5:06:15","USERID":"aujayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 5:06:40","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 5:07:31","USERID":"aujayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 5:07:57","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 5:08:11","USERID":"aujayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"11123ㅁㅁㅈㄷㅂ 님이 퇴장되었습니다. 2024-05-03 17:10","NICKNAME":"11123ㅁㅁㅈㄷㅂ","SERVERTIME":"2024. 5. 3. 오후 5:10:52","USERID":"acornjayk@gmail.com","TYPE":"KICKED"}
+{"MESSAGE":"님이 추방되었습니다.","NICKNAME":"11123ㅁㅁㅈㄷㅂ","SERVERTIME":"2024. 5. 3. 오후 5:10:52","USERID":"acornjayk@gmail.com","TYPE":"KICKED"}
+{"MESSAGE":"8행복한_재국_6 님이 퇴장되었습니다. 2024-05-03 17:11","NICKNAME":"8행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 5:11:15","USERID":"d@a","TYPE":"KICKED"}
+{"MESSAGE":"님이 추방되었습니다.","NICKNAME":"8행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 5:11:15","USERID":"d@a","TYPE":"KICKED"}
+{"MESSAGE":"9행복한_재국_6 님이 퇴장되었습니다. 2024-05-03 17:11","NICKNAME":"9행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 5:11:18","USERID":"e@a","TYPE":"KICKED"}
+{"MESSAGE":"님이 추방되었습니다.","NICKNAME":"9행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 5:11:18","USERID":"e@a","TYPE":"KICKED"}

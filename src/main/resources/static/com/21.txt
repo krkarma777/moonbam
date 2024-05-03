@@ -1,1 +1,2 @@
 {"MESSAGE":"11","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오전 9:16:09","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":" 님이 입장했습니다.","NICKNAME":"행복한_재국_62","SERVERTIME":"2024. 5. 3. 오후 5:11:29","USERID":"aujayk@gmail.com","TYPE":"ENTER"}

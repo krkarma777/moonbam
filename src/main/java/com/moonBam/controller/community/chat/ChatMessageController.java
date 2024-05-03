@@ -43,6 +43,9 @@ public class ChatMessageController {
 	@Autowired
 	ChatRoomService crService;
 
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	
 	// 파일 이름 저장
 	Set<String> numbers = new HashSet<>();
 
@@ -341,6 +344,7 @@ public class ChatMessageController {
 				jsonObject.replace("MESSAGE", message);
 				
 				returnStr = jsonObject.toJSONString();
+				messagingTemplate.convertAndSendToUser(principal.getName(),"/queue/more/"+chatNum, "추방되었습니다.");
 				System.out.println(returnStr);
 				break;
 				
@@ -358,6 +362,7 @@ public class ChatMessageController {
 				jsonObject.replace("MESSAGE", message);
 				
 				returnStr = jsonObject.toJSONString();
+				messagingTemplate.convertAndSendToUser(principal.getName(),"/queue/more/"+chatNum, "위임되었습니다.");
 				System.out.println(returnStr);
 				break;
 			}

@@ -227,11 +227,11 @@ session.removeAttribute("newLeader");
 		        console.log("Connected to WebSocket",frame.headers['user-name']);
  
 		        // 메시지 받는 주소
-		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
+		        stompClient.subscribe('/topic/messages/' + `${ChatRoomDTO.chatNum}`, function(messageOutput) {
 		            createMsgTag(messageOutput);
 		        });
 		        
-		        stompClient.subscribe('/user/queue/past', function(messageOutput) {
+		        stompClient.subscribe('/user/queue/past' , function(messageOutput) {
 		        	createMsgTag(messageOutput);
 		        });
 		        sendMessage("PAST");
@@ -286,8 +286,6 @@ session.removeAttribute("newLeader");
 				
 			}
 		}	
-	
-		
 		
 		// 출력
 		// 필수, 이전 메세지를 한번만 가져오게 함
@@ -302,8 +300,6 @@ session.removeAttribute("newLeader");
 			
 			// 이전 글이 있면 출력
 			if(body.length != 0){
-console.log("body.length : " + body.length)
-				console.log(body);
 				flag = body.includes("---");
 				let list = body.split("---");
 				

@@ -253,6 +253,11 @@
 		    stompClient = Stomp.over(socket);
 		    stompClient.connect({}, function(frame) {
 		        console.log("Connected to WebSocket",frame.headers['user-name']);
+		        
+		     // 메시지 받는 주소
+		        stompClient.subscribe('/user/queue/more/' + `${chatroomDTO.chatNum}`, function(messageOutput) {
+		        	showAlert(messageOutput);
+		        });
 		    });
 		}	
 
@@ -280,6 +285,14 @@
 			sendMessage("DELEGATE", userId);
 		}
 		
+		function showAlert(messageOutput) {
+		    // 메시지가 포함된 알림 창 표시
+		    if
+		    alert(messageOutput);
+
+		    // 확인 버튼을 클릭하면 페이지 새로고침
+		    window.location.reload();
+		}
 				
 </script>
 </body>

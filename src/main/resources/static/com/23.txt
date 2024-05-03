@@ -1,0 +1,2 @@
+{"MESSAGE":"ㄹㄴㅇㄹ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 5:13:24","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"ㄹㄴㅇㄹ","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 5:13:25","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
