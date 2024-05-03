@@ -66,7 +66,7 @@ public class CommunityChatRoomAutoDelete {
 				//뽑아온 모임 날짜와 현재 날짜를 비교하며 days의 값이 3이 될경우 방 삭제 진행 (현재 인원이 있냐 없냐 필요없음, 걍 강제삭제임)
 				// 방 삭제 진행 후 chatMember에서도 해당 방관련 레코드 삭제해야함(tx 묶음)
 				days = DAYS.between(mdate, now);
-				System.out.println("날짜 차이 " + days);
+//				System.out.println("날짜 차이 " + days);
 				
 					if(days>=3) { //혹시 몰라서 3 이상으로 범위 챙겼음
 						try {
@@ -79,7 +79,7 @@ public class CommunityChatRoomAutoDelete {
 							
 						}catch(Exception e){
 							
-							System.out.println("모임 날짜로부터 3일 경과한 커뮤니티 룸에 대한 삭제처리에 오류가 생겼습니다.");
+//							System.out.println("모임 날짜로부터 3일 경과한 커뮤니티 룸에 대한 삭제처리에 오류가 생겼습니다.");
 							
 						}
 					
@@ -92,14 +92,14 @@ public class CommunityChatRoomAutoDelete {
 				if(nothingDel) { //아무것도 안 거쳐서 flag가 여전히 true일 때만 실행 됨 //만약 거쳐서 true -> false가 되면 
 					
 					//days가 3인 게 없는거야
-					System.out.println("모임 날짜로부터 3일이 경과한 커뮤니티 룸이 없습니다.");
+//					System.out.println("모임 날짜로부터 3일이 경과한 커뮤니티 룸이 없습니다.");
 					
 				}
 			
 				if(deletedFin) { //위에 3일 차이나는 거 삭제하는 것이 실행되면 false -> true로 바뀌어서 실행이 됨
 					//////////for문 다 돌고 나서 실행될 메세지/////	
-					System.out.println("모임 날짜로부터 3일이 경과해 자동 삭제된 커뮤니티 룸의 수는 총 : " + delChatRoomNum + " 입니다.");
-					System.out.println("모임 날짜로부터 3일이 경과해 방에서 자동으로 나가게 된 멤버의 수는 총 : "+ delChatMemberNum + " 입니다.");
+//					System.out.println("모임 날짜로부터 3일이 경과해 자동 삭제된 커뮤니티 룸의 수는 총 : " + delChatRoomNum + " 입니다.");
+//					System.out.println("모임 날짜로부터 3일이 경과해 방에서 자동으로 나가게 된 멤버의 수는 총 : "+ delChatMemberNum + " 입니다.");
 				}
 			
 				

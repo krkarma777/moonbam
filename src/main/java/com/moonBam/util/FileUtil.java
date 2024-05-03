@@ -27,13 +27,14 @@ public class FileUtil {
 		    return file;
 		}
 
-		public String readChatContentFromFile(String filePath) {
-	    StringBuilder stringBuilder = new StringBuilder();
+		public String readChatContentFromFile(String num) {
+			String filePath = "src/main/resources/static/com/" + num + ".txt";
+			StringBuilder stringBuilder = new StringBuilder();
 	    try {
 	        File file = new File(filePath);
 	        if (!file.exists()) {
 	            System.err.println("File not found: " + filePath);
-	            return null;
+	            return "";
 	        }
 
 	        BufferedReader reader = new BufferedReader(new FileReader(file));

@@ -8,7 +8,6 @@
 	$(function() {
 		// 글쓰기
 		$("#buttonAnnoWrite").on("click", buttonAnnoWrite);
-
 	
 		// 검색
 		$("#buttonAnnoWord").on("click", buttonAnnoWord);

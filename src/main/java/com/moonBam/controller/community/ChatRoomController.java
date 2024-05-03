@@ -85,6 +85,8 @@ public class ChatRoomController {
 			return nextWhere;
 			
 		}else {//중복 data가 없으면 서버 작업 진행해주기 
+			// 입장 멘트
+			session.setAttribute("ENTER", "FIRST");
 			
 			//이 채팅방의 현재, 최대 인원 수 체크하기. 현재인원 수 currentNow , 최대인원 수 amount
 			ChatRoomDTO cdto = chatRoomSelectBychatNum(chatNum);

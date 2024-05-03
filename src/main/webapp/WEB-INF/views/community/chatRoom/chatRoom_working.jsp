@@ -17,7 +17,7 @@
 /*내가 보낸 채팅 말풍선  */
 .my-chat {
 	position: relative;
-	width: 200px;
+	width: 300px;
 	padding: 20px;
 	background-color: #ffb2c4;
 	border-radius: 4px;
@@ -179,9 +179,9 @@ session.removeAttribute("Kicked");
 				<div>
 					<td colspan="2"><input type="text" id="messageContent"
 						name="messageContent" style="width: 86%"
-						onkeydown="if (event.keyCode === 13) { sendMessage(); }"
+						onkeydown="if (event.keyCode === 13) { sendMessage('TALK'); }"
 						class="form-control-sm"> <input type="button" id="send"
-						value="전송" class="btn" onclick="sendMessage()"
+						value="전송" class="btn" onclick="sendMessage('TALK')"
 						style="float: right; background-color: #ff416c; color: white; margin-left: auto;">
 					</td>
 				</div>
@@ -216,67 +216,72 @@ session.removeAttribute("Kicked");
 		    stompClient.connect({}, function(frame) {
 		        console.log("Connected to WebSocket",frame.headers['user-name']);
  
-		        
 		        // 메시지 받는 주소
 		        stompClient.subscribe('/topic/messages/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
-		        	createMsgTag(messageOutput);
+		            createMsgTag(messageOutput);
 		        });
-		        
-		        // 이전 글 및 공지 메세지 받는 주소
-// 		        stompClient.subscribe('/topic/announce/' + ${ChatRoomDTO.chatNum}, function(messageOutput) {
-	//	        	createAnnoTag(messageOutput);
-		//        });
-				
-		     	// pre message, past message
-		//     	 pastChatMessage();
-		        
+
+		        // pre message, past message
+		        sendMessage("PAST");
 		    });
 		}
 		
-		/* sendChatMessage - sendMessage - pastChatMessage 통합
-			sendChatMessage : 
-			sendMessage : 
-			pastChatMessage : 이전글 가저오기 to /acorn/chat/past/${ChatRoomDTO.chatNum}, parameter : null, return list<String<
-			
-			test send to messageMapping reurn converstosend messageMapping
-		*/
 		
-// send test
-		function sendTest() {
-		    stompClient.send('/acorn/chat/send/test/' + ${ChatRoomDTO.chatNum}, {}, );
-		}
-// send message
-		function sendChatMessage(type, message, userIdInSocket) {
-		    stompClient.send('/acorn/chat/send/' + ${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-		        'type': type,
-		        'message': message,
-		        'userId': userIdInSocket
-		    }));
+		function sendTest1() {
+			sendMessage("KICKED");
 		}
 		
 		/* 메시지 전송 */
-		function sendMessage() {
+		function sendMessage(type) {
 			// 여기서 "" 처리
 			 if(document.getElementById('messageContent').value.trim() != '') {
 				var chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
-				var userId = `${userIdInSession}`; // 사용자 닉네임
-				//console.log("유저아이디 먼데",userId)
-				var message = escapeHtml($("#messageContent").val()); // 메세지 
+				var userId = `${userIdInSession}`; // 사용자 id
+				var message = escapeHtml($("#messageContent").val()); // 대화 내용 
 				var serverTime = new Date().toLocaleString();
-				stompClient.send("/acorn/chat/send/"+chatNum, {}, JSON.stringify({
-					'type' : 'TALK',
-					'userId' : userId,
-					'message' : message,
-					'serverTime' : serverTime}));
+				stompClient.send("/acorn/chat/test/"+chatNum, {}, JSON.stringify({
+					'TYPE' : type,
+					'USERID' : userId,
+					'MESSAGE' : message,
+					'SERVETTIME' : serverTime}));
 				document.getElementById('messageContent').value = ''; 
 			 }
 		}	
+				
+		
+		function createTestTag1(messageOutput) {
+			let body = messageOutput.body;
+			let list = body.split("---");
+			console.log(list[0]);
+			console.log("for start")
+			for( var i = 0 ; i<list.length; i++){
+				console.log(list[i])
+				let content= JSON.parse(list[i]); 
+				let type = content.TYPE;
+				let message = content.MESSAGE;
+				let nickName = content.USERID;
+				let serverTime = content.SERVETTIME;
+				console.log(type);
+				console.log(message);
+				console.log(nickName);
+				console.log(serverTime);
+				let chatLi;
+				
+			}
+			
+			
+	}
 		
 		
-		// send past
-		function pastChatMessage() {
-		    stompClient.send('/acorn/chat/past/' + ${ChatRoomDTO.chatNum}, {}, );
-		}	
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -293,9 +298,9 @@ session.removeAttribute("Kicked");
 		 function kicked(){
 			 console.log("kicked실행됨")
 			    stompClient.send("/acorn/chat/send/"+${ChatRoomDTO.chatNum}, {}, JSON.stringify({
-			    	'type':'KICKED',
-					'message' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
-					'userId' : userIdInSocket,
+			    	'TYPE':'KICKED',
+					'MESSAGE' : `${sessionScope.KickedUserId}` + ' 님이 강퇴되었습니다.	' + serverTime,
+					'USERID' : userIdInSocket,
 				}));
 			}
 
@@ -307,8 +312,8 @@ session.removeAttribute("Kicked");
 // 최신 메세지 추가(위치는 맨 뒤)
 // 이전 메세지 추가(위치는 맨위)
 		function createMsgTag(messageOutput) {
-	alert("fjdksfls");		
-	let body= JSON.parse(messageOutput.body);
+alert("fjkdslfsfksdlkfjskd");
+			let body= JSON.parse(messageOutput.body);
 			console.log("body : " + body)
 				let nickName = body.nickName;
 			let content = JSON.parse(body.chatContent);
@@ -344,7 +349,6 @@ session.removeAttribute("Kicked");
 			}else{
 				  chatLi = "<div class='chat_box' ><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div><span>"+nickName+"</span></div><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;' onclick='openReportWindow(\""+ userId + "\",\"" + message + "\")'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 			}
-	       
 	    }
 	    $("#chat").append(chatLi);
 	}
@@ -401,6 +405,10 @@ session.removeAttribute("Kicked");
 			flag=false;
 			}
 	}
+	
+	
+	
+	
 	
 		// 소켓 연결 끊기게 하는 함수
 		function disconnect() {

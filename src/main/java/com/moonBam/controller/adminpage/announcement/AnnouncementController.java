@@ -5,9 +5,11 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,12 +59,15 @@ public class AnnouncementController {
 	public ModelAndView View(String annoNum) {
 		System.out.println("AnnouncementController.View()");
 		AnnouncementDTO dto = service.oneAnnouncement(annoNum);
-		// setting times
-		dto.setTimes();
-		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("dto", dto);
-		mav.setViewName("AdminPage/AdminPageAnno_view");
+		String nextpage = "redirect:/AdminPage/AdminPageAnnounce";
+		if(dto != null) {
+			// setting times
+			dto.setTimes();
+			mav.addObject("dto", dto);
+			nextpage = "AdminPage/AdminPageAnno_view";	
+		}
+		mav.setViewName(nextpage);
 		return mav;
 	}
 
@@ -91,10 +96,13 @@ public class AnnouncementController {
 	}
 
 	// Delete
-	@RequestMapping("AdminPage/DeleteAnnouncementController")
-	public String Delete(@RequestParam String annoNum) {
-		System.out.println("DeleteAnnouncementController");
-		service.deleteAnnouncement(annoNum);
-		return nextPage;
+	@DeleteMapping("/AdminPage/DeleteAnnouncement")
+	@ResponseBody
+	public String deleteAnnouncement(@RequestParam String annoNum) {
+	    System.out.println("DeleteAnnouncement");
+	    service.deleteAnnouncement(annoNum); // Call the service method
+
+	    // Assuming successful deletion
+	    return "Announcement deleted successfully!"; 
 	}
 }

@@ -1,0 +1,1 @@
+{"MESSAGE":" 님이 입장했습니다.","NICKNAME":"슬기로운_성준_42","SERVERTIME":"2024. 5. 3. 오전 4:57:40","USERID":"aujayk@gmail.com","TYPE":"ENTER"}

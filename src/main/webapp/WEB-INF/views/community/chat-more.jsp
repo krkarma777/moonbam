@@ -248,51 +248,52 @@
 		});
 
 		// 소켓 연결
-		function connect() {
-		
+	function connect() {
 		    var socket = new SockJS('/acorn/chat-socket');
 		    stompClient = Stomp.over(socket);
-		    
 		    stompClient.connect({}, function(frame) {
-		        console.log("Connected to WebSocket", frame.headers['user-name']);
+		        console.log("Connected to WebSocket",frame.headers['user-name']);
 		        
-		        // 연결된 사용자가 채팅 메시지를 보낼 때마다 호출되어야 함
-		        sendChatMessage('ENTER', `${nickNameInSession} 님이 입장 ${serverTime}`);
+		     // 메시지 받는 주소
+		        stompClient.subscribe('/user/queue/more/' + `${chatroomDTO.chatNum}`, function(messageOutput) {
+		        	showAlert(messageOutput);
+		        });
 		    });
-		}
+		}	
 
-		function sendChatMessage(type, message, userIdInSocket) {
-		    stompClient.send(`/acorn/chat/send/${ChatRoomDTO.chatNum}`, {}, JSON.stringify({
-		        'type': type,
-		        'message': message,
-		        'userId': userIdInSocket
-		    }));
-		}
-
-		
+		function sendMessage(type, userId) {
+			console.log("sendMessage(t,u)")
+			let chatNum = `${chatroomDTO.chatNum}`; // 방번호
+			let serverTime = new Date().toLocaleString();
+			userId = (userId == null) ? `${userIdInSession}` : userId;
+			stompClient.send("/acorn/chat/test/"+chatNum, {}, JSON.stringify({
+				'TYPE' : type,
+				'USERID' : userId, // 강퇴, 위임 할 id
+				'MESSAGE' : "",
+				'NICKNAME' : "",
+				'SERVERTIME' : serverTime}));
+		}	
 		
 		//채팅 멤버 강퇴
 		function fnKick(userId) {
-		    stompClient.send("/acorn/Chatmore/ChatKickUser/" + `${chatroomDTO.chatNum}`, {}, JSON.stringify({
-	        'type': "KICKED",
-	        'userId': userId,	  }));
+			sendMessage("KICKED", userId);
+
 		}
 		
-		function delegate(userId){
-			//location.href = "/acorn/delegateMaster?chatNum="+${chatroomDTO.chatNum}+"&userId="+userId;
-			
-			stompClient.send("/acorn/delegateMaster/" + `${chatroomDTO.chatNum}`, {}, JSON.stringify({
-		        'type': "ANNOUNCE",
-		        'userId': userId,	  }));
+		// 방장 위임
+		function delegate(userId) {
+			sendMessage("DELEGATE", userId);
 		}
 		
-	/* 	//방나가기 눌렀을 때 작동되는 fn (이거 메인화면으로 이동했음)
-		function fnGoOut() {
-			console.log("goOutForm");
-			$("#goOutForm").attr("action","/acorn/chatRoom/out").submit();
-			
-		} */
-		
+		function showAlert(messageOutput) {
+		    // 메시지가 포함된 알림 창 표시
+		    if
+		    alert(messageOutput);
+
+		    // 확인 버튼을 클릭하면 페이지 새로고침
+		    window.location.reload();
+		}
+				
 </script>
 </body>
 </html>

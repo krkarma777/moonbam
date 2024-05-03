@@ -51,8 +51,28 @@
 	}
 
 	function deleteAnnouncement() {
-		$("#formView").attr("action", "DeleteAnnouncementController");
-		$("#formView").submit();
+	//	$("#formView").attr("action", "DeleteAnnouncementController");
+	//	$("#formView").submit();
+		
+		 $.ajax({
+		        url: "DeleteAnnouncement", // DELETE 요청 URL 설정
+		        type: "DELETE", // HTTP 메서드 설정
+		        data: {
+		            annoNum: ${dto.annoNum} // 전송할 데이터 설정
+		        },
+		        success: function() {
+		            // 삭제 성공 후 처리
+		            alert("공지가 삭제되었습니다.");
+		            // 목록 새로고침 등 필요한 작업 수행
+		        },
+		        error: function(xhr, status, error) {
+		            // 삭제 실패 시 처리
+		            console.error("공지 삭제 실패:", xhr, status, error);
+		            alert("공지 삭제에 실패했습니다.");
+		        }
+		    });
+		
+		
 	}
 
 	let dates = [ '년', '월', '일', '시', '분', '초' ];
@@ -60,13 +80,13 @@
 
 <div style="background-color: #ffb2c4; color: white; margin-left: auto;"> 공지상항</div>
 
-<form id="formView" style=" width: 100%">
+<form id="formView" style=" width: 100%" >
 	<input type="hidden" name="annoNum" value="${dto.annoNum}"> <input
 		type="hidden" name="annoTitle" value="${dto.annoTitle}"> <input
 		type="hidden" name="annoText" value="${dto.annoText}"> <input
 		type="hidden" name="annoWriter" value="${dto.annoWriter}"> <input
 		type="hidden" name="popup" value="${dto.popup}">
-	<%-- <input type="hidden" name="map" value="${dto.getMap()}"> --%>
+	
 	<table border='1' style="width: 100%">
 		<tr>
 			<th style="width: 150px">제목</th>
