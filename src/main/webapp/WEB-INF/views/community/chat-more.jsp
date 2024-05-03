@@ -253,11 +253,6 @@
 		    stompClient = Stomp.over(socket);
 		    stompClient.connect({}, function(frame) {
 		        console.log("Connected to WebSocket",frame.headers['user-name']);
- 
-		        // 메시지 받는 주소
-		        stompClient.subscribe('/topic/messages/'+ `${chatroomDTO.chatNum}`, function(messageOutput) {
-		            createMsgTag(messageOutput);
-		        });
 		    });
 		}	
 

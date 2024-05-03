@@ -39,7 +39,7 @@
 //
 //@Controller
 //@RequiredArgsConstructor
-//public class ChatController {
+//public class ChatController_origin {
 //
 //	@Autowired
 //	ChatRoomService crService;
@@ -119,26 +119,15 @@
 //	}
 //
 //	@RequestMapping(value = "/delegateMaster")
-//	@ResponseBody
 //	public String delegateMaster(@RequestParam String chatNum, @RequestParam String newMaster, Principal principal) {
 //		HashMap<String, String> map = new HashMap<>();
 //		map.put("chatNum", chatNum);
 //		map.put("to", newMaster);
-//		int n = crService.delegateMaster(map);
+//		crService.delegateMaster(principal,chatNum,newMaster );
 //
 //		////////////////// 권한위임 기존 방장이 하는지 검사
 //
-//		String formerMaster = principal.getName();
 //
-//		Boolean checkMaster = (formerMaster == crService.checkMaster(chatNum));
-//
-//		if (!checkMaster) {
-//			System.out.println("너 방장 아니지");
-//		} else {
-//			String mesg = (n == 1) ? "권한 위임 정상 처리" : "권한 위임 실패";
-//			System.out.println(mesg);
-//		}
-//		//////////////////
 //
 //		return "";
 //	}

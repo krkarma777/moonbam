@@ -86,3 +86,8 @@
 {"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 1:00:34","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
 {"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 1:00:45","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
 {"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 1:00:51","USERID":"e@a","TYPE":"TALK"}
+{"MESSAGE":"fds","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 1:09:32","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"fsdf","NICKNAME":"","SERVERTIME":"2024. 5. 3. 오후 1:10:05","USERID":"acornjayk@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 2:38:02","USERID":"e@a","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"9행복한_재국_6","SERVERTIME":"2024. 5. 3. 오후 2:42:40","USERID":"acornjayk@gmail.com","TYPE":"DELEGATE"}
+{"MESSAGE":"님이 방장이 되었습니다.","NICKNAME":"재벌_아야토_81","SERVERTIME":"2024. 5. 3. 오후 2:43:17","USERID":"e@a","TYPE":"DELEGATE"}

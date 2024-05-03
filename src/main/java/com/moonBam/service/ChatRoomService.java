@@ -81,10 +81,5 @@ public class ChatRoomService {
 	public List<String> getPastMessages(String chatNum) {
 		return dao.getPastMessages(chatNum);
 	}
-
-	
-	
-	
-	
 	
 }//end class

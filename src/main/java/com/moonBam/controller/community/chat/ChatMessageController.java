@@ -238,7 +238,7 @@ public class ChatMessageController {
 				// string타입에서 json으로 변경하여 message값만 가져와서 string으로 저장하기 성공
 				JSONObject jsonObj = (JSONObject) obj;
 				System.out.println(jsonObj);
-				String type = (String) jsonObj.get("type");
+				String type = (String) jsonObj.get("TYPE");
 				
 				// talk 만 nickName 필요함
 				if("TALK".equals(type)) {
@@ -250,7 +250,7 @@ public class ChatMessageController {
 					jsonObj.appendField("nickName", nickName);
 					
 					// check, inspection badword, forbiddenword
-					String message = (String) jsonObj.get("message");
+					String message = (String) jsonObj.get("MESSAGE");
 					System.out.println(message);
 					
 					/// 금칙어 스캔 후 위 message와 비교 후 ** 처리하여 리턴하여 보내주기 (DB엔 쌩으로 저장됨, 보여지기만 대체하여 보냄)
@@ -266,7 +266,7 @@ public class ChatMessageController {
 							///// true일시 작동하고 false일 때는 작동 안 하지요
 							//// 욕을 ** 문자로 지환하기
 							
-							jsonObj.appendField("message", message.replace(BadWord, "**"));
+							jsonObj.appendField("MESSAGE", message.replace(BadWord, "**"));
 							System.out.println(jsonObj);
 						}
 					}
@@ -354,10 +354,11 @@ public class ChatMessageController {
 				jsonObject.replace("NICKNAME", nickName);
 				returnStr = jsonObject.toJSONString();
 				
-			
+				crService.delegateMaster(principal, chatNum, jsonObject.getAsString("USERID"));
+				
 				fu.saveChatContentToFile(returnStr, chatNum);
 			
-				message = nickName + message;
+				message = nickName + message + jsonObject.getAsString("SERVERTIME");
 				jsonObject.replace("MESSAGE", message);
 				
 				returnStr = jsonObject.toJSONString();
@@ -393,6 +394,7 @@ public class ChatMessageController {
 		return jsonObj;
 	}
 
+	// 이전 글 가져오기 안됨
 	@MessageMapping("/chat/past/{chatNum}")
 	@SendToUser("/queue/past")
 	public String testPast(@DestinationVariable("chatNum") String chatNum, Principal principal) {

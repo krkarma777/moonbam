@@ -214,14 +214,7 @@ session.removeAttribute("newLeader");
 <script>
 	/*
 		목표 단일 pub / sub
-		
 	*/
-
-		
-		
-	
-	
-	
 		// 소켓 통신
 		var stompClient = null;
 		var userIdInSocket = `${userIdInSession}`; // 사용자 ID;
@@ -241,7 +234,6 @@ session.removeAttribute("newLeader");
 		        stompClient.subscribe('/user/queue/past', function(messageOutput) {
 		        	createMsgTag(messageOutput);
 		        });
-		        
 		        sendMessage("PAST");
 		    });
 		}	
@@ -250,10 +242,10 @@ session.removeAttribute("newLeader");
 		
 		function sendMessage(type) {
 			console.log("sendMessage(t)")
-			sendMessage(type, `${userIdInSession}`);
+			sendMessages(type, `${userIdInSession}`);
 		}
 		
-		function sendMessage(type, userId) {
+		function sendMessages(type, userId) {
 			console.log("sendMessage(t,u)")
 			let message;
 			let chatNum = `${ChatRoomDTO.chatNum}`; // 방번호  
@@ -383,12 +375,6 @@ console.log("body.length : " + body.length)
 		    $("#chat").append(chatLi);
 		}
 		
-		
-	
-		
-		
-
-	
 	
 
 		// -------------------------------------------------------------------------------------------------------------
