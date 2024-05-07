@@ -26,11 +26,10 @@ public class ViewPopupController {
 		return mav;
 	}
 	
-	@RequestMapping("/popupTest")
-	public ModelAndView popupTest() {
-		System.out.println("test");
-		String nextPage= "AdminPage/content/announce/popup/popTest";
-		ModelAndView mav = new ModelAndView(nextPage);
-		return mav;
-	}
+	/*
+	 * @RequestMapping("/popupTest") public ModelAndView popupTest() {
+	 * System.out.println("test"); String nextPage=
+	 * "AdminPage/content/announce/popup/popTest"; ModelAndView mav = new
+	 * ModelAndView(nextPage); return mav; }
+	 */
 }
