@@ -37,7 +37,8 @@ public class ChatGPTDAO {
 	// 일반적으로 100~200 토큰으로 설정
 	// 사용목적: 버그나 이상형상으로 인한 비정상적으로 높은 토큰소모만 방지
 	// 설정치에 따라 간소하게, 또는 세세하게 나옴
-	private int maxTokens = 200;
+//	private int maxTokens = 200;
+	private int maxTokens = 1000;
 	
 	// RestTemplate을 통한 api 요청 구현
 	public String getResponse(String prompt) throws JsonProcessingException {
@@ -49,7 +50,7 @@ public class ChatGPTDAO {
 	    headers.add("Content-Type", "application/json");
 
 	    Map<String, Object> requestBody = new HashMap<>();
-	    requestBody.put("model", "gpt-3.5-turbo"); //모델 설정 주의 - 잘못 설정시 404 반환 / gpt-3.5-turbo / gpt-4 / gpt-4-1106-preview
+	    requestBody.put("model", "gpt-4-1106-preview"); //모델 설정 주의 - 잘못 설정시 404 반환 / gpt-3.5-turbo / gpt-4 / gpt-4-1106-preview
 	    requestBody.put("max_tokens", maxTokens);
 	    requestBody.put("messages", Collections.singletonList(Map.of("role", "user", "content", prompt)));
 

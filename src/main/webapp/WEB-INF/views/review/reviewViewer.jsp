@@ -68,7 +68,7 @@
 		color: black;
 	}
 	
-	.link-icon { position: relative; display: inline-block; width: auto; font-size: 14px; font-weight: 500; color: #333; margin-right: 10px; padding-top: 50px; background-repeat: no-repeat;}
+	.link-icon { position: relative; display: inline-block; width: auto; font-size: 14px; font-weight: 500; color: #333; min-width: 48px;margin-right: 20px; padding-top: 50px; background-repeat: no-repeat;}
 	.link-icon.twitter { background-image: url(./resources/images/icon-twitter.png); background-repeat: no-repeat; }
 	.link-icon.facebook { background-image: url(./resources/images/icon-facebook.png); background-repeat: no-repeat; } 
 	.link-icon.kakao { background-image: url(./resources/images/icon-kakao.png); background-repeat: no-repeat; }
