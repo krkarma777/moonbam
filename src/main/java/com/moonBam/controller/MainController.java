@@ -77,7 +77,7 @@ public class MainController {
         });
       
         // popup get popup num list
-        String cate = (category == null) ? "전체" : category;
+        String cate = (category == null) ? "main" : category;
         List<Integer> list = annoService.popupNnumList(new HashMap<String, String>() {
             {
                 put("popup", "on");

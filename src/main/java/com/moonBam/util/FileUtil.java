@@ -29,9 +29,11 @@ public class FileUtil {
 
 		public String readChatContentFromFile(String num) {
 			String filePath = "src/main/resources/static/com/" + num + ".txt";
+			
 			StringBuilder stringBuilder = new StringBuilder();
 	    try {
 	        File file = new File(filePath);
+	        System.out.println("path: "+ file.getAbsolutePath());
 	        if (!file.exists()) {
 	            System.err.println("File not found: " + filePath);
 	            return "";
@@ -51,8 +53,9 @@ public class FileUtil {
 	    return stringBuilder.toString();
 	}
 	
-	public boolean deleteFile(String filePath) {
-	    File file = new File(filePath);
+	public boolean deleteFile(String num) {
+		String filePath = "src/main/resources/static/com/" + num + ".txt";
+		File file = new File(filePath);
 	    if (file.exists()) {
 	        return file.delete();
 	    } else {

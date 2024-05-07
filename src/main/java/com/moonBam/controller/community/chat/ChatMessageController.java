@@ -117,7 +117,7 @@ public class ChatMessageController {
 //		return ctDto; ////// 금칙어 처리된 아이가 브라우저 뿌리기용으로 보내짐.
 //	}
 
-	@Scheduled(fixedRate = 600000) // 1분(60,000밀리초)마다 실행
+	@Scheduled(fixedRate = 60000) // 1분(60,000밀리초)마다 실행
 	public void saveMessagesToDatabase() { // chatData를 DB에 저장
 		System.out.print("scheduled");
 		if (!(numbers.isEmpty())) {
@@ -126,18 +126,17 @@ public class ChatMessageController {
 			// for를 get(num)하고 read > insert > delete
 			for (String num : numbers) {
 				System.out.println(" - "+ num);
-				// path file
-				String filePath = "src/main/resources/static/com/" + num + ".txt";
 				// read file
 				FileUtil fu = new FileUtil();
-				String fileString = fu.readChatContentFromFile(filePath);
+				
+				String fileString = fu.readChatContentFromFile(num);
 				// ctDto
 				ChatTableDTO ctDto = new ChatTableDTO(num, fileString);
 				// insert db
 				ctDto.setChatContent(fileString);
 				chatMessagesService.insert(ctDto);
 				// delete file
-				fu.deleteFile(filePath);
+				fu.deleteFile(num);
 			}
 			numbers.clear();
 		}
@@ -308,7 +307,7 @@ public class ChatMessageController {
 			
 				fu.saveChatContentToFile(returnStr, chatNum);
 			
-				message = nickName + message;
+				message = nickName + message + jsonObject.getAsString("SERVERTIME");
 				jsonObject.replace("MESSAGE", message);
 				
 				returnStr = jsonObject.toJSONString();
@@ -323,7 +322,7 @@ public class ChatMessageController {
 				
 				fu.saveChatContentToFile(returnStr, chatNum);
 			
-				message = nickName + message;
+				message = nickName + message + jsonObject.getAsString("SERVERTIME");
 				jsonObject.replace("MESSAGE", message);
 				
 				returnStr = jsonObject.toJSONString();

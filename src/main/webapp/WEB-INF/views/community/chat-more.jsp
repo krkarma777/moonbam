@@ -147,10 +147,6 @@
 	session.removeAttribute("mesg");
 	%>
 
-	<%
-
-	%>
-
 	<script
 		src="https://fastly.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -287,8 +283,7 @@
 		
 		function showAlert(messageOutput) {
 		    // 메시지가 포함된 알림 창 표시
-		    if
-		    alert(messageOutput);
+		    alert(messageOutput.body);
 
 		    // 확인 버튼을 클릭하면 페이지 새로고침
 		    window.location.reload();

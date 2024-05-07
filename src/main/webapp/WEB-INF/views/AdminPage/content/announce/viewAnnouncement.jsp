@@ -3,7 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link
 	href="https://fastly.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -14,23 +14,23 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-	h1 {
-		text-align: center;
-	}
-	
-	.btn {
-		background-color: #ff416c;
-		color: white;
-	}
-	
-	#formView {
-		margin: 0 auto; /* 가운데 정렬 */
-		text-align: left; /* 내용물 왼쪽 정렬 */
-		width: 50%; /* 원하는 폭으로 조절 */
-	}
-	
-	#btnTd {
-    text-align: center;
+h1 {
+	text-align: center;
+}
+
+.btn {
+	background-color: #ff416c;
+	color: white;
+}
+
+#formView {
+	margin: 0 auto; /* 가운데 정렬 */
+	text-align: left; /* 내용물 왼쪽 정렬 */
+	width: 50%; /* 원하는 폭으로 조절 */
+}
+
+#btnTd {
+	text-align: center;
 }
 </style>
 <script type="text/javascript">
@@ -78,15 +78,16 @@
 	let dates = [ '년', '월', '일', '시', '분', '초' ];
 </script>
 
-<div style="background-color: #ffb2c4; color: white; margin-left: auto;"> 공지상항</div>
+<div style="background-color: #ffb2c4; color: white; margin-left: auto;">
+	공지상항</div>
 
-<form id="formView" style=" width: 100%" >
+<form id="formView" style="width: 100%">
 	<input type="hidden" name="annoNum" value="${dto.annoNum}"> <input
 		type="hidden" name="annoTitle" value="${dto.annoTitle}"> <input
 		type="hidden" name="annoText" value="${dto.annoText}"> <input
 		type="hidden" name="annoWriter" value="${dto.annoWriter}"> <input
 		type="hidden" name="popup" value="${dto.popup}">
-	
+
 	<table border='1' style="width: 100%">
 		<tr>
 			<th style="width: 150px">제목</th>
@@ -98,7 +99,15 @@
 		</tr>
 		<tr>
 			<th>카테고리</th>
-			<td colspan="3"><span>${dto.category}</span></td>
+			<td colspan="3">
+				<span>
+					<c:choose>
+						<c:when test="${dto.category eq 'main'}">전체</c:when>
+						<c:when test="${dto.category eq 'movie'}">영화</c:when>
+						<c:when test="${dto.category eq 'community'}">소모임</c:when>
+					</c:choose>
+				</span>
+			</td>
 		</tr>
 		<tr>
 			<th>작성일</th>
@@ -119,7 +128,8 @@
 					<span style="width: 25px">${times}</span> ${dto.dateName[status.index] }
 			</c:forEach></td>
 			<th>종료일</th>
-			<td><c:forEach var="times" items="${dto.endDateArr}" varStatus="status">
+			<td><c:forEach var="times" items="${dto.endDateArr}"
+					varStatus="status">
 					<span style="width: 25px">${times}</span> ${dto.dateName[status.index] }
 			</c:forEach></td>
 		</tr>
@@ -132,12 +142,13 @@
 				disabled="disabled"></td>
 		</tr>
 		<tr>
-			<td id=btnTd colspan="4" style="align-content: center"><button id="buttonBack"
-					style="float: right; background-color: #ffb2c4; color: white; ">확인</button>
+			<td id=btnTd colspan="4" style="align-content: center"><button
+					id="buttonBack"
+					style="float: right; background-color: #ffb2c4; color: white;">확인</button>
 				<button id="buttonUpdate"
-					style="float: right; background-color: #ff416c; color: white; ">수정</button>
+					style="float: right; background-color: #ff416c; color: white;">수정</button>
 				<button id="buttonDelete"
-					style="float: right; background-color: #ffb2c4; color: white; ">삭제</button></td>
+					style="float: right; background-color: #ffb2c4; color: white;">삭제</button></td>
 		</tr>
 	</table>
 </form>
