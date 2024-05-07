@@ -96,11 +96,11 @@
 			<th>카테고리</th>
 			<td colspan="4"><select name="category" class="form-select form-select-sm">
 					<option value="전체"
-						<c:if test="${dto.category == '전체'}">selected</c:if>>전체</option>
+						<c:if test="${dto.category eq 'main'}">selected</c:if>>전체</option>
 					<option value="영화"
-						<c:if test="${dto.category == '영화'}">selected</c:if>>영화</option>
+						<c:if test="${dto.category eq 'movie'}">selected</c:if>>영화</option>
 					<option value="소모임"
-						<c:if test="${dto.category == '소모임'}">selected</c:if>>소모임</option>
+						<c:if test="${dto.category eq 'community'}">selected</c:if>>소모임</option>
 			</select></td>
 		</tr>
 		<tr>
@@ -125,7 +125,7 @@
 		<tr>
 			<th>팝업 허용</th>
 			<td ><input type="checkbox" id="popup" name="popup"	value="on" class="form-check"
-				<c:if test="${dto.popup == 'on'}">checked="checked"</c:if>>
+				<c:if test="${dto.popup eq 'on'}">checked="checked"</c:if>>
 			</td>
 		</tr>
 		<tr>
