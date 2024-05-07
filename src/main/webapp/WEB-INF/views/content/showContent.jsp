@@ -306,10 +306,10 @@ if (rateAmount > 0) {
 		}
 	}
 	// 70px * (최대값+10%)
-	double height = 120 * rateDistribution[i] / (max * 1.1);
+	double height = 180 * rateDistribution[i] / (max * 1.1);
 
-	if (height > 120)
-		height = 120;
+	if (height > 180)
+		height = 180;
 	if (height == 0)
 		height = 2;%>
 			$("#score<%=i + 1%>").css("height", "<%=height%>px");
@@ -731,7 +731,7 @@ if (rateAmount > 0) {
 	</div>
 
 	<!-- 푸터 -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>
+	<%-- <jsp:include page="../common/footer.jsp"></jsp:include> --%>
 
 	<!-- 모달창 -->
 	<div class="modal fade" id="exampleModal" tabindex="-1"
