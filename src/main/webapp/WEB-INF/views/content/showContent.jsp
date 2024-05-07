@@ -200,19 +200,24 @@ int rateAmount = 0;
 if (rateList != null) { //0이 아닐 경우
 	rateAmount = rateList.size();
 }
-//모든 별점 순회
+
+// 1. 별점 분포를 계산하여 rateDistribution 배열에 저장
+// 2. 별점의 총합을 저장하여 sum에 저장
 double sum = 0;
 double[] rateDistribution = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 for (int i = 0; i < rateAmount; i++) {
 	RateDTO rate = rateList.get(i);
+	
+	// score는 double로 관리되고 있음.
 	double score = rate.getScore();
-	sum += score;
 	//별점(score)가 10이면 [9]에 +1증가
 	rateDistribution[(int) score - 1]++;
+	
+	sum += score;
 }
 
 String avgRate = "평점이 존재하지 않습니다.";
-// 별점이 1개 이상일 때
+// 별점이 1개 이상일 때, 평균별점 설정&출력
 if (rateAmount > 0) {
 	avgRate = String.format("%.1f", sum / rateAmount / 2);
 }
@@ -288,30 +293,54 @@ if (rateAmount > 0) {
 		}
 	}
 	
-	// 별점 막대그래프 높이 설정 함수
+	// 별점분 막대그래프 출력 함수 
 	function setAvgGraph(){
-		<%for (int i = 0; i < rateDistribution.length; i++) {
-	// 버전1
-	//전체높이 * 해당별점갯수/전체별점갯수
-	//문제: y축이 너무 높아짐
-	//double height = 70*rateDistribution[i]/rateAmount;
+		// 별점별 분포 갯수 배열 변수: rateDistribution
+		
+		//======================
+		// 별점분포 막대그래프 출력 로직 
+		// 1. 그래프의 y축 실제 최대높이는 180px으로 설정
+		
+		// 2. 그래프의 막대높이는 갯수/갯수최대값 비율로 설정
+		// 막대높이 = 180px * 갯수/갯수최대값
+		// 갯수최대값 : 10개의 별점 항목 중에 가장 갯수가 많은 항목의 갯수 
+		
+		//======================
+		// 높이 비율 idea ver.1
+		// 별점갯수/전체별점갯수
+		// 문제: y축이 너무 너무 높아짐
 
-	// 버전2
-	//y축 수치값을 (가장 많은 갯수 + 10%)로 설정
-	//전체높이 * 해당별점갯수/(가장 높은 갯수 + 10%)
-	double max = rateDistribution[0];
-	for (double num : rateDistribution) {
-		if (num > max) { //최대값 비교해서 구하기
-			max = num;
-		}
-	}
-	// 70px * (최대값+10%)
-	double height = 180 * rateDistribution[i] / (max * 1.1);
-
-	if (height > 180)
-		height = 180;
-	if (height == 0)
-		height = 2;%>
+		// 높이 비율 idea ver.2
+		// 별점갯수/가장 높은 갯수
+		// 적당하고 가시성도 좋음
+		//======================
+		
+		<%
+		
+		// 실제 최대 높이 
+		int maxh = 160;
+		// 전체 항목에서 최대갯수 구하기 
+		double maxn = rateDistribution[0];
+		for (double num : rateDistribution) {
+			if (num > maxn) { //최대값 비교해서 구하기
+				maxn = num;
+			}
+		}	
+		
+		// 막대높이 설정
+		for (int i = 0; i < rateDistribution.length; i++) {
+			
+			double height = 0;
+			if(maxn!=0){
+				// 막대높이 = 실제최대높이 * 갯수/최대갯수
+				height = maxh * rateDistribution[i] / maxn;
+			}
+			
+			// 최소높이 (가시성 고려) 
+			if (height == 0)
+				height = 2;
+		%>
+			// 실제 화면 적용
 			$("#score<%=i + 1%>").css("height", "<%=height%>px");
 			$("#score<%=i + 1%>").css("width", "20px");
 		<%}%>
