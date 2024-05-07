@@ -84,11 +84,11 @@ order by REPORTID asc
 
 <select id = "getUndone" resultType = "AdminReportDTO">
 	SELECT 
-	    SUM(CASE WHEN lang = 't' THEN 1 ELSE 0 END) AS lang,
-	    SUM(CASE WHEN sexual = 't' THEN 1 ELSE 0 END) AS sexual,
-	    SUM(CASE WHEN abusing = 't' THEN 1 ELSE 0 END) AS abusing,
-	    SUM(CASE WHEN ruleviolation = 't' THEN 1 ELSE 0 END) AS ruleviolation,
-	    SUM(CASE WHEN etc = 't' THEN 1 ELSE 0 END) AS etc
+	    SUM(CASE WHEN lang = 'T' THEN 1 ELSE 0 END) AS lang,
+	    SUM(CASE WHEN sexual = 'T' THEN 1 ELSE 0 END) AS sexual,
+	    SUM(CASE WHEN abusing = 'T' THEN 1 ELSE 0 END) AS abusing,
+	    SUM(CASE WHEN ruleviolation = 'T' THEN 1 ELSE 0 END) AS ruleviolation,
+	    SUM(CASE WHEN etc = 'T' THEN 1 ELSE 0 END) AS etc
 	FROM 
 	    adminreported
     where action = 'no'
