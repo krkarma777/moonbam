@@ -1,0 +1,6 @@
+{"MESSAGE":"안녕하세요","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오전 8:07:47","USERID":"kwangr1995@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"아러ㅗ항러ㅗㅎ","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오전 8:07:49","USERID":"kwangr1995@gmail.com","TYPE":"TALK"}
+{"MESSAGE":"ㅑㅐㅈ도ㅓ갲뎌ㅑㅗ가ㅓㄴ오라ㅓㄴ올;","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오전 8:07:51","USERID":"kwangr1995@gmail.com","TYPE":"TALK"}
+{"MESSAGE":" 님이 입장했습니다.","NICKNAME":"못난_미지_84","SERVERTIME":"2024. 5. 7. 오전 8:08:41","USERID":"kwangr1995@naver.com","TYPE":"ENTER"}
+{"MESSAGE":"안녕하세요","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오전 8:08:59","USERID":"kwangr1995@naver.com","TYPE":"TALK"}
+{"MESSAGE":"반갑습니다","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오전 8:09:11","USERID":"kwangr1995@gmail.com","TYPE":"TALK"}

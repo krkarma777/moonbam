@@ -28,7 +28,7 @@
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRprtedMem">신고회원 관리</option>
                 <%-- <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRule">등급 관리 규칙 설정</option> --%>
                 <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageMemRestricted">이용 제한 회원 관리</option>
-                <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageDeletedMember">삭제된 회원 데이터 관리</option>
+                <%-- <option value="<%=request.getContextPath()%>/AdminPage/toAdminPageDeletedMember">삭제된 회원 데이터 관리</option> --%>
             </select>
         </div>
         <!-- Notices and Other Management Dropdown -->
