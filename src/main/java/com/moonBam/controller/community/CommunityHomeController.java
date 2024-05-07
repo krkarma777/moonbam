@@ -2,6 +2,7 @@ package com.moonBam.controller.community;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import com.moonBam.dto.CommunityPageDTO;
 import com.moonBam.dto.MemberDTO;
 import com.moonBam.service.ChatRoomService;
 import com.moonBam.service.CommunityHomeService;
+import com.moonBam.service.adminpage.announcement.AnnouncementService;
 
 @Controller
 public class CommunityHomeController {
@@ -26,6 +28,10 @@ public class CommunityHomeController {
 	
 	@Autowired
 	ChatRoomService crService;
+	
+	@Autowired
+	AnnouncementService annoService;
+	
 	@PostMapping("/communitySearch")
 	public String communitySearch(Model model, String searchCategory, String searchValue, String curPage) {
 		System.out.println("in CommunityHomeController communitySearch()");
@@ -44,7 +50,7 @@ public class CommunityHomeController {
 		
     	model.addAttribute("cpDTO", cpDTO);
     	
-    	String category = "community";
+    	String category = "소모임";
     	model.addAttribute("category", category);
     	
     	List<String> categoryList = new ArrayList<>();;
@@ -56,6 +62,17 @@ public class CommunityHomeController {
 		
 		String communityCategory = "communitySearch";
 		model.addAttribute("communityCategory", communityCategory);
+		
+		
+		  // popup get popup num list
+        List<Integer> list = annoService.popupNnumList(new HashMap<String, String>() {
+            {
+                put("popup", "on");
+                put("category", category);
+            }
+        });
+        // popup
+        model.addAttribute("list", list);
 		
 		return "community/communityHome";
 	}

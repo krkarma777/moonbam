@@ -25,6 +25,7 @@ var list = <%= request.getAttribute("list") %>;
 
     	for (var i = 0; i < list.length; i++) {
         	let cookie = getCookie("popup"+list[i])
+       
         	if(cookie != "check"){
         		// 팝업 창의 위치 설정
         		setPostion(i);
@@ -56,9 +57,13 @@ var list = <%= request.getAttribute("list") %>;
 	        var decodedCookie = decodeURIComponent(document.cookie);
 	        
 			var cookies = decodedCookie.split(';');
+			console.log("cookie")
 			for (var i = 0; i < cookies.length; i++) {
 	            var cookie = cookies[i].trim();
+	            
 	            if (cookie.indexOf(name) === 0) {
+	            	console.log(i +" "+ name)
+	            	
 	                return cookie.substring(name.length + 1);
 	            }
 	        }

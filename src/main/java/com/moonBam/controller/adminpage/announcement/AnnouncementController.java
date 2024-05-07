@@ -90,7 +90,7 @@ public class AnnouncementController {
 			@RequestParam String dateTimePicker) {
 		System.out.println("AnnouncementController.UpdateAnnouncementController()");
 		String[] dates = dateTimePicker.split(" - "); // 시작일 종료일 분리
-		AnnouncementDTO dto = new AnnouncementDTO(annoNum, annoTitle, annoText, annoWriter, dates[0], dates[0], popup, category);
+		AnnouncementDTO dto = new AnnouncementDTO(annoNum, annoTitle, annoText, annoWriter, dates[0], dates[1], popup, category);
 		service.updateAnnouncement(dto);
 		 return nextPage; 
 	}
