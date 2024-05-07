@@ -362,7 +362,8 @@ session.removeAttribute("newLeader");
 		    let chatLi;
 		    
 		    let timeShort = time.substr(12); //주고받는 대화에서는 시간만 보이게 잘랐음
-			if(whosMessage == "my-chat"){
+		    
+		    if(whosMessage == "my-chat"){
 				  chatLi = "<div class='chat_box'><ul class='chatUl'><li class='"+whosMessage+"' style='list-style: none;'><div class='message'><span style=' overflow:hidden;  word-wrap:break-word;'><b>"+message+"&nbsp;</b></span><span style='font-size:13px'>"+timeShort+"</span></div></li></ul></div>";
 				  
 			}else{
