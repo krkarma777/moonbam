@@ -692,9 +692,15 @@ if (rateAmount > 0) {
 					<div class="inner" id="lastClone">
 						<%for (int i = creditList.size() - 6; i < creditList.size(); i++) { %>
 						<div style="width: 201px; height: auto;" class="poster">
-							<%if (null == creditList.get(i) || null == creditList.get(i).getProfile_path()) { %>
+							<%if (null == creditList.get(i)) { %>
+							<!-- <img class="innerImage" src="resources/images/question.png"
+								width="197px" height="296px"> -->
+							<%} else if (null == creditList.get(i).getProfile_path()) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								width="197px" height="296px">
+							<div class="rank index-label">
+								<%=creditList.get(i).getName() %>
+							</div>
 							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
@@ -712,9 +718,15 @@ if (rateAmount > 0) {
 						<div class="inner">
 						<%for (int j = 0; j < 6; j++) { %>
 							<div style="width: 201px; height: auto;" class="poster">
-							<%if (null == creditList.get(count) || null == creditList.get(count).getProfile_path()) { %>
+							<%if (null == creditList.get(count)) { %>
+							<!-- <img class="innerImage" src="resources/images/question.png"
+								width="197px" height="296px"> -->
+							<%} else if (null == creditList.get(count).getProfile_path()) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								height="296px" width="197px" style="bottom: 0px;">
+							<div class="rank index-label">
+								<%=creditList.get(count).getName() %>
+							</div>
 							<%} else { %>
 							<img class="innerImage"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(count).getProfile_path()%>"
@@ -730,9 +742,15 @@ if (rateAmount > 0) {
 					<div class="inner" id="firstClone">
 						<%for (int i = 0; i < 6; i++) { %>
 						<div style="width: 201px; height: auto;" class="poster">
-							<%if (null == creditList.get(i) || null == creditList.get(i).getProfile_path()) { %>
+							<%if (null == creditList.get(i)) { %>
+							<!-- <img class="innerImage" src="resources/images/question.png"
+								width="197px" height="296px"> -->
+							<%} else if (null == creditList.get(i).getProfile_path()) { %>
 							<img class="innerImage" src="resources/images/question.png"
 								width="197px" height="296px">
+							<div class="rank index-label">
+								<%=creditList.get(i).getName() %>
+							</div>
 							<%} else { %>
 							<img class="innerImage" alt="resource/images/person-x.svg"
 								src="http://image.tmdb.org/t/p/w342<%=creditList.get(i).getProfile_path()%>"
