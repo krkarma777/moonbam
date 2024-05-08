@@ -69,7 +69,7 @@ function restoreDeletedPost(){
 	console.log("restoreDeletedPost");
 	
 	//전송
-	var target = "<%=request.getContextPath()%>" + "/AdminPage/releaseUser?postid="+postid;
+	var target = "<%=request.getContextPath()%>" + "/AdminPage/restoreDeletedPost?postid="+postid;
 	console.log(restoreDeletedPost);
 	location.href = target;
 }//restorePost

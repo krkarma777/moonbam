@@ -1,0 +1,3 @@
+{"MESSAGE":" 님이 입장했습니다.","NICKNAME":"안녕하세요","SERVERTIME":"2024. 5. 7. 오후 5:42:57","USERID":"kwangr1995@naver.com","TYPE":"ENTER"}
+{"MESSAGE":"안녕하세요","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오후 5:43:10","USERID":"kwangr1995@naver.com","TYPE":"TALK"}
+{"MESSAGE":"안녕하세요","NICKNAME":"","SERVERTIME":"2024. 5. 7. 오후 5:43:20","USERID":"kwangr1995@gmail.com","TYPE":"TALK"}
