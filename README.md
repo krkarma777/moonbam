@@ -1,5 +1,10 @@
 # 문화인들의 밤
 
+
+![image](https://github.com/krkarma777/moonbam/assets/149022496/ba3609c4-3f24-480f-a11b-1fc2fd986ad2)
+
+![image](https://github.com/krkarma777/moonbam/assets/149022496/d085314f-8152-476f-8428-64106c5ba51a)
+
 문화인들의 밤은 영화 커뮤니티 플랫폼을 제공하는 프로젝트로, 사용자들이 영화에 대해 토론하고 정보를 공유할 수 있는 공간입니다. 백엔드는 Java와 Spring Boot를 사용하였고, 프론트엔드는 HTML, CSS, JavaScript로 구현되었습니다.
 
 ## 시작하기
